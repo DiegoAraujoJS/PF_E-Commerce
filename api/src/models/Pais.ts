@@ -3,5 +3,4 @@ import { Model, Column, Table, CreatedAt, UpdatedAt } from 'sequelize-typescript
 export default class Pais extends Model<Pais> {
     @Column
     name!: string;
-
 }

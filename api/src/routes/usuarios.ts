@@ -1,5 +1,5 @@
 import {Request, Response, Router} from 'express'
-import User from './../models/User'
+import Usuario from './../models/Usuario'
 const router = Router ()
 
 router.get('/', async (req: Request, res: Response) => {
@@ -16,15 +16,18 @@ router.get('/', async (req: Request, res: Response) => {
         puntuacion: 4.3,
         grado: 'quinto año',
         nivel: 'secundaria',
-        materia: 'matematica'
+        materia: 'matematica', 
+        descripcion: 'en esta clase veremos...'
     }
     
     res.send([clase,formatoProfesor])
 })
+
+
 router.post('/', async (req:Request, res:Response) => {
     const userInfo = req.body
     try{
-        const createdUser = await User.create(userInfo)
+        const createdUser = await Usuario.create(userInfo)
         res.send(createdUser)
     }
     catch (error) {
