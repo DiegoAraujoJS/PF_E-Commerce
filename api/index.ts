@@ -7,6 +7,7 @@ sequelize
     console.log('db connected')
     app.listen(3001, () => {
         console.log('app listening on port 3001')
+        console.log("cambio hecho por benja");
     })
 
 })
