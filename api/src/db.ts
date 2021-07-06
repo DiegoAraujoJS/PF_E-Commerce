@@ -42,9 +42,6 @@ const sequelize = new Sequelize ({
 
 
 // console.log('sequelize models', sequelize.models)
-const bootstrap = () => {
-    
-}
 
 export {sequelize};
 

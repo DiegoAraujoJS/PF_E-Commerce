@@ -1,12 +1,15 @@
 import { Model, Column, Table, CreatedAt, UpdatedAt, DataType } from 'sequelize-typescript';
 
 @Table
-export default class Profesor extends Model<Profesor> {
+export default class Profesor extends Model {
     @Column
     nombre!: string;
-    
+
     @Column
     apellido!: string;
+
+    @Column
+    ciudad!: string;
     
     @Column
     foto!: string;
@@ -14,12 +17,6 @@ export default class Profesor extends Model<Profesor> {
     @Column
     descripcion!: string;
 
-    @Column
-    ciudad!: string;
-
-    @UpdatedAt
-    @Column
-    cuidad!: string;
 }
 
 

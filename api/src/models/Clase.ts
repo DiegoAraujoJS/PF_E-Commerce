@@ -1,28 +1,25 @@
 import { Model, Column, Table, CreatedAt, UpdatedAt } from 'sequelize-typescript';
 @Table
-export default class Clase extends Model<Clase> {
+export default class Clase extends Model {
     @Column
     nombre!: string;
 
     @Column
-    provincia_id!: number;
-
-    @Column
     puntuacion!: number;
 
-    @Column
+    @Column ({allowNull: false})
     grado!: string;
 
     @Column
     nivel!: string;
 
-    @Column
+    @Column ({allowNull: false})
     materia!: string;
 
     @Column
     descripcion!: string;
 
-    @Column
+    @Column ({allowNull: false})
     profesor!: string
 
 }
