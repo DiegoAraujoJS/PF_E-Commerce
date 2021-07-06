@@ -6,13 +6,10 @@ import User from './Usuario';
 
 @Table
 export default class Profesor extends Model {
-
-    
+    @PrimaryKey
+    @ForeignKey(() => User)
     @Column
-    nombre!: string;
-
-    @Column
-    apellido!: string;
+    usuario!: string;
 
     @Column
     ciudad!: string;
@@ -22,11 +19,6 @@ export default class Profesor extends Model {
     
     @Column
     descripcion!: string;
-
-    @PrimaryKey
-    @ForeignKey(() => User)
-    @Column
-    email!: string;
 
     @HasMany(() => Clase)
     clases!: Clase[];
