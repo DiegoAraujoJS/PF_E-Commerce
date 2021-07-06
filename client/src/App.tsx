@@ -12,7 +12,7 @@ function App() {
         <Route exact path='/clases'><ClassContainer /></Route>
         <Route exact path='/'> <Login /> </Route>
     </BrowserRouter>
-    // <Login />
+    
   );
 }
 
