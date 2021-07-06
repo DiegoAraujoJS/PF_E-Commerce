@@ -4,6 +4,8 @@ import Profesor from '../models/Profesor'
 const router = Router ()
 
 
+//PROBANDO
+
 router.get('/:materia/:ciudad', async (req: Request, res: Response) => {
     console.log(req.params)
     const {materia , ciudad} = req.params
