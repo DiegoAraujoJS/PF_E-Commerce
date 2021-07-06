@@ -1,6 +1,6 @@
 import React from 'react'
 
-export default function Class() {
+export default function ClassCard() {
     return (
         <div>
             
