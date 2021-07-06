@@ -1,9 +1,9 @@
 import React from 'react'
 
-export default function Container() {
+export default function ClassCard() {
     return (
         <div>
-            <span>funcaa</span>
+            
         </div>
     )
 }
