@@ -8,7 +8,6 @@ import ClassContainer from './components/classContainer/ClassContainer';
 function App() {
   return (
     <BrowserRouter>
-        
         <Route exact path='/clases'><ClassContainer /></Route>
         <Route exact path='/'> <Login /> </Route>
     </BrowserRouter>
