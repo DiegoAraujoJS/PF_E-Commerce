@@ -59,25 +59,40 @@ const bootstrap = async () => {
         dia: 'domingo'
     })
 
-    await rango_profesor.create({
-        email: "diegoaraujo@gmail.com",
-        Rango_id: 1
-    })
+    // await rango_profesor.create({
+    //     email: "diegoaraujo@gmail.com",
+    //     Rango_id: 1
+    // })
 
-    await rango_profesor.create({
-        email: "braiansilva@gmail.com",
-        Rango_id: 1
-    })
-    await rango_profesor.create({
-        email: "edwardburgos@gmail.com",
-        Rango_id: 1
-    })
+    // await rango_profesor.create({
+    //     email: "braiansilva@gmail.com",
+    //     Rango_id: 1
+    // })
+    // await rango_profesor.create({
+    //     email: "edwardburgos@gmail.com",
+    //     Rango_id: 1
+    // })
 
-    await Clase.create({
-        materia: 'matematica',
-        Profesor_mail: "edwardburgos@gmail.com",
-        grado: "primer grado"
-    })
+    // await Clase.create({
+    //     materia: 'matematica',
+    //     Profesor_mail: "edwardburgos@gmail.com",
+    //     grado: "primer grado"
+    // })
+    // await Clase.create({
+    //     materia: 'lengua',
+    //     Profesor_mail: "javiercarro@gmail.com",
+    //     grado: "primer grado"
+    // })
+    // await Clase.create({
+    //     materia: 'ingles',
+    //     Profesor_mail: "diegoaraujo@gmail.com",
+    //     grado: "primer grado"
+    // })
+    // await Clase.create({
+    //     materia: 'lengua',
+    //     Profesor_mail: "braiansilva@gmail.com",
+    //     grado: "primer grado"
+    // })
 
 }
 

@@ -1,31 +1,34 @@
-import {Request, Response, Router} from 'express'
+import { Request, Response, Router } from 'express'
 import Clase from './../models/Clase'
 import Profesor from '../models/Profesor'
-const router = Router ()
+import User from '../models/Usuario';
+import { Op } from 'sequelize'
+const router = Router()
 
 
 router.get('/:materia/:ciudad', async (req: Request, res: Response) => {
     console.log(req.params)
-    const {materia , ciudad} = req.params
+    const { materia, ciudad } = req.params
 
-    const clases = await Clase.findAll()
-    let clasesFiltradas = clases.filter(clase => {
-        return clase.materia === materia
+    const clasesFiltradas = await Clase.findAll({ where: { materia: materia } })
+
+    const profesorFiltrados = await User.findAll({
+        include: [{
+            model: Profesor,
+            required: true,
+            attributes: ['ciudad', 'foto', 'descripcion'],
+            where: { ciudad: ciudad }
+        }],
+        attributes: ['email', 'nombre', 'apellido']
     })
-    console.log('clases', clases)
-    console.log('clases filtradas ', clasesFiltradas)
-
-    const profesores = await Profesor.findAll()
-    let profesorFiltrados = profesores.filter(profesor => {return profesor.ciudad === ciudad})
 
     var result = [];
-    for(var i=0; i < clasesFiltradas.length; i++){
-         for(var j=0; j < profesorFiltrados.length; j++){
-             console.log('clases filtradas ', clasesFiltradas[i], 'profesores filtrados ', profesorFiltrados[j])
-             result.push('EJEMPLO') // Esto reemplazaó al comentario inferior
-            /*if(clasesFiltradas[i].Profesor_mail === profesorFiltrados[j].nombre){ 
+    for (var i = 0; i < clasesFiltradas.length; i++) {
+        for (var j = 0; j < profesorFiltrados.length; j++) {
+
+            if (clasesFiltradas[i].Profesor_mail === profesorFiltrados[j].email) {
                 result.push(clasesFiltradas[i])
-            }*/
+            }
         }
     }
     res.send(result)
@@ -47,13 +50,20 @@ router.post('/add', async (req: Request, res: Response) => {
     }
 })
 
+
 router.put('/edit', async (req: Request, res: Response) => {
-    const {id} = req.body
+    const { id, descripcion, materia, nivel, grado, puntuacion } = req.body
+    const claseEditada = {
+        descripcion,
+        materia,
+        nivel,
+        grado,
+        puntuacion,
+    }
     try {
-        
         const clase: any = await Clase.findByPk(id);
-        console.log(clase)
-        await clase.set(clase.descripcion = req.body.descripcion);
+
+        await clase.set(claseEditada);
         await clase.save();
         const claseCambiada = await Clase.findByPk(id);
         res.send(claseCambiada)
@@ -63,8 +73,9 @@ router.put('/edit', async (req: Request, res: Response) => {
     }
 })
 
+
 router.post('/delete', async (req: Request, res: Response) => {
-    const {id} = req.body
+    const { id } = req.body
     try {
         await Clase.destroy({
             where: { id: id }
