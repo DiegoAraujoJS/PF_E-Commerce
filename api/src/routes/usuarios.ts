@@ -3,7 +3,7 @@ import {Request, Response, Router} from 'express'
 import Usuario from './../models/Usuario'
 const router = Router ()
 
-function validateEmail(email) {
+function validateEmail(email: string) {
         var re = /\S+@\S+\.\S+/;
         return re.test(email);
     }

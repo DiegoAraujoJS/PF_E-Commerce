@@ -1,4 +1,5 @@
-import { Model, Column, Table, CreatedAt, UpdatedAt } from 'sequelize-typescript';
+import { Model, Column, Table, CreatedAt, UpdatedAt, ForeignKey, BelongsTo } from 'sequelize-typescript';
+import Profesor from './Profesor';
 @Table
 export default class Clase extends Model {
     @Column
@@ -19,8 +20,13 @@ export default class Clase extends Model {
     @Column
     descripcion!: string;
 
-    @Column ({allowNull: false})
-    profesor!: string
+    @ForeignKey(() => Profesor)
+    @Column
+    Profesor_mail!: string
+
+    @BelongsTo(() => Profesor)
+    profesor!: Profesor
+
 
 }
 

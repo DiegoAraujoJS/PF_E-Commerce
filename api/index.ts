@@ -9,7 +9,7 @@ sequelize
     bootstrap()
     console.log('db connected')
     app.listen(3001, () => {
-        bootstrap()
+        
         console.log('app listening on port 3001')
         
     })

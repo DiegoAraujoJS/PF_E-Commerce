@@ -3,7 +3,11 @@
 // import Usuario from './Usuario'
 // import Provincia from './Provincia'
 import Clase from "./models/Clase"
+
 import Profesor from "./models/Profesor"
+import Rango from "./models/Rango"
+import rango_profesor from "./models/rango_profesor"
+
 import User from "./models/Usuario"
 
 
@@ -19,43 +23,82 @@ import User from "./models/Usuario"
 //         }
 //         }
 //     )
+interface Usuario {
+    nombre: string;
+    email: string;
+    apellido: string;
+}
+interface Prof {
+    user: string;
+}
+
 
 const bootstrap = async () => {
+    
+    // await Clase.create( {
+    //     materia: 'lengua',
+    //     profesor: 'maria',
+    //     grado: "primer grado"
+    // })
+    // await Clase.create({
+    //     materia: 'lengua',
+    //     profesor: 'marcela',
+    //     grado: "primer grado"
+    // })
+    await User.create ( {
+        nombre: `Juan`,
+        apellido: 'perez',
+        ciudad: 'Buenos Aires', 
+        email: "juanperez@gmail.com"
+        })
+
+    await User.create ( {
+        nombre: `maria`,
+        apellido: 'roman',
+        ciudad: 'Buenos Aires',
+        email: "juanperedz@gmail.com"
+        })
+    await User.create( {
+        nombre: 'marcela',
+        apellido: 'camargo',
+        ciudad: 'rio negro',
+        email: "juanpaerez@gmail.com"
+    })
+    
+    await Rango.create({
+        inicio: 16,
+        fin:18,
+        dia: 'domingo'
+    })
+    await Profesor.create({
+        email: "juanpaerez@gmail.com",
+
+    })
+    await Profesor.create({
+        email: "juanperedz@gmail.com",
+
+    })
+
+    await rango_profesor.create({
+        email:"juanpaerez@gmail.com",
+        Rango_id: 1
+    })
+
+    await rango_profesor.create({
+        email:"juanperedz@gmail.com",
+        Rango_id: 1
+    })
+    
+
+    
+    
+
     await Clase.create( {
         materia: 'matematica',
-        profesor: 'Juan',
+        Profesor_mail: "juanpaerez@gmail.com",
         grado: "primer grado"
-    })
-        await Clase.create( {
-            materia: 'lengua',
-            profesor: 'maria',
-            grado: "primer grado"
         })
-        await Clase.create({
-            materia: 'lengua',
-            profesor: 'marcela',
-            grado: "primer grado"
-        })
-    
-    
-        await Profesor.create ( {
-            nombre: `Juan`,
-            apellido: 'perez',
-            ciudad: 'Buenos Aires'
-            })
-    
-        await Profesor.create ( {
-            nombre: `maria`,
-            apellido: 'roman',
-            ciudad: 'Buenos Aires'
-            })
-        await Profesor.create( {
-            nombre: 'marcela',
-            apellido: 'camargo',
-            ciudad: 'rio negro'
-        })
-        console.log((await Clase.findAll()).map(obj => [obj.materia, obj.profesor]))
-        console.log((await Profesor.findAll()).map(profe => [profe.nombre, profe.ciudad]))        
+
 }
 
 

@@ -22,7 +22,7 @@ router.get('/:materia/:ciudad', async (req: Request, res: Response) => {
     for(var i=0; i < clasesFiltradas.length; i++){
          for(var j=0; j < profesorFiltrados.length; j++){
              console.log('clases filtradas ', clasesFiltradas[i], 'profesores filtrados ', profesorFiltrados[j])
-            if(clasesFiltradas[i].profesor === profesorFiltrados[j].nombre){ 
+            if(clasesFiltradas[i].Profesor_mail === profesorFiltrados[j].nombre){ 
                 result.push(clasesFiltradas[i])
             }
         }

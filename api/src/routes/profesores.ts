@@ -55,7 +55,8 @@ let profesores = [
 ]
 
 router.get('/', async (req: Request, res: Response) => { // profesore?name=rod
-    let terminoBusqueda = req.query.name.toString();
+    let terminoBusqueda: any;
+    terminoBusqueda = req.query.name!.toString();
 
 
     if (terminoBusqueda) { // Siendo más extrictos sería > if (terminoBusqueda && typeof terminoBusqueda === 'string')
@@ -102,7 +103,7 @@ router.put('/:id', async (req:Request, res:Response) => {
     const idProfesor = parseInt(req.params.id);
     let profesorEncontrado = profesores.filter(profesor => profesor.id === idProfesor);
     if (profesorEncontrado.length) {
-        let profesorModificado;
+        let profesorModificado: any;
         profesores = profesores.map(profesor => {
             if (profesor.id === idProfesor) {
                 profesorModificado = {...profesor, ...req.body}

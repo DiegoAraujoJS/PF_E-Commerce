@@ -1,10 +1,13 @@
-import { Model, Column, Table, CreatedAt, UpdatedAt, DataType, Unique } from 'sequelize-typescript';
+import { Model, Column, Table, CreatedAt, UpdatedAt, DataType, Unique, PrimaryKey, ForeignKey, HasOne } from 'sequelize-typescript';
+import Profesor from './Profesor';
 
 @Table
 export default class User extends Model {
     @Column ({allowNull: false})
     nombre!: string;
 
+    
+    @PrimaryKey
     @Unique
     @Column ({allowNull: false})
     email!: string;
@@ -19,6 +22,9 @@ export default class User extends Model {
     @UpdatedAt
     @Column
     updatedAt!: Date;
+
+    @HasOne(() => Profesor)
+    profesor!: string
 }
 
 
