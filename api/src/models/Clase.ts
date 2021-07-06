@@ -24,9 +24,6 @@ export default class Clase extends Model {
     @Column
     Profesor_mail!: string
 
-    @BelongsTo(() => Profesor)
-    profesor!: Profesor
-
 
 }
 
