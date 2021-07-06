@@ -1,4 +1,5 @@
-import React from 'react'
+import React from 'react';
+import { NavLink } from 'react-router-dom'
 
 export default function SearchBar() {
     return (
@@ -29,7 +30,7 @@ export default function SearchBar() {
                     </ul>
                     </li>
                     <li className="nav-item">
-                    <a className="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
+                    <a className="nav-link disabled" href="#" tabIndex={-1} aria-disabled="true">Disabled</a>
                     </li>
                 </ul>
                 <form className="d-flex">
