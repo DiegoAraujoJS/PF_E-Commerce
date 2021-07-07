@@ -12,12 +12,15 @@ app.use(cookieParser());
 app.use(morgan('dev'));
 
 app.use(
-    cors({
-        origin: config.cors,
-        credentials: true,
-        methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'DELETE'],
-        allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept']
-    })
+    cors(
+    //     {
+    //     origin: config.cors,
+    //     credentials: true,
+    //     methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'DELETE'],
+    //     allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept']
+    // }
+    )
+
 )
 
 interface Error {
