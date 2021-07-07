@@ -50,7 +50,8 @@ interface Prof {
     descripcion: string
     foto: string
     id: number
-    nombre: string
+    nombre: string;
+    email: string;
 }
 router.get('/:email', async (req: Request, res: Response) => {
     const email = req.params.email;
@@ -66,17 +67,19 @@ router.get('/:email', async (req: Request, res: Response) => {
     });
     if (usuario) {
         if (usuario.profesor) {
-            console.log(usuario)
-            return res.send([
-                {
+            
+            let obj: Prof = {
                     email: usuario.email,
                     nombre: usuario.nombre,
                     apellido: usuario.apellido,
                     ciudad: usuario.profesor.ciudad,
                     foto: usuario.profesor.foto,
-                    descripcion: usuario.profesor.descripcion
+                    descripcion: usuario.profesor.descripcion,
+                    id: usuario.id
 
-                }
+            }
+            return res.send([
+                obj
             ])
         } else {
             return res.send(`No existe ningún profesor asociado la cuenta del correo ${email}`)

@@ -1,8 +1,40 @@
 import { Model, Column, Table, CreatedAt, UpdatedAt, DataType, HasOne, ForeignKey, PrimaryKey, HasMany, BelongsToMany } from 'sequelize-typescript';
+import { Json } from 'sequelize/types/lib/utils';
+
 import Clase from './Clase';
 import Rango from './Rango';
 import rango_profesor from './rango_profesor';
 import User from './Usuario';
+
+interface CalendarioQuery{
+    disponible: {
+        lunes?: [],
+        martes?:[],
+        miercoles?:[],
+        jueves?:[],
+        viernes?:[],
+        sabado?:[],
+        domingo?:[]
+    };
+    ocupado: {
+        lunes?: [],
+        martes?:[],
+        miercoles?:[],
+        jueves?:[],
+        viernes?:[],
+        sabado?:[],
+        domingo?:[]
+    }
+}
+
+let query: CalendarioQuery = {
+    disponible: {
+        
+    },
+    ocupado:{
+
+    }
+}
 
 interface Calendario{
     disponible: [
@@ -47,8 +79,10 @@ export default class Profesor extends Model {
     @Column
     descripcion!: string;
 
-    @Column
-    calendario!: Calendario;
+    @Column({
+        type: DataType.JSON
+    })
+    calendario!: object;
 
     @PrimaryKey
     @ForeignKey(() => User)
