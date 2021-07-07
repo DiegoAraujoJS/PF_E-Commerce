@@ -7,6 +7,27 @@ import { Op } from 'sequelize'
 import Clase from '../models/Clase';
 const router = Router();
 
+const profesorEjemplo = [
+    {
+      start: "2021-07-07T10:30:00",
+      end: "2021-07-07T13:00:00",
+      text: "Esto es del back",
+      id: 1,
+    },
+    {
+      start: "2021-07-08T10:30:00",
+      end: "2021-07-08T13:00:00",
+      text: "Esto es del bacgasdas22",
+      id: 1,
+    },
+    {
+      start: "2021-07-09T10:30:00",
+      end: "2021-07-09T13:00:00",
+      text: "PEsto es del backEPOCLWEQA",
+      id: 3,
+    },
+  ];
+
 router.get('/', async (req: Request, res: Response) => { // profesore?name=rod
     let terminoBusqueda = req.query.nombre;
     let profesores = [];
@@ -69,6 +90,26 @@ router.get('/:email', async (req: Request, res: Response) => {
         return res.send(`No existe ninguna cuenta con el correo ${email}`)
     }
 })
+
+
+
+router.get('/calendar/:id',(req: Request, res: Response) => {
+    const id = req.params.id;
+    var results = profesorEjemplo.filter(e => e.id === parseInt(id));
+    console.log("Ruta calendario")
+    return res.send(results)
+        
+   
+})
+
+
+
+
+
+
+
+
+
 
 router.get('/:email/clases', async (req: Request, res: Response) => {
     const email = req.params.email;

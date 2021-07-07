@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import './profile.css'
 import axios from "axios"
-
+import Calendar from "../calendar/Calendar"
 
 interface Profesor {
     email: string
@@ -12,16 +12,22 @@ interface Profesor {
 
 
 function Profile(){
-    const  [prof, setProf]=useState<any>({})
-    
+    const  [prof, setProf]=useState<any>({
+        email:"",
+        nombre:"",
+        profesor:{},
+    })
+    const profesorArr = [];
     const fetchProfs = async () => {
         try {
             const response = await axios.get(`http://localhost:3001/api/profesores/edwardburgos@gmail.com`)
-            if (response) {
-                setProf(response.data)
-            } 
-        } catch {
-            console.log('error')
+            setProf({
+                email:response.data.email,
+                nombre:response.data.nombre,
+                profesor:response.data.profesor
+            })
+        } catch(err) {
+            console.log(err)
         }
         
         
@@ -32,14 +38,13 @@ function Profile(){
     
     return (
     <div className="row py-5 px-4">
-    <div className="col-md-5 mx-auto">
+    <div className="col-md-7 mx-auto">
      
         <div className="bg-white shadow rounded overflow-hidden">
             <div className="px-4 pt-0 pb-4 cover">
                 <div className="media align-items-center profile-head">
                 
                     <div className="profile"><img src={prof.profesor.foto} alt="..." width="130" height="130" className="profile"/>
-                  
                     </div>
                     <div className="rate">
                         <input type="radio" id="star5" name="rate" value="5" />
@@ -75,6 +80,9 @@ function Profile(){
                     <p className="font-italic mb-0">Trabajo en ...</p>
                 </div>
             </div>
+            <div>
+                      <Calendar/>
+                  </div>
             <div className="py-4 px-4">
                 
             </div>
