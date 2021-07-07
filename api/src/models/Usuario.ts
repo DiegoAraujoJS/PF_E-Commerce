@@ -1,5 +1,6 @@
 import { Model, Column, Table, CreatedAt, UpdatedAt, DataType, Unique, PrimaryKey, ForeignKey, HasOne } from 'sequelize-typescript';
 import Profesor from './Profesor';
+import Alumno from './Alumno';
 
 @Table
 export default class User extends Model {
@@ -24,6 +25,9 @@ export default class User extends Model {
 
     @HasOne(() => Profesor)
     profesor!: Profesor
+
+    @HasOne(() => Alumno)
+    alumno!: Alumno
 }
 
 

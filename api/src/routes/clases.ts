@@ -32,7 +32,23 @@ router.get('/:materia/:ciudad', async (req: Request, res: Response) => {
 
 })
 
-router.post('/add', async (req: Request, res: Response) => {
+router.post('/puntuar', async (req: Request, res:Response) => {
+    const {id, puntuacion} = req.body;
+    try {
+        const clase = await Clase.findOne({where: { id }})
+        if (clase) {
+            clase.update({ puntuacion })
+            const claseActualizada = await Clase.findOne({where: { id }})
+            res.send()
+        } else {
+            return res.send(`No se encontró ninguna clase con el id ${id}`)
+        }
+    } catch {
+
+    }
+})
+
+router.post('/', async (req: Request, res: Response) => {
     const clase = req.body
     try {
         const crearClase = await Clase.create(clase)

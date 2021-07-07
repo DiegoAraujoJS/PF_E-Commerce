@@ -7,25 +7,40 @@ interface Profesor {
     email: string
     nombre: string
     apellido: string
-    profesor: Object
+    profesor: {
+        ciudad: string,
+        foto: string,
+        descripcion: string
+    }
 }
 
 
 function Profile(){
     const  [prof, setProf]=useState<any>({})
     
-    const fetchProfs = async () => {
-        try {
-            const response = await axios.get(`http://localhost:3001/api/profesores/edwardburgos@gmail.com`)
-            if (response) {
+    // const fetchProfs = async () => {
+    //     try {
+    //         const response = await axios.get(`http://localhost:3001/api/profesores/edwardburgos@gmail.com`)
+    //         if (response) {
+    //             setProf(response.data)
+    //         } 
+    //     } catch {
+    //         console.log('error')
+    //     }
+        
+        
+    // }
+
+    const fetchProfs=async()=>{
+        const response=await axios.
+            get<Profesor>(`http://localhost:3001/api/profesores/edwardburgos@gmail.com`)
+            .catch((err)=>{console.log("Err", err)});
+            if (response ) { 
+                console.log("Esto es response", response)
                 setProf(response.data)
-            } 
-        } catch {
-            console.log('error')
-        }
-        
-        
+              }
     }
+
     useEffect(()=>{
         fetchProfs()
     }, []);

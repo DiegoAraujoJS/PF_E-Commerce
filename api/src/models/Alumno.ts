@@ -5,7 +5,7 @@ import rango_profesor from './rango_profesor';
 import User from './Usuario';
 
 @Table
-export default class Profesor extends Model {
+export default class Alumno extends Model {
     @PrimaryKey
     @ForeignKey(() => User)
     @Unique
@@ -21,11 +21,20 @@ export default class Profesor extends Model {
     @Column
     descripcion!: string;
 
-    @HasMany(() => Clase)
-    clases!: Clase[];
-
-    @BelongsToMany(() => Rango, ()  => rango_profesor)
-    rangos!: Rango[]
 }
 
-export {Profesor}
+
+/*const Profesor =  sequelize.define('Profesor', {
+    nombre: 
+    apellido: 
+    foto: 
+    descripcion:
+    ciudad: 
+    // nombre: 'Rodrigo',
+    // apellido: 'Callardo', 
+    // foto: 'https:///',
+    // descripcion: 'hace cuatro años que..',
+    // ciudad: 'Buenos Aires'
+})*/
+
+export {Alumno}
