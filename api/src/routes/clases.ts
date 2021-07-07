@@ -30,6 +30,12 @@ router.get('/:materia/:ciudad', async (req: Request, res: Response) => {
     res.send(result)
 })
 
+router.get('/', async (req: Request, res: Response) => {
+    const clases= await Clase.findAll({
+        include: [Profesor]
+    })
+    return res.send(clases)
+})
 ///////////
 //////////
 
