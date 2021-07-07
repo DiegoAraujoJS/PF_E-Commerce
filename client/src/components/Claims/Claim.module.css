@@ -39,3 +39,10 @@ h5 {
     width: 100px;
 }
 
+.description {
+    height: 30px;
+    width: 430px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;    
+}

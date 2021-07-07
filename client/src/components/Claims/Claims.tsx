@@ -38,11 +38,6 @@ function Claims(props) {
     },
 ]
 
-// height: '30px', 
-//         width: '430px',
-//         overflow: 'hidden',
-//         textOverflow: 'ellipsis',
-//         whiteSpace: 'nowrap'
 
     return (
         <div className = {style.container}>
@@ -52,6 +47,7 @@ function Claims(props) {
                     name = { c.name }
                     description = { c.description }
                     code = { c.codeClaim }
+                    key = {i}
                 />
             ))}
         </div>

@@ -9,11 +9,7 @@ function Claim(props) {
     return (
         <div className = {style.container}>
             <h5>{name}</h5>
-            <p style={{height: '30px', 
-        width: '430px',
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
-        whiteSpace: 'nowrap'}}>{description}</p>
+            <p className = { style.description }>{description}</p>
             <span>#{code}</span>
             <Link className = {style.btn} to = { `/claim/${code}` }> Visualizar </Link>
         </div>
