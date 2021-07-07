@@ -4,10 +4,11 @@ import Clase from './Clase';
 import Profesor from './Profesor';
 import rango_profesor from './rango_profesor'
 import User from './Usuario';
+
+
+
 @Table
 export default class Reclamo extends Model {
-
-    
 
     // @PrimaryKey
     // @ForeignKey(() => User)
@@ -28,7 +29,5 @@ export default class Reclamo extends Model {
 
     @BelongsTo(() => User)
     usuario!: User
-
-
 
 }
