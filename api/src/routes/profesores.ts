@@ -100,7 +100,7 @@ router.get('/:email/clases', async (req: Request, res: Response) => {
 })
 
 router.post('/', async (req: Request, res: Response) => {
-    const { email, ciudad, foto, descripcion } = req.body;
+    const email = req.body.usuario;
     if (email) {
         let usuario = await User.findOne({
             include: [{
@@ -113,12 +113,7 @@ router.post('/', async (req: Request, res: Response) => {
         });
         if (usuario) {
             if (!usuario.profesor) {
-                await Profesor.create({
-                    usuario: email,
-                    ciudad,
-                    foto,
-                    descripcion
-                })
+                await Profesor.create(req.body)
             } else {
                 return res.send(`Ya existe un profesor asociado a la cuenta ${email} así que debería actualizarlo`);
             }
@@ -142,7 +137,8 @@ router.post('/', async (req: Request, res: Response) => {
 })
 
 router.put('/', async (req: Request, res: Response) => {
-    const { email, ciudad, foto, descripcion } = req.body;
+    const { ciudad, foto, descripcion } = req.body;
+    const email = req.body.usuario;
     if (email) {
         let usuario = await User.findOne({
             include: [{
@@ -155,13 +151,7 @@ router.put('/', async (req: Request, res: Response) => {
         });
         if (usuario) {
             if (usuario.profesor) {
-                await usuario.profesor.update(
-                    {
-                        ciudad,
-                        foto,
-                        descripcion
-                    }
-                )
+                await usuario.profesor.update({ciudad, foto, descripcion})
             } else {
                 return res.send(`No existe un profesor asociado a la cuenta ${email} así que primero debe crearlo`)
             }

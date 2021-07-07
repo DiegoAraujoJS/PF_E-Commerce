@@ -32,7 +32,6 @@ router.get('/:materia/:ciudad', async (req: Request, res: Response) => {
 
 })
 
-
 router.post('/add', async (req: Request, res: Response) => {
     const clase = req.body
     try {
@@ -43,6 +42,7 @@ router.post('/add', async (req: Request, res: Response) => {
         res.send(error)
     }
 })
+
 
 
 router.put('/edit', async (req: Request, res: Response) => {
