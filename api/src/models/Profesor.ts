@@ -6,30 +6,32 @@ import Rango from './Rango';
 import rango_profesor from './rango_profesor';
 import User from './Usuario';
 
+
+type arrayDePares = [number, number][]
 interface CalendarioQuery{
     disponible: {
-        lunes?: [],
-        martes?:[],
-        miercoles?:[],
-        jueves?:[],
-        viernes?:[],
-        sabado?:[],
-        domingo?:[]
+        lunes?: arrayDePares,
+        martes?:arrayDePares,
+        miercoles?:arrayDePares,
+        jueves?:arrayDePares,
+        viernes?:arrayDePares,
+        sabado?:arrayDePares,
+        domingo?:arrayDePares
     };
     ocupado: {
-        lunes?: [],
-        martes?:[],
-        miercoles?:[],
-        jueves?:[],
-        viernes?:[],
-        sabado?:[],
-        domingo?:[]
+        lunes?: arrayDePares,
+        martes?:arrayDePares,
+        miercoles?:arrayDePares,
+        jueves?:arrayDePares,
+        viernes?:arrayDePares,
+        sabado?:arrayDePares,
+        domingo?:arrayDePares
     }
 }
 
 let query: CalendarioQuery = {
     disponible: {
-        
+        lunes:[[12, 16]]
     },
     ocupado:{
 
