@@ -4,6 +4,30 @@ import Rango from './Rango';
 import rango_profesor from './rango_profesor';
 import User from './Usuario';
 
+interface Calendario{
+    disponible: [
+        {
+            lunes: [
+                [number, number]
+            ],
+            martes: [
+                [number, number]
+            ],
+            
+        }
+    ],
+    ocupado: [
+        {
+            lunes: [
+                [number, number]
+            ],
+            martes: [
+                [number, number]
+            ]
+        }
+    ]
+}
+
 @Table
 export default class Profesor extends Model {
 
@@ -22,6 +46,9 @@ export default class Profesor extends Model {
     
     @Column
     descripcion!: string;
+
+    @Column
+    calendario!: Calendario;
 
     @PrimaryKey
     @ForeignKey(() => User)

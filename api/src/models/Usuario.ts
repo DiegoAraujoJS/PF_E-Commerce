@@ -24,7 +24,7 @@ export default class User extends Model {
     updatedAt!: Date;
 
     @HasOne(() => Profesor)
-    profesor!: string
+    profesor!: Profesor
 }
 
 

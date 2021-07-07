@@ -21,7 +21,7 @@ export default class Clase extends Model {
     descripcion!: string;
 
     @ForeignKey(() => Profesor)
-    @Column
+    @Column ({allowNull: false})
     Profesor_mail!: string
 
     @BelongsTo(() => Profesor)

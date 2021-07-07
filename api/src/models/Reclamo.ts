@@ -16,15 +16,15 @@ export default class Reclamo extends Model {
     // email!: string;
 
     @ForeignKey(() => User)
-    @Column
+    @Column ({allowNull: false})
     Denunciante_email!: string;
 
     @ForeignKey(() => User)
-    @Column
+    @Column ({allowNull: false})
     Denunciado_email!: string;
 
     @ForeignKey(() => User)
-    @Column
+    @Column ({allowNull: false})
     Admin_email!: string;
 
     @BelongsTo(() => User)
