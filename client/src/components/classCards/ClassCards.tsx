@@ -38,6 +38,7 @@ export default function ClassCards(props) {
             </ButtonGroup> */}
             <ul style={classListContainer}>
                 {clases.map( (clase, i) => <li className="m-3" key={i}>
+                    {console.log(clase)}
                     <ClassCard 
                     nombre={clase.nombre} 
                     descripcion={clase.descripcion} 

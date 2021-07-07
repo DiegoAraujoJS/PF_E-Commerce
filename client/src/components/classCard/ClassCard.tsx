@@ -1,16 +1,38 @@
 import React from 'react';
+import CSS from 'csstype';
 import { Class} from './interfaces';
 import {Card, Button} from 'react-bootstrap'
 const ClassCard: React.FC<Class> = (props) => {
+    const profileImg: CSS.Properties = {
+        height: '100px',
+        width: '100px',
+        borderRadius: '50%',
+    };
+    const descLimit: CSS.Properties = {
+        height: '30px', 
+        width: '430px',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap'
+    };
+    const cityPos: CSS.Properties = {
+        height: 'fit-content',
+        width: 'fit-content',
+    };
+
     return (
         <Card>
-            <Card.Header>Featured</Card.Header>
-            <Card.Body>
-                <Card.Title>Special title treatment</Card.Title>
-                <Card.Text>
-                    With supporting text below as a natural lead-in to additional content.
-                </Card.Text>
-                <Button variant="primary">Go somewhere</Button>
+            <Card.Header>{props.nombre}</Card.Header>
+            <Card.Body className='container d-flex flex-row justify-content-around align-items-center'>
+                <img style={profileImg} src={props.profesor.foto} alt={props.profesor.nombre}/>
+                <div>
+                    <Card.Title>* * * * *</Card.Title>
+                    <Card.Title>{props.materia + ' - ' + props.grado + ' - ' + props.nivel}</Card.Title>
+                    <Card.Text style={descLimit}>
+                        {props.descripcion}
+                    </Card.Text>
+                </div>
+                <Card.Text style={cityPos}>{props.profesor.ciudad}</Card.Text>
             </Card.Body>
         </Card>
     )
