@@ -1,6 +1,6 @@
 import React from "react";
 
-function DetailClaim(){
+function DetailClaim(props){
 
     //let { code:code } = useParams();
     //let[code] = useState(code);

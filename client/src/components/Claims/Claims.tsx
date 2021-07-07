@@ -8,7 +8,7 @@ function Claims(props) {
 
     let claims = [{
         name: 'Ayuda',
-        description: 'me timaron',
+        description: 'me timaroASDFASDSDFSDFSDFSDFSDFSDFFASDFASDFASDFSADFASDFFFFFFFFFFFFFFFFFFFFFFFSDFSDFSDFSDFSDFSDFSDFSDFSDFSDFSDFSDFn',
         codeClaim: '1',
     },
     {
@@ -23,7 +23,7 @@ function Claims(props) {
     },
     {
         name: 'Devuelvame mi Dinero',
-        description: 'me robaron',
+        description: 'me robaroOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOn',
         codeClaim: '2',
     },
     {
@@ -38,7 +38,11 @@ function Claims(props) {
     },
 ]
 
-
+// height: '30px', 
+//         width: '430px',
+//         overflow: 'hidden',
+//         textOverflow: 'ellipsis',
+//         whiteSpace: 'nowrap'
 
     return (
         <div className = {style.container}>
