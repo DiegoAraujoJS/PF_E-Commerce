@@ -46,7 +46,7 @@ const bootstrap = async () => {
 
     await Profesor.create({
         usuario: "edwardburgos@gmail.com",
-        ciudad: "Buenos Aires",
+        ciudad: "Lima",
         foto: "https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=547&q=80",
         descripcion: "Profesor apasionado por enseñar"
     })
@@ -74,11 +74,41 @@ const bootstrap = async () => {
     })
 
     await Clase.create({
-        materia: 'matematica',
-        Profesor_mail: "edwardburgos@gmail.com",
-        grado: "primer grado"
+        nombre: 'Sumas y Restas',
+        profesor: "edwardburgos@gmail.com",
+        descripcion: 'Aprende a sumar y restar para ser el mejor de tu clase',
+        materia: 'Matemática',
+        grado: "Primer grado",
+        nivel: 'Primario'
+    })
+    await Clase.create({
+        nombre: 'Aprende a comunicar',
+        profesor: "edwardburgos@gmail.com",
+        descripción: 'Aprende a comunicarte asertivamente con tu entorno',
+        materia: 'Comunicación',
+        grado: "Cuarto grado",
+        nivel: 'Terciario'
     })
 
+    await Clase.create({
+        nombre: 'Inglés para jóvenes',
+        profesor: "edwardburgos@gmail.com",
+        descripción: 'En esta clase te enseñaré todo lo que necesitas para tener un nivel intermedio de Inglés',
+        materia: 'Inglés',
+        grado: "Sexto grado",
+        nivel: 'Secundario'
+    })
+
+    await Clase.create({
+        materia: 'matematica',
+        profesor: "diegoaraujo@gmail.com",
+        grado: "primer grado"
+    })
+    await Clase.create({
+        materia: 'matematica',
+        profesor: "braiansilva@gmail.com",
+        grado: "primer grado"
+    })
 }
 
 export default bootstrap;

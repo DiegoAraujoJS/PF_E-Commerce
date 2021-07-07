@@ -2,6 +2,7 @@ import { Request, Response, Router } from 'express'
 import Profesor from '../models/Profesor';
 import User from '../models/Usuario';
 import { Op } from 'sequelize'
+import Clase from '../models/Clase';
 const router = Router();
 
 router.get('/', async (req: Request, res: Response) => { // profesore?name=rod
@@ -48,7 +49,8 @@ router.get('/:email', async (req: Request, res: Response) => {
     const email = req.params.email;
     const usuario = await User.findOne({
         include: [{
-            model: Profesor
+            model: Profesor,
+            attributes: ['ciudad', 'foto', 'descripcion']
         }],
         where: {
             email: email.toString()
@@ -58,6 +60,37 @@ router.get('/:email', async (req: Request, res: Response) => {
     if (usuario) {
         if (usuario.profesor) {
             return res.send(usuario)
+        } else {
+            return res.send(`No existe ningún profesor asociado la cuenta del correo ${email}`)
+        }
+    } else {
+        return res.send(`No existe ninguna cuenta con el correo ${email}`)
+    }
+})
+
+router.get('/:email/clases', async (req: Request, res: Response) => {
+    const email = req.params.email;
+    const usuario = await User.findOne({
+        include: [{
+            model: Profesor
+        }],
+        where: {
+            email: email.toString()
+        },
+    });
+    if (usuario) {
+        if (usuario.profesor) {
+            const clases = await Clase.findAll({
+              where: {
+                profesor: email.toString()
+            },
+            attributes: ['id', 'nombre', 'puntuacion', 'grado', 'nivel', 'materia', 'descripcion']
+            });
+            if (clases.length) {
+                res.send(clases)
+            } else {
+                res.send(`El profesor ${usuario.nombre} ${usuario.apellido} aún no tiene clases registradas`)
+            }
         } else {
             return res.send(`No existe ningún profesor asociado la cuenta del correo ${email}`)
         }

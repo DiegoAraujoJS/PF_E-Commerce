@@ -8,23 +8,21 @@ export default class Clase extends Model {
     @Column
     puntuacion!: number;
 
+    @ForeignKey(() => Profesor)
+    @Column
+    profesor!: string
+
+    @Column
+    descripcion!: string;
+
+    @Column ({allowNull: false})
+    materia!: string;
+
     @Column ({allowNull: false})
     grado!: string;
 
     @Column
     nivel!: string;
-
-    @Column ({allowNull: false})
-    materia!: string;
-
-    @Column
-    descripcion!: string;
-
-    @ForeignKey(() => Profesor)
-    @Column
-    Profesor_mail!: string
-
-
 }
 
 // const Clase =  sequelize.define('Clase', {
