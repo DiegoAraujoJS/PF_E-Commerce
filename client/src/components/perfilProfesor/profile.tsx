@@ -17,7 +17,7 @@ function Profile(){
     const  [prof, setProf]=useState<any>({})
     const fetchProfs=async()=>{
         const response=await axios.
-            get<Profesor[]>(`http://localhost:3001/api/profesores/2`)
+            get<Profesor[]>(`http://localhost:3001/api/profesores/edwardburgos@gmail.com`)
             .catch((err)=>{console.log("Err", err)});
             if (response ) { 
                 console.log("Esto es response", response)
