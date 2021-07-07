@@ -7,6 +7,7 @@ import Clase from "./models/Clase"
 import Profesor from "./models/Profesor"
 import Rango from "./models/Rango"
 import rango_profesor from "./models/rango_profesor"
+import Reclamo from "./models/Reclamo"
 
 import User from "./models/Usuario"
 
@@ -98,6 +99,13 @@ const bootstrap = async () => {
         Profesor_mail: "juanpaerez@gmail.com",
         grado: "primer grado"
         })
+
+    await Reclamo.create({
+        Denunciante_email: "juanperez@gmail.com",
+        Denunciado_email: "juanperedz@gmail.com",
+        Admin_email: "juanpaerez@gmail.com"
+        
+    })
 
 }
 
