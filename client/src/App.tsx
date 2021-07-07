@@ -10,6 +10,7 @@ import Claims from './components/Claims/Claims';
 import AddClaim from './components/Claims/AddClaim';
 import DetailClaim from './components/Claims/DetailClaim';
 import Profile from './components/perfilProfesor/profile';
+import Chat from './components/Chat';
 function App() {
   return (
     <BrowserRouter>
@@ -20,6 +21,7 @@ function App() {
       <Route exact path = '/claim/:id'><DetailClaim/></Route>
       <Route exact path = '/claim/add'><AddClaim/></Route>
       <Route exact path = '/perfil'><Profile /></Route>
+      <Route exact path = '/chat'><Chat/></Route>
     </BrowserRouter>
     
   );
