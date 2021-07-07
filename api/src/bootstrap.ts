@@ -1,28 +1,14 @@
-// import Clase from './Clase'
-// import Profesor from './Profesor'
-// import Usuario from './Usuario'
-// import Provincia from './Provincia'
 import Clase from "./models/Clase"
 
 import Profesor from "./models/Profesor"
 import Rango from "./models/Rango"
 import rango_profesor from "./models/rango_profesor"
-
+import Reclamo from "./models/Reclamo"
 import User from "./models/Usuario"
 
 
 
-// const profesores = indices.map(i => {
-//         return {
-//           nombre: 'Rodrigo' + i,
-//           apellido: "Ayala" + i,
-//           email: `RodrigoAyala${i}@gmail.com`,
-//           foto: 'https://pbs.twimg.com/profile_images/1347614168531283971/B3WveAU6_400x400.jpg',
-//           descripcion: 'soy el mas grande papa',
-//           ciudad: 'Buenos Aires'
-//         }
-//         }
-//     )
+
 interface Usuario {
     nombre: string;
     email: string;
@@ -35,16 +21,6 @@ interface Prof {
 
 const bootstrap = async () => {
     
-    // await Clase.create( {
-    //     materia: 'lengua',
-    //     profesor: 'maria',
-    //     grado: "primer grado"
-    // })
-    // await Clase.create({
-    //     materia: 'lengua',
-    //     profesor: 'marcela',
-    //     grado: "primer grado"
-    // })
     await User.create ( {
         nombre: `Juan`,
         apellido: 'perez',
@@ -163,6 +139,13 @@ const bootstrap = async () => {
         materia: 'Quimica',
         Profesor_mail: "juanperez4@gmail.com"
     })
+    await Reclamo.create({
+        Denunciante_email: "juanperez1@gmail.com",
+        Denunciado_email: "juanperez2@gmail.com",
+        Admin_email: "juanperez3@gmail.com"
+        
+    })
+
 
 }
 export default bootstrap
