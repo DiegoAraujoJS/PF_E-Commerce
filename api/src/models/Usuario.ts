@@ -3,14 +3,13 @@ import Profesor from './Profesor';
 
 @Table
 export default class User extends Model {
-    @Column ({allowNull: false})
-    nombre!: string;
-
-    
     @PrimaryKey
     @Unique
     @Column ({allowNull: false})
     email!: string;
+
+    @Column ({allowNull: false})
+    nombre!: string;
 
     @Column ({allowNull: false})
     apellido!: string;
@@ -24,7 +23,7 @@ export default class User extends Model {
     updatedAt!: Date;
 
     @HasOne(() => Profesor)
-    profesor!: string
+    profesor!: Profesor
 }
 
 

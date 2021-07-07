@@ -1,4 +1,4 @@
-import { Model, Column, Table, CreatedAt, UpdatedAt, DataType, HasOne, ForeignKey, PrimaryKey, HasMany, BelongsToMany } from 'sequelize-typescript';
+import { Model, Column, Table, CreatedAt, UpdatedAt, DataType, HasOne, ForeignKey, PrimaryKey, HasMany, BelongsToMany, Unique } from 'sequelize-typescript';
 import Clase from './Clase';
 import Rango from './Rango';
 import rango_profesor from './rango_profesor';
@@ -6,13 +6,11 @@ import User from './Usuario';
 
 @Table
 export default class Profesor extends Model {
-
-    
+    @PrimaryKey
+    @ForeignKey(() => User)
+    @Unique
     @Column
-    nombre!: string;
-
-    @Column
-    apellido!: string;
+    usuario!: string;
 
     @Column
     ciudad!: string;
@@ -22,11 +20,6 @@ export default class Profesor extends Model {
     
     @Column
     descripcion!: string;
-
-    @PrimaryKey
-    @ForeignKey(() => User)
-    @Column
-    email!: string;
 
     @HasMany(() => Clase)
     clases!: Clase[];
