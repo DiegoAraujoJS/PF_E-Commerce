@@ -10,12 +10,14 @@ import Claims from './components/Claims/Claims';
 import AddClaim from './components/Claims/AddClaim';
 import DetailClaim from './components/Claims/DetailClaim';
 import Profile from './components/perfilProfesor/profile';
+import Home from './components/home/Home';
 
 function App() {
   return (
     <BrowserRouter>
         <Route exact path='/clases'><ClassContainer /></Route>
         <Route exact path='/'> <Login /> </Route>
+        <Route exact path='/home'> <Home/> </Route>
         <Route exact path='/calendar'> <CalendarApp /> </Route>
         <Route exact path = '/claim'><Claims/></Route>
       <Route exact path = '/claim/:id'><DetailClaim/></Route>
