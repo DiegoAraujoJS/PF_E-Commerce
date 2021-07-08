@@ -1,5 +1,4 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 import Login from './components/login/login';
 import {BrowserRouter} from 'react-router-dom'
@@ -17,9 +16,9 @@ function App() {
         <Route exact path='/'> <Login /> </Route>
         <Route exact path='/calendar'> <CalendarApp /> </Route>
         <Route exact path = '/claim'><Claims/></Route>
-      <Route exact path = '/claim/:id'><DetailClaim/></Route>
-      <Route exact path = '/claim/add'><AddClaim/></Route>
-      <Route exact path = '/perfil'><Profile /></Route>
+        <Route exact path = '/claim/:id'><DetailClaim/></Route>
+        <Route exact path = '/claim/id/add'><AddClaim/></Route>
+        <Route exact path = '/perfil'><Profile /></Route>
     </BrowserRouter>
     
   );

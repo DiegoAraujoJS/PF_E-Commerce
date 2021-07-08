@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
+import style from './AddClaim.module.css';
 
 function AddClaim() {
 
     let [professor, setProfessor] = useState('');
     let [claim, setClaim] = useState({professors:[], name: '', description: '', detail:""});
 
-    const professorsList = useSelector(state => state['professor']);
+    const professorsList = useSelector(state => state['professors']);
 
 
     const handleChange = (e) => {
@@ -15,7 +16,7 @@ function AddClaim() {
         let val = e.target.value;
         setClaim({...claim,[nam]:val});
     };
-console.log(claim)
+
     let professorChange = (e) => {
         let cn = e.target.value
         setProfessor(cn);
@@ -36,7 +37,7 @@ console.log(claim)
     };
 
     let validateProfessor = (a) => {
-        return professorsList.some(c => c.name === a)
+        return professorsList.some(c => c['name'] === a)
     };
 
     let delProfessor = (e) => {
@@ -44,45 +45,84 @@ console.log(claim)
         setClaim({...claim, professors:[...claim.professors.filter(c => c !== e.target.name)]})
     };
 
+    let handleSubmit = (e) => {
+        e.preventDefault();
+
+        let { name, description, detail } = claim;
+
+        // claim.professors.map(professor => 
+        //     axios.post('http://localhost:3001/api/claim/professor', { name, description, detail })
+        // )
+
+        alert('Reclamo Subido')
+    };
+
     return (
-        <div>
-            <form>
-                <div>
+        <div className = {style.container}>
+            <form className = {style.form}>
+                <div className = {style.question}>
                     <h4>Crear un Reclamo</h4>
-                    <label>Nombre Reclamo</label>
-                    <input
-                        type = 'text'
-                        name = 'name'
-                        onChange = {handleChange}
-                    /><br/>
-                    <label>Descripcion</label>
-                    <input
-                        type = 'text'
-                        name = 'description'
-                        onChange = {handleChange}
-                    /><br/>
-                    <label>Detalla el Reclamo</label>
-                    <textarea
-                        name = 'detail'
-                        rows = {4}
-                        cols = {60}
-                        onChange = {handleChange}
-                    />
+                    <div className = {style.claim}>
+                        <label>Nombre Reclamo</label>
+                        <input
+                            className = {style.input}
+                            type = 'text'
+                            name = 'name'
+                            onChange = {handleChange}
+                        />
+                    </div>
+                    <div className = {style.claim}>
+                        <label>Descripcion</label>
+                        <input
+                            className = {style.input}
+                            type = 'text'
+                            name = 'description'
+                            onChange = {handleChange}
+                        />
+                    </div>
+                    <div className = {style.claim}>
+                        <label>Detalla el Reclamo</label>
+                        <textarea
+                            className = {style.input}
+                            name = 'detail'
+                            rows = {4}
+                            cols = {60}
+                            onChange = {handleChange}
+                        />
+                    </div>
                 </div>
-                <div>
-                    <label>Profesor:</label><br/>
+                <div className = {style.profe}>
+                    <label>Profesor:</label>
                     <input  
+                        className = {style.input}
                         id = 'p'
                         type='text' 
                         name='professor' 
                         onChange={professorChange}
                     />
-                    <button onClick={addProfessor}>+</button><br/>
+                    <button 
+                        className = {style.sum} 
+                        onClick={addProfessor}>
+                            +
+                    </button>
+                </div>
+                <div className = {style.claim}>
                     {Array.isArray(claim.professors) && claim.professors.map((c,i) => 
                     <label key={i}> {c} 
-                        <button name={c} onClick={delProfessor}>x</button>
+                        <button 
+                            className = {style.del}
+                            name={c} 
+                            onClick={delProfessor}>
+                                x
+                        </button>
                     </label>)}
                 </div>
+                <button 
+                    className = {style.submit}
+                    value='Add Claim' 
+                    onClick={handleSubmit}>
+                        Subir Reclamo
+                </button>
             </form>
         </div>
     )

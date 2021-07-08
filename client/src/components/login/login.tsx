@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import logo from '../../logo.svg';
 import style from './login.module.css';
 import { GoogleLogin, GoogleLogout } from 'react-google-login';
 
@@ -74,7 +73,7 @@ function Login() {
     return (
         <div className="container">
             <div>
-                <img src={logo} alt='logo'></img>
+                
             </div>
             <div>
                 <h1>INICIAR SESIÓN</h1>
