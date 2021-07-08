@@ -108,7 +108,7 @@ router.post('/add', async (req: Request, res: Response) => {
                     calendario: [
                         {
                             fecha: query.fecha,
-                            disponible: query.disponible,
+                            disponible: query.disponible ? query.disponible : null,
                             ocupado: query.ocupado,
                         }
                     ]
@@ -126,7 +126,7 @@ router.post('/add', async (req: Request, res: Response) => {
 
 router.get('/:usuario', async (req: Request, res: Response) => {
     const { usuario } = req.params
-    console.log(usuario)
+
     try {
         if (usuario) {
             const profesor = await Profesor.findOne({
@@ -135,9 +135,8 @@ router.get('/:usuario', async (req: Request, res: Response) => {
                 }
             })
             if (profesor) {
-                if (profesor.calendario.length > 0 && profesor.calendario) {
-                    let fechas = profesor.calendario.filter( (c) => c.disponible.length > 0 )
-                    res.send(fechas)
+                if (profesor.calendario.length > 0 && profesor.calendario) {                 
+                    res.send(profesor.calendario)
                 }
             }
         }
@@ -147,5 +146,58 @@ router.get('/:usuario', async (req: Request, res: Response) => {
     }
 });
 
+
+// router.put('/edit', async (req: Request, res: Response) => {
+//     let query: Horario = req.body
+//     try {
+//         let profesor = await Profesor.findOne({
+//             where: {
+//                 usuario: query.email
+//             }
+//         })
+
+//         if (profesor) {
+//             if (profesor.calendario) {
+//                 // profesor.set({
+//                 //     ...profesor,
+//                 //     calendario: [
+//                 //         ...profesor.calendario,
+//                 //         {
+//                 //             fecha: query.fecha,
+//                 //             disponible: query.disponible,
+//                 //             ocupado: query.ocupado,
+//                 //         }
+//                 //     ]
+//                 // })
+//                 // let calendarioEditado = await profesor.save()
+//                 let fechas = profesor.calendario.find(element => {
+//                     element.fecha.anio === query.fecha.anio &&
+//                     element.fecha.mes === query.fecha.mes &&
+//                     element.fecha.dia === query.fecha.dia
+//                 })
+
+
+//                 res.send(fechas)
+//             }
+//             else {
+//                 profesor.set({
+//                     ...profesor,
+//                     calendario: [
+//                         {
+//                             fecha: query.fecha,
+//                             disponible: query.disponible ? query.disponible : null,
+//                             ocupado: query.ocupado,
+//                         }
+//                     ]
+//                 })
+//                 let calendarioEditado = await profesor.save()
+//                 res.send(calendarioEditado)
+//             }
+//         }
+//     }
+//     catch (error) {
+//         res.send(error)
+//     }
+// });
 
 export default router
