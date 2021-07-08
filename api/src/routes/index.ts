@@ -1,7 +1,15 @@
 import {Router} from 'express'
-import UserRoutes from './user'
-import loginInfo from './login'
+import login from './login'
+import usuarios from './usuarios'
+import clases from './clases'
+import profesores from './profesores'
+import reclamos from './reclamos'
+
 const router = Router()
-router.use('/clases', UserRoutes)
-router.use('/login', loginInfo)
+router.use('/login', login)
+router.use('/usuarios', usuarios)
+router.use('/clases', clases)
+router.use('/profesores', profesores)
+router.use('/reclamos', reclamos)
+
 export default router

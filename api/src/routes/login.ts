@@ -1,5 +1,5 @@
 import {Request, Response, Router} from 'express'
-import User from './../models/User'
+import Usuario from './../models/Usuario'
 const router = Router ()
 
 router.get('/true', async (req: Request, res: Response) => {
@@ -10,7 +10,7 @@ router.get('/true', async (req: Request, res: Response) => {
     res.send(response)
 })
 router.get('/false', async (req: Request, res: Response) => {
-    // const users = await User.findAll()
+    const users = await Usuario.findAll()
     const response = {
         rejected: false
     }
@@ -19,7 +19,7 @@ router.get('/false', async (req: Request, res: Response) => {
 router.post('/', async (req:Request, res:Response) => {
     const userInfo = req.body
     try{
-        const createdUser = await User.create(userInfo)
+        const createdUser = await Usuario.create(userInfo)
         res.send(createdUser)
     }
     catch (error) {
