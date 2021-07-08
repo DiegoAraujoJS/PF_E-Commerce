@@ -23,9 +23,9 @@ export default function Home() {
 
     const bgImg: CSS.Properties = {
         position: 'fixed',
-        height: '950px',
-        width: '1350px',  
-        bottom: '-230px',
+        minHeight: '100%',
+        minWidth: '100%',  
+        bottom: '-200px',
         margin: '0px auto',
         zIndex: -1
     };
