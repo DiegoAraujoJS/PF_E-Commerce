@@ -8,7 +8,7 @@ import "firebase/auth";
 import "firebase/analytics";
 
 import { useAuthState } from "react-firebase-hooks/auth";
-// import { useCollectionData } from "react-firebase-hooks/firestore";
+import { useCollectionData } from "react-firebase-hooks/firestore";
 
 firebase.initializeApp({
   apiKey: "AIzaSyDGqKZu8WjUjyjurueAHUhooogWltFdcwM",
@@ -22,7 +22,7 @@ firebase.initializeApp({
 });
 
 const auth = firebase.auth();
-// const firestore = firebase.firestore();
+const firestore = firebase.firestore();
 // const analytics = firebase.analytics();
 
 function Chat(props) {
