@@ -1,12 +1,10 @@
-import { Model, Column, Table, CreatedAt, UpdatedAt, ForeignKey, BelongsTo } from 'sequelize-typescript';
+import { Model, Column, Table, CreatedAt, UpdatedAt, ForeignKey,  BelongsTo, HasMany } from 'sequelize-typescript';
 import Profesor from './Profesor';
+import Puntuacion from './Puntuacion';
 @Table
 export default class Clase extends Model {
     @Column
     nombre!: string;
-
-    @Column
-    puntuacion!: number;
 
     @ForeignKey(() => Profesor)
     @Column
@@ -23,6 +21,12 @@ export default class Clase extends Model {
 
     @Column
     nivel!: string;
+
+    @Column 
+    puntuacion!: number;
+
+    @HasMany(() => Puntuacion)
+    puntuaciones!: Puntuacion[];
 }
 
 // const Clase =  sequelize.define('Clase', {

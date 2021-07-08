@@ -3,6 +3,7 @@ import Clase from './Clase';
 import Rango from './Rango';
 import rango_profesor from './rango_profesor';
 import User from './Usuario';
+import Puntuacion from './Puntuacion';
 
 @Table
 export default class Alumno extends Model {
@@ -20,6 +21,10 @@ export default class Alumno extends Model {
     
     @Column
     descripcion!: string;
+
+    @HasMany(() => Puntuacion)
+    puntuaciones!: Puntuacion[];
+
 
 }
 

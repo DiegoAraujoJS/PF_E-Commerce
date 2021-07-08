@@ -1,3 +1,4 @@
+import Alumno from "./models/Alumno"
 import Clase from "./models/Clase"
 
 import Profesor from "./models/Profesor"
@@ -44,6 +45,13 @@ const bootstrap = async () => {
         apellido: 'Carro',
         email: "javiercarro@gmail.com"
     })
+    await User.create({
+        nombre: 'Mauro',
+        apellido: 'Leonel',
+        email: "mauroleonel@gmail.com"
+    })
+
+    
 
     await Profesor.create({
         usuario: "diegoaraujo@gmail.com",
@@ -67,6 +75,13 @@ const bootstrap = async () => {
     })
 
     // Parte II
+
+    await Alumno.create({
+        usuario: "mauroleonel@gmail.com",
+        ciudad: "Lima",
+        foto: "https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=547&q=80",
+        descripcion: "Alumno"
+    })
 
     await Rango.create({
         inicio: 16,

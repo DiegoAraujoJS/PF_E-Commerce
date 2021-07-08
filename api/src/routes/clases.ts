@@ -2,6 +2,8 @@ import {Request, Response, Router} from 'express'
 import Clase from './../models/Clase'
 import Profesor from '../models/Profesor'
 import User from '../models/Usuario'
+import Puntuacion from '../models/Puntuacion'
+import { classicNameResolver } from 'typescript'
 const router = Router ()
 
 router.get('/:materia/:ciudad', async (req: Request, res: Response) => {
@@ -32,14 +34,39 @@ router.get('/:materia/:ciudad', async (req: Request, res: Response) => {
 
 })
 
+// Devuelve todas las clases
+router.get('/', async (req: Request, res: Response) => {
+    const clases = await Clase.findAll({});
+    res.send(clases);
+
+})
+
+// Puntua una clase
 router.post('/puntuar', async (req: Request, res:Response) => {
-    const {id, puntuacion} = req.body;
+    const {id, alumno, puntuacion, comentario} = req.body;
     try {
-        const clase = await Clase.findOne({where: { id }})
+        const clase = await Clase.findOne({
+            where: { id }, 
+            include: [{
+            model: Puntuacion,
+            attributes: ['puntuacion']
+        }]
+    })
         if (clase) {
-            clase.update({ puntuacion })
-            const claseActualizada = await Clase.findOne({where: { id }})
-            res.send()
+            Puntuacion.create({
+                usuario: alumno,
+                clase: id,
+                puntuacion,
+                comentario
+            });
+            const claseActualizada = await Clase.findOne({
+                where: { id }, 
+                include: [{
+                model: Puntuacion,
+                attributes: ['puntuacion']
+            }]
+        });
+            res.send(claseActualizada)
         } else {
             return res.send(`No se encontró ninguna clase con el id ${id}`)
         }
