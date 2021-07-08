@@ -29,6 +29,8 @@ interface BodyRoutePuntuarPost{
         }
     ]
 }
+    
+
 
 @Table
 export default class Puntuacion extends Model {
