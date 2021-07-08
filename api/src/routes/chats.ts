@@ -31,6 +31,13 @@ router.get("/", async (req: Request, res: Response) => {
       text: "hola otra respuesta",
       createdAt: new Date(),
     },
+    ,
+    {
+      uid: "diegoaraujo@gmail.com",
+      photoURL: "http://picsum.photos/200",
+      text: "hola otra respuesta",
+      createdAt: new Date(),
+    },
   ]);
 });
 
