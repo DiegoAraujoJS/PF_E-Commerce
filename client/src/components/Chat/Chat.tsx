@@ -1,5 +1,6 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import "./Chat.css";
+import axios from "axios";
 
 import firebase from "firebase/app";
 import "firebase/firestore";
@@ -7,7 +8,7 @@ import "firebase/auth";
 import "firebase/analytics";
 
 import { useAuthState } from "react-firebase-hooks/auth";
-import { useCollectionData } from "react-firebase-hooks/firestore";
+// import { useCollectionData } from "react-firebase-hooks/firestore";
 
 firebase.initializeApp({
   apiKey: "AIzaSyDGqKZu8WjUjyjurueAHUhooogWltFdcwM",
@@ -21,12 +22,12 @@ firebase.initializeApp({
 });
 
 const auth = firebase.auth();
-const firestore = firebase.firestore();
-const analytics = firebase.analytics();
+// const firestore = firebase.firestore();
+// const analytics = firebase.analytics();
 
 function Chat(props) {
   const [user] = useAuthState(auth);
-  console.log(user);
+  // console.log(user);
 
   return (
     <div className="App">
@@ -80,27 +81,39 @@ function ChatRoom() {
   // const messagesRef = firestore.collection("messages");
   const [user] = useAuthState(auth);
 
-  let messagesRef = firestore.collection(unificar("diegolaraujo96@gmail.com", "benjaminspiecker@gmail.com" ));
+  // let messagesRef = firestore.collection(unificar("diegolaraujo96@gmail.com", "benjaminspiecker@gmail.com" ));
 
-  const query = messagesRef.orderBy("createdAt").limit(25);
-
-  
-
-  const [messages] = useCollectionData(query, { idField: "id" });
+  // const query = messagesRef.orderBy("createdAt").limit(25);
+  // const [messages] = useCollectionData(query, { idField: "id" });
+  const [messages, setMessages] = useState([]);
 
   const [formValue, setFormValue] = useState("");
+
+  useEffect( () => {
+    
+    getMessages()
+    
+  }, [])
+    
+  const getMessages = async() => {
+    const response = await axios.get("http://localhost:3001/api/chats");
+    setMessages(response.data);
+  }
+  const setMessage = async () => {
+
+  }
 
   const sendMessage = async (e) => {
     e.preventDefault();
 
     const { uid, photoURL } = auth.currentUser;
 
-    await messagesRef.add({
-      text: formValue,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-      uid,
-      photoURL,
-    });
+    // await messagesRef.add({
+    //   text: formValue,
+    //   createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    //   uid,
+    //   photoURL,
+    // });
 
     setFormValue("");
     dummy!.current.scrollIntoView({ behavior: "smooth" });
@@ -110,7 +123,7 @@ function ChatRoom() {
     <>
       <main>
         {messages &&
-          messages.map((msg:any) => <ChatMessage key={msg.id} message={msg} />)}
+          messages.map((msg:any, i) => <ChatMessage key={i} message={msg} />)}
 
         <span ref={dummy}></span>
       </main>
@@ -119,7 +132,7 @@ function ChatRoom() {
         <input
           value={formValue}
           onChange={(e) => setFormValue(e.target.value)}
-          placeholder="say something nice"
+          placeholder="Envia un mensaje"
         />
 
         <button type="submit" disabled={!formValue}>
@@ -132,8 +145,8 @@ function ChatRoom() {
 
 function ChatMessage(props) {
   const { text, uid, photoURL } = props.message;
-
-  const messageClass = uid === auth.currentUser.uid ? "sent" : "received";
+  
+  const messageClass = uid === auth.currentUser.email ? "sent" : "received";
 
   return (
     <>

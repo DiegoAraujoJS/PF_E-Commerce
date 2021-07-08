@@ -1,31 +1,40 @@
-import { Request, Response, Router } from 'express'
-import { Op } from 'sequelize'
-import Chat from '../models/Chat'
+import { Request, Response, Router } from "express";
+import { Op } from "sequelize";
+import Chat from "../models/Chat";
 
-const router = Router()
-
+const router = Router();
 
 // /api/chats/?user1=diegoaraujo@gmail.com&user2=benjaSpickler@gmail.com
-router.get('/', async (req:Request, res:Response) => {
-    res.send([
-        {
-          
-          uid: "diegoaraujo@gmail.com",
-          photoURL: "http://...",
-          text: "hola soy un mensaje",
-          createdAt: new Date()
-        },
-        {
-            uid: "benjaminspickler@gmail.com",
-            photoURL: "http://...",
-            text: "hola soy una respuesta",
-            createdAt: new Date()
-          }
-      ])
-})
+router.get("/", async (req: Request, res: Response) => {
+  res.send([
+    {
+      uid: "diegoaraujo@gmail.com",
+      photoURL: "http://picsum.photos/200",
+      text: "hola soy un mensaje",
+      createdAt: new Date(),
+    },
+    {
+      uid: "benjaminspiecker@gmail.com",
+      photoURL: "http://picsum.photos/200",
+      text: "hola soy una respuesta",
+      createdAt: new Date(),
+    },
+    {
+      uid: "benjaminspiecker@gmail.com",
+      photoURL: "http://picsum.photos/200",
+      text: "hola otro mensaje",
+      createdAt: new Date(),
+    },
+    {
+      uid: "diegoaraujo@gmail.com",
+      photoURL: "http://picsum.photos/200",
+      text: "hola otra respuesta",
+      createdAt: new Date(),
+    },
+  ]);
+});
 
 export default router;
-
 
 // codigo viejo de braian
 
@@ -41,11 +50,11 @@ export default router;
 //         where: {
 //             [Op.or]: [{
 //                 user_a: user_a,
-//                 user_b: user_b 
+//                 user_b: user_b
 //             },
-//             { 
+//             {
 //                 user_a: user_b,
-//                 user_b: user_a,        
+//                 user_b: user_a,
 //             }]
 //         }
 //     })
@@ -64,8 +73,6 @@ export default router;
 
 // })
 
-
-
 // router.get('/:user_a/:user_b', async (req: Request, res: Response) => {
 //     const { user_a, user_b } = req.params
 
@@ -73,11 +80,11 @@ export default router;
 //         where: {
 //             [Op.or]: [{
 //                 user_a: user_a,
-//                 user_b: user_b 
+//                 user_b: user_b
 //             },
-//             { 
+//             {
 //                 user_a: user_b,
-//                 user_b: user_a,        
+//                 user_b: user_a,
 //             }]
 //         }
 //     })
