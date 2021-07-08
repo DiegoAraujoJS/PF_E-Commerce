@@ -1,85 +1,125 @@
-import {Request, Response, Router} from 'express'
+import { Request, Response, Router } from 'express'
 import Clase from './../models/Clase'
 import Profesor from '../models/Profesor'
-import Puntuacion from '../models/Puntuacion'
-const router = Router ()
+import User from '../models/Usuario';
+import { Op, where } from 'sequelize'
+const router = Router()
+
+
+//http://localhost:3001/api/clases?busqueda=Buenos%20aires%20matematica%20segundo%20grado
+router.get('/', async (req: Request, res: Response) => {
+    const { busqueda } = req.query
+    try {
+        if (busqueda) {
+            let palabrasSeparadas = (busqueda as string).split(" ");
+
+            let resultado = palabrasSeparadas.map(async (element) => {
+                return await Clase.findAll({
+                    where: {
+                        [Op.or]: [{
+                            materia: {
+                                [Op.like]: `%${element}%`
+                            }
+                        },
+                        {
+                            nivel: {
+                                [Op.like]: `%${element}%`
+                            }
+                        }
+                        ]
+                    }
+                })
+            });
+
+            Promise.all(resultado)
+                .then(response => {
+                    var arrayClases: any[] = []
+                    response.forEach(async (element) => {
+                        console.log("element", element)
+                        if (element.length) {
+                            arrayClases.push(element)
+                        }
+                    })
+                    const clasesSolicitadas = arrayClases[0]
+
+                    let profesores = palabrasSeparadas.map(async (element) => {
+
+                        return await User.findAll({
+                            include: [{
+                                model: Profesor,
+                                required: true,
+                                attributes: ['ciudad', 'foto', 'descripcion'],
+                                where: {
+                                    ciudad: {
+                                        [Op.like]: `%${element}%`
+
+                                    }
+                                },
+                            }],
+                            attributes: ['email', 'nombre', 'apellido'],
+                        })
+                    })
+
+                    Promise.all(profesores)
+                        .then(response => {
+                            var arrayProfesores: any[] = []
+                            response.forEach(async (element) => {
+                                if (element.length) {
+                                    arrayProfesores.push(element)
+                                }
+                            })
+                            const profesoresSolicitados = arrayProfesores[0]
+
+                            var result = [];
+                            for (var i = 0; i < clasesSolicitadas.length; i++) {
+                                for (var j = 0; j < profesoresSolicitados.length; j++) {
+                                    if (clasesSolicitadas[i].Profesor_mail === profesoresSolicitados[j].email) {
+                                        result.push(clasesSolicitadas[i])
+                                    }
+                                }
+                            }
+                            res.send(result)
+                        })
+                })
+        }
+    }
+    catch (error) {
+        res.send(error)
+    }
+});
 
 
 router.get('/:materia/:ciudad', async (req: Request, res: Response) => {
-    console.log(req.params)
-    const {materia , ciudad} = req.params
+    const { materia, ciudad } = req.params
+    try {
+        const clasesFiltradas = await Clase.findAll({ where: { materia: materia } })
 
-    const clases = await Clase.findAll()
-    let clasesFiltradas = clases.filter(clase => {
-        return clase.materia === materia
-    })
-    console.log('clases', clases)
-    console.log('clases filtradas ', clasesFiltradas)
+        const profesorFiltrados = await User.findAll({
+            include: [{
+                model: Profesor,
+                required: true,
+                attributes: ['ciudad', 'foto', 'descripcion'],
+                where: { ciudad: ciudad }
+            }],
+            attributes: ['email', 'nombre', 'apellido']
+        })
 
-    const profesores = await Profesor.findAll()
-    let profesorFiltrados = profesores.filter(profesor => {return profesor.ciudad === ciudad})
+        var result = [];
+        for (var i = 0; i < clasesFiltradas.length; i++) {
+            for (var j = 0; j < profesorFiltrados.length; j++) {
 
-    var result = [];
-    for(var i=0; i < clasesFiltradas.length; i++){
-         for(var j=0; j < profesorFiltrados.length; j++){
-             console.log('clases filtradas ', clasesFiltradas[i], 'profesores filtrados ', profesorFiltrados[j])
-            if(clasesFiltradas[i].Profesor_mail === profesorFiltrados[j].nombre){ 
-                result.push(clasesFiltradas[i])
+                if (clasesFiltradas[i].Profesor_mail === profesorFiltrados[j].email) {
+                    result.push(clasesFiltradas[i])
+                }
             }
         }
+        res.send(result)
     }
-    res.send(result)
-})
-
-router.get('/', async (req: Request, res: Response) => {
-    const clases= await Clase.findAll({
-        include: [Profesor]
-    })
-    return res.send(clases)
-})
-///////////
-//////////
-
-
-// Puntua una clase
-router.post('/puntuar', async (req: Request, res: Response) => {
-    const { id, alumno, puntuacion, comentario } = req.body;
-    try {
-        const clase = await Clase.findOne({
-            where: { id },
-            include: [{
-                model: Puntuacion,
-                attributes: ['puntuacion']
-            }]
-        })
-        if (clase) {
-            await Puntuacion.create({
-                usuario: alumno,
-                clase: id,
-                puntuacion,
-                comentario
-            });
-
-            const claseActualizada = await Clase.findOne({
-                where: { id },
-                include: [{
-                    model: Puntuacion
-                }]
-            });
-            res.send(claseActualizada)
-        } else {
-            return res.send(`No se encontró ninguna clase con el id ${id}`)
-        }
-    } catch {
-
+    catch (error) {
+        res.send(error)
     }
 })
 
-
-
-
-
-// propiedades notNull de Clase: 
 
 router.post('/add', async (req: Request, res: Response) => {
     const clase = req.body
@@ -92,13 +132,20 @@ router.post('/add', async (req: Request, res: Response) => {
     }
 })
 
+
 router.put('/edit', async (req: Request, res: Response) => {
-    const {id} = req.body
+    const { id, descripcion, materia, nivel, grado, puntuacion } = req.body
+    const claseEditada = {
+        descripcion,
+        materia,
+        nivel,
+        grado,
+        puntuacion,
+    }
     try {
-        
         const clase: any = await Clase.findByPk(id);
-        console.log(clase)
-        await clase.set(clase.descripcion = req.body.descripcion);
+
+        await clase.set(claseEditada);
         await clase.save();
         const claseCambiada = await Clase.findByPk(id);
         res.send(claseCambiada)
@@ -108,8 +155,9 @@ router.put('/edit', async (req: Request, res: Response) => {
     }
 })
 
+
 router.post('/delete', async (req: Request, res: Response) => {
-    const {id} = req.body
+    const { id } = req.body
     try {
         await Clase.destroy({
             where: { id: id }
@@ -119,10 +167,6 @@ router.post('/delete', async (req: Request, res: Response) => {
         res.send(error)
     }
 })
-
-//////////
-/////////
-
 
 
 export default router;
