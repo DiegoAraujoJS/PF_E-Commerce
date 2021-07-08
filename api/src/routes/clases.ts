@@ -2,34 +2,56 @@ import {Request, Response, Router} from 'express'
 import Clase from './../models/Clase'
 import Profesor from '../models/Profesor'
 import Puntuacion from '../models/Puntuacion'
+import { Op } from 'sequelize'
 const router = Router ()
 
 
-router.get('/:materia/:ciudad', async (req: Request, res: Response) => {
-    console.log(req.params)
-    const {materia , ciudad} = req.params
+router.get('/', async (req: Request, res: Response) => {
+    const { busqueda } = req.query
+    try {
+        if (busqueda) {
+            let palabrasSeparadas = (busqueda as string).split(" ");
 
-    const clases = await Clase.findAll()
-    let clasesFiltradas = clases.filter(clase => {
-        return clase.materia === materia
-    })
-    console.log('clases', clases)
-    console.log('clases filtradas ', clasesFiltradas)
-
-    const profesores = await Profesor.findAll()
-    let profesorFiltrados = profesores.filter(profesor => {return profesor.ciudad === ciudad})
-
-    var result = [];
-    for(var i=0; i < clasesFiltradas.length; i++){
-         for(var j=0; j < profesorFiltrados.length; j++){
-             console.log('clases filtradas ', clasesFiltradas[i], 'profesores filtrados ', profesorFiltrados[j])
-            if(clasesFiltradas[i].Profesor_mail === profesorFiltrados[j].nombre){ 
-                result.push(clasesFiltradas[i])
+            
+            let clases: any[] = []
+            for (let x of palabrasSeparadas){
+                const c = await Clase.findAll({
+                    where: {
+                        [Op.or]: [{
+                            materia: {
+                                [Op.like]: `%${x}%`.replace("\'", '')
+                            }
+                        },
+                        {
+                            nivel: {
+                                [Op.like]: `%${x}%`.replace("\'", '')
+                            }
+                        },
+                        {
+                            grado: {
+                                [Op.like]: `%${x}%`.replace("\'", '')
+                            }
+                        },
+                        {
+                            ciudad: {
+                                [Op.like]: `%${x}%`.replace("\'", '')
+                            }
+                        }
+                        
+                        ]
+                    }
+                })
+                console.log(c)
+                clases.push(...c)
             }
+            res.send(clases)
+
         }
     }
-    res.send(result)
-})
+    catch (error) {
+        res.send(error)
+    }
+});
 
 router.get('/', async (req: Request, res: Response) => {
     const clases= await Clase.findAll({
