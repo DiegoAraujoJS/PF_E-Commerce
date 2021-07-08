@@ -1,6 +1,7 @@
 import {Request, Response, Router} from 'express'
 import Clase from './../models/Clase'
 import Profesor from '../models/Profesor'
+import Puntuacion from '../models/Puntuacion'
 const router = Router ()
 
 
@@ -38,6 +39,45 @@ router.get('/', async (req: Request, res: Response) => {
 })
 ///////////
 //////////
+
+
+// Puntua una clase
+router.post('/puntuar', async (req: Request, res: Response) => {
+    const { id, alumno, puntuacion, comentario } = req.body;
+    try {
+        const clase = await Clase.findOne({
+            where: { id },
+            include: [{
+                model: Puntuacion,
+                attributes: ['puntuacion']
+            }]
+        })
+        if (clase) {
+            await Puntuacion.create({
+                usuario: alumno,
+                clase: id,
+                puntuacion,
+                comentario
+            });
+
+            const claseActualizada = await Clase.findOne({
+                where: { id },
+                include: [{
+                    model: Puntuacion
+                }]
+            });
+            res.send(claseActualizada)
+        } else {
+            return res.send(`No se encontró ninguna clase con el id ${id}`)
+        }
+    } catch {
+
+    }
+})
+
+
+
+
 
 // propiedades notNull de Clase: 
 

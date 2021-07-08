@@ -1,43 +1,50 @@
 import React, { useEffect, useState } from 'react';
 import './profile.css'
 import axios from "axios"
-
+import Calendar from "../calendar/Calendar"
 
 interface Profesor {
-    apellido: string
-    ciudad: string
-    descripcion: string
-    foto: string
-    id: number
+    email: string
     nombre: string
+    apellido: string
+    profesor: Object
 }
 
 
 function Profile(){
-    const  [prof, setProf]=useState<any>({})
-    const fetchProfs=async()=>{
-        const response=await axios.
-            get<Profesor[]>(`http://localhost:3001/api/profesores/edwardburgos@gmail.com`)
-            .catch((err)=>{console.log("Err", err)});
-            if (response ) { 
-                console.log("Esto es response", response)
-                setProf(response.data[0])
-              }
+    const  [prof, setProf]=useState<any>({
+        email:"",
+        nombre:"",
+        profesor:{},
+    })
+    const profesorArr = [];
+    const fetchProfs = async () => {
+        try {
+            const response = await axios.get(`http://localhost:3001/api/profesores/edwardburgos@gmail.com`)
+            setProf({
+                email:response.data.email,
+                nombre:response.data.nombre,
+                profesor:response.data.profesor
+            })
+        } catch(err) {
+            console.log(err)
+        }
+        
+        
     }
     useEffect(()=>{
         fetchProfs()
     }, []);
-    console.log(prof)
     
-    return (<div className="row py-5 px-4">
-    <div className="col-md-5 mx-auto">
+    return (
+    <div className="row py-5 px-4">
+    <div className="col-md-7 mx-auto">
      
         <div className="bg-white shadow rounded overflow-hidden">
             <div className="px-4 pt-0 pb-4 cover">
                 <div className="media align-items-center profile-head">
                 
-                    <div className="profile"><img src={prof.foto} alt="..." width="130" height="130" className="profile"/>
-                  
+                    <div className="profile"><img src={prof.profesor.foto} alt="..." width="130" height="130" className="profile"/>
                     </div>
                     <div className="rate">
                         <input type="radio" id="star5" name="rate" value="5" />
@@ -54,7 +61,7 @@ function Profile(){
                    
                     <div className="media-body mb-5">
                         <h4 className="mt-0 mb-0">{prof.nombre} {prof.apellido} </h4>
-                        <p className="small mb-4"> <i className="fas fa-map-marker-alt mr-2"></i>{prof.ciudad}</p>
+                        <p className="small mb-4"> <i className="fas fa-map-marker-alt mr-2"></i>{prof.profesor.ciudad}</p>
                     </div>
                   
                 </div>
@@ -68,11 +75,14 @@ function Profile(){
             <div className="px-4 py-3">
                 <h5 className="mb-0">Licenciado en matematica</h5>
                 <div className="p-4 rounded shadow-sm bg-light">
-                    <p className="font-italic mb-0">{prof.descripcion}</p>
+                    <p className="font-italic mb-0">{prof.profesor.descripcion}</p>
                     <p className="font-italic mb-0"></p>
                     <p className="font-italic mb-0">Trabajo en ...</p>
                 </div>
             </div>
+            <div>
+                      <Calendar/>
+                  </div>
             <div className="py-4 px-4">
                 
             </div>

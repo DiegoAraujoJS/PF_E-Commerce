@@ -10,7 +10,7 @@ export default class User extends Model {
     @PrimaryKey
     @Unique
     @Column ({allowNull: false})
-    email!: string;
+    mail!: string;
 
     @Column ({allowNull: false})
     apellido!: string;

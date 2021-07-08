@@ -1,12 +1,20 @@
-import { Model, Column, Table, CreatedAt, UpdatedAt, ForeignKey, BelongsTo } from 'sequelize-typescript';
+import { Model, Column, Table, CreatedAt, UpdatedAt, ForeignKey,  BelongsTo, HasMany } from 'sequelize-typescript';
 import Profesor from './Profesor';
+import Puntuacion from './Puntuacion';
 @Table
 export default class Clase extends Model {
     @Column
     nombre!: string;
 
+    @ForeignKey(() => Profesor)
     @Column
-    puntuacion!: number;
+    Profesor_mail!: string
+
+    @Column
+    descripcion!: string;
+
+    @Column ({allowNull: false})
+    materia!: string;
 
     @Column ({allowNull: false})
     grado!: string;
@@ -14,20 +22,11 @@ export default class Clase extends Model {
     @Column
     nivel!: string;
 
-    @Column ({allowNull: false})
-    materia!: string;
+    @Column 
+    puntuacion!: number;
 
-    @Column
-    descripcion!: string;
-
-    @ForeignKey(() => Profesor)
-    @Column ({allowNull: false})
-    Profesor_mail!: string
-
-    @BelongsTo(() => Profesor)
-    profesor!: Profesor
-
-
+    @HasMany(() => Puntuacion)
+    puntuaciones!: Puntuacion[];
 }
 
 // const Clase =  sequelize.define('Clase', {

@@ -93,7 +93,7 @@ export default class Profesor extends Model {
     @PrimaryKey
     @ForeignKey(() => User)
     @Column
-    email!: string;
+    User_mail!: string;
 
     @HasMany(() => Clase)
     clases!: Clase[];

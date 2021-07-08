@@ -28,7 +28,7 @@ router.get('/', async (req: Request, res: Response) => { // profesore?name=rod
                     },
                 ]
             },
-            attributes: ['email', 'nombre', 'apellido']
+            attributes: ['mail', 'nombre', 'apellido']
         })
         if (profesores.length) return res.send(profesores);
         return res.send(`No se encontraron coincidencias con ${terminoBusqueda.toString()}`)
@@ -39,7 +39,7 @@ router.get('/', async (req: Request, res: Response) => { // profesore?name=rod
             required: true,
             attributes: ['ciudad', 'foto', 'descripcion']
         }],
-        attributes: ['email', 'nombre', 'apellido']
+        attributes: ['mail', 'nombre', 'apellido']
     })
     if (profesores.length) return res.send(profesores)
     return res.send(`No se encontraron profesores`)
@@ -51,25 +51,25 @@ interface Prof {
     foto: string
     id: number
     nombre: string;
-    email: string;
+    mail: string;
 }
-router.get('/:email', async (req: Request, res: Response) => {
-    const email = req.params.email;
+router.get('/:mail', async (req: Request, res: Response) => {
+    const mail = req.params.mail;
     const usuario: User | null = await User.findOne({
         include: [{
             model: Profesor,
             attributes: ['ciudad', 'foto', 'descripcion']
         }],
         where: {
-            email: email.toString()
+            mail: mail.toString()
         },
-        attributes: ['email', 'nombre', 'apellido']
+        attributes: ['mail', 'nombre', 'apellido']
     });
     if (usuario) {
         if (usuario.profesor) {
             
             let obj: Prof = {
-                    email: usuario.email,
+                    mail: usuario.mail,
                     nombre: usuario.nombre,
                     apellido: usuario.apellido,
                     ciudad: usuario.profesor.ciudad,
@@ -82,28 +82,28 @@ router.get('/:email', async (req: Request, res: Response) => {
                 obj
             ])
         } else {
-            return res.send(`No existe ningún profesor asociado la cuenta del correo ${email}`)
+            return res.send(`No existe ningún profesor asociado la cuenta del correo ${mail}`)
         }
     } else {
-        return res.send(`No existe ninguna cuenta con el correo ${email}`)
+        return res.send(`No existe ninguna cuenta con el correo ${mail}`)
     }
 })
 
-router.get('/:email/clases', async (req: Request, res: Response) => {
-    const email = req.params.email;
+router.get('/:mail/clases', async (req: Request, res: Response) => {
+    const mail = req.params.mail;
     const usuario = await User.findOne({
         include: [{
             model: Profesor
         }],
         where: {
-            email: email.toString()
+            mail: mail.toString()
         },
     });
     if (usuario) {
         if (usuario.profesor) {
             const clases = await Clase.findAll({
               where: {
-                profesor: email.toString()
+                profesor: mail.toString()
             },
             attributes: ['id', 'nombre', 'puntuacion', 'grado', 'nivel', 'materia', 'descripcion']
             });
@@ -113,33 +113,33 @@ router.get('/:email/clases', async (req: Request, res: Response) => {
                 res.send(`El profesor ${usuario.nombre} ${usuario.apellido} aún no tiene clases registradas`)
             }
         } else {
-            return res.send(`No existe ningún profesor asociado la cuenta del correo ${email}`)
+            return res.send(`No existe ningún profesor asociado la cuenta del correo ${mail}`)
         }
     } else {
-        return res.send(`No existe ninguna cuenta con el correo ${email}`)
+        return res.send(`No existe ninguna cuenta con el correo ${mail}`)
     }
 })
 
 router.post('/', async (req: Request, res: Response) => {
-    const email = req.body.usuario;
-    if (email) {
+    const mail = req.body.usuario;
+    if (mail) {
         let usuario = await User.findOne({
             include: [{
                 model: Profesor
             }],
             where: {
-                email: email.toString()
+                mail: mail.toString()
             },
-            attributes: ['email', 'nombre', 'apellido']
+            attributes: ['mail', 'nombre', 'apellido']
         });
         if (usuario) {
             if (!usuario.profesor) {
                 await Profesor.create(req.body)
             } else {
-                return res.send(`Ya existe un profesor asociado a la cuenta ${email} así que debería actualizarlo`);
+                return res.send(`Ya existe un profesor asociado a la cuenta ${mail} así que debería actualizarlo`);
             }
         } else {
-            return res.send(`No existe una cuenta con el correo ${email}`)
+            return res.send(`No existe una cuenta con el correo ${mail}`)
         }
         usuario = await User.findOne({
             include: [{
@@ -148,9 +148,9 @@ router.post('/', async (req: Request, res: Response) => {
                 attributes: ['ciudad', 'foto', 'descripcion']
             }],
             where: {
-                email: email.toString()
+                mail: mail.toString()
             },
-            attributes: ['email', 'nombre', 'apellido']
+            attributes: ['mail', 'nombre', 'apellido']
         });
         return res.send(usuario);
     }
@@ -159,25 +159,25 @@ router.post('/', async (req: Request, res: Response) => {
 
 router.put('/', async (req: Request, res: Response) => {
     const { ciudad, foto, descripcion } = req.body;
-    const email = req.body.usuario;
-    if (email) {
+    const mail = req.body.usuario;
+    if (mail) {
         let usuario: any = await User.findOne({
             include: [{
                 model: Profesor,
             }],
             where: {
-                email: email.toString()
+                mail: mail.toString()
             },
-            attributes: ['email', 'nombre', 'apellido']
+            attributes: ['mail', 'nombre', 'apellido']
         });
         if (usuario) {
             if (usuario.profesor) {
                 await usuario.profesor.update({ciudad, foto, descripcion})
             } else {
-                return res.send(`No existe un profesor asociado a la cuenta ${email} así que primero debe crearlo`)
+                return res.send(`No existe un profesor asociado a la cuenta ${mail} así que primero debe crearlo`)
             }
         } else {
-            return res.send(`No existe una cuenta con el correo ${email}`)
+            return res.send(`No existe una cuenta con el correo ${mail}`)
         }
         usuario = await User.findOne({
             include: [{
@@ -186,39 +186,39 @@ router.put('/', async (req: Request, res: Response) => {
                 attributes: ['ciudad', 'foto', 'descripcion']
             }],
             where: {
-                email: email.toString()
+                mail: mail.toString()
             },
-            attributes: ['email', 'nombre', 'apellido']
+            attributes: ['mail', 'nombre', 'apellido']
         });
         return res.send(usuario);
     }
     return res.send('Indique un correo');
 })
 
-router.delete('/:email', async (req: Request, res: Response) => {
-    const email = req.params.email;
+router.delete('/:mail', async (req: Request, res: Response) => {
+    const mail = req.params.mail;
     const usuario = await User.findOne({
         include: [{
             model: Profesor
         }],
         where: {
-            email: email.toString()
+            mail: mail.toString()
         },
-        attributes: ['email', 'nombre', 'apellido']
+        attributes: ['mail', 'nombre', 'apellido']
     });
     if (usuario) {
         if (usuario.profesor) {
             await Profesor.destroy({
                 where: {
-                    usuario: email.toString()
+                    usuario: mail.toString()
                 }
             });
-            return res.send(`El profesor asociado a la cuenta ${email} fue eliminado exitosamente`)
+            return res.send(`El profesor asociado a la cuenta ${mail} fue eliminado exitosamente`)
         } else {
-            return res.send(`No existe ningún profesor asociado la cuenta del correo ${email}`)
+            return res.send(`No existe ningún profesor asociado la cuenta del correo ${mail}`)
         }
     } else {
-        return res.send(`No existe ninguna cuenta con el correo ${email}`)
+        return res.send(`No existe ninguna cuenta con el correo ${mail}`)
     }
 });
 
