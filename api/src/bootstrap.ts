@@ -69,6 +69,7 @@ const bootstrap = async () => {
 
     await Profesor.create({
         User_mail: "edwardburgos@gmail.com",
+        puntuacion: 2.1,
         ciudad: "Lima",
         foto: "https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=547&q=80",
         descripcion: "Profesor apasionado por enseñar"
@@ -82,6 +83,46 @@ const bootstrap = async () => {
         foto: "https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=547&q=80",
         descripcion: "Alumno"
     })
+
+    await User.create({
+        nombre: 'Usuario 1 Nombre',
+        apellido: 'Usuario 1 Apellido',
+        mail: "usuario1@gmail.com"
+    })
+
+    await Alumno.create({
+        User_usuario: "usuario1@gmail.com",
+        ciudad: "Lima",
+        foto: "https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=547&q=80",
+        descripcion: "Alumno 1"
+    })
+
+    await User.create({
+        nombre: 'Usuario 2 Nombre',
+        apellido: 'Usuario 2 Apellido',
+        mail: "usuario2@gmail.com"
+    })
+
+    await Alumno.create({
+        User_usuario: "usuario2@gmail.com",
+        ciudad: "Lima",
+        foto: "https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=547&q=80",
+        descripcion: "Alumno 2"
+    })
+
+    await User.create({
+        nombre: 'Usuario 3 Nombre',
+        apellido: 'Usuario 3 Apellido',
+        mail: "usuario3@gmail.com"
+    })
+
+    await Alumno.create({
+        User_usuario: "usuario3@gmail.com",
+        ciudad: "Lima",
+        foto: "https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=547&q=80",
+        descripcion: "Alumno 3"
+    })
+
 
     await Rango.create({
         inicio: 16,
@@ -116,6 +157,7 @@ const bootstrap = async () => {
         Profesor_mail: "edwardburgos@gmail.com",
         descripción: 'Aprende a comunicarte asertivamente con tu entorno',
         materia: 'Comunicación',
+        puntuacion: 4.63,
         grado: "Cuarto grado",
         nivel: 'Terciario'
     })
@@ -125,6 +167,7 @@ const bootstrap = async () => {
         Profesor_mail: "edwardburgos@gmail.com",
         descripción: 'En esta clase te enseñaré todo lo que necesitas para tener un nivel intermedio de Inglés',
         materia: 'Inglés',
+        puntuacion: 2.33,
         grado: "Sexto grado",
         nivel: 'Secundario'
     })

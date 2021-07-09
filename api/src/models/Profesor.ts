@@ -69,7 +69,9 @@ let query: CalendarioResponse = [
 @Table
 export default class Profesor extends Model {
 
-    
+    @Column(DataType.FLOAT)
+    puntuacion!: number;
+
     @Column
     nombre!: string;
 

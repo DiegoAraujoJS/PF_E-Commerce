@@ -1,4 +1,5 @@
-import { Model, Column, Table, CreatedAt, UpdatedAt, ForeignKey,  BelongsTo, HasMany } from 'sequelize-typescript';
+import { Model, Column, Table, CreatedAt, UpdatedAt, ForeignKey,DataType,  BelongsTo, HasMany } from 'sequelize-typescript';
+import { DecimalDataType } from 'sequelize/types';
 import Profesor from './Profesor';
 import Puntuacion from './Puntuacion';
 @Table
@@ -22,7 +23,7 @@ export default class Clase extends Model {
     @Column
     nivel!: string;
 
-    @Column 
+    @Column(DataType.FLOAT)
     puntuacion!: number;
 
     @HasMany(() => Puntuacion)
