@@ -8,9 +8,13 @@ const router = Router ()
 
 router.get('/', async (req: Request, res: Response) => {
     const { busqueda } = req.query
+    if (!busqueda) return res.status(400).send('Debes ingresar un input como \'busqueda\'')
     try {
         if (busqueda) {
             let palabrasSeparadas = (busqueda as string).split(" ");
+            palabrasSeparadas = palabrasSeparadas.filter(x => x!=='grado')
+            palabrasSeparadas = palabrasSeparadas.filter(x => x!=='año')
+            palabrasSeparadas = palabrasSeparadas.filter(x => x!=='anio')
 
             
             let clases: any[] = []
@@ -42,14 +46,10 @@ router.get('/', async (req: Request, res: Response) => {
                         ]
                     }
                 })
-                // for (const clase of c) {
-                //     const profe = await Profesor.findByPk(clase.Profesor_mail)
-                // }
-                console.log(c)
+                
                 clases.push(...c)
             }
             res.status(200).send(clases)
-
         }
     }
     catch (error) {
@@ -57,7 +57,7 @@ router.get('/', async (req: Request, res: Response) => {
     }
 });
 
-router.get('/', async (req: Request, res: Response) => {
+router.get('/todas', async (req: Request, res: Response) => {
     const clases= await Clase.findAll({
         include: [Profesor]
     })
@@ -102,9 +102,6 @@ router.post('/puntuar', async (req: Request, res: Response) => {
 })
 
 
-
-
-
 // propiedades notNull de Clase: 
 
 router.post('/add', async (req: Request, res: Response) => {
@@ -141,6 +138,7 @@ router.post('/delete', async (req: Request, res: Response) => {
             where: { id: id }
         }).then(e => res.send(`${e}`)).catch(err => res.send(err))
     }
+
     catch (error) {
         res.send(error)
     }
