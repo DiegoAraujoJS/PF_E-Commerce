@@ -21,20 +21,15 @@ interface Horario{
 }
 
 @Table
-<<<<<<< HEAD
-export default class Profesor extends Model {
-
+export default class Profesor extends Model {    
     @Column(DataType.FLOAT)
     puntuacion!: number;
 
-=======
-export default class Profesor extends Model {    
     @PrimaryKey
     @ForeignKey(() => User)
     @Column
     User_mail!: string;
     
->>>>>>> origin/BraianBranch-2
     @Column
     nombre!: string;
 
