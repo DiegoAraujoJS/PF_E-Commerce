@@ -2,7 +2,6 @@ body {
   background-color: #63ffe0;
 }
 
-
 .calendarContainer {
   display: grid;
   position: center;
@@ -16,6 +15,9 @@ body {
 
 .profile {
   border-radius: 70px;
+}
+.h4Prof {
+  color: white;
 }
 .sectionOne {
   background-color: #00b0ff;
@@ -35,11 +37,12 @@ body {
   scroll-behavior: smooth;
 }
 .sectionThree {
-  background-color: #1300f5;
+  background-color: #63ff9c;
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
+  color: white;
   scroll-snap-align: start;
   scroll-behavior: smooth;
 }
