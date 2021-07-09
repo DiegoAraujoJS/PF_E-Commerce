@@ -104,10 +104,6 @@ var nuevosHorarios = (arrayHorarios: Array<string[]>) => {
                 let horario = h.substring(0, 2) + ":" + h.substring(2, 4) + ":" + h.substring(4, 6)
                 return horario
             }
-            else if (h.length === 5) {
-                let horario = h.substring(0, 1) + ":" + h.substring(1, 3) + ":" + h.substring(3, 5)
-                return horario
-            }
         }
     })
 
