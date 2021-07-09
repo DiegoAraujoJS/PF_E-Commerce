@@ -5,6 +5,88 @@ import { Op } from 'sequelize'
 import Clase from '../models/Clase';
 const router = Router();
 
+type arrayDePares = [`${number}:${number}:00`, `${number}:${number}:00`][]
+
+// Horario es lo que manda el front
+interface Horario{
+
+    email: string;
+    fecha: {
+        anio: number,
+        mes: number,
+        dia: number
+    },
+    disponible: arrayDePares,
+    ocupado?: arrayDePares
+}
+// CalendarioResponse es lo que manda el back
+type CalendarioResponse = Horario[]
+
+
+// TodasLasSemanas lo puede mandar el front si el profesor pone ''tengo disponibles los lunes de 14 a 18''
+interface TodasLasSemanas {
+    dia: {
+        nombre: 'lunes' | 'martes' | 'miercoles' | 'jueves' | 'viernes' | 'sabado' | 'domingo',
+    },
+    disponible: arrayDePares,
+}
+
+// ejemplo
+let ejemploProfe: CalendarioResponse = [
+    {
+        email: "edwardburgos@gmail.com",
+        fecha: {
+            anio: 2021,
+            mes:7,
+            dia: 7
+        },
+        disponible: [['13:45:00', '12:29:00']],
+        ocupado:[['16:30:00', '19:29:00']]
+
+    },
+    {
+        email: "edwardburgos@gmail.com",
+        fecha: {
+            anio: 2021,
+            mes:11,
+            dia: 12
+        },
+        disponible: [['12:29:00', '16:29:00']],
+        ocupado:[['16:29:00', '19:29:00']]
+    
+        },
+        {
+            email: "edwardburgoseqw@gmail.com",
+            fecha: {
+                anio: 2021,
+                mes:12,
+                dia: 3
+            },
+            disponible: [['12:45:00', '16:29:00']],
+            ocupado:[['16:29:00', '16:29:00']]
+    
+        },
+        {
+            email: "edwardburgosewq@gmail.com",
+            fecha: {
+                anio: 2021,
+                mes:11,
+                dia: 16
+            },
+            disponible: [['16:29:00', '16:29:00']],
+            ocupado:[['16:29:00', '16:29:00']]
+        
+            }
+]
+
+router.get('/calendar/:id',(req: Request, res: Response) => {
+    const id = req.params.id;
+    var results = ejemploProfe.filter(e => e.email === id);
+    console.log("Ruta calendario")
+    return res.send(results)
+    //"edwardburgos@gmail.com"
+   
+})
 router.get('/', async (req: Request, res: Response) => { // profesore?name=rod
     let terminoBusqueda = req.query.nombre;
     let profesores = [];
