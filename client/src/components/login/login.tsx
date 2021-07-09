@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import logo from '../../logo.svg';
 import style from './login.module.css';
 import { loginWithGoogle, signIn, signOut, createUser } from '../../firebase';
+import {Link} from 'react-router-dom'
+import {auth} from '../../firebase'
 
 function Login() {
     const [email, setEmail] = useState('')
@@ -52,17 +54,12 @@ function Login() {
         // } else {
         //     alert('Login successful');
         // }
-        
+        console.log('auth', auth.currentUser)
         const response = await signIn(email, password);
-        console.log(response);
+        
         
     }
-    async function handleSubmitCreated(e) {
-        e.preventDefault()        
-        const response = await createUser(email, password);
-        console.log(response);
-        
-    }
+    
 
     // const onSuccess = (res) => {
     //     console.log('[login Success] currentUser: ', res.profileObj);
@@ -81,30 +78,42 @@ function Login() {
 
     return (
         <div className="container">
-            <div>
-                <img src={logo} alt='logo'></img>
-            </div>
-            <div>
-                <h1>INICIAR SESIÓN</h1>
-                <button className="sign-in" onClick={loginWithGoogle}>
-                    Sign in with Google
-                </button>
-                <button className="sign-in" onClick={signOut}>
-                    Logout
-                </button>
-                <form onSubmit={handleSubmit}>
-                    <input type='text' value={email} name='emailValue' onChange={handleChange} placeholder='Email'/>
-                    <input type='password' value={password} name='passValue' onChange={handleChange} placeholder='Contraseña'/>
-                    <input type="submit" value="login" />
-                </form>
-                <form onSubmit={handleSubmitCreated}>
-                    <input type='text' value={email} name='emailValue' onChange={handleChange} placeholder='Email'/>
-                    <input type='password' value={password} name='passValue' onChange={handleChange} placeholder='Contraseña'/>
-                    <input type="submit" value="create" />
-                </form>
-            </div>
+                 <main className="form-signin">
+  <form>
+    <img className="mb-4" src="../assets/brand/bootstrap-logo.svg" alt="" width="72" height="57"/>
+    <h1 className="h3 mb-3 fw-normal">Please sign in</h1>
+
+    <div className="form-floating">
+      <input type="email" className="form-control" id="floatingInput" placeholder="name@example.com"/>
+      <label htmlFor="floatingInput">Email address</label>
+    </div>
+    <div className="form-floating">
+      <input type="password" className="form-control" id="floatingPassword" placeholder="Password"/>
+      <label htmlFor="floatingPassword">Password</label>
+    </div>
+
+    <div className="checkbox mb-3">
+      <label>
+        <input type="checkbox" value="remember-me"></input>
+      </label>
+    </div>
+    <button className="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
+    <p className="mt-5 mb-3 text-muted">&copy; 2017–2021</p>
+  </form>
+</main>
+       
         </div>
     )
 }
 
 export default Login;
+
+
+
+
+
+
+
+
+
+

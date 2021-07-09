@@ -12,6 +12,7 @@ import DetailClaim from './components/Claims/DetailClaim';
 import Profile from './components/perfilProfesor/profile';
 import Chat from './components/Chat/Chat'
 import Home from './components/home/Home'
+import Register from './components/Register/Register'
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
       <Route exact path = '/claim/id/add'><AddClaim/></Route>
       <Route exact path = '/perfil'><Profile /></Route>
       <Route exact path = '/chat'><Chat /></Route>
+      <Route exact path = '/registro'><Register /></Route>
     </BrowserRouter>
     
   );
