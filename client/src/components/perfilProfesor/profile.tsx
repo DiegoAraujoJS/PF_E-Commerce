@@ -67,7 +67,7 @@ function Profile(email){
    </section>
 
    <section className={style.sectionTwo}>
-       <h4>Aca podrás ver sus horarios disponibles:</h4>
+       <h4 className={style.h4Prof}>Aca podrás ver sus horarios disponibles:</h4>
        <br/>
    <div className={style.calendarContainer}>
                       <Calendar {...propEmail}/>
