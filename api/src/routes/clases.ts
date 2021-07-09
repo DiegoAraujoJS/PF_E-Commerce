@@ -71,9 +71,11 @@ router.post('/puntuar', async (req: Request, res: Response) => {
         const clase = await Clase.findOne({
             where: { id },
             include: [{
-                model: Puntuacion,
-                attributes: ['puntuacion']
-            }]
+                model: Profesor,
+                required: true,
+                attributes: ['ciudad', 'foto', 'descripcion'],
+            }],
+            attributes: ['email', 'nombre', 'apellido']
         })
         if (clase) {
             const profesor = clase.Profesor_mail;
@@ -200,6 +202,62 @@ router.put('/puntuar', async (req: Request, res: Response) => {
 })
 
 
+
+
+router.post('/add', async (req: Request, res: Response) => {
+    const clase = req.body
+    try {
+        const crearClase = await Clase.create(clase)
+        res.send(crearClase)
+    }
+    catch (error) {
+        res.send(error)
+    }
+})
+
+
+router.put('/edit', async (req: Request, res: Response) => {
+    const { id, descripcion, materia, nivel, grado, puntuacion } = req.body
+    const claseEditada = {
+        descripcion,
+        materia,
+        nivel,
+        grado,
+        puntuacion,
+    }
+    try {
+        const clase: any = await Clase.findByPk(id);
+
+        await clase.set(claseEditada);
+        const claseCambiada = await clase.save();
+        res.send(claseCambiada)
+    }
+    catch (error) {
+        res.send(error)
+    }
+})
+
+
+router.post('/delete', async (req: Request, res: Response) => {
+    const { id } = req.body
+    try {
+        await Clase.destroy({
+            where: { id: id }
+        }).then(e => res.send(`${e}`)).catch(err => res.send(err))
+    }
+
+    catch (error) {
+        res.send(error)
+    }
+})
+
+//////////
+/////////
+export default router
+
+
+/// comentarios
+
 // router.put('/puntuar', async (req: Request, res: Response) => {
 //     try {
 //         const { id, alumno, puntuacion, comentario } = req.body;
@@ -257,46 +315,3 @@ router.put('/puntuar', async (req: Request, res: Response) => {
 // })
 
 // propiedades notNull de Clase: 
-
-router.post('/add', async (req: Request, res: Response) => {
-    const clase = req.body
-    try {
-        const crearClase = await Clase.create(clase)
-        res.send(crearClase)
-    }
-    catch (error) {
-        res.send(error)
-    }
-})
-
-router.put('/edit', async (req: Request, res: Response) => {
-    const { id } = req.body
-    try {
-
-        const clase: any = await Clase.findByPk(id);
-        await clase.set(clase.descripcion = req.body.descripcion);
-        await clase.save();
-        const claseCambiada = await Clase.findByPk(id);
-        res.send(claseCambiada)
-    }
-    catch (error) {
-        res.send(error)
-    }
-})
-
-router.post('/delete', async (req: Request, res: Response) => {
-    const { id } = req.body
-    try {
-        await Clase.destroy({
-            where: { id: id }
-        }).then(e => res.send(`${e}`)).catch(err => res.send(err))
-    }
-
-    catch (error) {
-        res.send(error)
-    }
-})
-
-//////////
-/////////
-export default router
