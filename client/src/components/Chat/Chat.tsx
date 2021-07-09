@@ -1,29 +1,13 @@
 import React, { useRef, useState, useEffect } from "react";
 import "./Chat.css";
-import axios from "axios";
-
-import firebase from "firebase/app";
-import "firebase/firestore";
-import "firebase/auth";
-import "firebase/analytics";
+// import axios from "axios";
 
 import { useAuthState } from "react-firebase-hooks/auth";
 import { useCollectionData } from "react-firebase-hooks/firestore";
+import { auth, firestore, loginWithGoogle, signOut } from '../../firebase';
+import firebase from 'firebase/app';
 
-firebase.initializeApp({
-  apiKey: "AIzaSyDGqKZu8WjUjyjurueAHUhooogWltFdcwM",
-  authDomain: "auth-4d665.firebaseapp.com",
-  databaseURL: "https://auth-4d665.firebaseio.com",
-  projectId: "auth-4d665",
-  storageBucket: "auth-4d665.appspot.com",
-  messagingSenderId: "817622282057",
-  appId: "1:817622282057:web:341e90c00d9d84b1483498",
-  measurementId: "G-QVJFDGG499",
-});
 
-const auth = firebase.auth();
-const firestore = firebase.firestore();
-// const analytics = firebase.analytics();
 
 function Chat(props) {
   const [user] = useAuthState(auth);
@@ -42,14 +26,10 @@ function Chat(props) {
 }
 
 function SignIn() {
-  const signInWithGoogle = () => {
-    const provider = new firebase.auth.GoogleAuthProvider();
-    auth.signInWithPopup(provider);
-  };
-
+  
   return (
     <>
-      <button className="sign-in" onClick={signInWithGoogle}>
+      <button className="sign-in" onClick={loginWithGoogle}>
         Sign in with Google
       </button>
       <p>
@@ -62,7 +42,7 @@ function SignIn() {
 function SignOut() {
   return (
     auth.currentUser && (
-      <button className="sign-out" onClick={() => auth.signOut()}>
+      <button className="sign-out" onClick={signOut}>
         Sign Out
       </button>
     )
@@ -81,39 +61,39 @@ function ChatRoom() {
   // const messagesRef = firestore.collection("messages");
   const [user] = useAuthState(auth);
 
-  // let messagesRef = firestore.collection(unificar("diegolaraujo96@gmail.com", "benjaminspiecker@gmail.com" ));
+  let messagesRef = firestore.collection(unificar("diegolaraujo96@gmail.com", "benjaminspiecker@gmail.com" ));
 
-  // const query = messagesRef.orderBy("createdAt").limit(25);
-  // const [messages] = useCollectionData(query, { idField: "id" });
-  const [messages, setMessages] = useState([]);
+  const query = messagesRef.orderBy("createdAt").limit(25);
+  const [messages] = useCollectionData(query, { idField: "id" });
+  // const [messages, setMessages] = useState([]);
 
   const [formValue, setFormValue] = useState("");
 
-  useEffect( () => {
+  // useEffect( () => {
     
-    getMessages()
+  //   getMessages()
     
-  }, [])
+  // }, [])
     
-  const getMessages = async() => {
-    const response = await axios.get("http://localhost:3001/api/chats");
-    setMessages(response.data);
-  }
-  const setMessage = async () => {
+  // const getMessages = async() => {
+  //   const response = await axios.get("http://localhost:3001/api/chats");
+  //    setMessages(response.data);
+  // }
+  // const setMessage = async () => {
 
-  }
+  // }
 
   const sendMessage = async (e) => {
     e.preventDefault();
 
     const { uid, photoURL } = auth.currentUser;
 
-    // await messagesRef.add({
-    //   text: formValue,
-    //   createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-    //   uid,
-    //   photoURL,
-    // });
+    await messagesRef.add({
+      text: formValue,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      uid,
+      photoURL,
+    });
 
     setFormValue("");
     dummy!.current.scrollIntoView({ behavior: "smooth" });
@@ -146,7 +126,7 @@ function ChatRoom() {
 function ChatMessage(props) {
   const { text, uid, photoURL } = props.message;
   
-  const messageClass = uid === auth.currentUser.email ? "sent" : "received";
+  const messageClass = uid === auth.currentUser.uid ? "sent" : "received";
 
   return (
     <>

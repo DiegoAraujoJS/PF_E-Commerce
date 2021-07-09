@@ -16,11 +16,11 @@ import Home from './components/home/Home'
 function App() {
   return (
     <BrowserRouter>
-    <Route exact path='/home'> <Home/> </Route>
-        <Route exact path='/clases'><ClassContainer /></Route>
-        <Route exact path='/'> <Login /> </Route>
-        <Route exact path='/calendar'> <CalendarApp /> </Route>
-        <Route exact path = '/claim'><Claims/></Route>
+      <Route exact path = '/home'> <Home/> </Route>
+      <Route exact path = '/clases'><ClassContainer /></Route>
+      <Route exact path = '/login'> <Login /> </Route>
+      <Route exact path = '/calendar'> <CalendarApp /> </Route>
+      <Route exact path = '/claim'><Claims/></Route>
       <Route exact path = '/claim/:id'><DetailClaim/></Route>
       <Route exact path = '/claim/add'><AddClaim/></Route>
       <Route exact path = '/claim/id/add'><AddClaim/></Route>

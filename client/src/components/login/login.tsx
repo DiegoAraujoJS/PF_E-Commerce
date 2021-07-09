@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import logo from '../../logo.svg';
 import style from './login.module.css';
-import { GoogleLogin, GoogleLogout } from 'react-google-login';
-
-const clientId = '335971411859-5nphqdu952putvhvsd8db519ltc2klco.apps.googleusercontent.com'
+import { loginWithGoogle } from '../../firebase';
 
 function Login() {
     const [email, setEmail] = useState('')
@@ -78,26 +76,14 @@ function Login() {
             </div>
             <div>
                 <h1>INICIAR SESIÓN</h1>
+                <div>
+                    <button>Login with Google</button>
+                    <button>logout</button>
+                </div>
                 <form onSubmit={handleSubmit}>
-                    <div>
-                        <GoogleLogin 
-                            clientId={clientId}
-                            buttonText="Login"
-                            onSuccess={onSuccess}
-                            onFailure={onFailure}
-                            cookiePolicy={'single_host_origin'}
-                            isSignedIn={true}
-                        />
-                        <GoogleLogout
-                            clientId={clientId}
-                            buttonText="Logout"
-                            onLogoutSuccess={onLogoutSuccess}
-                            onFailure={onLogoutFailure}
-                        ></GoogleLogout>
-                    </div>
                     <input type='text' value={email} name='emailValue' onChange={handleChange} placeholder='Email'/>
                     <input type='password' value={password} name='passValue' onChange={handleChange} placeholder='Contraseña'/>
-                    <input type="submit" value="Enviar" />
+                    <input type="submit" value="login" />
                 </form>
             </div>
         </div>
