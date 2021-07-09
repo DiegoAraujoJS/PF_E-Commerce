@@ -3,11 +3,13 @@ import ReactDOM from 'react-dom';
 import CalendarApp from './CalendarApp';
 
 
-export default function Calendar(){
+
+export default function Calendar(email){
+  console.log("Esto es emailll",email)
   return (
 
   <React.StrictMode>
-    <CalendarApp />
+    <CalendarApp {...email}/>
   </React.StrictMode>
   )
 }

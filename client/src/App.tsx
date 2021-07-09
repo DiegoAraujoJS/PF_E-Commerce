@@ -25,6 +25,9 @@ function App() {
       <Route exact path = '/claim/add'><AddClaim/></Route>
       <Route exact path = '/claim/id/add'><AddClaim/></Route>
       <Route exact path = '/perfil'><Profile /></Route>
+      <Route  path='/perfil/:email' exact render={({ match }) => {
+           return <Profile >{match.params.email} </Profile>     
+     }}/>
       <Route exact path = '/chat'><Chat /></Route>
     </BrowserRouter>
     

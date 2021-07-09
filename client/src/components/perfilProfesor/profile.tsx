@@ -13,8 +13,16 @@ interface Profesor {
     descripcion: string;
 }
 
+interface Email{
+    email: string
+}
 
-function Profile(){
+
+function Profile(email){
+    console.log("Este deberia ser el email", email.children[0])
+    const propEmail={
+        email: email.children[0]
+    }
     const  [prof, setProf]=useState<Profesor>({
         mail:"",
         nombre:"",
@@ -27,8 +35,8 @@ function Profile(){
     const profesorArr = [];
     const fetchProfs = async () => {
         try {
-            const response = await axios.get(`http://localhost:3001/api/profesores/edwardburgos@gmail.com`)
-            console.log(response)
+            const response = await axios.get(`http://localhost:3001/api/profesores/${email.children[0]}`)
+            console.log("Este deberia ser el profesor",response)
             setProf({
                 ...response.data
             })
@@ -62,7 +70,7 @@ function Profile(){
        <h4>Aca podrás ver sus horarios disponibles:</h4>
        <br/>
    <div className={style.calendarContainer}>
-                      <Calendar/>
+                      <Calendar {...propEmail}/>
                   </div>
    </section>
 <section className={style.sectionThree}>
@@ -129,6 +137,7 @@ function Profile(){
     </div>
 </div> */
     )
+    
 }
 
 export default Profile

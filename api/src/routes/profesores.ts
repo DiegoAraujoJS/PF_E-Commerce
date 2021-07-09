@@ -40,7 +40,7 @@ let ejemploProfe: CalendarioResponse = [
             mes:7,
             dia: 7
         },
-        disponible: [['13:45:00', '12:29:00']],
+        disponible: [['11:45:00', '12:30:00']],
         ocupado:[['16:30:00', '19:29:00']]
 
     },
@@ -62,8 +62,8 @@ let ejemploProfe: CalendarioResponse = [
                 mes:12,
                 dia: 3
             },
-            disponible: [['12:45:00', '16:29:00']],
-            ocupado:[['16:29:00', '16:29:00']]
+            disponible: [['12:45:00', '16:30:00']],
+            ocupado:[['18:30:00', '19:30:00']]
     
         },
         {

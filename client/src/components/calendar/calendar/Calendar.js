@@ -64,9 +64,12 @@ class Calendar extends Component {
   }
 
   async componentDidMount() {
+
     // load event data
+    console.log("Esto es el calendario",this.props.email)
+    const email=this.props.email
     const arrayProf = await axios.get(
-      `http://localhost:3001/api/profesores/calendar/edwardburgos@gmail.com`
+      `http://localhost:3001/api/profesores/calendar/${email}`
     );
     var tempo = [];
     arrayProf.data.map((prof) => {
