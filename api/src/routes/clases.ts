@@ -49,6 +49,7 @@ router.get('/', async (req: Request, res: Response) => {
                 
                 clases.push(...c)
             }
+            console.log(clases)
             res.status(200).send(clases)
         }
     }

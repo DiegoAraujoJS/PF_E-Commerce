@@ -5,16 +5,20 @@ import { connect } from 'react-redux';
 import axios from 'axios'
 import {ButtonGroup, Button} from 'react-bootstrap'
 import { User, Profesor, Class } from '../classCard/interfaces';
+import { store } from '../../Store/store';
 
-function ClassCards({ searchInput }) {
+export default function ClassCards() {
 
     const [clases, setClases] = React.useState([])
 
     React.useEffect(() => {
         async function fetchDataStart() {
+            
+            const searchInput = store.getState().searchInput
             console.log(searchInput)
-            const response: any = await axios.get(`http://localhost:3001/api/clases?busqueda=${searchInput}`)
-            setClases(response) // [{},{}]
+            
+            console.log('response',  searchInput)
+            setClases(searchInput) // [{},{}]
         }
         fetchDataStart()
     }, [])
@@ -58,13 +62,13 @@ function ClassCards({ searchInput }) {
     )
 }
 
-const connectStateToProps = (state) => {
-    return {
-        searchInput: state.searchInput
-    }
-}
+// const connectStateToProps = (state) => {
+//     return {
+//         searchInput: state.searchInput
+//     }
+// }
 
-export default connect(connectStateToProps)(ClassCards)
+// export default connect(connectStateToProps)(ClassCards)
 // @Column
 //     nombre!: string;
 

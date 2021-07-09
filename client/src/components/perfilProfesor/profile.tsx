@@ -4,27 +4,32 @@ import axios from "axios"
 import Calendar from "../calendar/Calendar"
 
 interface Profesor {
-    email: string
-    nombre: string
-    apellido: string
-    profesor: Object
+    mail: string;
+    nombre: string;
+    apellido: string;
+    ciudad: string;
+    foto: string;
+    descripcion: string;
 }
 
 
 function Profile(){
-    const  [prof, setProf]=useState<any>({
-        email:"",
+    const  [prof, setProf]=useState<Profesor>({
+        mail:"",
         nombre:"",
-        profesor:{},
+        apellido:"",
+        ciudad:"",
+        foto:"",
+        descripcion:""
+        
     })
     const profesorArr = [];
     const fetchProfs = async () => {
         try {
             const response = await axios.get(`http://localhost:3001/api/profesores/edwardburgos@gmail.com`)
+            console.log(response)
             setProf({
-                email:response.data.email,
-                nombre:response.data.nombre,
-                profesor:response.data.profesor
+                ...response.data
             })
         } catch(err) {
             console.log(err)
@@ -44,7 +49,7 @@ function Profile(){
             <div className="px-4 pt-0 pb-4 cover">
                 <div className="media align-items-center profile-head">
                 
-                    <div className="profile"><img src={prof.profesor.foto} alt="..." width="130" height="130" className="profile"/>
+                    <div className="profile"><img src={prof.foto} alt="..." width="130" height="130" className="profile"/>
                     </div>
                     <div className="rate">
                         <input type="radio" id="star5" name="rate" value="5" />
@@ -61,7 +66,7 @@ function Profile(){
                    
                     <div className="media-body mb-5">
                         <h4 className="mt-0 mb-0">{prof.nombre} {prof.apellido} </h4>
-                        <p className="small mb-4"> <i className="fas fa-map-marker-alt mr-2"></i>{prof.profesor.ciudad}</p>
+                        <p className="small mb-4"> <i className="fas fa-map-marker-alt mr-2"></i>{prof.ciudad}</p>
                     </div>
                   
                 </div>
@@ -75,7 +80,7 @@ function Profile(){
             <div className="px-4 py-3">
                 <h5 className="mb-0">Licenciado en matematica</h5>
                 <div className="p-4 rounded shadow-sm bg-light">
-                    <p className="font-italic mb-0">{prof.profesor.descripcion}</p>
+                    <p className="font-italic mb-0">{prof.descripcion}</p>
                     <p className="font-italic mb-0"></p>
                     <p className="font-italic mb-0">Trabajo en ...</p>
                 </div>

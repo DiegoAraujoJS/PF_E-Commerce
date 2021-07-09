@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { useHistory } from "react-router-dom";
 import SearchBarHome from '../searchBar/SearchBarHome';
 import students from '../../images/students.jpg';
-
+import axios from 'axios'
 const Home = ({ dispatchInput }) => {
     const [searchInput, setSearchInput] = React.useState('')
     const history = useHistory()
@@ -44,8 +44,10 @@ const Home = ({ dispatchInput }) => {
         lineHeight: '100px'
     }
 
-    function vaYBusca() {
-        dispatchInput(searchInput)
+    async function vaYBusca() {
+        
+        const response: any = await axios.get(`http://localhost:3001/api/clases?busqueda=${searchInput}`)
+        dispatchInput(response.data)
         history.push('/clases')
     }
 

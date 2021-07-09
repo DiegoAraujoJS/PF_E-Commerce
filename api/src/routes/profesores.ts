@@ -78,9 +78,9 @@ router.get('/:mail', async (req: Request, res: Response) => {
                     id: usuario.id
 
             }
-            return res.send([
+            return res.send(
                 obj
-            ])
+            )
         } else {
             return res.send(`No existe ningún profesor asociado la cuenta del correo ${mail}`)
         }
