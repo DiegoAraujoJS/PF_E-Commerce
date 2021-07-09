@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import logo from '../../logo.svg';
 import style from './login.module.css';
-import { loginWithGoogle, signIn, signOut } from '../../firebase';
+import { loginWithGoogle, signIn, signOut, createUser } from '../../firebase';
 
 function Login() {
     const [email, setEmail] = useState('')
@@ -57,6 +57,12 @@ function Login() {
         console.log(response);
         
     }
+    async function handleSubmitCreated(e) {
+        e.preventDefault()        
+        const response = await createUser(email, password);
+        console.log(response);
+        
+    }
 
     // const onSuccess = (res) => {
     //     console.log('[login Success] currentUser: ', res.profileObj);
@@ -90,6 +96,11 @@ function Login() {
                     <input type='text' value={email} name='emailValue' onChange={handleChange} placeholder='Email'/>
                     <input type='password' value={password} name='passValue' onChange={handleChange} placeholder='Contraseña'/>
                     <input type="submit" value="login" />
+                </form>
+                <form onSubmit={handleSubmitCreated}>
+                    <input type='text' value={email} name='emailValue' onChange={handleChange} placeholder='Email'/>
+                    <input type='password' value={password} name='passValue' onChange={handleChange} placeholder='Contraseña'/>
+                    <input type="submit" value="create" />
                 </form>
             </div>
         </div>
