@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import logo from '../../logo.svg';
 import style from './login.module.css';
-import { loginWithGoogle } from '../../firebase';
+import { loginWithGoogle, signIn, signOut } from '../../firebase';
 
 function Login() {
     const [email, setEmail] = useState('')
@@ -43,31 +43,35 @@ function Login() {
             }
     }
 
-    function handleSubmit(e) {
+    async function handleSubmit(e) {
         e.preventDefault()
-        validateErrors();
-        console.log(errors)
-        if(errors.email || errors.password) {
-            alert('Fail')
-        } else {
-            alert('Login successful');
-        }
+        // validateErrors();
+        // console.log(errors)
+        // if(errors.email || errors.password) {
+        //     alert('Fail')
+        // } else {
+        //     alert('Login successful');
+        // }
+        
+        const response = await signIn(email, password);
+        console.log(response);
+        
     }
 
-    const onSuccess = (res) => {
-        console.log('[login Success] currentUser: ', res.profileObj);
-    }
+    // const onSuccess = (res) => {
+    //     console.log('[login Success] currentUser: ', res.profileObj);
+    // }
 
-    const onFailure = (res) => {
-        console.log('[Login failed] res:', res);
-    }
+    // const onFailure = (res) => {
+    //     console.log('[Login failed] res:', res);
+    // }
 
-    const onLogoutSuccess = () => {
-        alert('Logout made successfully');
-    }
-    const onLogoutFailure = () => {
-        alert('Fail');
-    }
+    // const onLogoutSuccess = () => {
+    //     alert('Logout made successfully');
+    // }
+    // const onLogoutFailure = () => {
+    //     alert('Fail');
+    // }
 
     return (
         <div className="container">
@@ -76,10 +80,12 @@ function Login() {
             </div>
             <div>
                 <h1>INICIAR SESIÓN</h1>
-                <div>
-                    <button>Login with Google</button>
-                    <button>logout</button>
-                </div>
+                <button className="sign-in" onClick={loginWithGoogle}>
+                    Sign in with Google
+                </button>
+                <button className="sign-in" onClick={signOut}>
+                    Logout
+                </button>
                 <form onSubmit={handleSubmit}>
                     <input type='text' value={email} name='emailValue' onChange={handleChange} placeholder='Email'/>
                     <input type='password' value={password} name='passValue' onChange={handleChange} placeholder='Contraseña'/>
