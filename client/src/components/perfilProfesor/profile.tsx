@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import './profile.css'
+import style from './profile.module.css'
 import axios from "axios"
 import Calendar from "../calendar/Calendar"
+import { tSTypeLiteral } from '@babel/types';
 
 interface Profesor {
     mail: string;
@@ -42,16 +43,52 @@ function Profile(){
     }, []);
     
     return (
-    <div className="row py-5 px-4">
+<div className={style.container}>
+  <section className={style.sectionOne}>
+      <div className={style.profileContainer}>
+      <img src={prof.foto} alt="..." width="130" height="130" className={style.profile} />
+    <div className="media-body mb-5">
+                        <h4 className="mt-0 mb-0">{prof.nombre} {prof.apellido} </h4>
+                        <p className="small mb-4"> <i className="fas fa-map-marker-alt mr-2"></i>{prof.ciudad}</p>
+                    </div>
+<h1> Licenciado en Cs Naturales</h1>
+<h4>{prof.descripcion}</h4>
+      </div>
+
+
+   </section>
+
+   <section className={style.sectionTwo}>
+       <h4>Aca podrás ver sus horarios disponibles:</h4>
+       <br/>
+   <div className={style.calendarContainer}>
+                      <Calendar/>
+                  </div>
+   </section>
+<section className={style.sectionThree}>
+<h1> Sobre mi... y como contactarme</h1>
+</section>
+
+        </div>
+/*     <div className="row py-5 px-4">
     <div className="col-md-7 mx-auto">
-     
+     <section>
+
+     </section>
+     <section>
+
+     </section>
+     <section>
+         
+     </section>
         <div className="bg-white shadow rounded overflow-hidden">
             <div className="px-4 pt-0 pb-4 cover">
                 <div className="media align-items-center profile-head">
                 
                     <div className="profile"><img src={prof.foto} alt="..." width="130" height="130" className="profile"/>
+                    <div><img src={prof.foto} alt="..." width="130" height="130" className={style.profile}/>
                     </div>
-                    <div className="rate">
+                    <div className={style.rate}>
                         <input type="radio" id="star5" name="rate" value="5" />
                         <label htmlFor="star5" title="text">5 stars</label>
                         <input type="radio" id="star4" name="rate" value="4" />
@@ -73,9 +110,6 @@ function Profile(){
             </div>
             <div className="bg-light p-4 d-flex justify-content-center text-center">
             
-          {/*     {<ul className="list-inline mb-0">
-                    <li>Aqui va el calendario</li>
-                </ul>} */}
             </div>
             <div className="px-4 py-3">
                 <h5 className="mb-0">Licenciado en matematica</h5>
@@ -93,7 +127,7 @@ function Profile(){
             </div>
         </div>
     </div>
-</div>
+</div> */
     )
 }
 
