@@ -8,7 +8,6 @@ import chats from './chats'
 
 import alumnos from './alumnos'
 import calendario from './calendario'
-import chats from './chats'
 
 const router = Router()
 router.use('/login', login)
@@ -18,5 +17,6 @@ router.use('/profesores', profesores)
 router.use('/reclamos', reclamos)
 router.use('/chats', chats)
 router.use('/alumnos', alumnos)
+router.use('/calendario', calendario)
 
 export default router
