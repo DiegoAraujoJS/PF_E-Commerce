@@ -16,6 +16,7 @@ router.get('/', async (req: Request, res: Response) => {
             let clases: any[] = []
             for (let x of palabrasSeparadas){
                 const c = await Clase.findAll({
+                    include: [Profesor],
                     where: {
                         [Op.or]: [{
                             materia: {
@@ -41,10 +42,13 @@ router.get('/', async (req: Request, res: Response) => {
                         ]
                     }
                 })
+                // for (const clase of c) {
+                //     const profe = await Profesor.findByPk(clase.Profesor_mail)
+                // }
                 console.log(c)
                 clases.push(...c)
             }
-            res.send(clases)
+            res.status(200).send(clases)
 
         }
     }

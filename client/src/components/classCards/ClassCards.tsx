@@ -1,18 +1,20 @@
 import React from 'react'
 import CSS from 'csstype';
 import ClassCard from '../classCard/ClassCard';
+import { connect } from 'react-redux';
 import axios from 'axios'
 import {ButtonGroup, Button} from 'react-bootstrap'
 import { User, Profesor, Class } from '../classCard/interfaces';
 
-export default function ClassCards(props) {
+function ClassCards({ searchInput }) {
 
     const [clases, setClases] = React.useState([])
 
     React.useEffect(() => {
         async function fetchDataStart() {
-            const response = await axios.get(`http://localhost:3001/api/clases?searchQuery=${props.searchQuery}`)
-            setClases(response.data)
+            console.log(searchInput)
+            const response: any = await axios.get(`http://localhost:3001/api/clases?busqueda=${searchInput}`)
+            setClases(response) // [{},{}]
         }
         fetchDataStart()
     }, [])
@@ -56,6 +58,37 @@ export default function ClassCards(props) {
     )
 }
 
+const connectStateToProps = (state) => {
+    return {
+        searchInput: state.searchInput
+    }
+}
+
+export default connect(connectStateToProps)(ClassCards)
+// @Column
+//     nombre!: string;
+
+//     @Column
+//     puntuacion!: number;
+
+//     @Column ({allowNull: false})
+//     grado!: string;
+
+//     @Column
+//     nivel!: string;
+
+//     @Column ({allowNull: false})
+//     materia!: string;
+
+//     @Column
+//     descripcion!: string;
+
+//     @Column 
+//     ciudad!: string
+
+//     @ForeignKey(() => Profesor)
+//     @Column
+//     Profesor_mail!: string
 
 // clase
     // descripcion

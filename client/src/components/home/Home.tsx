@@ -1,11 +1,14 @@
 import React from 'react';
 import CSS from 'csstype';
 import { Button } from 'react-bootstrap';
+import { connect } from 'react-redux';
+import { useHistory } from "react-router-dom";
 import SearchBarHome from '../searchBar/SearchBarHome';
 import students from '../../images/students.jpg';
 
-export default function Home() {
+const Home = ({ dispatchInput }) => {
     const [searchInput, setSearchInput] = React.useState('')
+    const history = useHistory()
 
     function handleChange(e) {
         switch(e.target.name) {
@@ -15,10 +18,6 @@ export default function Home() {
             default:
                 break;
         }
-    }
-
-    function handleSubmit(e) {
-        e.preventDefault()
     }
 
     const bgImg: CSS.Properties = {
@@ -45,14 +44,29 @@ export default function Home() {
         lineHeight: '100px'
     }
 
+    function vaYBusca() {
+        dispatchInput(searchInput)
+        history.push('/clases')
+    }
+
     return (
         <div>
             <SearchBarHome />
             <div style={searchCenter}>
                 <input style={searchBar} type='text' name='searchInput' value={searchInput} onChange={handleChange}/>
-                <Button variant='primary'>Buscar</Button>
+                <Button variant='primary' onClick={() => vaYBusca()}>Buscar</Button>
             </div>
             <img src={students} style={bgImg}/>
         </div>
     )
 }
+
+const dispatchFuncToProps = (dispatch) => {
+    return {
+        dispatchInput: function (payload) {
+            dispatch({type: 'SEARCH_INPUT', payload})
+        }
+    }
+}
+
+export default connect(null, dispatchFuncToProps)(Home)

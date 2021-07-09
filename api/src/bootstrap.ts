@@ -54,6 +54,8 @@ const bootstrap = async () => {
     
 
     await Profesor.create({
+        nombre: `Diego`,
+        apellido: 'Araujo',
         User_mail: "diegoaraujo@gmail.com",
         ciudad: "Buenos Aires",
         foto: "https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=547&q=80",
@@ -61,6 +63,8 @@ const bootstrap = async () => {
     })
 
     await Profesor.create({
+        nombre: `Braian`,
+        apellido: 'Silva',
         User_mail: "braiansilva@gmail.com",
         ciudad: "Buenos Aires",
         foto: "https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=547&q=80",
@@ -68,7 +72,25 @@ const bootstrap = async () => {
     })
 
     await Profesor.create({
+        nombre: 'Edward',
+        apellido: 'Burgos',
         User_mail: "edwardburgos@gmail.com",
+        ciudad: "Lima",
+        foto: "https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=547&q=80",
+        descripcion: "Profesor apasionado por enseñar"
+    })
+    await Profesor.create({
+        nombre: 'Mauro',
+        apellido: 'Leonel',
+        User_mail: "mauroleonel@gmail.com",
+        ciudad: "Lima",
+        foto: "https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=547&q=80",
+        descripcion: "Profesor apasionado por enseñar"
+    })
+    await Profesor.create({
+        nombre: 'Javier',
+        apellido: 'Carro',
+        User_mail: "javiercarro@gmail.com",
         ciudad: "Lima",
         foto: "https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=547&q=80",
         descripcion: "Profesor apasionado por enseñar"

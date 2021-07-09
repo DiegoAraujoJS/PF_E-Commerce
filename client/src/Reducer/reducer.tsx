@@ -1,4 +1,5 @@
 let initialState = {
+    searchInput: '',
     professors: [{name:'ariel'}, {name:'asd'}],
     professor: [],
     claim:[]
@@ -12,7 +13,11 @@ const all = (state = initialState, action) => {
                 ...state,
                 claim: action.payload
             }
-
+        case 'SEARCH_INPUT':
+            return {
+                ...state,
+                searchInput: action.payload
+            }
         default:
             return state
     }

@@ -1,6 +1,7 @@
-import axios from "axios";
+
 
 const GET_BY_ID = 'GET_BY_ID_CLAIM';
+const SEARCH_INPUT = 'SEARCH_INPUT' 
 
 const getByIdClaim = (id) => {
 
@@ -11,4 +12,6 @@ const getByIdClaim = (id) => {
     }
 }
 
-export{ getByIdClaim }
+
+
+export { getByIdClaim }
