@@ -82,9 +82,11 @@ var nuevosHorarios = (arrayHorarios: Array<string[]>) => {
 
     let horarioNumero = arrayHorarios.map(h => {
         if (h) {
-            let sumaHorario_1 = h[0].substring(0, 2) + h[0].substring(3, 5) + h[0].substring(6, 8)
-            let sumaHorario_2 = h[1].substring(0, 2) + h[1].substring(3, 5) + h[1].substring(6, 8)
-            return [sumaHorario_1, sumaHorario_2]
+            if (h[0].length === 8 && h[1].length === 8) {
+                let sumaHorario_1 = h[0].substring(0, 2) + h[0].substring(3, 5) + h[0].substring(6, 8)
+                let sumaHorario_2 = h[1].substring(0, 2) + h[1].substring(3, 5) + h[1].substring(6, 8)
+                return [sumaHorario_1, sumaHorario_2]
+            }
         }
     })
 
@@ -98,8 +100,14 @@ var nuevosHorarios = (arrayHorarios: Array<string[]>) => {
 
     let horariosNuevos = eliminarRepetidos?.map(h => {
         if (h) {
-            let horario = h.substring(0, 2) + ":" + h.substring(2, 4) + ":" + h.substring(4, 6)
-            return horario
+            if (h.length === 6) {
+                let horario = h.substring(0, 2) + ":" + h.substring(2, 4) + ":" + h.substring(4, 6)
+                return horario
+            }
+            else if (h.length === 5) {
+                let horario = h.substring(0, 1) + ":" + h.substring(1, 3) + ":" + h.substring(3, 5)
+                return horario
+            }
         }
     })
 
@@ -111,14 +119,24 @@ var nuevosHorarios = (arrayHorarios: Array<string[]>) => {
 
     let completarHorario = horariosTuplas.map(e => {
         if (!e[1]) {
-            return [e[0], e[0]]
+
+            if (horariosTuplas && horariosTuplas[horariosTuplas.length - 2][1] && e[0] !== horariosTuplas[horariosTuplas.length - 2][1] && e[0] > horariosTuplas[horariosTuplas.length - 2][1]) {
+                return [[horariosTuplas.length - 2][1], e[0]]
+            }
+            else if (horariosTuplas && horariosTuplas[horariosTuplas.length - 2][1] && e[0] === horariosTuplas[horariosTuplas.length - 2][1]) {
+                return [undefined, undefined]
+            }
+            else {
+                return [e[0], e[0]]
+            }
         }
         else {
             return e
         }
     })
+    let resultado = completarHorario.filter(fecha => fecha[0] && fecha[1])
 
-    return completarHorario
+    return resultado
 }
 //----------------------------------------- TERMINA LA FUNCION -------------------------------------------
 
@@ -243,40 +261,42 @@ router.put('/edit', async (req: Request, res: Response) => {
                     const editarHorarios = (arrayHorarios: Array<string[]>) => {
 
                         let completarHorario = arrayHorarios.map(h => {
-                            
+
                             if (query.ocupado) {
                                 let sumaHorario_1 = h[0].substring(0, 2) + h[0].substring(3, 5) + h[0].substring(6, 8)
                                 let sumaHorario_2 = h[1].substring(0, 2) + h[1].substring(3, 5) + h[1].substring(6, 8)
                                 let sumaHorarioDisponible_1 = query.ocupado[0][0].substring(0, 2) + query.ocupado[0][0].substring(3, 5) + query.ocupado[0][0].substring(6, 8)
                                 let sumaHorarioDisponible_2 = query.ocupado[0][1].substring(0, 2) + query.ocupado[0][1].substring(3, 5) + query.ocupado[0][1].substring(6, 8)
 
-                                if (sumaHorario_2 > sumaHorarioDisponible_1 && sumaHorario_2 < sumaHorarioDisponible_2) {
-                                    console.log("1", h)
-                                    return [ h[0], query.ocupado[0][0] ]
+                                
+                                if(sumaHorario_1 > sumaHorarioDisponible_1 && sumaHorario_2 < sumaHorarioDisponible_2){
+                                    return null
+                                }
+                                else if (sumaHorario_2 > sumaHorarioDisponible_1 && sumaHorario_2 < sumaHorarioDisponible_2) {
+                                    return [h[0], query.ocupado[0][0]]
                                 }
                                 else if (sumaHorario_1 < sumaHorarioDisponible_2 && sumaHorario_2 > sumaHorarioDisponible_2) {
-                                    console.log("1", h)
-                                    return [ query.ocupado[0][1] , h[1]]
+                                    return [query.ocupado[0][1], h[1]]
                                 }
                                 else {
-                                    console.log("2", h)
                                     return h
                                 }
                             }
+
                             else if (query.disponible) {
                                 let sumaHorario_1 = h[0].substring(0, 2) + h[0].substring(3, 5) + h[0].substring(6, 8)
                                 let sumaHorario_2 = h[1].substring(0, 2) + h[1].substring(3, 5) + h[1].substring(6, 8)
                                 let sumaHorarioDisponible_1 = query.disponible[0][0].substring(0, 2) + query.disponible[0][0].substring(3, 5) + query.disponible[0][0].substring(6, 8)
                                 let sumaHorarioDisponible_2 = query.disponible[0][1].substring(0, 2) + query.disponible[0][1].substring(3, 5) + query.disponible[0][1].substring(6, 8)
 
-                                if (sumaHorario_2 > sumaHorarioDisponible_1 && sumaHorario_2 < sumaHorarioDisponible_2) {
-                                    console.log("4", h)
-                                    console.log("4 b", [h[0], query.disponible[0][0]])
+                                if(sumaHorario_1 > sumaHorarioDisponible_1 && sumaHorario_2 < sumaHorarioDisponible_2){
+                                    return null
+                                }
+                                else if (sumaHorario_2 > sumaHorarioDisponible_1 && sumaHorario_2 < sumaHorarioDisponible_2 && sumaHorarioDisponible_1 > sumaHorario_1) {
                                     return [h[0], query.disponible[0][0]]
                                 }
                                 else if (sumaHorario_1 < sumaHorarioDisponible_2 && sumaHorario_2 > sumaHorarioDisponible_2) {
-                                    console.log("1", h)
-                                    return [ query.disponible[0][1] , h[1]]
+                                    return [query.disponible[0][1], h[1]]
                                 }
                                 else {
                                     return h
@@ -287,14 +307,14 @@ router.put('/edit', async (req: Request, res: Response) => {
                             }
                         })
 
-                        console.log("completarHorario", completarHorario)
- 
-                        return completarHorario
+                        let resultado = completarHorario.filter(horarios => horarios)
+
+                        return resultado
+
                     }
                     //----------------------------------------- TERMINA LA FUNCION -------------------------------------------
 
                     if (query.disponible) {
-                        console.log("QUERY DISPONIBLE")
                         let calendarioEditado = {
                             email: query.email,
                             fecha: query.fecha,
@@ -312,7 +332,6 @@ router.put('/edit', async (req: Request, res: Response) => {
                         res.send(resultado)
                     }
                     else if (query.ocupado) {
-                        console.log("QUERY OCUPADOO")
                         let calendarioEditado = {
                             email: query.email,
                             fecha: query.fecha,
