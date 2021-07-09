@@ -73,7 +73,7 @@ router.get('/', async (req: Request, res: Response) => {
                             var result = [];
                             for (var i = 0; i < clasesSolicitadas.length; i++) {
                                 for (var j = 0; j < profesoresSolicitados.length; j++) {
-                                    if (clasesSolicitadas[i].Profesor_mail === profesoresSolicitados[j].email) {
+                                    if (clasesSolicitadas[i].Profesor_mail === profesoresSolicitados[j].mail) {
                                         result.push(clasesSolicitadas[i])
                                     }
                                 }
@@ -108,7 +108,7 @@ router.get('/:materia/:ciudad', async (req: Request, res: Response) => {
         for (var i = 0; i < clasesFiltradas.length; i++) {
             for (var j = 0; j < profesorFiltrados.length; j++) {
 
-                if (clasesFiltradas[i].Profesor_mail === profesorFiltrados[j].email) {
+                if (clasesFiltradas[i].Profesor_mail === profesorFiltrados[j].mail) {
                     result.push(clasesFiltradas[i])
                 }
             }
@@ -146,8 +146,7 @@ router.put('/edit', async (req: Request, res: Response) => {
         const clase: any = await Clase.findByPk(id);
 
         await clase.set(claseEditada);
-        await clase.save();
-        const claseCambiada = await Clase.findByPk(id);
+        const claseCambiada = await clase.save();
         res.send(claseCambiada)
     }
     catch (error) {
