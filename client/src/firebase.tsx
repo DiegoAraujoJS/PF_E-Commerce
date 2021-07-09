@@ -40,6 +40,7 @@ export const createUser = async (email, password) => {
 export const signIn = async (email, password) => {
   try {
     const userCredential = await firebase.auth().signInWithEmailAndPassword(email, password);
+    console.log(userCredential);
     return userCredential;
   } catch (error) {
     return error;
@@ -47,8 +48,9 @@ export const signIn = async (email, password) => {
 }
 export const signOut = async () => {
   try {
-    const response = await firebase.auth().signOut();
-    return response;
+    await firebase.auth().signOut();
+    console.log('correct logout');
+    return 'correct logout';
   } catch (error) {
     return error;
   } 

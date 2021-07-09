@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState } from "react";
 import "./Chat.css";
 // import axios from "axios";
 
@@ -6,7 +6,6 @@ import { useAuthState } from "react-firebase-hooks/auth";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { auth, firestore, loginWithGoogle, signOut } from '../../firebase';
 import firebase from 'firebase/app';
-
 
 
 function Chat(props) {

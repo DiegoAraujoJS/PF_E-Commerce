@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import logo from '../../logo.svg';
 import style from './login.module.css';
-import { GoogleLogin, GoogleLogout } from 'react-google-login';
-
-const clientId = '335971411859-5nphqdu952putvhvsd8db519ltc2klco.apps.googleusercontent.com'
+import { loginWithGoogle, signIn, signOut } from '../../firebase';
 
 function Login() {
     const [email, setEmail] = useState('')
@@ -45,31 +43,35 @@ function Login() {
             }
     }
 
-    function handleSubmit(e) {
+    async function handleSubmit(e) {
         e.preventDefault()
-        validateErrors();
-        console.log(errors)
-        if(errors.email || errors.password) {
-            alert('Fail')
-        } else {
-            alert('Login successful');
-        }
+        // validateErrors();
+        // console.log(errors)
+        // if(errors.email || errors.password) {
+        //     alert('Fail')
+        // } else {
+        //     alert('Login successful');
+        // }
+        
+        const response = await signIn(email, password);
+        console.log(response);
+        
     }
 
-    const onSuccess = (res) => {
-        console.log('[login Success] currentUser: ', res.profileObj);
-    }
+    // const onSuccess = (res) => {
+    //     console.log('[login Success] currentUser: ', res.profileObj);
+    // }
 
-    const onFailure = (res) => {
-        console.log('[Login failed] res:', res);
-    }
+    // const onFailure = (res) => {
+    //     console.log('[Login failed] res:', res);
+    // }
 
-    const onLogoutSuccess = () => {
-        alert('Logout made successfully');
-    }
-    const onLogoutFailure = () => {
-        alert('Fail');
-    }
+    // const onLogoutSuccess = () => {
+    //     alert('Logout made successfully');
+    // }
+    // const onLogoutFailure = () => {
+    //     alert('Fail');
+    // }
 
     return (
         <div className="container">
@@ -78,26 +80,16 @@ function Login() {
             </div>
             <div>
                 <h1>INICIAR SESIÓN</h1>
+                <button className="sign-in" onClick={loginWithGoogle}>
+                    Sign in with Google
+                </button>
+                <button className="sign-in" onClick={signOut}>
+                    Logout
+                </button>
                 <form onSubmit={handleSubmit}>
-                    <div>
-                        <GoogleLogin 
-                            clientId={clientId}
-                            buttonText="Login"
-                            onSuccess={onSuccess}
-                            onFailure={onFailure}
-                            cookiePolicy={'single_host_origin'}
-                            isSignedIn={true}
-                        />
-                        <GoogleLogout
-                            clientId={clientId}
-                            buttonText="Logout"
-                            onLogoutSuccess={onLogoutSuccess}
-                            onFailure={onLogoutFailure}
-                        ></GoogleLogout>
-                    </div>
                     <input type='text' value={email} name='emailValue' onChange={handleChange} placeholder='Email'/>
                     <input type='password' value={password} name='passValue' onChange={handleChange} placeholder='Contraseña'/>
-                    <input type="submit" value="Enviar" />
+                    <input type="submit" value="login" />
                 </form>
             </div>
         </div>
