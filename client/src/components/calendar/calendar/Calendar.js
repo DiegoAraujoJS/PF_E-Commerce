@@ -45,10 +45,18 @@ const styles = {
 class Calendar extends Component {
   constructor(props) {
     super(props);
+    var login=false
+    var booleano
+    if(login===true){
+      booleano="Enabled"
+    } else {
+      booleano="Disabled"
+    }
     this.state = {
       viewType: "WorkWeek",
       durationBarVisible: true,
-      timeRangeSelectedHandling: "Disabled",
+      timeRangeSelectedHandling: booleano
+      ,
       onTimeRangeSelected: async (args) => {
         const dp = this.calendar;
         const modal = await DayPilot.Modal.prompt(
@@ -56,9 +64,22 @@ class Calendar extends Component {
           "Event 1"
         );
         dp.clearSelection();
-        if (!modal.result) {
-          return;
-        }
+        if (!modal.result) { return; }
+        dp.events.add({
+          start: args.start,
+          end: args.end,
+          id: DayPilot.guid(),
+          text: modal.result
+        });
+      },
+      eventDeleteHandling: "Update",
+      onEventClick: async args => {
+        const dp = this.calendar;
+        const modal = await DayPilot.Modal.prompt("Update event text:", args.e.text());
+        if (!modal.result) { return; }
+        const e = args.e;
+        e.data.text = modal.result;
+        dp.events.update(e);
       },
     };
   }

@@ -38,9 +38,9 @@ let ejemploProfe: CalendarioResponse = [
         fecha: {
             anio: 2021,
             mes:7,
-            dia: 7
+            dia: 9
         },
-        disponible: [['11:45:00', '12:30:00']],
+        disponible: [['14:30:00', '15:30:00']],
         ocupado:[['16:30:00', '19:29:00']]
 
     },

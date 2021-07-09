@@ -35,21 +35,17 @@ function Profile(email){
     const profesorArr = [];
     const fetchProfs = async () => {
         try {
-            const response = await axios.get(`http://localhost:3001/api/profesores/${email.children[0]}`)
-            console.log("Este deberia ser el profesor",response)
+            const response = await axios.get(`http://localhost:3001/api/profesores/${propEmail.email}`)
             setProf({
                 ...response.data
             })
         } catch(err) {
             console.log(err)
-        }
-        
-        
+        }  
     }
     useEffect(()=>{
         fetchProfs()
     }, []);
-    
     return (
 <div className={style.container}>
   <section className={style.sectionOne}>
@@ -62,7 +58,6 @@ function Profile(email){
 <h1> Licenciado en Cs Naturales</h1>
 <h4>{prof.descripcion}</h4>
       </div>
-
 
    </section>
 
@@ -78,6 +73,13 @@ function Profile(email){
 </section>
 
         </div>
+
+    )
+    
+}
+
+export default Profile
+
 /*     <div className="row py-5 px-4">
     <div className="col-md-7 mx-auto">
      <section>
@@ -136,8 +138,3 @@ function Profile(email){
         </div>
     </div>
 </div> */
-    )
-    
-}
-
-export default Profile
