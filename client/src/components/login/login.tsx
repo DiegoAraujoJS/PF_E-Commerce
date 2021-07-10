@@ -5,6 +5,7 @@ import { loginWithGoogle, signIn, createUser } from '../../firebase';
 import {Link} from 'react-router-dom'
 import {auth} from '../../firebase'
 import axios from 'axios';
+import { useHistory } from "react-router-dom";
 
 
 const clientId = '335971411859-5nphqdu952putvhvsd8db519ltc2klco.apps.googleusercontent.com'
@@ -16,6 +17,10 @@ function Login() {
     const [wrongPassword, setWrongPassword] = React.useState(false)
     const [logoutSuccess, setLogoutSuccess] = React.useState('')
     console.log(auth.currentUser)
+
+    const history = useHistory()
+
+    
 
     function handleChange(e) {
         validateErrors()
@@ -43,7 +48,6 @@ function Login() {
                 setErrors({...errors, email: null})
                 console.log('tambien acá')
             }
-
             if(!/[\S]/.test(password)) {
                 setErrors({...errors, password: 'No puede contener espacio blanco'})
             } else if (password.length < 4 || password.length > 20) {
@@ -72,6 +76,7 @@ function Login() {
                 password: password
             })
             localStorage.setItem('user', JSON.stringify({...login.data}))
+            history.push('/home')
             
         } catch (error) {
             setWrongPassword(true)
@@ -80,8 +85,8 @@ function Login() {
 
     function signOut(e) {
 
-        if (localStorage.getItem(email)) {
-            localStorage.removeItem(email)
+        if (localStorage.getItem('user')) {
+            localStorage.removeItem('user')
             setLogoutSuccess('true')
         } else {
             setLogoutSuccess('false')
