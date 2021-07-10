@@ -71,8 +71,8 @@ function Login() {
                 username: email,
                 password: password
             })
-            localStorage.setItem(email, 'logged in')
-            console.log('succesfully logged in')
+            localStorage.setItem('user', JSON.stringify({...login.data}))
+            
         } catch (error) {
             setWrongPassword(true)
         }

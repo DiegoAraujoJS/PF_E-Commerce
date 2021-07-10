@@ -2,6 +2,7 @@ import { createUser, loginWithGoogle } from '../../firebase';
 import React from 'react'
 import axios from 'axios';
 
+interface User{username: string, password: string, role: string}
 
 export default function Register() {
 
@@ -15,13 +16,15 @@ export default function Register() {
 
     async function handleSubmit (e) {
       e.preventDefault()
-      const registro = await axios.post('http://localhost:3001/api/session/register', {
-        username: mail,
-        password: password
-      })
-      console.log(registro)
+      let user: User = {
+        password: password,
+        role: 'user',
+        username: mail
+      }
+      if (mail === 'braiansilva@gmail.com') user.role = 'admin';
+      const registro = await axios.post('http://localhost:3001/api/session/register', user)
+      
     }
-
     async function googleSubmit() {
 
     }

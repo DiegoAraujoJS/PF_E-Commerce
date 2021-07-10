@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import style from './profile.module.css'
 import axios from "axios"
 import Calendar from "../calendar/Calendar"
-import { tSTypeLiteral } from '@babel/types';
+
 
 interface Profesor {
     mail: string;
