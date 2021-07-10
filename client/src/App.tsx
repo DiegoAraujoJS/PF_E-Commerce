@@ -17,39 +17,32 @@ import NavBar from './components/NavBar/NavBar'
 
 function App() {
 
-  let [role, setRole] = React.useState('')
+  let [role, setRole] = React.useState(undefined)
 
   React.useEffect(() => {
     async function setRoleOfUser() {
       if (localStorage.getItem('user')) {
         const roleOfUser = await axios.get(`http://localhost:3001/api/session/${JSON.parse(localStorage.getItem('user')).username}`)
         if (roleOfUser.data) {
-          console.log(roleOfUser.data)
           setRole(roleOfUser.data)
         } else {
-          console.log('el servidor no encontro ningun usuario con ese id')
-          setRole("")
+          setRole(undefined)      
         }
       }
     }
-    setRoleOfUser()
-  }, [window.location.href])
 
+    setRoleOfUser()
+
+  }, [])
 
   return (
     <BrowserRouter>
       <Route path='/'> <NavBar /> </Route>
-      <Route exact path='/claim' render={() => {
-        if (role) {
-          if (role === 'admin') {
-            return <Claims />
-          }
-          else {
-            return < Redirect to="/home" />
-          }
-        }
+      { role === "admin" && <Route exact path='/claim' render={() => { 
+            return <Claims />    
       }
-      }></Route>
+      }></Route> }
+
       <Route exact path='/claim/:id' render={() => {
         if (role) {
           if (role === 'admin') {
@@ -59,6 +52,8 @@ function App() {
             return < Redirect to="/home" />
           }
         }
+
+        return < Redirect to="/home" />
       }
       }>
       </Route>
@@ -71,6 +66,7 @@ function App() {
             return < Redirect to="/home" />
           }
         }
+        return < Redirect to="/home" />
       }
       }></Route>
       <Route exact path='/perfil' render={() => {
@@ -82,6 +78,7 @@ function App() {
             return < Redirect to="/home" />
           }
         }
+        return < Redirect to="/home" />
       }
       }></Route>
       <Route path='/perfil/:email' exact render={({ match }) => {
@@ -93,18 +90,12 @@ function App() {
             return < Redirect to="/home" />
           }
         }
+        return < Redirect to="/home" />
       }} />
-      <Route exact path='/registro' render={() => {
-        if (role) {
-          if (role !== 'user' && role !== 'admin') {
-            return <Register />
-          }
-          else {
-            return < Redirect to="/home" />
-          }
-        }
+      {role !== 'user' && role !== 'admin' ? <Route exact path='/registro' render={() => {
+        return <Register />
       }
-      }></Route>
+      }></Route> :  < Redirect to="/home"/>}
 
       <Route exact path='/login'> <Login /> </Route>
       <Route exact path='/calendar'> <CalendarApp /> </Route>

@@ -13,69 +13,75 @@ interface Profesor {
     descripcion: string;
 }
 
-interface Email{
+interface Email {
     email: string
 }
 
 
-function Profile(email){
-    console.log("Este deberia ser el email", email.children[0])
-    const propEmail={
-        email: email.children[0]
+function Profile(email) {
+    console.log("Este deberia ser el email", email && email.children && email.children[0])
+    const propEmail = {
+        email: email && email.children ? email.children[0] : null
     }
-    const  [prof, setProf]=useState<Profesor>({
-        mail:"",
-        nombre:"",
-        apellido:"",
-        ciudad:"",
-        foto:"",
-        descripcion:""
-        
+
+    const [prof, setProf] = useState<Profesor>({
+        mail: "",
+        nombre: "",
+        apellido: "",
+        ciudad: "",
+        foto: "",
+        descripcion: ""
+
     })
+
     const profesorArr = [];
+
     const fetchProfs = async () => {
         try {
-            const response = await axios.get(`http://localhost:3001/api/profesores/${propEmail.email}`)
-            setProf({
-                ...response.data
-            })
-        } catch(err) {
+            if (propEmail) {
+                const response = await axios.get(`http://localhost:3001/api/profesores/${propEmail.email}`)
+                setProf({
+                    ...response.data
+                })
+            }
+            console.log("No se encontro el Email")
+        } catch (err) {
             console.log(err)
-        }  
+        }
     }
-    useEffect(()=>{
+
+    useEffect(() => {
         fetchProfs()
     }, []);
+
     return (
-<div className={style.container}>
-  <section className={style.sectionOne}>
-      <div className={style.profileContainer}>
-      <img src={prof.foto} alt="..." width="130" height="130" className={style.profile} />
-    <div className="media-body mb-5">
+        <div className={style.container}>
+            <section className={style.sectionOne}>
+                <div className={style.profileContainer}>
+                    <img src={prof.foto} alt="..." width="130" height="130" className={style.profile} />
+                    <div className="media-body mb-5">
                         <h4 className="mt-0 mb-0">{prof.nombre} {prof.apellido} </h4>
                         <p className="small mb-4"> <i className="fas fa-map-marker-alt mr-2"></i>{prof.ciudad}</p>
                     </div>
-<h1> Licenciado en Cs Naturales</h1>
-<h4>{prof.descripcion}</h4>
-      </div>
+                    <h1> Licenciado en Cs Naturales</h1>
+                    <h4>{prof.descripcion}</h4>
+                </div>
 
-   </section>
+            </section>
 
-   <section className={style.sectionTwo}>
-       <h4 className={style.h4Prof}>Aca podrás ver sus horarios disponibles:</h4>
-       <br/>
-   <div className={style.calendarContainer}>
-                      <Calendar {...propEmail}/>
-                  </div>
-   </section>
-<section className={style.sectionThree}>
-<h1> Sobre mi... y como contactarme</h1>
-</section>
+            <section className={style.sectionTwo}>
+                <h4 className={style.h4Prof}>Aca podrás ver sus horarios disponibles:</h4>
+                <br />
+                <div className={style.calendarContainer}>
+                    <Calendar {...propEmail} />
+                </div>
+            </section>
+            <section className={style.sectionThree}>
+                <h1> Sobre mi... y como contactarme</h1>
+            </section>
 
         </div>
-
     )
-    
 }
 
 export default Profile
@@ -89,12 +95,12 @@ export default Profile
 
      </section>
      <section>
-         
+
      </section>
         <div className="bg-white shadow rounded overflow-hidden">
             <div className="px-4 pt-0 pb-4 cover">
                 <div className="media align-items-center profile-head">
-                
+
                     <div className="profile"><img src={prof.foto} alt="..." width="130" height="130" className="profile"/>
                     <div><img src={prof.foto} alt="..." width="130" height="130" className={style.profile}/>
                     </div>
@@ -110,16 +116,16 @@ export default Profile
                         <input type="radio" id="star1" name="rate" value="1" />
                         <label htmlFor="star1" title="text">1 star</label>
             </div>
-                   
+
                     <div className="media-body mb-5">
                         <h4 className="mt-0 mb-0">{prof.nombre} {prof.apellido} </h4>
                         <p className="small mb-4"> <i className="fas fa-map-marker-alt mr-2"></i>{prof.ciudad}</p>
                     </div>
-                  
+
                 </div>
             </div>
             <div className="bg-light p-4 d-flex justify-content-center text-center">
-            
+
             </div>
             <div className="px-4 py-3">
                 <h5 className="mb-0">Licenciado en matematica</h5>
@@ -133,7 +139,7 @@ export default Profile
                       <Calendar/>
                   </div>
             <div className="py-4 px-4">
-                
+
             </div>
         </div>
     </div>

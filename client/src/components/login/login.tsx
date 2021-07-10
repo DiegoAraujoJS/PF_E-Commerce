@@ -88,7 +88,10 @@ function Login() {
         if (localStorage.getItem('user')) {
             localStorage.removeItem('user')
             setLogoutSuccess('true')
+            
             alert("Se cerro sesión correctamente")
+            window.location.reload();
+
         } else {
             setLogoutSuccess('false')
             alert("Fallo al cerrar sesión")
