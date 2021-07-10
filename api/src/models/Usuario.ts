@@ -7,7 +7,6 @@ export default class User extends Model {
     @Column ({allowNull: false})
     nombre!: string;
 
-    
     @PrimaryKey
     @Unique
     @Column ({allowNull: false})

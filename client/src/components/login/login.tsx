@@ -9,6 +9,7 @@ function Login() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('');
     const [errors, setErrors] = useState({email: null, password: null})
+    console.log(auth.currentUser)
 
     function handleChange(e) {
         validateErrors()
@@ -78,30 +79,29 @@ function Login() {
 
     return (
         <div className="container">
-                 <main className="form-signin">
-  <form>
-    <img className="mb-4" src="../assets/brand/bootstrap-logo.svg" alt="" width="72" height="57"/>
-    <h1 className="h3 mb-3 fw-normal">Please sign in</h1>
-
-    <div className="form-floating">
-      <input type="email" className="form-control" id="floatingInput" placeholder="name@example.com"/>
-      <label htmlFor="floatingInput">Email address</label>
-    </div>
-    <div className="form-floating">
-      <input type="password" className="form-control" id="floatingPassword" placeholder="Password"/>
-      <label htmlFor="floatingPassword">Password</label>
-    </div>
-
-    <div className="checkbox mb-3">
-      <label>
-        <input type="checkbox" value="remember-me"></input>
-      </label>
-    </div>
-    <button className="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
-    <p className="mt-5 mb-3 text-muted">&copy; 2017–2021</p>
-  </form>
-</main>
+                 
        
+            <div>
+                <img src={logo} alt='logo'></img>
+            </div>
+            <div>
+                <h1>INICIAR SESIÓN</h1>
+                <button className="sign-in" onClick={loginWithGoogle}>
+                    Sign in with Google
+                </button>
+                <button className="sign-in" onClick={signOut}>
+                    Logout
+                </button>
+                <form onSubmit={handleSubmit}>
+                    <input type='text' value={email} name='emailValue' onChange={handleChange} placeholder='Email'/>
+                    <input type='password' value={password} name='passValue' onChange={handleChange} placeholder='Contraseña'/>
+                    <input type="submit" value="login" />
+                </form>
+                <Link to='register'>
+                    <button>Regístrate</button>
+                </Link>
+                
+            </div>
         </div>
     )
 }
@@ -109,7 +109,29 @@ function Login() {
 export default Login;
 
 
+{/* <main className="form-signin">
+<form>
+  <img className="mb-4" src="../assets/brand/bootstrap-logo.svg" alt="" width="72" height="57"/>
+  <h1 className="h3 mb-3 fw-normal">Please sign in</h1>
 
+  <div className="form-floating">
+    <input type="email" className="form-control" id="floatingInput" placeholder="name@example.com"/>
+    <label htmlFor="floatingInput">Email address</label>
+  </div>
+  <div className="form-floating">
+    <input type="password" className="form-control" id="floatingPassword" placeholder="Password"/>
+    <label htmlFor="floatingPassword">Password</label>
+  </div>
+
+  <div className="checkbox mb-3">
+    <label>
+      <input type="checkbox" value="remember-me"></input>
+    </label>
+  </div>
+  <button className="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
+  <p className="mt-5 mb-3 text-muted">&copy; 2017–2021</p>
+</form>
+</main> */}
 
 
 

@@ -6,9 +6,12 @@ import { useHistory } from "react-router-dom";
 import SearchBarHome from '../searchBar/SearchBarHome';
 import students from '../../images/students.jpg';
 import axios from 'axios'
+import { auth } from '../../firebase';
 const Home = ({ dispatchInput }) => {
     const [searchInput, setSearchInput] = React.useState('')
     const history = useHistory()
+
+    console.log(auth.currentUser)
 
     function handleChange(e) {
         switch(e.target.name) {
