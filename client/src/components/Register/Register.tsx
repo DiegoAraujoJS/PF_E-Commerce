@@ -22,8 +22,15 @@ export default function Register() {
         username: mail
       }
       if (mail === 'braiansilva@gmail.com') user.role = 'admin';
+      try{
       const registro = await axios.post('http://localhost:3001/api/session/register', user)
-      
+        console.log(registro)
+      if(registro) alert("Se registro correctamente")
+      }
+      catch(error){
+        console.log(error)
+        alert("Se produjo un error al registrarse")
+      }
     }
     async function googleSubmit() {
 

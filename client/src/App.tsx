@@ -2,7 +2,7 @@ import React from 'react';
 
 import './App.css';
 import Login from './components/login/login';
-import {BrowserRouter, Redirect, Route } from 'react-router-dom';
+import { BrowserRouter, Redirect, Route } from 'react-router-dom';
 import ClassContainer from './components/classContainer/ClassContainer';
 import CalendarApp from './components/calendar/Calendar';
 import Claims from './components/Claims/Claims';
@@ -18,68 +18,102 @@ import NavBar from './components/NavBar/NavBar'
 function App() {
 
   let [role, setRole] = React.useState('')
-  
-  
 
   React.useEffect(() => {
-    async function setRoleOfUser () {
+    async function setRoleOfUser() {
       if (localStorage.getItem('user')) {
         const roleOfUser = await axios.get(`http://localhost:3001/api/session/${JSON.parse(localStorage.getItem('user')).username}`)
         if (roleOfUser.data) {
+          console.log(roleOfUser.data)
           setRole(roleOfUser.data)
         } else {
           console.log('el servidor no encontro ningun usuario con ese id')
+          setRole("")
         }
       }
     }
     setRoleOfUser()
-  }, [role])
+  }, [window.location.href])
 
-  
+
   return (
     <BrowserRouter>
-      <Route path = '/'> <NavBar/> </Route>
-
-
-      <Route exact path = '/claim' render={() => {
-        if (role === 'admin') return <Claims />
-        else return < Redirect to="/home" />
+      <Route path='/'> <NavBar /> </Route>
+      <Route exact path='/claim' render={() => {
+        if (role) {
+          if (role === 'admin') {
+            return <Claims />
+          }
+          else {
+            return < Redirect to="/home" />
+          }
+        }
       }
       }></Route>
-      <Route exact path = '/claim/:id' render={() => {
-        if (role === 'admin') return <DetailClaim />
-        else return < Redirect to="/home" />
+      <Route exact path='/claim/:id' render={() => {
+        if (role) {
+          if (role === 'admin') {
+            return <DetailClaim />
+          }
+          else {
+            return < Redirect to="/home" />
+          }
+        }
       }
-      }>        
+      }>
       </Route>
-      <Route exact path = '/claim/id/add' render={() => {
-        if (role === 'admin') return <AddClaim />
-        else return < Redirect to="/home" />
+      <Route exact path='/claim/id/add' render={() => {
+        if (role) {
+          if (role === 'admin') {
+            return <AddClaim />
+          }
+          else {
+            return < Redirect to="/home" />
+          }
+        }
       }
       }></Route>
-      <Route exact path = '/perfil' render={() => {
-        if (role === 'user' || role === 'admin') return <Profile />
-        else return < Redirect to="/home" />
+      <Route exact path='/perfil' render={() => {
+        if (role) {
+          if (role === 'user' || role === 'admin') {
+            return <Profile />
+          }
+          else {
+            return < Redirect to="/home" />
+          }
+        }
       }
       }></Route>
-      <Route  path='/perfil/:email' exact render={({ match }) => {
-          if (role === 'user' || role === 'admin') return <Profile >{match.params.email} </Profile> 
-          else return < Redirect to="/home" />    
-     }}/>
-      <Route exact path = '/registro' render={() => {
-        if (role !== 'user' && role !== 'admin') return <Register />
-        else return < Redirect to="/home" />
+      <Route path='/perfil/:email' exact render={({ match }) => {
+        if (role) {
+          if (role === 'user' || role === 'admin') {
+            return <Profile >{match.params.email} </Profile>
+          }
+          else {
+            return < Redirect to="/home" />
+          }
+        }
+      }} />
+      <Route exact path='/registro' render={() => {
+        if (role) {
+          if (role !== 'user' && role !== 'admin') {
+            return <Register />
+          }
+          else {
+            return < Redirect to="/home" />
+          }
+        }
       }
       }></Route>
 
-      <Route exact path = '/login'> <Login /> </Route>
-      <Route exact path = '/calendar'> <CalendarApp /> </Route>
-      <Route exact path = '/chat'><Chat /></Route>
-      <Route exact path = '/claim/add'><AddClaim/></Route>
-      <Route exact path = '/home'> <Home/> </Route>
-      <Route exact path = '/clases'><ClassContainer /></Route>
+      <Route exact path='/login'> <Login /> </Route>
+      <Route exact path='/calendar'> <CalendarApp /> </Route>
+      <Route exact path='/chat'><Chat /></Route>
+      <Route exact path='/claim/add'><AddClaim /></Route>
+      <Route exact path='/home'> <Home /> </Route>
+      <Route exact path='/clases'><ClassContainer /></Route>
     </BrowserRouter>
-    
+
   );
 }
 
