@@ -78,7 +78,12 @@ interface Horario {
 
 //------------------------------ FUNCION --------------------------------
 
-var nuevosHorarios = (arrayHorarios: Array<string[]>) => {
+var nuevosHorarios = (arrayHorarios: Array<string[]>, query?: any) => {
+
+    if (query) {
+        var query_1: string = query[0].substring(0, 2) + query[0].substring(3, 5) + query[0].substring(6, 8)
+        var query_2: string = query[1].substring(0, 2) + query[1].substring(3, 5) + query[1].substring(6, 8)
+    }
 
     let horarioNumero = arrayHorarios.map(h => {
         if (h) {
@@ -94,11 +99,34 @@ var nuevosHorarios = (arrayHorarios: Array<string[]>) => {
 
     let ordenados = numeros && numeros.join().split(",").sort()
 
-    let eliminarRepetidos = ordenados?.filter((item, index) => {
-        return ordenados?.indexOf(item) === index;
+    // let eliminarRepetidos = ordenados?.filter((item, index) => {
+    //     return ordenados?.indexOf(item) === index;
+    // })
+
+    let acomodarFechas = ordenados?.map((item, index) => {
+        if (query && query_1 && query_2) {
+            if (item > query_1 && item <= query_2 ) {
+                if (Number(ordenados[index]) - Number(query_1) < Number(query_2) - Number(ordenados[index])) {
+                    return query_1
+                }
+                else {
+                    return query_2
+                }
+            }
+            else if(item === query_1 && index%2===0){
+                return query_2
+            }
+            else {
+                return item
+            }
+        }
+        else {
+            return item
+        }
     })
 
-    let horariosNuevos = eliminarRepetidos?.map(h => {
+
+    let horariosNuevos = acomodarFechas?.map(h => {
         if (h) {
             if (h.length === 6) {
                 let horario = h.substring(0, 2) + ":" + h.substring(2, 4) + ":" + h.substring(4, 6)
@@ -108,24 +136,43 @@ var nuevosHorarios = (arrayHorarios: Array<string[]>) => {
     })
 
 
-    let horariosTuplas: Array<(string|undefined)[]> = []
+    let horariosTuplas: Array<(string | undefined)[]> = []
 
-    for(let i = 0 ; i < horariosNuevos.length ; i+=2){
+    for (let i = 0; i < horariosNuevos.length; i += 2) {
         horariosTuplas.push([horariosNuevos && horariosNuevos[i], horariosNuevos && horariosNuevos[i + 1]])
     }
 
-
     let completarHorario = horariosTuplas.map(e => {
-        if (!e[1]) {
-
+        if (!e[1] && e[0]) {
             if (horariosTuplas && horariosTuplas[horariosTuplas.length - 2][1] && e[0] !== horariosTuplas[horariosTuplas.length - 2][1]) {
-                return [[horariosTuplas.length - 2][1], e[0]]
+                if (e[0].substring(0, 2) + e[0].substring(3, 5) + e[0].substring(6, 8) > query_2) {
+                    return [query[1], e[0]]
+                }
+                else {
+                    return [horariosTuplas[horariosTuplas.length - 2][1], e[0]]
+                }
             }
             else if (horariosTuplas && horariosTuplas[horariosTuplas.length - 2][1] && e[0] === horariosTuplas[horariosTuplas.length - 2][1]) {
                 return [undefined, undefined]
             }
             else {
                 return [e[0], e[0]]
+            }
+        }
+        else if (!e[0] && e[1]) {
+            if (horariosTuplas && horariosTuplas[horariosTuplas.length - 2][1] && e[1] !== horariosTuplas[horariosTuplas.length - 2][1]) {
+                if (e[1].substring(0, 2) + e[1].substring(3, 5) + e[1].substring(6, 8) > query_2) {
+                    return [query[1], e[1]]
+                }
+                else {
+                    return [horariosTuplas[horariosTuplas.length - 2][1], e[1]]
+                }
+            }
+            else if (horariosTuplas && horariosTuplas[horariosTuplas.length - 2][1] && e[1] === horariosTuplas[horariosTuplas.length - 2][1]) {
+                return [undefined, undefined]
+            }
+            else {
+                return [e[1], e[1]]
             }
         }
         else {
@@ -160,8 +207,8 @@ router.post('/add', async (req: Request, res: Response) => {
                     let nuevaFecha = {
                         email: query.email,
                         fecha: query.fecha,
-                        disponible: calendario.disponible ? query.disponible ? nuevosHorarios([...calendario.disponible, query.disponible[0]]) : calendario.disponible : null,
-                        ocupado: calendario.ocupado ? query.ocupado ? nuevosHorarios([...calendario.ocupado, query.ocupado[0]]) : calendario.ocupado : null,
+                        disponible: calendario.disponible ? query.disponible ? nuevosHorarios([...calendario.disponible, query.disponible[0]], query.ocupado && query.ocupado[0]) : calendario.disponible : null,
+                        ocupado: calendario.ocupado ? query.ocupado ? nuevosHorarios([...calendario.ocupado, query.ocupado[0]], query.disponible[0]) : calendario.ocupado : null,
                     }
 
                     let nuevoCalendario = profesor.calendario.map((e, i) => i === indice ? nuevaFecha : e)
@@ -271,12 +318,6 @@ router.put('/edit', async (req: Request, res: Response) => {
                                 if (sumaHorario_1 >= sumaHorarioOcupado_1 && sumaHorario_2 <= sumaHorarioOcupado_2) {
                                     return null
                                 }
-                                if (sumaHorarioOcupado_1 >= sumaHorario_1 && sumaHorarioOcupado_1 >= sumaHorario_2) {
-                                    return h
-                                }
-                                if (sumaHorarioOcupado_1 <= sumaHorario_1 && sumaHorarioOcupado_2 <= sumaHorario_1) {
-                                    return h
-                                }
                                 else if (sumaHorario_2 >= sumaHorarioOcupado_1 && sumaHorario_2 <= sumaHorarioOcupado_2) {
                                     return [h[0], query.ocupado[0][0]]
                                 }
@@ -299,12 +340,6 @@ router.put('/edit', async (req: Request, res: Response) => {
 
                                 if (sumaHorario_1 >= sumaHorarioDisponible_1 && sumaHorario_2 <= sumaHorarioDisponible_2) {
                                     return null
-                                }                                
-                                if (sumaHorarioDisponible_1 >= sumaHorario_1 && sumaHorarioDisponible_1 >= sumaHorario_2) {
-                                    return h
-                                }
-                                if (sumaHorarioDisponible_1 <= sumaHorario_1 && sumaHorarioDisponible_2 <= sumaHorario_1) {
-                                    return h
                                 }
                                 else if (sumaHorario_2 >= sumaHorarioDisponible_1 && sumaHorario_2 <= sumaHorarioDisponible_2 && sumaHorarioDisponible_1 >= sumaHorario_1) {
                                     return [h[0], query.disponible[0][0]]
