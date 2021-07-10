@@ -236,7 +236,7 @@ router.post('/add', async (req: Request, res: Response) => {
                         ]
                     })
                     let calendarioEditado = await profesor.save()
-                    res.send(calendarioEditado)
+                    return res.send(calendarioEditado)
                 }
             }
             else {
@@ -252,12 +252,12 @@ router.post('/add', async (req: Request, res: Response) => {
                     ]
                 })
                 let calendarioEditado = await profesor.save()
-                res.send(calendarioEditado)
+                return res.send(calendarioEditado)
             }
         }
     }
     catch (error) {
-        res.send(error)
+        return res.send(error)
     }
 });
 
