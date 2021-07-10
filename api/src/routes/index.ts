@@ -5,7 +5,7 @@ import clases from './clases'
 import profesores from './profesores'
 import reclamos from './reclamos'
 import chats from './chats'
-
+import sessions from './session'
 import alumnos from './alumnos'
 import calendario from './calendario'
 
@@ -18,5 +18,6 @@ router.use('/reclamos', reclamos)
 router.use('/chats', chats)
 router.use('/alumnos', alumnos)
 router.use('/calendario', calendario)
+router.use('/session', sessions)
 
 export default router

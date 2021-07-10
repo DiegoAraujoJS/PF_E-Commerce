@@ -6,6 +6,9 @@ import {Link} from 'react-router-dom'
 import {auth} from '../../firebase'
 import axios from 'axios';
 
+
+const clientId = '335971411859-5nphqdu952putvhvsd8db519ltc2klco.apps.googleusercontent.com'
+
 function Login() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('');
@@ -124,6 +127,9 @@ function Login() {
                     Logout
                 </button>
                 <form onSubmit={handleSubmit}>
+                    <div>
+                       
+                    </div>
                     <input type='text' value={email} name='emailValue' onChange={handleChange} placeholder='Email'/>
                     <input type='password' value={password} name='passValue' onChange={handleChange} placeholder='Contraseña'/>
                     <input type="submit" value="login" />

@@ -13,8 +13,16 @@ interface Profesor {
     descripcion: string;
 }
 
+interface Email{
+    email: string
+}
 
-function Profile(){
+
+function Profile(email){
+    console.log("Este deberia ser el email", email.children[0])
+    const propEmail={
+        email: email.children[0]
+    }
     const  [prof, setProf]=useState<Profesor>({
         mail:"",
         nombre:"",
@@ -27,21 +35,17 @@ function Profile(){
     const profesorArr = [];
     const fetchProfs = async () => {
         try {
-            const response = await axios.get(`http://localhost:3001/api/profesores/edwardburgos@gmail.com`)
-            console.log(response)
+            const response = await axios.get(`http://localhost:3001/api/profesores/${propEmail.email}`)
             setProf({
                 ...response.data
             })
         } catch(err) {
             console.log(err)
-        }
-        
-        
+        }  
     }
     useEffect(()=>{
         fetchProfs()
     }, []);
-    
     return (
 <div className={style.container}>
   <section className={style.sectionOne}>
@@ -55,14 +59,13 @@ function Profile(){
 <h4>{prof.descripcion}</h4>
       </div>
 
-
    </section>
 
    <section className={style.sectionTwo}>
-       <h4>Aca podrás ver sus horarios disponibles:</h4>
+       <h4 className={style.h4Prof}>Aca podrás ver sus horarios disponibles:</h4>
        <br/>
    <div className={style.calendarContainer}>
-                      <Calendar/>
+                      <Calendar {...propEmail}/>
                   </div>
    </section>
 <section className={style.sectionThree}>
@@ -70,6 +73,13 @@ function Profile(){
 </section>
 
         </div>
+
+    )
+    
+}
+
+export default Profile
+
 /*     <div className="row py-5 px-4">
     <div className="col-md-7 mx-auto">
      <section>
@@ -128,7 +138,3 @@ function Profile(){
         </div>
     </div>
 </div> */
-    )
-}
-
-export default Profile
