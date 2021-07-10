@@ -1,5 +1,6 @@
 import { createUser, loginWithGoogle } from '../../firebase';
 import React from 'react'
+import axios from 'axios';
 
 
 export default function Register() {
@@ -12,23 +13,19 @@ export default function Register() {
     const [state, setState] = React.useState('')
     const [alreadyCreated, setAlreadyCreated] = React.useState(false)
 
-    async function handleSubmit(e) {
-        e.preventDefault()    
+    async function handleSubmit (e) {
+      e.preventDefault()
+      const registro = await axios.post('http://localhost:3001/api/session/register', {
+        username: mail,
+        password: password
+      })
+      console.log(registro)
+    }
 
-        if (password.length<6) {
-            return ;
-        }
-        const response = await createUser(mail, password)
-        console.log(response)
-        if (response.code === 'auth/email-already-in-use') {
-            setAlreadyCreated(true)
-        }
+    async function googleSubmit() {
+
     }
-    async function googleSubmit () {
-        const response = await createUser(mail, password)
-        console.log(response)
-        response.code === 'auth/email-already-in-use' ? setAlreadyCreated(true) : loginWithGoogle()
-    }
+
     return (
         <div className="container">
         <form onSubmit={(e) => handleSubmit(e)}>

@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
 import logo from '../../logo.svg';
 import style from './login.module.css';
-import { loginWithGoogle, signIn, signOut, createUser } from '../../firebase';
+import { loginWithGoogle, signIn, createUser } from '../../firebase';
 import {Link} from 'react-router-dom'
 import {auth} from '../../firebase'
+import axios from 'axios';
 
 function Login() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('');
     const [errors, setErrors] = useState({email: null, password: null})
+    const [wrongPassword, setWrongPassword] = React.useState(false)
+    const [logoutSuccess, setLogoutSuccess] = React.useState('')
     console.log(auth.currentUser)
 
     function handleChange(e) {
@@ -23,6 +26,7 @@ function Login() {
             default:
                 break;
         }
+        
     }
 
     function validateErrors() {
@@ -55,11 +59,38 @@ function Login() {
         // } else {
         //     alert('Login successful');
         // }
-        console.log('auth', auth.currentUser)
-        const response = await signIn(email, password);
+
+
+        // console.log('auth', auth.currentUser)
+        // const response = await signIn(email, password);
+        try {
+            const login = await axios.post('http://localhost:3001/api/session/login', {
+                username: email,
+                password: password
+            })
+            localStorage.setItem(email, 'logged in')
+            console.log('succesfully logged in')
+        } catch (error) {
+            setWrongPassword(true)
+        }
+    }
+
+    function signOut(e) {
+
+        if (localStorage.getItem(email)) {
+            localStorage.removeItem(email)
+            setLogoutSuccess('true')
+        } else {
+            setLogoutSuccess('false')
+        }
         
+        
+        
+        
+    
         
     }
+    
     
 
     // const onSuccess = (res) => {
@@ -102,6 +133,9 @@ function Login() {
                 </Link>
                 
             </div>
+            {wrongPassword ? <span style={{color:'red'}}>El usuario o la contraseña son incorrectos</span> : ''}
+            {logoutSuccess === 'true' ? <span style={{color:'red'}}>Fin de sesión exitosa</span> : ''}
+            {logoutSuccess === 'false' ? <span style={{color:'red'}}>Debes haber iniciado sesion para deslogearte</span> : ''}
         </div>
     )
 }
