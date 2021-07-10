@@ -21,7 +21,6 @@ function Login() {
     const history = useHistory()
 
     
-
     function handleChange(e) {
         validateErrors()
         switch(e.target.name) {
