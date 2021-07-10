@@ -85,13 +85,7 @@ function Login() {
             setLogoutSuccess('true')
         } else {
             setLogoutSuccess('false')
-        }
-        
-        
-        
-        
-    
-        
+        }           
     }
     
     
@@ -134,7 +128,7 @@ function Login() {
                     <input type='password' value={password} name='passValue' onChange={handleChange} placeholder='Contraseña'/>
                     <input type="submit" value="login" />
                 </form>
-                <Link to='register'>
+                <Link to='/registro'>
                     <button>Regístrate</button>
                 </Link>
                 

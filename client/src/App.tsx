@@ -14,6 +14,7 @@ import Chat from './components/Chat/Chat'
 import Home from './components/home/Home'
 import Register from './components/Register/Register'
 import axios from 'axios';
+import NavBar from './components/NavBar/NavBar'
 
 function App() {
 
@@ -38,6 +39,7 @@ function App() {
   
   return (
     <BrowserRouter>
+      <Route path = '/'> <NavBar/> </Route>
       <Route exact path = '/home'> <Home/> </Route>
       <Route exact path = '/clases'><ClassContainer /></Route>
       <Route exact path = '/login'> <Login /> </Route>
