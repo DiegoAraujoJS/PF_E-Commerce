@@ -83,8 +83,10 @@ function Login() {
         if (localStorage.getItem(email)) {
             localStorage.removeItem(email)
             setLogoutSuccess('true')
+            alert("Se inicio sesión correctamente")
         } else {
             setLogoutSuccess('false')
+            alert("Fallo al iniciar sesión")
         }           
     }
     
