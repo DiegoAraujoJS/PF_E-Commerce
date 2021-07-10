@@ -107,7 +107,7 @@ var nuevosHorarios = (arrayHorarios: Array<string[]>) => {
         }
     })
 
-    let horariosTuplas: any[] = []
+    let horariosTuplas: Array<(string|undefined)[]> = []
     horariosNuevos?.forEach((e, i) => {
         horariosTuplas.push([horariosNuevos && horariosNuevos[i], horariosNuevos && horariosNuevos[i + 1]])
         i += 2
@@ -116,7 +116,7 @@ var nuevosHorarios = (arrayHorarios: Array<string[]>) => {
     let completarHorario = horariosTuplas.map(e => {
         if (!e[1]) {
 
-            if (horariosTuplas && horariosTuplas[horariosTuplas.length - 2][1] && e[0] !== horariosTuplas[horariosTuplas.length - 2][1] && e[0] > horariosTuplas[horariosTuplas.length - 2][1]) {
+            if (horariosTuplas && horariosTuplas[horariosTuplas.length - 2][1] && e[0] !== horariosTuplas[horariosTuplas.length - 2][1]) {
                 return [[horariosTuplas.length - 2][1], e[0]]
             }
             else if (horariosTuplas && horariosTuplas[horariosTuplas.length - 2][1] && e[0] === horariosTuplas[horariosTuplas.length - 2][1]) {
@@ -264,8 +264,8 @@ router.put('/edit', async (req: Request, res: Response) => {
                                 let sumaHorarioOcupado_1 = query.ocupado[0][0].substring(0, 2) + query.ocupado[0][0].substring(3, 5) + query.ocupado[0][0].substring(6, 8)
                                 let sumaHorarioOcupado_2 = query.ocupado[0][1].substring(0, 2) + query.ocupado[0][1].substring(3, 5) + query.ocupado[0][1].substring(6, 8)
 
-                                
-                                if(sumaHorario_1 > sumaHorarioOcupado_1 && sumaHorario_2 < sumaHorarioOcupado_2){
+
+                                if (sumaHorario_1 > sumaHorarioOcupado_1 && sumaHorario_2 < sumaHorarioOcupado_2) {
                                     return null
                                 }
                                 else if (sumaHorario_2 > sumaHorarioOcupado_1 && sumaHorario_2 < sumaHorarioOcupado_2) {
@@ -273,6 +273,9 @@ router.put('/edit', async (req: Request, res: Response) => {
                                 }
                                 else if (sumaHorario_1 < sumaHorarioOcupado_2 && sumaHorario_2 > sumaHorarioOcupado_2) {
                                     return [query.ocupado[0][1], h[1]]
+                                }
+                                else if (sumaHorario_1 >= sumaHorarioOcupado_1 && sumaHorario_2 <= sumaHorarioOcupado_2) {
+                                    return [query.ocupado[0][0], h[1]]
                                 }
                                 else {
                                     return h
@@ -285,7 +288,7 @@ router.put('/edit', async (req: Request, res: Response) => {
                                 let sumaHorarioDisponible_1 = query.disponible[0][0].substring(0, 2) + query.disponible[0][0].substring(3, 5) + query.disponible[0][0].substring(6, 8)
                                 let sumaHorarioDisponible_2 = query.disponible[0][1].substring(0, 2) + query.disponible[0][1].substring(3, 5) + query.disponible[0][1].substring(6, 8)
 
-                                if(sumaHorario_1 > sumaHorarioDisponible_1 && sumaHorario_2 < sumaHorarioDisponible_2){
+                                if (sumaHorario_1 > sumaHorarioDisponible_1 && sumaHorario_2 < sumaHorarioDisponible_2) {
                                     return null
                                 }
                                 else if (sumaHorario_2 > sumaHorarioDisponible_1 && sumaHorario_2 < sumaHorarioDisponible_2 && sumaHorarioDisponible_1 > sumaHorario_1) {
@@ -294,10 +297,14 @@ router.put('/edit', async (req: Request, res: Response) => {
                                 else if (sumaHorario_1 < sumaHorarioDisponible_2 && sumaHorario_2 > sumaHorarioDisponible_2) {
                                     return [query.disponible[0][1], h[1]]
                                 }
+                                else if (sumaHorario_1 >= sumaHorarioDisponible_1 && sumaHorario_2 <= sumaHorarioDisponible_2) {
+                                    return [query.disponible[0][0], h[1]]
+                                }
                                 else {
                                     return h
                                 }
                             }
+
                             else {
                                 return h
                             }
