@@ -2,8 +2,7 @@ import React from 'react';
 
 import './App.css';
 import Login from './components/login/login';
-import {BrowserRouter} from 'react-router-dom';
-import {Route} from 'react-router-dom'
+import {BrowserRouter, Redirect, Route } from 'react-router-dom';
 import ClassContainer from './components/classContainer/ClassContainer';
 import CalendarApp from './components/calendar/Calendar';
 import Claims from './components/Claims/Claims';
@@ -40,23 +39,45 @@ function App() {
   return (
     <BrowserRouter>
       <Route path = '/'> <NavBar/> </Route>
-      <Route exact path = '/home'> <Home/> </Route>
-      <Route exact path = '/clases'><ClassContainer /></Route>
-      <Route exact path = '/login'> <Login /> </Route>
-      <Route exact path = '/calendar'> <CalendarApp /> </Route>
+
+
       <Route exact path = '/claim' render={() => {
         if (role === 'admin') return <Claims />
+        else return < Redirect to="/home" />
       }
       }></Route>
-      <Route exact path = '/claim/:id'><DetailClaim/></Route>
-      <Route exact path = '/claim/add'><AddClaim/></Route>
-      <Route exact path = '/claim/id/add'><AddClaim/></Route>
-      <Route exact path = '/perfil'><Profile /></Route>
+      <Route exact path = '/claim/:id' render={() => {
+        if (role === 'admin') return <DetailClaim />
+        else return < Redirect to="/home" />
+      }
+      }>        
+      </Route>
+      <Route exact path = '/claim/id/add' render={() => {
+        if (role === 'admin') return <AddClaim />
+        else return < Redirect to="/home" />
+      }
+      }></Route>
+      <Route exact path = '/perfil' render={() => {
+        if (role === 'user' || role === 'admin') return <Profile />
+        else return < Redirect to="/home" />
+      }
+      }></Route>
       <Route  path='/perfil/:email' exact render={({ match }) => {
-           return <Profile >{match.params.email} </Profile>     
+          if (role === 'user' || role === 'admin') return <Profile >{match.params.email} </Profile> 
+          else return < Redirect to="/home" />    
      }}/>
+      <Route exact path = '/registro' render={() => {
+        if (role !== 'user' && role !== 'admin') return <Register />
+        else return < Redirect to="/home" />
+      }
+      }></Route>
+
+      <Route exact path = '/login'> <Login /> </Route>
+      <Route exact path = '/calendar'> <CalendarApp /> </Route>
       <Route exact path = '/chat'><Chat /></Route>
-      <Route exact path = '/registro'><Register /></Route>
+      <Route exact path = '/claim/add'><AddClaim/></Route>
+      <Route exact path = '/home'> <Home/> </Route>
+      <Route exact path = '/clases'><ClassContainer /></Route>
     </BrowserRouter>
     
   );
