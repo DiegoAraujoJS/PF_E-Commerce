@@ -1,13 +1,13 @@
 import { Router, Request, Response } from "express";
 
 const router = Router()
-interface User{username: string, password: string}
+interface User{username: string, password: string, role: string}
 type Users = User[]
 
 let users: Users = []
 
 router.post('/register', async (req:Request, res:Response) => {
-    const {username, password} = req.body;
+    const {username, password, role} = req.body;
     if (users.find ((user: any) => user.username === username )) {
         return res.status(400).send('el usuario ya existe')
     } else {
@@ -15,7 +15,8 @@ router.post('/register', async (req:Request, res:Response) => {
         users.push(
             {
                 username: username,
-                password: password
+                password: password,
+                role: role,
             }
         )
         console.log("users",users)
@@ -25,15 +26,21 @@ router.post('/register', async (req:Request, res:Response) => {
 console.log("users",users)
 router.post('/login', async (req:Request, res:Response) => {
     const {username, password} = req.body;
-    console.log("req.body",req.body)
-    console.log("users",users)
-    if (users.find ((user: any) => (user.username === username && user.password === password))) {
-        return res.status(200).send('usuario y contraseña correctos')
+    const user = users.find ((user: any) => (user.username === username && user.password === password))
+    if (user) {
+        return res.status(200).send(user)
     } else {
         return res.status(400).send('usuario o contaseña incorrectos')
     }
 })
 
+router.get('/:user', async (req:Request, res:Response) => {
+    const user: User | undefined = users.find(x => x.username === req.params.user)
 
+    if (user === undefined) {
+        return res.send(undefined)
+    }
+    return res.send(user?.role)
+})
 
 export default router

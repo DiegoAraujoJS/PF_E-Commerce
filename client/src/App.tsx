@@ -16,10 +16,6 @@ import Register from './components/Register/Register'
 import axios from 'axios';
 import NavBar from './components/NavBar/NavBar'
 
-interface User{username: string, password: string, role: string}
-
-
-
 function App() {
 
   let [role, setRole] = React.useState('')
@@ -49,10 +45,6 @@ function App() {
       <Route exact path = '/login'> <Login /> </Route>
       <Route exact path = '/calendar'> <CalendarApp /> </Route>
       <Route exact path = '/claim' render={() => {
-        console.log('role data ', role)
-
-        // if (!role) axios.get(`http://localhost:3001/api/session/${JSON.parse(localStorage.getItem('user')).username}`)
-        // .then(e => setRole(e.data)
         if (role === 'admin') return <Claims />
       }
       }></Route>
