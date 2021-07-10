@@ -107,11 +107,13 @@ var nuevosHorarios = (arrayHorarios: Array<string[]>) => {
         }
     })
 
+
     let horariosTuplas: Array<(string|undefined)[]> = []
-    horariosNuevos?.forEach((e, i) => {
+
+    for(let i = 0 ; i < horariosNuevos.length ; i+=2){
         horariosTuplas.push([horariosNuevos && horariosNuevos[i], horariosNuevos && horariosNuevos[i + 1]])
-        i += 2
-    })
+    }
+
 
     let completarHorario = horariosTuplas.map(e => {
         if (!e[1]) {
@@ -130,6 +132,7 @@ var nuevosHorarios = (arrayHorarios: Array<string[]>) => {
             return e
         }
     })
+
     let resultado = completarHorario.filter(fecha => fecha[0] && fecha[1])
 
     return resultado
@@ -265,13 +268,19 @@ router.put('/edit', async (req: Request, res: Response) => {
                                 let sumaHorarioOcupado_2 = query.ocupado[0][1].substring(0, 2) + query.ocupado[0][1].substring(3, 5) + query.ocupado[0][1].substring(6, 8)
 
 
-                                if (sumaHorario_1 > sumaHorarioOcupado_1 && sumaHorario_2 < sumaHorarioOcupado_2) {
+                                if (sumaHorario_1 >= sumaHorarioOcupado_1 && sumaHorario_2 <= sumaHorarioOcupado_2) {
                                     return null
                                 }
-                                else if (sumaHorario_2 > sumaHorarioOcupado_1 && sumaHorario_2 < sumaHorarioOcupado_2) {
+                                if (sumaHorarioOcupado_1 >= sumaHorario_1 && sumaHorarioOcupado_1 >= sumaHorario_2) {
+                                    return h
+                                }
+                                if (sumaHorarioOcupado_1 <= sumaHorario_1 && sumaHorarioOcupado_2 <= sumaHorario_1) {
+                                    return h
+                                }
+                                else if (sumaHorario_2 >= sumaHorarioOcupado_1 && sumaHorario_2 <= sumaHorarioOcupado_2) {
                                     return [h[0], query.ocupado[0][0]]
                                 }
-                                else if (sumaHorario_1 < sumaHorarioOcupado_2 && sumaHorario_2 > sumaHorarioOcupado_2) {
+                                else if (sumaHorario_1 <= sumaHorarioOcupado_2 && sumaHorario_2 >= sumaHorarioOcupado_2) {
                                     return [query.ocupado[0][1], h[1]]
                                 }
                                 else if (sumaHorario_1 >= sumaHorarioOcupado_1 && sumaHorario_2 <= sumaHorarioOcupado_2) {
@@ -288,13 +297,19 @@ router.put('/edit', async (req: Request, res: Response) => {
                                 let sumaHorarioDisponible_1 = query.disponible[0][0].substring(0, 2) + query.disponible[0][0].substring(3, 5) + query.disponible[0][0].substring(6, 8)
                                 let sumaHorarioDisponible_2 = query.disponible[0][1].substring(0, 2) + query.disponible[0][1].substring(3, 5) + query.disponible[0][1].substring(6, 8)
 
-                                if (sumaHorario_1 > sumaHorarioDisponible_1 && sumaHorario_2 < sumaHorarioDisponible_2) {
+                                if (sumaHorario_1 >= sumaHorarioDisponible_1 && sumaHorario_2 <= sumaHorarioDisponible_2) {
                                     return null
+                                }                                
+                                if (sumaHorarioDisponible_1 >= sumaHorario_1 && sumaHorarioDisponible_1 >= sumaHorario_2) {
+                                    return h
                                 }
-                                else if (sumaHorario_2 > sumaHorarioDisponible_1 && sumaHorario_2 < sumaHorarioDisponible_2 && sumaHorarioDisponible_1 > sumaHorario_1) {
+                                if (sumaHorarioDisponible_1 <= sumaHorario_1 && sumaHorarioDisponible_2 <= sumaHorario_1) {
+                                    return h
+                                }
+                                else if (sumaHorario_2 >= sumaHorarioDisponible_1 && sumaHorario_2 <= sumaHorarioDisponible_2 && sumaHorarioDisponible_1 >= sumaHorario_1) {
                                     return [h[0], query.disponible[0][0]]
                                 }
-                                else if (sumaHorario_1 < sumaHorarioDisponible_2 && sumaHorario_2 > sumaHorarioDisponible_2) {
+                                else if (sumaHorario_1 <= sumaHorarioDisponible_2 && sumaHorario_2 >= sumaHorarioDisponible_2) {
                                     return [query.disponible[0][1], h[1]]
                                 }
                                 else if (sumaHorario_1 >= sumaHorarioDisponible_1 && sumaHorario_2 <= sumaHorarioDisponible_2) {
