@@ -379,7 +379,7 @@ router.put('/edit', async (req: Request, res: Response) => {
                         let calendarioEditado = {
                             email: query.email,
                             fecha: query.fecha,
-                            disponible: calendario.disponible ? nuevosHorarios([...calendario.disponible, query.disponible[0]]) : null,
+                            disponible: calendario.disponible ? nuevosHorarios([...calendario.disponible, query.disponible[0]]) : nuevosHorarios(query.disponible),
                             ocupado: calendario.ocupado ? editarHorarios(calendario.ocupado) : null,
                         }
 
@@ -396,8 +396,8 @@ router.put('/edit', async (req: Request, res: Response) => {
                         let calendarioEditado = {
                             email: query.email,
                             fecha: query.fecha,
-                            disponible: calendario.disponible ? editarHorarios(calendario.disponible) : null,
-                            ocupado: calendario.ocupado ? nuevosHorarios([...calendario.ocupado, query.ocupado[0]]) : null,
+                            disponible: calendario.disponible ? editarHorarios(calendario.disponible) : null ,
+                            ocupado: calendario.ocupado ? nuevosHorarios([...calendario.ocupado, query.ocupado[0]]) : nuevosHorarios(query.ocupado)  ,
                         }
 
                         let nuevoCalendario = profesor.calendario.map((fecha, i) => i === indice ? calendarioEditado : fecha)
