@@ -47,16 +47,17 @@ router.get('/', async (req: Request, res: Response) => { // profesore?name=rod
 })
 
 router.get('/:mail', async (req: Request, res: Response) => {
+    console.log("INTENTANDO ENTRAR A MAIL")
     const mail = req.params.mail;
     const usuario: User | null = await User.findOne({
         include: [{
             model: Profesor,
-            attributes: ['ciudad', 'foto', 'descripcion']
+            attributes: ['city', 'foto', 'description']
         }],
         where: {
             mail: mail.toString()
         },
-        attributes: ['mail', 'nombre', 'apellido']
+        attributes: ['mail', 'name', 'lastName']
     });
     if (usuario) {
         if (usuario.profesor) {

@@ -11,39 +11,45 @@ import { Role } from "../../interfaces"
 
 const bootstrap = async () => {
 
-    const Diego: UserProps = {
+    const d: UserProps = {
         name: `Diego`,
         lastName: 'Araujo',
         mail: "diegoaraujo@gmail.com",
         role: Role.ADMIN 
     }
+    const Diego = {...d, password:123456}
 
-    const Braian: UserProps = {
+    const b: UserProps = {
         name: `Braian`,
         lastName: 'Silva',
         mail: "braiansilva@gmail.com",
         role: Role.ADMIN
     }
+    const Braian = {...b, password:123456}
 
-    const Edward: UserProps = {
+    const e: UserProps = {
         name: 'Edward',
         lastName: 'Burgos',
         mail: "edwardburgos@gmail.com",
         role: Role.ADMIN
     }
+    const Edward = {...e, password:123456}
 
-    const Javi: UserProps = {
+    const j: UserProps = {
         name: 'Javier',
         lastName: 'Carro',
         mail: "javiercarro@gmail.com",
         role: Role.ADMIN
     }
-    const Mauro: UserProps = {
+    const Javi = {...j, password:123456}
+
+    const m: UserProps = {
         name: 'Mauro',
         lastName: 'Leonel',
         mail: "mauroleonel@gmail.com", 
         role: Role.ADMIN
     }
+    const Mauro = {...m, password:123456}
 
     
 

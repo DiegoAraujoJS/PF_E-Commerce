@@ -21,8 +21,9 @@ function App() {
 
   React.useEffect(() => {
     async function setRoleOfUser() {
+      console.log(localStorage.getItem('user'))
       if (localStorage.getItem('user')) {
-        const roleOfUser = await axios.get(`http://localhost:3001/api/session/${JSON.parse(localStorage.getItem('user')).username}`)
+        const roleOfUser = await axios.get(`http://localhost:3001/api/session/${JSON.parse(localStorage.getItem('user')).mail}`)
         if (roleOfUser.data) {
           setRole(roleOfUser.data)
         } else {

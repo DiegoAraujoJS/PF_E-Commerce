@@ -90,8 +90,9 @@ class Calendar extends Component {
     console.log("Esto es el calendario",this.props.email)
     const email=this.props.email
     const arrayProf = await axios.get(
-      `http://localhost:3001/api/profesores/calendar/${email}`
+      `http://localhost:3001/api/calendario/${email}`
     );
+    console.log("ARRAYPROF", arrayProf)
     var tempo = [];
     arrayProf.data.map((prof) => {
       let año = prof.fecha.anio.toString();
@@ -103,23 +104,18 @@ class Calendar extends Component {
       if (mes.length === 1) {
         mes = "0" + mes;
       }
+      console.log("PROF",prof)
       tempo.push({
-        start: año + "-" + mes + "-" + dia + "T" + prof.disponible[0][0],
-        end: año + "-" + mes + "-" + dia + "T" + prof.disponible[0][1],
+        start: año + "-" + mes + "-" + dia + "T" + prof.disponible[0],
+        end: año + "-" + mes + "-" + dia + "T" + prof.disponible[1],
         text: "Disponible",
         backColor: "blue",
         moveDisabled: true,
         resizeDisabled: true,
         toolTop: "hola manito",
       });
-      tempo.push({
-        start: año + "-" + mes + "-" + dia + "T" + prof.ocupado[0][0],
-        end: año + "-" + mes + "-" + dia + "T" + prof.ocupado[0][1],
-        text: "Ocupado",
-        backColor: "red",
-        moveDisabled: true,
-        resizeDisabled: true,
-      });
+      
+      console.log("TEMPO", tempo)
       return tempo;
     });
 
