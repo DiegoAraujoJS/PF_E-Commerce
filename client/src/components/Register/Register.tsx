@@ -5,6 +5,7 @@ import { useHistory } from "react-router-dom";
 import {UserProps} from '../../../../interfaces'
 
 enum Role {USER, ADMIN}
+enum ErrorType {INCOMPLETE_INPUTS, ALREADY_EXISTS}
 
 export default function Register() {
 
@@ -40,8 +41,12 @@ export default function Register() {
       history.push('/login')
     }
     catch (error) {
-      console.log(error)
-      alert("Se produjo un error al registrarse")
+      
+      if (error.response.data.type === ErrorType.ALREADY_EXISTS) {
+        alert('El usuario ya existe!')
+      } else if (error.response.data.type === ErrorType.INCOMPLETE_INPUTS){
+        alert('Debe ingresar mail, nombre y apellido')
+      }
     }
   }
   async function googleSubmit() {

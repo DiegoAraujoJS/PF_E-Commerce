@@ -108,8 +108,8 @@ class Calendar extends Component {
       }
       console.log("PROF",prof)
       tempo.push({
-        start: año + "-" + mes + "-" + dia + "T" + prof.disponible[0],
-        end: año + "-" + mes + "-" + dia + "T" + prof.disponible[1],
+        start: año + "-" + mes + "-" + dia + "T" + prof.disponible[0][0],
+        end: año + "-" + mes + "-" + dia + "T" + prof.disponible[0][1],
         text: "Disponible",
         backColor: "blue",
         moveDisabled: true,

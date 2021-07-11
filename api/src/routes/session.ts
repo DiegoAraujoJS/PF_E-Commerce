@@ -5,6 +5,8 @@ const router = Router()
 
 type Users = UserProps[]
 
+enum ErrorType {INCOMPLETE_INPUTS, ALREADY_EXISTS}
+
 router.post('/register', async (req:Request, res:Response) => {
     const newUser: UserProps = {
         lastName: req.body.lastName,
@@ -12,15 +14,20 @@ router.post('/register', async (req:Request, res:Response) => {
         name: req.body.name,
         role: req.body.role
     }
-    const [user, created] = await User.findOrCreate({
-        where: {
-            mail: req.body.mail
-        },
-        defaults: {...newUser, password: req.body.password}
-    })
+    if (newUser.lastName && newUser.name && newUser.mail){
 
-    if (!created) return res.status(400).send('the user already exists')
-    return res.send(user)
+        const [user, created] = await User.findOrCreate({
+            where: {
+                mail: req.body.mail
+            },
+            defaults: {...newUser, password: req.body.password}
+        })
+    
+        if (!created) return res.status(400).send({type:ErrorType.ALREADY_EXISTS})
+        return res.send(user)
+    } else {
+        return res.status(400).send({type: ErrorType.INCOMPLETE_INPUTS})
+    }
     }
 )
 
