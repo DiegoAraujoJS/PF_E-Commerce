@@ -96,7 +96,7 @@ class Calendar extends Component {
     );
     console.log("ARRAYPROF", arrayProf)
     var tempo = [];
-    if(arrayProf.length>0){arrayProf.data.map((prof) => {
+    if(arrayProf.data.length>0){arrayProf.data.map((prof) => {
       let año = prof.fecha.anio.toString();
       let mes = prof.fecha.mes.toString();
       let dia = prof.fecha.dia.toString();
@@ -114,7 +114,7 @@ class Calendar extends Component {
         backColor: "blue",
         moveDisabled: true,
         resizeDisabled: true,
-        toolTop: "hola manito",
+        
       });
       
       console.log("TEMPO", tempo)
