@@ -94,7 +94,7 @@ class Calendar extends Component {
     );
     console.log("ARRAYPROF", arrayProf)
     var tempo = [];
-    arrayProf.data.map((prof) => {
+    if(arrayProf.length>0){arrayProf.data.map((prof) => {
       let año = prof.fecha.anio.toString();
       let mes = prof.fecha.mes.toString();
       let dia = prof.fecha.dia.toString();
@@ -117,7 +117,7 @@ class Calendar extends Component {
       
       console.log("TEMPO", tempo)
       return tempo;
-    });
+    });}
 
     console.log("Tempo", tempo);
 

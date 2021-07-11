@@ -72,7 +72,12 @@ function App() {
       }
       }></Route>
 
-      <Route exact path='/perfil'> <Profile /></Route>
+      <Route exact path='/perfil' render={() => {
+          
+            return < Redirect to={`/perfil/${JSON.parse(localStorage.getItem('user')).mail}`} />
+          }           
+      }
+      ></Route>
 
       <Route path='/perfil/:email' exact render={({ match }) => {
             return <Profile >{match.params.email} </Profile>           
