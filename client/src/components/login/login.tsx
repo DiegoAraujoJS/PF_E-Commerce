@@ -71,7 +71,7 @@ function Login() {
         // const response = await signIn(email, password);
         try {
             const login = await axios.post('http://localhost:3001/api/session/login', {
-                username: email,
+                mail: email,
                 password: password
             })
             localStorage.setItem('user', JSON.stringify({...login.data}))

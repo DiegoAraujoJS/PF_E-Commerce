@@ -71,24 +71,12 @@ function App() {
       }
       }></Route>
 
-      <Route exact path='/perfil' render={() => {
-          if (role === 'user' || role === 'admin') {
-            return <Profile />
-          }
-          else {
-            return < Redirect to="/home" />
-          }              
-      }
-      }></Route>
+      <Route exact path='/perfil'> <Profile /></Route>
 
       <Route path='/perfil/:email' exact render={({ match }) => {
-          if (role === 'user' || role === 'admin') {
-            return <Profile >{match.params.email} </Profile>
-          }
-          else {
-            return < Redirect to="/home" />
+            return <Profile >{match.params.email} </Profile>           
           }           
-      }} />
+      } />
       </div> : null}
 
       <Route exact path='/registro' render={() => {

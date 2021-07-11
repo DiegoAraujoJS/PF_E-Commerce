@@ -45,8 +45,8 @@ router.get('/', async (req: Request, res: Response) => {
                 let alumnosDevolver = alumnos.map(e => {
                     let nuevoAlumno: AlumnoInterface = {
                         mail: e.mail,
-                        nombre: e.nombre,
-                        apellido: e.apellido,
+                        nombre: e.name,
+                        apellido: e.lastName,
                         foto: e.alumno.foto,
                         ciudad: e.alumno.ciudad,
                         descripcion: e.alumno.descripcion
@@ -69,8 +69,8 @@ router.get('/', async (req: Request, res: Response) => {
             let alumnosDevolver = alumnos.map(e => {
                 let nuevoAlumno: AlumnoInterface = {
                     mail: e.mail,
-                    nombre: e.nombre,
-                    apellido: e.apellido,
+                    nombre: e.name,
+                    apellido: e.lastName,
                     foto: e.alumno.foto,
                     ciudad: e.alumno.ciudad,
                     descripcion: e.alumno.descripcion
@@ -103,8 +103,8 @@ router.get('/:mail', async (req: Request, res: Response) => {
             if (usuario.alumno) {
                 let obj: AlumnoInterface = {
                     mail: usuario.mail,
-                    nombre: usuario.nombre,
-                    apellido: usuario.apellido,
+                    nombre: usuario.name,
+                    apellido: usuario.lastName,
                     foto: usuario.alumno.foto,
                     ciudad: usuario.alumno.ciudad,
                     descripcion: usuario.alumno.descripcion,
@@ -152,8 +152,8 @@ router.post('/', async (req: Request, res: Response) => {
                     if (usuario) {
                         let alumnoPorDevolver: AlumnoInterface = {
                             mail: usuario.mail,
-                            nombre: usuario.nombre,
-                            apellido: usuario.apellido,
+                            nombre: usuario.name,
+                            apellido: usuario.lastName,
                             ciudad: usuario.alumno.ciudad,
                             foto: usuario.alumno.foto,
                             descripcion: usuario.alumno.descripcion
@@ -203,8 +203,8 @@ router.put('/', async (req: Request, res: Response) => {
                     if (usuario) {
                         let alumnoPorDevolver: AlumnoInterface = {
                             mail: usuario.mail,
-                            nombre: usuario.nombre,
-                            apellido: usuario.apellido,
+                            nombre: usuario.name,
+                            apellido: usuario.lastName,
                             ciudad: usuario.alumno.ciudad,
                             foto: usuario.alumno.foto,
                             descripcion: usuario.alumno.descripcion

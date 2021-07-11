@@ -1,33 +1,33 @@
 import { Router, Request, Response } from "express";
-
+import User from "../models/Usuario";
+import {UserProps, Role} from '../../../interfaces'
 const router = Router()
-interface User{username: string, password: string, role: string}
-type Users = User[]
 
-let users: Users = []
+type Users = UserProps[]
 
 router.post('/register', async (req:Request, res:Response) => {
-    const {username, password, role} = req.body;
-    if (users.find ((user: any) => user.username === username )) {
-        return res.status(400).send('el usuario ya existe')
-    } else {
-        console.log('register',  req.body)
-        users.push(
-            {
-                username: username,
-                password: password,
-                role: role,
-            }
-        )
-        console.log("users",users)
-        return res.send(users[users.length - 1])
+    const newUser: UserProps = {
+        lastName: req.body.lastName,
+        mail: req.body.mail,
+        name: req.body.name,
+        role: req.body.role
     }
-})
-console.log("users",users)
+    const [user, created] = await User.findOrCreate({
+        where: {
+            mail: req.body.mail
+        },
+        defaults: {...newUser, password: req.body.password}
+    })
+
+    if (!created) return res.status(400).send('the user already exists')
+    return res.send(user)
+    }
+)
+
 router.post('/login', async (req:Request, res:Response) => {
-    const {username, password} = req.body;
-    const user = users.find ((user: any) => (user.username === username && user.password === password))
-    if (user) {
+    const user = await User.findByPk(req.body.mail)
+    
+    if (user?.password === req.body.password) {
         return res.status(200).send(user)
     } else {
         return res.status(400).send('usuario o contaseña incorrectos')
@@ -35,12 +35,12 @@ router.post('/login', async (req:Request, res:Response) => {
 })
 
 router.get('/:user', async (req:Request, res:Response) => {
-    const user: User | undefined = users.find(x => x.username === req.params.user)
-
+    const user: UserProps | null = await User.findByPk(req.body.mail)
     if (user === undefined) {
         return res.send(undefined)
     }
     return res.send(user?.role)
 })
+
 
 export default router

@@ -10,6 +10,7 @@ router.get('/', async (req: Request, res: Response) => {
     const { busqueda } = req.query
     if (!busqueda) return res.status(400).send('Debes ingresar un input como \'busqueda\'')
     try {
+        let clases: any[] = []
         if (busqueda) {
             let palabrasSeparadas = (busqueda as string).split(" ");
             palabrasSeparadas = palabrasSeparadas.filter(x => x!=='grado')
@@ -17,29 +18,29 @@ router.get('/', async (req: Request, res: Response) => {
             palabrasSeparadas = palabrasSeparadas.filter(x => x!=='anio')
 
             
-            let clases: any[] = []
+            
             for (let x of palabrasSeparadas){
                 const c = await Clase.findAll({
                     include: [Profesor],
                     where: {
                         [Op.or]: [{
                             materia: {
-                                [Op.like]: `%${x}%`.replace("\'", '')
+                                [Op.iLike]: `%${x}%`.replace("\'", '')
                             }
                         },
                         {
                             nivel: {
-                                [Op.like]: `%${x}%`.replace("\'", '')
+                                [Op.iLike]: `%${x}%`.replace("\'", '')
                             }
                         },
                         {
                             grado: {
-                                [Op.like]: `%${x}%`.replace("\'", '')
+                                [Op.iLike]: `%${x}%`.replace("\'", '')
                             }
                         },
                         {
                             ciudad: {
-                                [Op.like]: `%${x}%`.replace("\'", '')
+                                [Op.iLike]: `%${x}%`.replace("\'", '')
                             }
                         }
                         
@@ -49,7 +50,9 @@ router.get('/', async (req: Request, res: Response) => {
                 
                 clases.push(...c)
             }
-        } 
+            
+        }
+        return res.send(clases) 
         
     } catch (err) {
         res.send(err)

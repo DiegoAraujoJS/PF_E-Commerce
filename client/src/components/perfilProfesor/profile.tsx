@@ -2,21 +2,7 @@ import React, { useEffect, useState } from 'react';
 import style from './profile.module.css'
 import axios from "axios"
 import Calendar from "../calendar/Calendar"
-
-
-interface Profesor {
-    mail: string;
-    nombre: string;
-    apellido: string;
-    ciudad: string;
-    foto: string;
-    descripcion: string;
-}
-
-interface Email {
-    email: string
-}
-
+import { ProfesorProps } from '../../../../interfaces';
 
 function Profile(email) {
     console.log("Este deberia ser el email", email && email.children && email.children[0])
@@ -24,13 +10,14 @@ function Profile(email) {
         email: email && email.children ? email.children[0] : null
     }
 
-    const [prof, setProf] = useState<Profesor>({
-        mail: "",
-        nombre: "",
-        apellido: "",
-        ciudad: "",
+    const [prof, setProf] = useState<ProfesorProps>({
+        User_mail: "",
+        name: "",
+        lastName: "",
+        city: "",
         foto: "",
-        descripcion: ""
+        description: "", 
+        score: 0
 
     })
 
@@ -43,6 +30,7 @@ function Profile(email) {
                 setProf({
                     ...response.data
                 })
+                console.log(prof)
             }
             console.log("No se encontro el Email")
         } catch (err) {
@@ -60,11 +48,11 @@ function Profile(email) {
                 <div className={style.profileContainer}>
                     <img src={prof.foto} alt="..." width="130" height="130" className={style.profile} />
                     <div className="media-body mb-5">
-                        <h4 className="mt-0 mb-0">{prof.nombre} {prof.apellido} </h4>
-                        <p className="small mb-4"> <i className="fas fa-map-marker-alt mr-2"></i>{prof.ciudad}</p>
+                        <h4 className="mt-0 mb-0">{prof.name} {prof.lastName} </h4>
+                        <p className="small mb-4"> <i className="fas fa-map-marker-alt mr-2"></i>{prof.city}</p>
                     </div>
                     <h1> Licenciado en Cs Naturales</h1>
-                    <h4>{prof.descripcion}</h4>
+                    <h4>{prof.description}</h4>
                 </div>
 
             </section>

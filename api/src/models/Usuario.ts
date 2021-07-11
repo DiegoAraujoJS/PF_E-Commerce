@@ -1,11 +1,13 @@
 import { Model, Column, Table, CreatedAt, UpdatedAt, DataType, Unique, PrimaryKey, ForeignKey, HasOne } from 'sequelize-typescript';
 import Alumno from './Alumno';
 import Profesor from './Profesor';
+import { UserProps } from '../../../interfaces';
+
 
 @Table
-export default class User extends Model {
+export default class User extends Model implements UserProps{
     @Column ({allowNull: false})
-    nombre!: string;
+    name!: string;
 
     @PrimaryKey
     @Unique
@@ -13,7 +15,13 @@ export default class User extends Model {
     mail!: string;
 
     @Column ({allowNull: false})
-    apellido!: string;
+    lastName!: string;
+
+    @Column
+    password!: string;
+
+    @Column
+    role!: number;
 
     @CreatedAt
     @Column

@@ -15,7 +15,7 @@ export default function ClassCards() {
         async function fetchDataStart() {
             
             const searchInput = store.getState().searchInput
-            console.log(searchInput)
+            console.log('array de clases', searchInput)
             
             console.log('response',  searchInput)
             setClases(searchInput) // [{},{}]

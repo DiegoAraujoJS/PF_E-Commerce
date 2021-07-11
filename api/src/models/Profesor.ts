@@ -5,45 +5,35 @@ import Clase from './Clase';
 import Rango from './Rango';
 import rango_profesor from './rango_profesor';
 import User from './Usuario';
-
-type arrayDePares = [`${number}:${number}:00`, `${number}:${number}:00`][]
-
-interface Horario{
-
-    email: string;
-    fecha: {
-        anio: number,
-        mes: number,
-        dia: number
-    },
-    disponible: arrayDePares,
-    ocupado?: arrayDePares
-}
+import {ProfesorProps, Horario} from '../../../interfaces'
 
 @Table
-export default class Profesor extends Model {    
+export default class Profesor extends Model implements ProfesorProps{
     @Column(DataType.FLOAT)
-    puntuacion!: number;
+    score!: number;
 
     @PrimaryKey
     @ForeignKey(() => User)
     @Column
     User_mail!: string;
+
+    @Column
+    password!: string;
     
     @Column
-    nombre!: string;
+    name!: string;
 
     @Column
-    apellido!: string;
+    lastName!: string;
 
     @Column
-    ciudad!: string;
+    city!: string;
     
     @Column
     foto!: string;
     
     @Column
-    descripcion!: string;
+    description!: string;
 
     @Column({ type: DataType.JSON })
     calendario!: Horario[];

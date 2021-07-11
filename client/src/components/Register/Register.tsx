@@ -2,31 +2,39 @@ import { createUser, loginWithGoogle } from '../../firebase';
 import React from 'react'
 import axios from 'axios';
 import { useHistory } from "react-router-dom";
+import {UserProps} from '../../../../interfaces'
 
-interface User { username: string, password: string, role: string }
+enum Role {USER, ADMIN}
 
 export default function Register() {
 
   const [mail, setMail] = React.useState('')
   const [password, setPass] = React.useState('')
   const [name, setName] = React.useState('')
-  const [surname, setSurname] = React.useState('')
+  const [lastName, setlastName] = React.useState('')
   const [city, setCity] = React.useState('')
   const [state, setState] = React.useState('')
   const [alreadyCreated, setAlreadyCreated] = React.useState(false)
 
   const history = useHistory()
 
+
+  
   async function handleSubmit(e) {
     e.preventDefault()
-    let user: User = {
-      password: password,
-      role: 'user',
-      username: mail
+    let user: UserProps = {
+      lastName: lastName,
+      mail: mail,
+      name: name,
+      role: Role.USER
     }
-    if (mail === 'braiansilva@gmail.com') user.role = 'admin';
+    let userWithPassword = {
+      ...user,
+      password: password
+    }
+    if (mail === 'braiansilva@gmail.com') user.role = Role.ADMIN;
     try {
-      const registro = await axios.post('http://localhost:3001/api/session/register', user)
+      const registro = await axios.post('http://localhost:3001/api/session/register', userWithPassword)
       console.log(registro)
       if (registro) alert("Se registro correctamente")
       history.push('/login')
@@ -60,7 +68,7 @@ export default function Register() {
         </div>
         <div className="form-group">
           <label htmlFor="inputAddress2">Apellido</label>
-          <input value={surname} onChange={(e) => setSurname(e.target.value)} type="text" className="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor" />
+          <input value={lastName} onChange={(e) => setlastName(e.target.value)} type="text" className="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor" />
         </div>
         <div className="form-row">
           <div className="form-group col-md-6">
