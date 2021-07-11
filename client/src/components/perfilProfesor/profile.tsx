@@ -32,7 +32,7 @@ function Profile(email) {
                 await setProf({
                     ...response.data
                 })
-                console.log("ESTO ES PROF",prof)
+                
             }else
             {
                 console.log("No se encontro el Email")
@@ -47,7 +47,7 @@ function Profile(email) {
         fetchProfs()
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-
+    console.log("ESTO ES PROF",prof)
     return (
         <div className={style.container}>
             <section className={style.sectionOne}>
