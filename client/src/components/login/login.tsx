@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import logo from '../../logo.svg';
-import style from './login.module.css';
-import { loginWithGoogle, signIn, createUser } from '../../firebase';
+// import style from './login.module.css';
+import { loginWithGoogle,/*  signIn, createUser */ } from '../../firebase';
 import {Link} from 'react-router-dom'
 import {auth} from '../../firebase'
 import axios from 'axios';
 import { useHistory } from "react-router-dom";
 
 
-const clientId = '335971411859-5nphqdu952putvhvsd8db519ltc2klco.apps.googleusercontent.com'
+// const clientId = '335971411859-5nphqdu952putvhvsd8db519ltc2klco.apps.googleusercontent.com'
 
 function Login() {
     const [email, setEmail] = useState('')
@@ -152,7 +152,7 @@ function Login() {
 export default Login;
 
 
-{/* <main className="form-signin">
+/* <main className="form-signin">
 <form>
   <img className="mb-4" src="../assets/brand/bootstrap-logo.svg" alt="" width="72" height="57"/>
   <h1 className="h3 mb-3 fw-normal">Please sign in</h1>
@@ -174,7 +174,7 @@ export default Login;
   <button className="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
   <p className="mt-5 mb-3 text-muted">&copy; 2017–2021</p>
 </form>
-</main> */}
+</main> */
 
 
 

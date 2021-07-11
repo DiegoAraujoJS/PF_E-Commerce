@@ -9,7 +9,7 @@ function Profile(email) {
     const propEmail = {
         email: email && email.children ? email.children[0] : null
     }
-
+    
     const [prof, setProf] = useState<ProfesorProps>({
         User_mail: "",
         name: "",
@@ -21,18 +21,23 @@ function Profile(email) {
 
     })
 
-    const profesorArr = [];
+    // const profesorArr = [];
 
     const fetchProfs = async () => {
         try {
+            console.log("PROPEMAIL?", propEmail)
             if (propEmail) {
                 const response = await axios.get(`http://localhost:3001/api/profesores/${propEmail.email}`)
-                setProf({
+                console.log("ESTO ES RESPONSE",response)
+                await setProf({
                     ...response.data
                 })
-                console.log(prof)
+                console.log("ESTO ES PROF",prof)
+            }else
+            {
+                console.log("No se encontro el Email")
+
             }
-            console.log("No se encontro el Email")
         } catch (err) {
             console.log(err)
         }
@@ -40,6 +45,7 @@ function Profile(email) {
 
     useEffect(() => {
         fetchProfs()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (

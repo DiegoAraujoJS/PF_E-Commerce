@@ -27,6 +27,7 @@ function App() {
         const roleOfUser = await axios.get(`http://localhost:3001/api/session/${JSON.parse(localStorage.getItem('user')).mail}`)
         console.log('role ', roleOfUser)
         if (roleOfUser.data === 1) {
+          console.log(localStorage.getItem('user'))
           setRole(roleOfUser.data)
         } else {
           console.log('el servidor no encontro ningun usuario con ese id')    
@@ -44,7 +45,8 @@ function App() {
 
       
         <Route exact path='/claim' render={() => {
-          console.log(role)
+
+          
           if (role === 1) {
             return <Claims />
           }
@@ -55,7 +57,7 @@ function App() {
       }></Route>
       
       <Route exact path='/claim/:id' render={() => {
-          if (role === 'admin') {
+          if (role === 1) {
             return <DetailClaim />
           }
           else {
@@ -75,8 +77,12 @@ function App() {
       }
       }></Route>
 
-      <Route exact path='/perfil'> <Profile /></Route>
-
+<Route exact path='/perfil' render={() => {
+            
+            return < Redirect to={`/perfil/${JSON.parse(localStorage.getItem('user')).mail}`} />
+          }           
+      }
+      ></Route>
       <Route path='/perfil/:email' exact render={({ match }) => {
             return <Profile >{match.params.email} </Profile>           
           }           

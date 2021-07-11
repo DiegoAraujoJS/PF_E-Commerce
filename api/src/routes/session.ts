@@ -40,7 +40,9 @@ router.get('/:user', async (req:Request, res:Response) => {
     if (user === undefined) {
         return res.send(undefined)
     }
-    return res.send(user?.role)
+    const rol=user?.role.toString()
+    console.log(rol)
+    return res.send(rol)
 })
 
 
