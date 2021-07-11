@@ -26,76 +26,80 @@ function App() {
         if (roleOfUser.data) {
           setRole(roleOfUser.data)
         } else {
+          console.log('el servidor no encontro ningun usuario con ese id')    
           setRole(undefined)      
         }
       }
     }
-
     setRoleOfUser()
-
   }, [])
+
 
   return (
     <BrowserRouter>
       <Route path='/'> <NavBar /> </Route>
-      { role === "admin" && <Route exact path='/claim' render={() => { 
-            return <Claims />    
-      }
-      }></Route> }
 
+      { role ? <div>
+        <Route exact path='/claim' render={() => {
+          if (role === 'admin') {
+            return <Claims />
+          }
+          else {
+            return < Redirect to="/home" />
+          }           
+      }
+      }></Route>
+      
       <Route exact path='/claim/:id' render={() => {
-        if (role) {
           if (role === 'admin') {
             return <DetailClaim />
           }
           else {
             return < Redirect to="/home" />
-          }
-        }
-
-        return < Redirect to="/home" />
+          }          
       }
       }>
       </Route>
+
       <Route exact path='/claim/id/add' render={() => {
-        if (role) {
           if (role === 'admin') {
             return <AddClaim />
           }
           else {
             return < Redirect to="/home" />
-          }
-        }
-        return < Redirect to="/home" />
+          }        
       }
       }></Route>
+
       <Route exact path='/perfil' render={() => {
-        if (role) {
           if (role === 'user' || role === 'admin') {
             return <Profile />
           }
           else {
             return < Redirect to="/home" />
-          }
-        }
-        return < Redirect to="/home" />
+          }              
       }
       }></Route>
+
       <Route path='/perfil/:email' exact render={({ match }) => {
-        if (role) {
           if (role === 'user' || role === 'admin') {
             return <Profile >{match.params.email} </Profile>
           }
           else {
             return < Redirect to="/home" />
-          }
-        }
-        return < Redirect to="/home" />
+          }           
       }} />
-      {role !== 'user' && role !== 'admin' ? <Route exact path='/registro' render={() => {
-        return <Register />
+      </div> : null}
+
+      <Route exact path='/registro' render={() => {
+          if (!role) {
+            return <Register />
+          }
+          else {
+            return < Redirect to="/home" />
+          }           
       }
-      }></Route> :  < Redirect to="/home"/>}
+      }></Route>
 
       <Route exact path='/login'> <Login /> </Route>
       <Route exact path='/calendar'> <CalendarApp /> </Route>
