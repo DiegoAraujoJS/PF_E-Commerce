@@ -34,4 +34,5 @@ interface ProfesorProps {
 }
 
 
-export {UserProps, Role, ArrayDePares, Horario, CalendarioResponse, ProfesorProps}
+export type {UserProps, ArrayDePares, Horario, CalendarioResponse, ProfesorProps}
+export {Role}

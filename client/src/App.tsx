@@ -15,15 +15,18 @@ import Register from './components/Register/Register'
 import axios from 'axios';
 import NavBar from './components/NavBar/NavBar'
 
+
 function App() {
 
   let [role, setRole] = React.useState(undefined)
 
   React.useEffect(() => {
     async function setRoleOfUser() {
+      
       if (localStorage.getItem('user')) {
-        const roleOfUser = await axios.get(`http://localhost:3001/api/session/${JSON.parse(localStorage.getItem('user')).username}`)
-        if (roleOfUser.data) {
+        const roleOfUser = await axios.get(`http://localhost:3001/api/session/${JSON.parse(localStorage.getItem('user')).mail}`)
+        console.log('role ', roleOfUser)
+        if (roleOfUser.data === 1) {
           setRole(roleOfUser.data)
         } else {
           console.log('el servidor no encontro ningun usuario con ese id')    
@@ -39,9 +42,10 @@ function App() {
     <BrowserRouter>
       <Route path='/'> <NavBar /> </Route>
 
-      { role ? <div>
+      
         <Route exact path='/claim' render={() => {
-          if (role === 'admin') {
+          console.log(role)
+          if (role === 1) {
             return <Claims />
           }
           else {
@@ -62,7 +66,7 @@ function App() {
       </Route>
 
       <Route exact path='/claim/id/add' render={() => {
-          if (role === 'admin') {
+          if (role === 1) {
             return <AddClaim />
           }
           else {
@@ -77,10 +81,10 @@ function App() {
             return <Profile >{match.params.email} </Profile>           
           }           
       } />
-      </div> : null}
+      
 
       <Route exact path='/registro' render={() => {
-          if (!role) {
+          if (role === undefined) {
             return <Register />
           }
           else {

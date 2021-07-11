@@ -35,7 +35,8 @@ router.post('/login', async (req:Request, res:Response) => {
 })
 
 router.get('/:user', async (req:Request, res:Response) => {
-    const user: UserProps | null = await User.findByPk(req.body.mail)
+    console.log(req.params)
+    const user: UserProps | null = await User.findByPk(req.params.user)
     if (user === undefined) {
         return res.send(undefined)
     }

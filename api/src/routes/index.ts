@@ -8,6 +8,7 @@ import chats from './chats'
 import sessions from './session'
 import alumnos from './alumnos'
 import calendario from './calendario'
+import webTokens from './sessionJWT'
 
 const router = Router()
 router.use('/login', login)
@@ -19,5 +20,6 @@ router.use('/chats', chats)
 router.use('/alumnos', alumnos)
 router.use('/calendario', calendario)
 router.use('/session', sessions)
+router.use('/webTokens', webTokens)
 
 export default router

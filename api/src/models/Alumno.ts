@@ -12,6 +12,9 @@ export default class Alumno extends Model {
 
     @Column
     foto!: string;
+
+    @Column ({type: DataType.JSON})
+    history!: object[]
     
     @Column
     ciudad!: string;

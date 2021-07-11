@@ -35,6 +35,9 @@ export default class Profesor extends Model implements ProfesorProps{
     @Column
     description!: string;
 
+    @Column ({type: DataType.JSON})
+    history!: object[]
+
     @Column({ type: DataType.JSON })
     calendario!: Horario[];
 
