@@ -43,7 +43,7 @@ export default function ClassCards() {
                 <Button>Right</Button>
             </ButtonGroup> */}
             <ul style={classListContainer}>
-                {clases.map( (clase, i) => <li className="m-3" key={i}>
+                { clases && clases.length > 0 ?  clases.map( (clase, i) => <li className="m-3" key={i}>
                     {console.log(clase)}
                     <ClassCard 
                     nombre={clase.nombre} 
@@ -56,7 +56,8 @@ export default function ClassCards() {
                     puntuacion={clase.puntuacion} 
                     key={i}/>
                     </li>
-                )}    
+                )
+            : <h2>No hay clases disponibles</h2> }    
             </ul>
         </div>
     )
