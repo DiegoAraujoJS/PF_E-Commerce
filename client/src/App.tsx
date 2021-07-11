@@ -42,7 +42,7 @@ function App() {
 
       { role ? <div>
         <Route exact path='/claim' render={() => {
-          if (role === 'admin') {
+          if (role === 1) {
             return <Claims />
           }
           else {
@@ -52,7 +52,7 @@ function App() {
       }></Route>
       
       <Route exact path='/claim/:id' render={() => {
-          if (role === 'admin') {
+          if (role === 1) {
             return <DetailClaim />
           }
           else {
@@ -63,7 +63,7 @@ function App() {
       </Route>
 
       <Route exact path='/claim/id/add' render={() => {
-          if (role === 'admin') {
+          if (role === 1) {
             return <AddClaim />
           }
           else {
@@ -73,7 +73,7 @@ function App() {
       }></Route>
 
       <Route exact path='/perfil' render={() => {
-          
+            
             return < Redirect to={`/perfil/${JSON.parse(localStorage.getItem('user')).mail}`} />
           }           
       }
@@ -83,7 +83,7 @@ function App() {
             return <Profile >{match.params.email} </Profile>           
           }           
       } />
-      </div> : null}
+      </div> :null }
 
       <Route exact path='/registro' render={() => {
           if (!role) {

@@ -88,7 +88,9 @@ class Calendar extends Component {
 
     // load event data
     console.log("Esto es el calendario",this.props.email)
-    const email=this.props.email
+    var email=this.props.email
+    if(email===undefined && localStorage.getItem('user')!==null)email=JSON.parse(localStorage.getItem('user')).mail
+    console.log("Esto es email si undefined", email)
     const arrayProf = await axios.get(
       `http://localhost:3001/api/calendario/${email}`
     );
