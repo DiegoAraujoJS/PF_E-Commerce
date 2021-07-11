@@ -58,7 +58,7 @@ function unificar (mail1, mail2) {
 function ChatRoom() {
   const dummy: any = useRef();
   // const messagesRef = firestore.collection("messages");
-  const [user] = useAuthState(auth);
+  // const [user] = useAuthState(auth);
 
   let messagesRef = firestore.collection(unificar("diegolaraujo96@gmail.com", "benjaminspiecker@gmail.com" ));
 
@@ -131,6 +131,7 @@ function ChatMessage(props) {
     <>
       <div className={`message ${messageClass}`}>
         <img
+          alt='alt'
           src={
             photoURL || "https://api.adorable.io/avatars/23/abott@adorable.png"
           }

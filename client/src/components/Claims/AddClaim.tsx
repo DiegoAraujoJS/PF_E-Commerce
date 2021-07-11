@@ -48,7 +48,7 @@ function AddClaim() {
     let handleSubmit = (e) => {
         e.preventDefault();
 
-        let { name, description, detail } = claim;
+        // let { name, description, detail } = claim;
 
         // claim.professors.map(professor => 
         //     axios.post('http://localhost:3001/api/claim/professor', { name, description, detail })

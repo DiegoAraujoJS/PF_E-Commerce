@@ -21,7 +21,7 @@ function Profile(email) {
 
     })
 
-    const profesorArr = [];
+    // const profesorArr = [];
 
     const fetchProfs = async () => {
         try {
@@ -40,6 +40,7 @@ function Profile(email) {
 
     useEffect(() => {
         fetchProfs()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (

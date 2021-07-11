@@ -6,8 +6,8 @@ import { useHistory } from "react-router-dom";
 import SearchBarHome from '../searchBar/SearchBarHome';
 import students from '../../images/students.jpg';
 import axios from 'axios'
-import { auth } from '../../firebase';
-import { store } from '../../Store/store';
+// import { auth } from '../../firebase';
+// import { store } from '../../Store/store';
 const Home = ({ dispatchInput }) => {
     const [searchInput, setSearchInput] = React.useState('')
     const history = useHistory()
@@ -64,7 +64,7 @@ const Home = ({ dispatchInput }) => {
                 <input style={searchBar} type='text' name='searchInput' value={searchInput} onChange={handleChange}/>
                 <Button variant='primary' onClick={() => vaYBusca()}>Buscar</Button>
             </div>
-            <img src={students} style={bgImg}/>
+            <img src={students} alt='students' style={bgImg}/>
         </div>
     )
 }

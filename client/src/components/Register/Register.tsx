@@ -1,4 +1,4 @@
-import { createUser, loginWithGoogle } from '../../firebase';
+// import { createUser, loginWithGoogle } from '../../firebase';
 import React from 'react'
 import axios from 'axios';
 import { useHistory } from "react-router-dom";
@@ -14,7 +14,7 @@ export default function Register() {
   const [lastName, setlastName] = React.useState('')
   const [city, setCity] = React.useState('')
   const [state, setState] = React.useState('')
-  const [alreadyCreated, setAlreadyCreated] = React.useState(false)
+  const [alreadyCreated, /* setAlreadyCreated */] = React.useState(false)
 
   const history = useHistory()
 

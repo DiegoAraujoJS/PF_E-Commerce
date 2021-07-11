@@ -120,6 +120,7 @@ class Calendar extends Component {
         moveDisabled: true,
         resizeDisabled: true,
       });
+      return tempo;
     });
 
     console.log("Tempo", tempo);

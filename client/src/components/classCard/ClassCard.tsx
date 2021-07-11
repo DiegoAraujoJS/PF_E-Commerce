@@ -1,7 +1,7 @@
 import React from 'react';
 import CSS from 'csstype';
 import { Class} from './interfaces';
-import {Card, Button} from 'react-bootstrap'
+import {Card, /* Button */} from 'react-bootstrap'
 const ClassCard: React.FC<Class> = (props) => {
     const profileImg: CSS.Properties = {
         height: '100px',

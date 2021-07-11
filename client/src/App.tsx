@@ -67,7 +67,7 @@ function App() {
           }
           else {
             return < Redirect to="/home" />
-          }        
+          }
       }
       }></Route>
 

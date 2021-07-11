@@ -1,6 +1,6 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom'
-import style from './SearchBar.module.css'
+// import { NavLink } from 'react-router-dom'
+// import style from './SearchBar.module.css'
 import { Navbar } from 'react-bootstrap';
 
 import { Nav } from 'react-bootstrap'
@@ -8,7 +8,7 @@ import { Form } from 'react-bootstrap'
 import { FormControl } from 'react-bootstrap'
 import { Button } from 'react-bootstrap'
 import {NavDropdown} from 'react-bootstrap'
-import { InputGroup } from 'react-bootstrap';
+// import { InputGroup } from 'react-bootstrap';
 export default function SearchBar() {
     return (
         
