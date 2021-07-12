@@ -5,7 +5,7 @@ import Calendar from "../calendar/Calendar"
 import { ProfesorProps } from '../../../../interfaces';
 
 function Profile(email) {
-    console.log("Este deberia ser el email", email && email.children && email.children[0])
+    
     const propEmail = {
         email: email && email.children ? email.children[0] : null
     }
@@ -25,17 +25,17 @@ function Profile(email) {
 
     const fetchProfs = async () => {
         try {
-            console.log("PROPEMAIL?", propEmail)
+           
             if (propEmail) {
                 const response = await axios.get(`http://localhost:3001/api/profesores/${propEmail.email}`)
-                console.log("ESTO ES RESPONSE",response)
+              
                 await setProf({
                     ...response.data
                 })
                 
             }else
             {
-                console.log("No se encontro el Email")
+             
 
             }
         } catch (err) {
@@ -47,7 +47,7 @@ function Profile(email) {
         fetchProfs()
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
-    console.log("ESTO ES PROF",prof)
+    
     return (
         <div className={style.container}>
             <section className={style.sectionOne}>

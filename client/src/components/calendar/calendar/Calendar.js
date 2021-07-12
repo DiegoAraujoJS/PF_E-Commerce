@@ -45,17 +45,11 @@ const styles = {
 class Calendar extends Component {
   constructor(props) {
     super(props);
-    var login=false
-    var booleano
-    if(login===true){
-      booleano="Enabled"
-    } else {
-      booleano="Disabled"
-    }
+    
     this.state = {
-      viewType: "WorkWeek",
+      viewType: "Week",
       durationBarVisible: true,
-      timeRangeSelectedHandling: booleano
+      timeRangeSelectedHandling:"disabled"
       ,
       onTimeRangeSelected: async (args) => {
         const dp = this.calendar;
@@ -94,7 +88,7 @@ class Calendar extends Component {
     const arrayProf = await axios.get(
       `http://localhost:3001/api/calendario/${email}`
     );
-    console.log("ARRAYPROF", arrayProf)
+    
     var tempo = [];
     if(arrayProf.data.length>0){arrayProf.data.map((prof) => {
       let año = prof.fecha.anio.toString();
@@ -107,21 +101,37 @@ class Calendar extends Component {
         mes = "0" + mes;
       }
       
-      tempo.push({
-        start: año + "-" + mes + "-" + dia + "T" + prof.disponible[0][0],
-        end: año + "-" + mes + "-" + dia + "T" + prof.disponible[0][1],
-        text: "Disponible",
-        backColor: "blue",
-        moveDisabled: true,
-        resizeDisabled: true,
-        
-      });
+      if(prof.disponible){prof.disponible.map((disp)=>{
+        tempo.push({
+          start: año + "-" + mes + "-" + dia + "T" + disp[0],
+          end: año + "-" + mes + "-" + dia + "T" + disp[1],
+          text: "Disponible",
+          backColor: "blue",
+          moveDisabled: true,
+          resizeDisabled: true,
+          
+        })
+      })}
+      if(prof.ocupado){prof.ocupado.map((ocup)=>{
+        tempo.push({
+          start: año + "-" + mes + "-" + dia + "T" + ocup[0],
+          end: año + "-" + mes + "-" + dia + "T" + ocup[1],
+          text: "Ocupado",
+          backColor: "red",
+          moveDisabled: true,
+          resizeDisabled: true,
+          
+        })
+      })}
+
+      ;
+
       
       
       return tempo;
     });}
 
-    console.log("Tempo", tempo);
+    
 
     const persons = tempo;
     
