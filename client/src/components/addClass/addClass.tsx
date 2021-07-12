@@ -114,10 +114,10 @@ const AddClass = ( {newClass} ) => {
 										onBlur={handleBlur}
 										value={values.descripcion}
 										className={`form-control ${
-											errors.descripcion && touched.descripcion ? 'is-invalid' : ''
+											errors.descripcion ? 'is-invalid' : ''
 										}`}
 									/>
-									{errors.descripcion && touched.descripcion ? (
+									{errors.descripcion  ? (
 										<div className='invalid-feedback'>{errors.descripcion}</div>
 									) : null}
 								</Col>
