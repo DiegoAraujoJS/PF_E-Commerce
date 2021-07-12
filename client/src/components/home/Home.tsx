@@ -29,7 +29,7 @@ const Home = ({ dispatchInput }) => {
         position: 'fixed',
         minHeight: '100%',
         minWidth: '100%',  
-        bottom: '-200px',
+        bottom: '-56px',
         margin: '0px auto',
         zIndex: -1
     };
@@ -48,7 +48,9 @@ const Home = ({ dispatchInput }) => {
         top: '2px',
         lineHeight: '100px'
     }
-
+    const containerHome: CSS.Properties = {
+    //    '--height': 'calc(100vh - 56px)',
+    }
     async function vaYBusca() {
         
         const response: any = await axios.get(`http://localhost:3001/api/clases?busqueda=${searchInput}`)
@@ -58,7 +60,7 @@ const Home = ({ dispatchInput }) => {
     }
 
     return (
-        <div>
+        <div style={containerHome}>
             {/* <SearchBarHome /> */}
             <div style={searchCenter}>
                 <input style={searchBar} type='text' name='searchInput' value={searchInput} onChange={handleChange}/>
