@@ -14,12 +14,12 @@ export default function SearchBar() {
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="mr-auto">
-          <Nav.Link><Link className={'ms-4 text-decoration-none link-dark'} to={"/home"}>Home</Link></Nav.Link>
-          <Nav.Link><Link className={'ms-4 text-decoration-none link-dark'} to={"/registro"}>registro</Link></Nav.Link>
-          <Nav.Link><Link className={'ms-4 text-decoration-none link-dark'} to={"/login"}>login</Link></Nav.Link>
-          <Nav.Link><Link className={'ms-4 text-decoration-none link-dark'} to={"/calendar"}>calendar</Link></Nav.Link>
-          <Nav.Link><Link className={'ms-4 text-decoration-none link-dark'} to={"/perfil"}>perfil</Link></Nav.Link>
-          <Nav.Link><Link className={'ms-4 text-decoration-none link-dark'} to={"/chat"}>chat</Link></Nav.Link>
+          <Link className={'nav-link ms-4 text-decoration-none'} to={"/home"}>Home</Link>
+          <Link className={'nav-link ms-4 text-decoration-none'} to={"/registro"}>registro</Link>
+          <Link className={'nav-link ms-4 text-decoration-none'} to={"/login"}>login</Link>
+          <Link className={'nav-link ms-4 text-decoration-none'} to={"/calendar"}>calendar</Link>
+          <Link className={'nav-link ms-4 text-decoration-none'} to={"/perfil"}>perfil</Link>
+          <Link className={'nav-link ms-4 text-decoration-none'} to={"/chat"}>chat</Link>
           <NavDropdown className={'ms-4 text-decoration-none'} title="Dropdown" id="basic-nav-dropdown" disabled>
             <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
             <NavDropdown.Item href="#action/3.2">
