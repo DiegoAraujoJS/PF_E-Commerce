@@ -21,16 +21,6 @@ const all = (state = initialState, action) => {
                 ...state,
                 searchInput: action.payload
             }
-        case actionsType.NEW_CLASS:
-            return {
-                ...state,
-                class: action.payload
-            }
-        case actionsType.NEW_REGISTER:
-            return {
-                ...state,
-                newRegister: action.payload
-            }
         default:
             return state
     }

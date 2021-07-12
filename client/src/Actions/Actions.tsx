@@ -14,28 +14,5 @@ const getByIdClaim = (id) => {
 };
 
 
-function newClass ( data ) {
-    return (dispatch) => {
-        axios.post("http://localhost:3001/api/clases/add", data)
-            .then(response => {
-                dispatch({ type: actionsType.NEW_CLASS , payload: response.data }) 
-            })
-            .catch(err => { 
-                dispatch({ type: actionsType.NEW_CLASS, payload: null })
-            })    
-        }
-}
 
-function registerAction ( data ) {
-    return (dispatch) => {
-        axios.post('http://localhost:3001/api/session/register', data)
-            .then(response => {
-                dispatch({ type: actionsType.NEW_REGISTER , payload: response.data }) 
-            })
-            .catch(err => { 
-                dispatch({ type: actionsType.NEW_REGISTER, payload: null })
-            })    
-        }
-}
-
-export { getByIdClaim , newClass, registerAction}
+export { getByIdClaim }

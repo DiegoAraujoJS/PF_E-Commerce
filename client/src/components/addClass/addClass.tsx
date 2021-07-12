@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { Formik, Field } from 'formik';
 import { validationSchemaNewClass } from '../../utils/validations';
 import { Form, Row, Col, Container, Button } from 'react-bootstrap';
-import { newClass } from '../../Actions/Actions';
-import { connect } from 'react-redux';
-
+import axios from 'axios'
 
 const materias = [
 	"Física",
@@ -46,14 +44,8 @@ const grados = [
 ]
 
 
-const AddClass = ({ newClass, clase }) => {
-	const [check, setCheck] = useState("")
+const AddClass = () => {
 
-	useEffect(() => {
-		if (clase) setCheck(clase)
-		else setCheck("")
-	}, [clase])
-	
 	return (
 		<Container className='shadow p-3 mb-5 bg-white rounded flex'>
 			<h1>Agrega tu propia Clase!</h1>
@@ -68,27 +60,20 @@ const AddClass = ({ newClass, clase }) => {
 					nivel: ""
 				}}
 
-				onSubmit={(values, { resetForm }) => {				
-						newClass(values)
-						setCheck(clase)
-
-						if (check) {
-							if (clase.Profesor_mail){ 
-								setCheck("")
-								alert("La clase se creo exitosamente")								
-								}
-							else {
-								setCheck("")
-								alert("Email no esta registrado o no es profesor")							
-							}
+				onSubmit={async (values, { resetForm }) => {
+					try {
+						const clase = await axios.post("http://localhost:3001/api/clases/add", values)
+						if (clase) {
+							alert("La clase se creo exitosamente")
 						}
-						else{
-							alert("Error al crear la clase")
-							setCheck("")
-						}				
-
-				}
-				}
+						else {
+							alert("Email no esta registrado o no es profesor")
+						}
+					}
+					catch (err) {
+						alert("Email no esta registrado o no es profesor")
+					}
+				}}
 			>
 				{({ handleSubmit, handleChange, values, errors, handleBlur, touched }) => (
 					<Form className='mt-5' onSubmit={handleSubmit}>
@@ -224,17 +209,5 @@ const AddClass = ({ newClass, clase }) => {
 	)
 }
 
-const mapStateToProps = (state) => {
-	console.log(state)
-	return {
-		clase: state.class
-	}
-}
 
-const mapDispachToProps = (dispatch) => {
-	return {
-		newClass: (data) => dispatch(newClass(data))
-	}
-}
-
-export default connect(mapStateToProps, mapDispachToProps)(AddClass)
+export default AddClass

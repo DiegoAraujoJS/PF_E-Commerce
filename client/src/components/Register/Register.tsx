@@ -5,13 +5,12 @@ import { useHistory } from "react-router-dom";
 import { UserProps } from '../../../../interfaces'
 import { Formik } from 'formik';
 import { validationSchemaRegister } from '../../utils/validations';
-import { registerAction } from '../../Actions/Actions';
-import { connect } from 'react-redux';
+
 
 enum ErrorType { INCOMPLETE_INPUTS, ALREADY_EXISTS }
 enum Role { USER, PROFESSOR, ADMIN }
 
-const Register = ({registerAction,newRegister}) => {
+const Register = () => {
 
   // const [mail, setMail] = React.useState('')
   // const [password, setPass] = React.useState('')
@@ -206,16 +205,6 @@ const Register = ({registerAction,newRegister}) => {
   )
 }
 
-const mapStateToProps = (state) => {
-  return {
-    newRegister: state.newRegister
-  }
-}
 
-const mapDispachToProps = (dispatch) => {
-  return {
-    registerAction: (data) => dispatch(registerAction(data))
-  }
-}
 
-export default connect(mapStateToProps, mapDispachToProps)(Register)
+export default Register
