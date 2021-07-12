@@ -14,6 +14,7 @@ import Home from './components/home/Home'
 import Register from './components/Register/Register'
 import axios from 'axios';
 import NavBar from './components/NavBar/NavBar'
+import AddClass from './components/addClass/addClass';
 
 function App() {
 
@@ -38,6 +39,7 @@ function App() {
   return (
     <BrowserRouter>
       <Route path='/'> <NavBar /> </Route>
+      <Route path='/clases/add'><AddClass /></Route>
 
       { role ? <div>
         <Route exact path='/claim' render={() => {
