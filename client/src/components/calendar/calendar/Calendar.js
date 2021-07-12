@@ -57,7 +57,7 @@ class Calendar extends Component {
           "Create a new event:",
           "Disponible"
         );
-        console.log("Agregaste un horario al calendario")
+        
         dp.clearSelection();
         if (!modal.result) { return; }
         dp.events.add({
@@ -83,7 +83,7 @@ class Calendar extends Component {
           }
       }
         await axios.post('http://localhost:3001/api/calendario/add', horario1)
-        console.log("Esto es horario despues de axios", horario1)
+
       },
       eventDeleteHandling: "Update",
       onEventClick: async args => {
