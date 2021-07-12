@@ -1,129 +1,287 @@
-// MIS CAMBIOS > Generé un CRUD completo para los profesores
-
-// Agregué esto a routes/index.js
-// import profesores from './profesores'
-// router.use('/profesores', profesores)
-
-// Creé este archivo profesores.ts
-import {Request, Response, Router} from 'express'
+import { Request, Response, Router } from 'express'
 import Profesor from '../models/Profesor';
-import {Op} from 'sequelize'
-
-const router = Router ()
-
-let profesores = [
-    {
-        id: 1,
-        nombre: 'Uno Rodrigo',
-        apellido: 'Callardo', 
-        foto: 'https://images.unsplash.com/photo-1548449112-96a38a643324?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=334&q=80',
-        descripcion: 'Enseño inglés',
-        ciudad: 'Buenos Aires'
-    },
-    {
-        id: 2,
-        nombre: 'Dos Rodrigo',
-        apellido: 'Callardo', 
-        foto: 'https://images.unsplash.com/photo-1548449112-96a38a643324?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=334&q=80',
-        descripcion: 'Enseño inglés',
-        ciudad: 'Buenos Aires'
-    },
-    {
-        id: 3,
-        nombre: 'Tres Rodrigo',
-        apellido: 'Callardo', 
-        foto: 'https://images.unsplash.com/photo-1548449112-96a38a643324?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=334&q=80',
-        descripcion: 'Enseño inglés',
-        ciudad: 'Buenos Aires'
-    },
-    {
-        id: 4,
-        nombre: 'Cuatro Rodrigo',
-        apellido: 'Callardo', 
-        foto: 'https://images.unsplash.com/photo-1548449112-96a38a643324?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=334&q=80',
-        descripcion: 'Enseño inglés',
-        ciudad: 'Buenos Aires'
-    },
-    {
-        id: 5,
-        nombre: 'Cinco Rodrigo',
-        apellido: 'Callardo', 
-        foto: 'https://images.unsplash.com/photo-1548449112-96a38a643324?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=334&q=80',
-        descripcion: 'Enseño inglés',
-        ciudad: 'Buenos Aires'
-    },
-]
+import User from '../models/Usuario';
+import { Op } from 'sequelize'
+import Clase from '../models/Clase';
+import { ProfesorProps } from '../../../interfaces';
+const router = Router();
 
 router.get('/', async (req: Request, res: Response) => { // profesore?name=rod
-    let terminoBusqueda: any;
-    terminoBusqueda = req.query.name!.toString();
-
-
+    let terminoBusqueda = req.query.nombre;
+    let profesores = [];
     if (terminoBusqueda) { // Siendo más extrictos sería > if (terminoBusqueda && typeof terminoBusqueda === 'string')
-        let profesores = await Profesor.findAll({where: {
-            [Op.or]: [
-                {
-                    nombre: {
-                        [Op.like]: `%${terminoBusqueda}%`
-                    }
-                },
-                {
-                    apellido: {
-                        [Op.like]: `%${terminoBusqueda}%`
-                    }
-                }
-            ]
-        }})
-        
-        
-        if (profesores.length) return res.send(profesores);
-        return res.send(`No se encontraron coincidencias con ${terminoBusqueda}`)
-    } 
-})
-
-
-router.post('/', async (req:Request, res:Response) => {
-    const {nombre, apellido, descripcion, ciudad} = req.body;
-    if (nombre && apellido && descripcion && ciudad) {
-        const profesor = {...req.body, id: profesores.length + 1, foto: 'https://images.unsplash.com/photo-1548449112-96a38a643324?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=334&q=80'}
-        profesores.push(profesor);
-        return res.send(`El profesor ${profesores[profesores.length - 1].nombre} ${profesores[profesores.length - 1].apellido} se creó exitosamente`);
-    }
-    return res.send('Datos imcompletos para el registro');
-})
-
-router.get('/:id', async (req:Request, res:Response) => {
-    const idProfesor = parseInt(req.params.id);
-    const profesorSolicitado = profesores.filter(profesor => profesor.id === idProfesor)
-    if (profesorSolicitado.length) return res.send(profesorSolicitado)
-    res.send(`No se encontró un profesor con el id ${ idProfesor}`)
-})
-
-router.put('/:id', async (req:Request, res:Response) => {
-    const idProfesor = parseInt(req.params.id);
-    let profesorEncontrado = profesores.filter(profesor => profesor.id === idProfesor);
-    if (profesorEncontrado.length) {
-        let profesorModificado: any;
-        profesores = profesores.map(profesor => {
-            if (profesor.id === idProfesor) {
-                profesorModificado = {...profesor, ...req.body}
-                return profesorModificado;
-            };
-            return profesor
+        terminoBusqueda = terminoBusqueda.toString()
+        profesores = await User.findAll({
+            include: [{
+                model: Profesor,
+                required: true,
+                attributes: ['ciudad', 'foto', 'descripcion']
+            }],
+            where: {
+                [Op.or]: [
+                    {
+                        nombre:
+                            { [Op.iLike]: `%${terminoBusqueda}%` }
+                    },
+                    {
+                        apellido:
+                            { [Op.iLike]: `%${terminoBusqueda}%` }
+                    },
+                ]
+            },
+            attributes: ['mail', 'nombre', 'apellido']
         })
-        return res.send(`El profesor ${profesorModificado.nombre} ${profesorModificado.apellido} fue modificado exitosamente`)
+        if (profesores.length) return res.send(profesores);
+        return res.send(`No se encontraron coincidencias con ${terminoBusqueda.toString()}`)
     }
-    return res.send(`Imposible modificar pues no hay ningún profesor con el id ${idProfesor}`)
+    profesores = await User.findAll({
+        include: [{
+            model: Profesor,
+            required: true,
+            attributes: ['ciudad', 'foto', 'descripcion']
+        }],
+        attributes: ['mail', 'nombre', 'apellido']
+    })
+    if (profesores.length) return res.send(profesores)
+    return res.send(`No se encontraron profesores`)
 })
 
-router.delete('/:id', async (req:Request, res:Response) => {
-    const idProfesor = parseInt(req.params.id);
-    let nuevoArray = profesores.filter(profesor => profesor.id !== idProfesor)
-    if (nuevoArray.length === profesores.length - 1) {
-        profesores = nuevoArray;
-        return res.send(`El profesor de id ${idProfesor} se borró exitosamente`)
+router.get('/:mail', async (req: Request, res: Response) => {
+    console.log("INTENTANDO ENTRAR A MAIL")
+    const mail = req.params.mail;
+    const usuario: User | null = await User.findOne({
+        include: [{
+            model: Profesor,
+            attributes: ['city', 'foto', 'description']
+        }],
+        where: {
+            mail: mail.toString()
+        },
+        attributes: ['mail', 'name', 'lastName']
+    });
+    if (usuario) {
+        if (usuario.profesor) {
+            
+            let obj: ProfesorProps = {
+                    User_mail: usuario.mail,
+                    name: usuario.name,
+                    lastName: usuario.lastName,
+                    city: usuario.profesor.city,
+                    foto: usuario.profesor.foto,
+                    description: usuario.profesor.description,
+                    score: usuario.profesor.score
+            }
+            return res.send(
+                obj
+            )
+        } else {
+            return res.send(`No existe ningún profesor asociado la cuenta del correo ${mail}`)
+        }
+    } else {
+        return res.send(`No existe ninguna cuenta con el correo ${mail}`)
     }
-    return res.send(`Imposible eliminar pues no hay ningún profesor con el id ${idProfesor}`)
+})
+
+router.get('/:mail/clases', async (req: Request, res: Response) => {
+    const mail = req.params.mail;
+    const usuario = await User.findOne({
+        include: [{
+            model: Profesor
+        }],
+        where: {
+            mail: mail.toString()
+        },
+    });
+    if (usuario) {
+        if (usuario.profesor) {
+            const clases = await Clase.findAll({
+              where: {
+                profesor: mail.toString()
+            },
+            attributes: ['id', 'nombre', 'puntuacion', 'grado', 'nivel', 'materia', 'descripcion']
+            });
+            if (clases.length) {
+                res.send(clases)
+            } else {
+                res.send(`El profesor ${usuario.name} ${usuario.lastName} aún no tiene clases registradas`)
+            }
+        } else {
+            return res.send(`No existe ningún profesor asociado la cuenta del correo ${mail}`)
+        }
+    } else {
+        return res.send(`No existe ninguna cuenta con el correo ${mail}`)
+    }
+})
+
+router.post('/', async (req: Request, res: Response) => {
+    const mail = req.body.usuario;
+    if (mail) {
+        let usuario = await User.findOne({
+            include: [{
+                model: Profesor
+            }],
+            where: {
+                mail: mail.toString()
+            },
+            attributes: ['mail', 'nombre', 'apellido']
+        });
+        if (usuario) {
+            if (!usuario.profesor) {
+                await Profesor.create(req.body)
+            } else {
+                return res.send(`Ya existe un profesor asociado a la cuenta ${mail} así que debería actualizarlo`);
+            }
+        } else {
+            return res.send(`No existe una cuenta con el correo ${mail}`)
+        }
+        usuario = await User.findOne({
+            include: [{
+                model: Profesor,
+                required: true,
+                attributes: ['ciudad', 'foto', 'descripcion']
+            }],
+            where: {
+                mail: mail.toString()
+            },
+            attributes: ['mail', 'nombre', 'apellido']
+        });
+        return res.send(usuario);
+    }
+    return res.send('Indique un correo');
+})
+
+router.put('/', async (req: Request, res: Response) => {
+    const { ciudad, foto, descripcion } = req.body;
+    const mail = req.body.usuario;
+    if (mail) {
+        let usuario: any = await User.findOne({
+            include: [{
+                model: Profesor,
+            }],
+            where: {
+                mail: mail.toString()
+            },
+            attributes: ['mail', 'nombre', 'apellido']
+        });
+        if (usuario) {
+            if (usuario.profesor) {
+                await usuario.profesor.update({ciudad, foto, descripcion})
+            } else {
+                return res.send(`No existe un profesor asociado a la cuenta ${mail} así que primero debe crearlo`)
+            }
+        } else {
+            return res.send(`No existe una cuenta con el correo ${mail}`)
+        }
+        usuario = await User.findOne({
+            include: [{
+                model: Profesor,
+                required: true,
+                attributes: ['ciudad', 'foto', 'descripcion']
+            }],
+            where: {
+                mail: mail.toString()
+            },
+            attributes: ['mail', 'nombre', 'apellido']
+        });
+        return res.send(usuario);
+    }
+    return res.send('Indique un correo');
+})
+
+router.delete('/:mail', async (req: Request, res: Response) => {
+    const mail = req.params.mail;
+    const usuario = await User.findOne({
+        include: [{
+            model: Profesor
+        }],
+        where: {
+            mail: mail.toString()
+        },
+        attributes: ['mail', 'nombre', 'apellido']
+    });
+    if (usuario) {
+        if (usuario.profesor) {
+            await Profesor.destroy({
+                where: {
+                    usuario: mail.toString()
+                }
+            });
+            return res.send(`El profesor asociado a la cuenta ${mail} fue eliminado exitosamente`)
+        } else {
+            return res.send(`No existe ningún profesor asociado la cuenta del correo ${mail}`)
+        }
+    } else {
+        return res.send(`No existe ninguna cuenta con el correo ${mail}`)
+    }
 });
 
 export default router;
+
+
+// TodasLasSemanas lo puede mandar el front si el profesor pone ''tengo disponibles los lunes de 14 a 18''
+// interface TodasLasSemanas {
+//     dia: {
+//         nombre: 'lunes' | 'martes' | 'miercoles' | 'jueves' | 'viernes' | 'sabado' | 'domingo',
+//     },
+//     disponible: arrayDePares,
+// }
+
+
+// let ejemploProfe: CalendarioResponse = [
+    //     {
+    //         email: "edwardburgos@gmail.com",
+    //         fecha: {
+    //             anio: 2021,
+    //             mes:7,
+    //             dia: 9
+    //         },
+    //         disponible: [['14:30:00', '15:30:00']],
+    //         ocupado:[['16:30:00', '19:29:00']]
+    
+    //     },
+    //     {
+    //         email: "edwardburgos@gmail.com",
+    //         fecha: {
+    //             anio: 2021,
+    //             mes:11,
+    //             dia: 12
+    //         },
+    //         disponible: [['12:29:00', '16:29:00']],
+    //         ocupado:[['16:29:00', '19:29:00']]
+        
+    //         },
+    //         {
+    //             email: "edwardburgoseqw@gmail.com",
+    //             fecha: {
+    //                 anio: 2021,
+    //                 mes:12,
+    //                 dia: 3
+    //             },
+    //             disponible: [['12:45:00', '16:30:00']],
+    //             ocupado:[['18:30:00', '19:30:00']]
+        
+    //         },
+    //         {
+    //             email: "edwardburgosewq@gmail.com",
+    //             fecha: {
+    //                 anio: 2021,
+    //                 mes:11,
+    //                 dia: 16
+    //             },
+    //             disponible: [['16:29:00', '16:29:00']],
+    //             ocupado:[['16:29:00', '16:29:00']]
+            
+    //             }
+    // ]
+    
+
+    // ejemplo
+// 
+// router.get('/calendar/:id',(req: Request, res: Response) => {
+//     const id = req.params.id;
+//     var results = ejemploProfe.filter(e => e.email === id);
+//     console.log("Ruta calendario")
+//     return res.send(results)
+//     //"edwardburgos@gmail.com"
+   
+// })

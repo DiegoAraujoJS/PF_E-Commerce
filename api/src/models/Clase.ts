@@ -1,12 +1,11 @@
-import { Model, Column, Table, CreatedAt, UpdatedAt, ForeignKey, BelongsTo } from 'sequelize-typescript';
+import { Model, Column, Table, CreatedAt, UpdatedAt, ForeignKey,DataType,  BelongsTo, HasMany } from 'sequelize-typescript';
+import { DecimalDataType } from 'sequelize/types';
 import Profesor from './Profesor';
+import Puntuacion from './Puntuacion';
 @Table
 export default class Clase extends Model {
     @Column
     nombre!: string;
-
-    @Column
-    puntuacion!: number;
 
     @Column ({allowNull: false})
     grado!: string;
@@ -20,6 +19,9 @@ export default class Clase extends Model {
     @Column
     descripcion!: string;
 
+    @Column 
+    ciudad!: string
+
     @ForeignKey(() => Profesor)
     @Column
     Profesor_mail!: string
@@ -27,6 +29,11 @@ export default class Clase extends Model {
     @BelongsTo(() => Profesor)
     profesor!: Profesor
 
+    @Column(DataType.FLOAT)
+    puntuacion!: number;
+
+    @HasMany(() => Puntuacion)
+    puntuaciones!: Puntuacion[];
 
 }
 

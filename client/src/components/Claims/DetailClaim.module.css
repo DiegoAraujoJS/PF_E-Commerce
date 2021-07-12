@@ -1,0 +1,135 @@
+.fondo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: lightblue;
+    height: 100vh;
+}
+
+.container {
+    width: 80%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    background-color: blanchedalmond;
+    border: 2px solid rgb(204, 200, 200);
+    border-radius: 15px;
+}
+
+.claim {
+    display: block;
+    width: 50%;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.estudiante {
+    text-align: center;
+}
+
+.nombreEst {
+    width: 100%;
+}
+
+.description {
+    display: block;
+    align-items: center;
+    justify-content: space-between;
+    width: 85%;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: rgb(248, 241, 227);
+    border-radius: 8px;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    font-size: small;
+     
+}
+.data {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 80%;
+    margin: 10px;
+}
+
+.detailClaim {
+    display: block;
+    text-align: left;
+    margin-left: 10px;
+}
+
+.chat {
+    background-color: whitesmoke;
+    border-radius: 20px;
+    width: 85%;
+    height: 250px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+.denunciado {
+    display: block;
+    width: 50%;
+    text-align: center;
+}
+
+.imagendenu{
+    display: block;
+    margin-top: 50px;
+    width: 150px;
+    height: 150px;
+    border-radius: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.detail {
+    background-color: rgb(248, 241, 227);
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 20px;
+    height: 300px;
+    width: 80%;
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.btns {
+    margin-top: 50px;
+    margin-bottom: 30px;
+}
+
+.ban {
+    background-color: rgb(151, 26, 3);
+    padding: 10px 50px 10px 50px;
+    border-radius: 10px;
+    font-weight: 400;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.ban:hover {
+    background-color: rgb(255, 0, 0);
+    color: white;
+}
+
+.desb {
+    background-color: rgb(4, 165, 71);
+    color: white;
+    padding: 10px 50px 10px 50px;
+    border-radius: 10px;
+    font-weight: 400;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.desb:hover {
+    background-color: rgb(43, 253, 1);
+    color: black;
+}

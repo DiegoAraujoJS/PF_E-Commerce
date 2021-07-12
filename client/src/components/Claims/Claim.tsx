@@ -9,7 +9,7 @@ function Claim(props) {
     return (
         <div className = {style.container}>
             <h5>{name}</h5>
-            <p>{description}</p>
+            <p className = { style.description }>{description}</p>
             <span>#{code}</span>
             <Link className = {style.btn} to = { `/claim/${code}` }> Visualizar </Link>
         </div>

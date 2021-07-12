@@ -1,15 +1,23 @@
 import React, { useState } from 'react';
 import logo from '../../logo.svg';
 import style from './login.module.css';
-import { GoogleLogin, GoogleLogout } from 'react-google-login';
+import { loginWithGoogle /*  signIn, createUser */, auth } from '../../firebase';
+import {Link} from 'react-router-dom'
 
-const clientId = '335971411859-5nphqdu952putvhvsd8db519ltc2klco.apps.googleusercontent.com'
+import axios from 'axios';
+import { useHistory } from "react-router-dom";
 
 function Login() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('');
     const [errors, setErrors] = useState({email: null, password: null})
+    const [wrongPassword, setWrongPassword] = React.useState(false)
+    const [logoutSuccess, setLogoutSuccess] = React.useState('')
+    // console.log(auth.currentUser)
 
+    const history = useHistory()
+
+    
     function handleChange(e) {
         validateErrors()
         switch(e.target.name) {
@@ -22,20 +30,18 @@ function Login() {
             default:
                 break;
         }
+        
     }
 
     function validateErrors() {
             if(!email) {
                 //email, a pesar de estar vacío y entrar a esta validación, no cambia el estado
                 setErrors({...errors, email: 'Se necesita un E-mail'})
-                console.log('entro aca') 
             } else if(!/\S+@{1}[a-zA-Z]+\.{1}[a-z]{3}\.?[a-z]*/gm.test(email)) {
                 setErrors({...errors, email: 'E-mail inválido'}) 
             } else {
                 setErrors({...errors, email: null})
-                console.log('tambien acá')
             }
-
             if(!/[\S]/.test(password)) {
                 setErrors({...errors, password: 'No puede contener espacio blanco'})
             } else if (password.length < 4 || password.length > 20) {
@@ -45,59 +51,80 @@ function Login() {
             }
     }
 
-    function handleSubmit(e) {
+    async function handleSubmit(e) {
         e.preventDefault()
-        validateErrors();
-        console.log(errors)
-        if(errors.email || errors.password) {
-            alert('Fail')
-        } else {
-            alert('Login successful');
+        try {
+            const login = await axios.post(`http://localhost:3001/api/tokens/login`, {
+                mail: email,
+                password: password
+            })
+            await auth()
+            localStorage.setItem('user', JSON.stringify({mail: email}))
+            
+            history.push('/home')
+            window.location.reload();
+            
+        } catch (error) {
+            setWrongPassword(true)
+        }
+    }
+    async function signOut(e) {
+        // auth.signOut();
+        try {
+            localStorage.removeItem('user')
+            setLogoutSuccess('true')
+            alert("Se cerro sesión correctamente")
+            window.location.reload();
+        } catch (err) {
+            setLogoutSuccess('false')
+            alert("Fallo al cerrar sesión. No has iniciado sesión?")
+        }   
+    }
+    async function auth () {
+        try {
+            const auth = await axios.get(`http://localhost:3001/api/tokens/auth`)
+        } catch (err) {
+            console.log(err)
         }
     }
 
-    const onSuccess = (res) => {
-        console.log('[login Success] currentUser: ', res.profileObj);
-    }
-
-    const onFailure = (res) => {
-        console.log('[Login failed] res:', res);
-    }
-
-    const onLogoutSuccess = () => {
-        alert('Logout made successfully');
-    }
-    const onLogoutFailure = () => {
-        alert('Fail');
-    }
-
     return (
-        <div className="container">
-            <div>
-                <img src={logo} alt='logo'></img>
-            </div>
-            <div>
-                <h1>INICIAR SESIÓN</h1>
+        <div className={"text-center " + style.height}>
+            <div className={style.formSignin}>
                 <form onSubmit={handleSubmit}>
-                    <div>
-                        <GoogleLogin 
-                            clientId={clientId}
-                            buttonText="Login"
-                            onSuccess={onSuccess}
-                            onFailure={onFailure}
-                            cookiePolicy={'single_host_origin'}
-                            isSignedIn={true}
-                        />
-                        <GoogleLogout
-                            clientId={clientId}
-                            buttonText="Logout"
-                            onLogoutSuccess={onLogoutSuccess}
-                            onFailure={onLogoutFailure}
-                        ></GoogleLogout>
+                    <img className="mb-4" src={logo} alt='logo' width="72" height="57"></img>
+            
+                    <h1 className="h3 mb-3 fw-normal">INICIAR SESIÓN</h1>
+                    <div className="form-floating">
+                        <input type='email' value={email} name='emailValue' onChange={handleChange} placeholder='Email' className="form-control"/>
+                        <label htmlFor="floatingInput">Email</label>
                     </div>
-                    <input type='text' value={email} name='emailValue' onChange={handleChange} placeholder='Email'/>
-                    <input type='password' value={password} name='passValue' onChange={handleChange} placeholder='Contraseña'/>
-                    <input type="submit" value="Enviar" />
+                    <div className="form-floating">
+                        <input type='password' value={password} name='passValue' onChange={handleChange} placeholder='Contraseña' className="form-control"/>
+                        <label htmlFor="floatingPassword">Password</label>
+                    </div>
+                    
+                    <input type="submit" value="Login" className="w-100 btn btn-lg btn-primary mb-2" />
+                
+                    <Link to='/registro'>
+                        <button className="w-100 btn btn-lg btn-secondary mb-2">Regístrate</button>
+                    </Link>
+                    <button className="w-100 btn btn-lg btn-light mb-2" onClick={loginWithGoogle}>
+                        Sign in with Google
+                    </button>
+                    <button className="w-100 btn btn-lg btn-danger mb-2" onClick={signOut}>
+                        Logout
+                    </button>
+                    <div className="">
+                        {wrongPassword ? <span className={"badge bg-danger"}>
+                            El usuario o la contraseña son incorrectos</span> : ''}
+
+                        {logoutSuccess === 'true' ? <span className={"badge bg-danger"}>
+                            Fin de sesión exitosa</span> : ''}
+
+                        {logoutSuccess === 'false' ? <span className={"badge bg-danger"}>
+                            Debes haber iniciado sesion para deslogearte</span> : ''}
+                    </div>
                 </form>
             </div>
         </div>
@@ -105,3 +132,33 @@ function Login() {
 }
 
 export default Login;
+
+    // const onSuccess = (res) => {
+    //     console.log('[login Success] currentUser: ', res.profileObj);
+    // }
+
+    // const onFailure = (res) => {
+    //     console.log('[Login failed] res:', res);
+    // }
+
+    // const onLogoutSuccess = () => {
+    //     alert('Logout made successfully');
+    // }
+    // const onLogoutFailure = () => {
+    //     alert('Fail');
+    // }
+
+      // validateErrors();
+        // console.log(errors)
+        // if(errors.email || errors.password) {
+        //     alert('Fail')
+        // } else {
+        //     alert('Login successful');
+        // }
+
+
+        // console.log('auth', auth.currentUser)
+        // const response = await signIn(email, password);
+
+
+
