@@ -93,10 +93,10 @@ function App() {
 
       <Route exact path='/registro' render={() => {
           if (role === Role.USER || role === Role.PROFESSOR) {
-            return <Register />
+            return < Redirect to="/home" />
           }
           else {
-            return < Redirect to="/home" />
+            return <Register />
           }           
       }
       }></Route>
