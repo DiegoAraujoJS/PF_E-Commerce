@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import logo from '../../logo.svg';
 import style from './login.module.css';
-import { loginWithGoogle,/*  signIn, createUser */ } from '../../firebase';
+import { loginWithGoogle /*  signIn, createUser */, auth } from '../../firebase';
 import {Link} from 'react-router-dom'
-import {auth} from '../../firebase'
+
 import axios from 'axios';
 import { useHistory } from "react-router-dom";
 
@@ -13,7 +13,7 @@ function Login() {
     const [errors, setErrors] = useState({email: null, password: null})
     const [wrongPassword, setWrongPassword] = React.useState(false)
     const [logoutSuccess, setLogoutSuccess] = React.useState('')
-    console.log(auth.currentUser)
+    // console.log(auth.currentUser)
 
     const history = useHistory()
 
@@ -37,12 +37,10 @@ function Login() {
             if(!email) {
                 //email, a pesar de estar vacío y entrar a esta validación, no cambia el estado
                 setErrors({...errors, email: 'Se necesita un E-mail'})
-                console.log('entro aca') 
             } else if(!/\S+@{1}[a-zA-Z]+\.{1}[a-z]{3}\.?[a-z]*/gm.test(email)) {
                 setErrors({...errors, email: 'E-mail inválido'}) 
             } else {
                 setErrors({...errors, email: null})
-                console.log('tambien acá')
             }
             if(!/[\S]/.test(password)) {
                 setErrors({...errors, password: 'No puede contener espacio blanco'})
@@ -70,6 +68,7 @@ function Login() {
 
     function signOut(e) {
 
+        auth.signOut();
         if (localStorage.getItem('user')) {
             localStorage.removeItem('user')
             setLogoutSuccess('true')
@@ -107,12 +106,19 @@ function Login() {
                     <button className="w-100 btn btn-lg btn-light mb-2" onClick={loginWithGoogle}>
                         Sign in with Google
                     </button>
-                    <button className="w-100 btn btn-lg btn-info mb-2" onClick={signOut}>
+                    <button className="w-100 btn btn-lg btn-danger mb-2" onClick={signOut}>
                         Logout
                     </button>
-                    {wrongPassword ? <span style={{color:'red'}}>El usuario o la contraseña son incorrectos</span> : ''}
-                    {logoutSuccess === 'true' ? <span style={{color:'red'}}>Fin de sesión exitosa</span> : ''}
-                    {logoutSuccess === 'false' ? <span style={{color:'red'}}>Debes haber iniciado sesion para deslogearte</span> : ''}
+                    <div className="">
+                        {wrongPassword ? <span className={"badge bg-danger"}>
+                            El usuario o la contraseña son incorrectos</span> : ''}
+
+                        {logoutSuccess === 'true' ? <span className={"badge bg-danger"}>
+                            Fin de sesión exitosa</span> : ''}
+
+                        {logoutSuccess === 'false' ? <span className={"badge bg-danger"}>
+                            Debes haber iniciado sesion para deslogearte</span> : ''}
+                    </div>
                 </form>
             </div>
         </div>
