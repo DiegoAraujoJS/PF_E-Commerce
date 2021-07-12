@@ -87,10 +87,10 @@ class Calendar extends Component {
   async componentDidMount() {
 
     // load event data
-    console.log("Esto es el calendario",this.props.email)
+    
     var email=this.props.email
     if(email===undefined && localStorage.getItem('user')!==null)email=JSON.parse(localStorage.getItem('user')).mail
-    console.log("Esto es email si undefined", email)
+    
     const arrayProf = await axios.get(
       `http://localhost:3001/api/calendario/${email}`
     );
@@ -106,7 +106,7 @@ class Calendar extends Component {
       if (mes.length === 1) {
         mes = "0" + mes;
       }
-      console.log("PROF",prof)
+      
       tempo.push({
         start: año + "-" + mes + "-" + dia + "T" + prof.disponible[0][0],
         end: año + "-" + mes + "-" + dia + "T" + prof.disponible[0][1],
@@ -117,14 +117,14 @@ class Calendar extends Component {
         
       });
       
-      console.log("TEMPO", tempo)
+      
       return tempo;
     });}
 
     console.log("Tempo", tempo);
 
     const persons = tempo;
-    console.log("Nuevo profe", arrayProf.data);
+    
     this.setState({
       bubble: null,
       showToolTip: false,

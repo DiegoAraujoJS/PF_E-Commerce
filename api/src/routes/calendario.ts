@@ -5,6 +5,8 @@ import User from '../models/Usuario';
 import { Op, where } from 'sequelize'
 import { isNullishCoalesce } from 'typescript';
 import { CalendarioResponse, Horario, ArrayDePares } from '../../../interfaces';
+import nuevosHorarios from './nuevosHorarios';
+import editCalendar from './editCalendar';
 const router = Router()
 // ejemplo
 let queryBack: CalendarioResponse = [
@@ -32,122 +34,6 @@ let queryBack: CalendarioResponse = [
     }
 ]
 
-//------------------------------ FUNCION --------------------------------
-
-var nuevosHorarios = (arrayHorarios: Array<string[]>, query?: any) => {
-    console.log("arrayHorarios",arrayHorarios)
-    if (query) {
-        var query_1: string = query[0].substring(0, 2) + query[0].substring(3, 5) + query[0].substring(6, 8)
-        var query_2: string = query[1].substring(0, 2) + query[1].substring(3, 5) + query[1].substring(6, 8)
-    }
-
-    let horarioNumero = arrayHorarios.map(h => {
-        if (h) {
-            if (h[0].length === 8 && h[1].length === 8) {
-                let sumaHorario_1 = h[0].substring(0, 2) + h[0].substring(3, 5) + h[0].substring(6, 8)
-                let sumaHorario_2 = h[1].substring(0, 2) + h[1].substring(3, 5) + h[1].substring(6, 8)
-                return [sumaHorario_1, sumaHorario_2]
-            }
-        }
-    })
-    console.log("horarioNumero",horarioNumero)
-    let numeros = horarioNumero && horarioNumero.map(elements => elements && elements.join().split(","))
-
-    let ordenados = numeros && numeros.join().split(",").sort()
-    console.log("ordenados",ordenados)  
-
-    let eliminarRepetidos = ordenados?.filter((item, index) => {
-        return ordenados?.indexOf(item) === index;
-    })
-
-    let acomodarFechas = eliminarRepetidos?.map((item, index) => {
-        if (query && query_1 && query_2) {
-            if (item > query_1 && item < query_2 ) {
-                if (Number(ordenados[index]) - Number(query_1) < Number(query_2) - Number(ordenados[index])) {
-                    return query_1
-                }
-                else {
-                    return query_2
-                }
-            }
-            else if(item === query_1 && index%2===0){
-                return query_2
-            }
-            else if(item === ordenados[index-1]){
-                return null
-            }
-            else {
-                return item
-            }
-        }
-        else {
-            return item
-        }
-    })
-    console.log("acomodarFechas",acomodarFechas)
-
-    let horariosNuevos = acomodarFechas?.map(h => {
-        if (h) {
-            if (h.length === 6) {
-                let horario = h.substring(0, 2) + ":" + h.substring(2, 4) + ":" + h.substring(4, 6)
-                return horario
-            }
-        }
-    })
-    console.log("horariosNuevos",horariosNuevos)
-
-    let eliminarVacios = horariosNuevos.filter(fecha => fecha)
-    console.log("eliminarVacios",eliminarVacios)
-
-    let horariosTuplas: Array<(string | undefined)[]> = []
-
-    for (let i = 0; i < horariosNuevos.length; i += 2) {
-        horariosTuplas.push([horariosNuevos && horariosNuevos[i], horariosNuevos && horariosNuevos[i + 1]])
-    }
-    console.log("horariosTuplas",horariosTuplas)
-    let completarHorario = horariosTuplas.map(e => {
-        if (!e[1] && e[0]) {
-            if (horariosTuplas && horariosTuplas[horariosTuplas.length - 2][1] && e[0] !== horariosTuplas[horariosTuplas.length - 2][1]) {
-                if (e[0].substring(0, 2) + e[0].substring(3, 5) + e[0].substring(6, 8) > query_2) {
-                    return [query[1], e[0]]
-                }
-                else {
-                    return [horariosTuplas[horariosTuplas.length - 2][1], e[0]]
-                }
-            }
-            else if (horariosTuplas && horariosTuplas[horariosTuplas.length - 2][1] && e[0] === horariosTuplas[horariosTuplas.length - 2][1]) {
-                return [undefined, undefined]
-            }
-            else {
-                return [e[0], e[0]]
-            }
-        }
-        else if (!e[0] && e[1]) {
-            if (horariosTuplas && horariosTuplas[horariosTuplas.length - 2][1] && e[1] !== horariosTuplas[horariosTuplas.length - 2][1]) {
-                if (e[1].substring(0, 2) + e[1].substring(3, 5) + e[1].substring(6, 8) > query_2) {
-                    return [query[1], e[1]]
-                }
-                else {
-                    return [horariosTuplas[horariosTuplas.length - 2][1], e[1]]
-                }
-            }
-            else if (horariosTuplas && horariosTuplas[horariosTuplas.length - 2][1] && e[1] === horariosTuplas[horariosTuplas.length - 2][1]) {
-                return [undefined, undefined]
-            }
-            else {
-                return [e[1], e[1]]
-            }
-        }
-        else {
-            return e
-        }
-    })
-    console.log("completarHorario",completarHorario)
-    let resultado = completarHorario.filter(fecha => fecha[0] && fecha[1])
-
-    return resultado
-}
-//----------------------------------------- TERMINA LA FUNCION -------------------------------------------
 
 router.post('/add', async (req: Request, res: Response) => {
     let query: Horario = req.body
@@ -265,78 +151,13 @@ router.put('/edit', async (req: Request, res: Response) => {
                 let calendario = profesor.calendario[indice]
 
                 if (calendario) {
-                    //------------------------------ FUNCION --------------------------------
-
-                    const editarHorarios = (arrayHorarios: Array<string[]>) => {
-                        console.log("editarHorarios  arrayHorarios",arrayHorarios)
-                        let completarHorario = arrayHorarios.map(h => {
-
-                            if (query.ocupado) {
-                                let sumaHorario_1 = h[0].substring(0, 2) + h[0].substring(3, 5) + h[0].substring(6, 8)
-                                let sumaHorario_2 = h[1].substring(0, 2) + h[1].substring(3, 5) + h[1].substring(6, 8)
-                                let sumaHorarioOcupado_1 = query.ocupado[0][0].substring(0, 2) + query.ocupado[0][0].substring(3, 5) + query.ocupado[0][0].substring(6, 8)
-                                let sumaHorarioOcupado_2 = query.ocupado[0][1].substring(0, 2) + query.ocupado[0][1].substring(3, 5) + query.ocupado[0][1].substring(6, 8)
-
-
-                                if (sumaHorario_1 >= sumaHorarioOcupado_1 && sumaHorario_2 <= sumaHorarioOcupado_2) {
-                                    return null
-                                }
-                                else if (sumaHorario_2 >= sumaHorarioOcupado_1 && sumaHorario_2 <= sumaHorarioOcupado_2) {
-                                    return [h[0], query.ocupado[0][0]]
-                                }
-                                else if (sumaHorario_1 <= sumaHorarioOcupado_2 && sumaHorario_2 >= sumaHorarioOcupado_2) {
-                                    return [query.ocupado[0][1], h[1]]
-                                }
-                                else if (sumaHorario_1 >= sumaHorarioOcupado_1 && sumaHorario_2 <= sumaHorarioOcupado_2) {
-                                    return [query.ocupado[0][0], h[1]]
-                                }
-                                else {
-                                    return h
-                                }
-                            }
-
-                            else if (query.disponible) {
-                                let sumaHorario_1 = h[0].substring(0, 2) + h[0].substring(3, 5) + h[0].substring(6, 8)
-                                let sumaHorario_2 = h[1].substring(0, 2) + h[1].substring(3, 5) + h[1].substring(6, 8)
-                                let sumaHorarioDisponible_1 = query.disponible[0][0].substring(0, 2) + query.disponible[0][0].substring(3, 5) + query.disponible[0][0].substring(6, 8)
-                                let sumaHorarioDisponible_2 = query.disponible[0][1].substring(0, 2) + query.disponible[0][1].substring(3, 5) + query.disponible[0][1].substring(6, 8)
-
-                                if (sumaHorario_1 >= sumaHorarioDisponible_1 && sumaHorario_2 <= sumaHorarioDisponible_2) {
-                                    return null
-                                }
-                                else if (sumaHorario_2 >= sumaHorarioDisponible_1 && sumaHorario_2 <= sumaHorarioDisponible_2 && sumaHorarioDisponible_1 >= sumaHorario_1) {
-                                    return [h[0], query.disponible[0][0]]
-                                }
-                                else if (sumaHorario_1 <= sumaHorarioDisponible_2 && sumaHorario_2 >= sumaHorarioDisponible_2) {
-                                    return [query.disponible[0][1], h[1]]
-                                }
-                                else if (sumaHorario_1 >= sumaHorarioDisponible_1 && sumaHorario_2 <= sumaHorarioDisponible_2) {
-                                    return [query.disponible[0][0], h[1]]
-                                }
-                                else {
-                                    return h
-                                }
-                            }
-
-                            else {
-                                return h
-                            }
-                        })
-                        console.log("editarHorarios  completarHorario",completarHorario)
-                        let resultado = completarHorario.filter(horarios => horarios)
-                        console.log("editarHorarios resultado",resultado)
-
-                        return resultado
-
-                    }
-                    //----------------------------------------- TERMINA LA FUNCION -------------------------------------------
 
                     if (query.disponible) {
                         let calendarioEditado = {
                             email: query.email,
                             fecha: query.fecha,
                             disponible: calendario.disponible ? nuevosHorarios([...calendario.disponible, query.disponible[0]]) : nuevosHorarios(query.disponible),
-                            ocupado: calendario.ocupado ? editarHorarios(calendario.ocupado) : null,
+                            ocupado: calendario.ocupado ? editCalendar(calendario.ocupado, query) : null,
                         }
 
                         let nuevoCalendario = profesor.calendario.map((fecha, i) => i === indice ? calendarioEditado : fecha)
@@ -352,7 +173,7 @@ router.put('/edit', async (req: Request, res: Response) => {
                         let calendarioEditado = {
                             email: query.email,
                             fecha: query.fecha,
-                            disponible: calendario.disponible ? editarHorarios(calendario.disponible) : null ,
+                            disponible: calendario.disponible ? editCalendar(calendario.disponible, query) : null ,
                             ocupado: calendario.ocupado ? nuevosHorarios([...calendario.ocupado, query.ocupado[0]]) : nuevosHorarios(query.ocupado)  ,
                         }
 

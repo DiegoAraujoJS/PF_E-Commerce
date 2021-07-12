@@ -2,7 +2,7 @@ import React from 'react';
 
 import './App.css';
 import Login from './components/login/login';
-import { BrowserRouter, Redirect, Route } from 'react-router-dom';
+import { BrowserRouter, Redirect, Route, useHistory } from 'react-router-dom';
 import ClassContainer from './components/classContainer/ClassContainer';
 import CalendarApp from './components/calendar/Calendar';
 import Claims from './components/Claims/Claims';
@@ -17,6 +17,7 @@ import NavBar from './components/NavBar/NavBar'
 
 
 function App() {
+  const history = useHistory()
 
   let [role, setRole] = React.useState(undefined)
 
@@ -31,7 +32,7 @@ function App() {
           setRole(roleOfUser.data)
         } else {
           console.log('el servidor no encontro ningun usuario con ese id')    
-          setRole(undefined)      
+          setRole(roleOfUser.data)      
         }
       }
     }
@@ -44,24 +45,23 @@ function App() {
       <Route path='/'> <NavBar /> </Route>
 
       
-        <Route exact path='/claim' render={() => {
-
-          
+        {role !== undefined ? <Route exact path='/claim' render={() => {
+          console.log(role)
           if (role === 1) {
-            return <Claims />
+            return <Claims/>
+          } else {
+            return <Redirect to='/home'/>
           }
-          else {
-            return < Redirect to="/home" />
-          }           
       }
-      }></Route>
+      }></Route> : null}
       
       <Route exact path='/claim/:id' render={() => {
           if (role === 1) {
             return <DetailClaim />
           }
-          else {
-            return < Redirect to="/home" />
+          else  {
+            console.log('entre')
+            return <Redirect to='/home'/>
           }          
       }
       }>

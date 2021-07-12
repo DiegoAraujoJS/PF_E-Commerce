@@ -2,7 +2,7 @@ import { Model, Column, Table, CreatedAt, UpdatedAt, DataType, HasOne, ForeignKe
 import { EnumType } from 'typescript';
 import Clase from './Clase';
 import Profesor from './Profesor';
-import rango_profesor from './rango_profesor'
+
 import User from './Usuario';
 
 

@@ -3,8 +3,7 @@ import Alumno from "./models/Alumno"
 import Clase from "./models/Clase"
 
 import Profesor from "./models/Profesor"
-import Rango from "./models/Rango"
-import rango_profesor from "./models/rango_profesor"
+
 import Reclamo from "./models/Reclamo"
 import User from "./models/Usuario"
 import { Role } from "../../interfaces"

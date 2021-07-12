@@ -2,8 +2,6 @@ import { Model, Column, Table, CreatedAt, UpdatedAt, DataType, HasOne, ForeignKe
 import { Json } from 'sequelize/types/lib/utils';
 
 import Clase from './Clase';
-import Rango from './Rango';
-import rango_profesor from './rango_profesor';
 import User from './Usuario';
 import {ProfesorProps, Horario} from '../../../interfaces'
 
@@ -43,9 +41,6 @@ export default class Profesor extends Model implements ProfesorProps{
 
     @HasMany(() => Clase)
     clases!: Clase[];
-
-    @BelongsToMany(() => Rango, ()  => rango_profesor)
-    rangos!: Rango[]
 }
 
 
