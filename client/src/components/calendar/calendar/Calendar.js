@@ -45,7 +45,7 @@ const styles = {
 class Calendar extends Component {
   constructor(props) {
     super(props);
-    
+    var email=this.props.email
     this.state = {
       viewType: "Week",
       durationBarVisible: true,
@@ -55,8 +55,9 @@ class Calendar extends Component {
         const dp = this.calendar;
         const modal = await DayPilot.Modal.prompt(
           "Create a new event:",
-          "Event 1"
+          "Disponible"
         );
+        console.log("Agregaste un horario al calendario")
         dp.clearSelection();
         if (!modal.result) { return; }
         dp.events.add({
@@ -65,6 +66,24 @@ class Calendar extends Component {
           id: DayPilot.guid(),
           text: modal.result
         });
+        console.log(args.start.value)
+        const año=args.start.value.slice(0,-15)
+        const mes=args.start.value.slice(5,-12)
+        const dia=args.start.value.slice(8,-9)
+        const start=args.start.value.slice(11)
+        const end=args.end.value.slice(11)
+        console.log("Esto es la fecha",año, mes, dia, start, end)
+        const horario1={
+          disponible: [[start,  end]],
+          email: email,
+          fecha: {
+              anio: año,
+              mes: mes,
+              dia: dia
+          }
+      }
+        await axios.post('http://localhost:3001/api/calendario/add', horario1)
+        console.log("Esto es horario despues de axios", horario1)
       },
       eventDeleteHandling: "Update",
       onEventClick: async args => {
@@ -73,6 +92,43 @@ class Calendar extends Component {
         if (!modal.result) { return; }
         const e = args.e;
         e.data.text = modal.result;
+        if(e.data.text==="Ocupado"){
+          const año2=e.data.start.value.slice(0,-15)
+          const mes2=e.data.start.value.slice(5,-12)
+          const dia2=e.data.start.value.slice(8,-9)
+          const start2=e.data.start.value.slice(11)
+          const end2=e.data.end.value.slice(11)
+          const ocupado1={
+            ocupado: [[start2,  end2]],
+            email: email,
+            fecha: {
+                anio: año2,
+                mes: mes2,
+                dia: dia2
+            }
+        }
+          e.data.backColor="red"
+          await axios.put('http://localhost:3001/api/calendario/edit', ocupado1)
+        }
+        if(e.data.text==="Disponible"){
+          const año3=e.data.start.value.slice(0,-15)
+          const mes3=e.data.start.value.slice(5,-12)
+          const dia3=e.data.start.value.slice(8,-9)
+          const start3=e.data.start.value.slice(11)
+          const end3=e.data.end.value.slice(11)
+          const disponible1={
+            disponible: [[start3,  end3]],
+            email: email,
+            fecha: {
+                anio: año3,
+                mes: mes3,
+                dia: dia3
+            }
+        }
+          e.data.backColor="blue"
+          await axios.post('http://localhost:3001/api/calendario/add', disponible1)
+        }
+        console.log(e.data.backColor)
         dp.events.update(e);
       },
     };
