@@ -5,7 +5,7 @@ interface UserProps {
     role: number;
 }
 
-enum Role {USER, ADMIN}
+enum Role {USER, PROFESSOR, ADMIN}
 
 type ArrayDePares = [`${number}:${number}:00`, `${number}:${number}:00`][]
 

@@ -16,7 +16,7 @@ import axios from 'axios';
 import NavBar from './components/NavBar/NavBar'
 import AddClass from './components/addClass/addClass';
 
-
+enum Role {USER, PROFESSOR, ADMIN}
 function App() {
   const history = useHistory()
 
@@ -58,7 +58,7 @@ function App() {
       }></Route> : null}
       
       <Route exact path='/claim/:id' render={() => {
-          if (role === 1) {
+          if (role === Role.ADMIN) {
             return <DetailClaim />
           }
           else  {
@@ -70,7 +70,7 @@ function App() {
       </Route>
 
       <Route exact path='/claim/id/add' render={() => {
-          if (role === 1) {
+          if (role === Role.ADMIN) {
             return <AddClaim />
           }
           else {
@@ -92,7 +92,7 @@ function App() {
       
 
       <Route exact path='/registro' render={() => {
-          if (role === undefined) {
+          if (role === Role.USER || role === Role.PROFESSOR) {
             return <Register />
           }
           else {

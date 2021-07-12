@@ -4,9 +4,8 @@ import axios from 'axios';
 import { useHistory } from "react-router-dom";
 import {UserProps} from '../../../../interfaces'
 
-enum Role {USER, ADMIN}
 enum ErrorType {INCOMPLETE_INPUTS, ALREADY_EXISTS}
-
+enum Role {USER, PROFESSOR, ADMIN}
 export default function Register() {
 
   const [mail, setMail] = React.useState('')
@@ -15,6 +14,7 @@ export default function Register() {
   const [lastName, setlastName] = React.useState('')
   const [city, setCity] = React.useState('')
   const [state, setState] = React.useState('')
+  const [role, setRole] = React.useState(0)
   const [alreadyCreated, /* setAlreadyCreated */] = React.useState(false)
 
   const history = useHistory()
@@ -27,7 +27,7 @@ export default function Register() {
       lastName: lastName,
       mail: mail,
       name: name,
-      role: Role.USER
+      role: role
     }
     let userWithPassword = {
       ...user,
@@ -100,6 +100,7 @@ export default function Register() {
         <button type="submit" id="local" className="btn btn-primary">Regístrate</button>
 
       </form>
+      <input className="form-check-input" type="checkbox" id="gridCheck" onChange={() => setRole(Role.PROFESSOR)}/>
       <button onClick={googleSubmit} id="google" className="btn btn-primary">Regístrate con Google</button>
       {alreadyCreated ? <span style={{ color: 'red' }}>El usuario ya está siendo usado</span> : ''}
     </div>
