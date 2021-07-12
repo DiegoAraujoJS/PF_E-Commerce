@@ -19,6 +19,6 @@ router.use('/reclamos', reclamos)
 router.use('/alumnos', alumnos)
 router.use('/calendario', calendario)
 router.use('/session', sessions)
-router.use('/webTokens', webTokens)
+router.use('/tokens', webTokens)
 
 export default router

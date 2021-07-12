@@ -4,20 +4,29 @@ import morgan from 'morgan';
 import cors from 'cors'
 import config from './lib/config';
 import routes from './routes/index'
+import session from 'express-session'
+import dotenv from 'dotenv'
+dotenv.config()
 const app = express()
 
 app.use(express.urlencoded({extended: true, limit: '50mb'}));
 app.use(express.json({limit:'50mb'}));
 app.use(cookieParser());
 app.use(morgan('dev'));
+app.use(session({
+    name: 'session-id',
+    secret: process.env.SESSION_SECRET,
+    saveUninitialized: false,
+    resave: false,
+}));
 
 app.use(
-    cors(/* {
-        origin: config.cors,
+    cors( {
+        origin: '*',
         credentials: true,
         methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'DELETE'],
-        allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept']
-    } */)
+        allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'authorization', 'user']
+    } )
 )
 
 interface Error {

@@ -62,15 +62,6 @@ router.get('/', async (req: Request, res: Response) => {
     }
 })
 
-// router.get('/', async (req: Request, res: Response) => {
-//     const clases = await Clase.findAll({
-//         include: [Profesor]
-//     })
-//     return res.send(clases)
-// })
-///////////
-//////////
-// Puntuar una clase
 router.post('/puntuar', async (req: Request, res: Response) => {
     try {
         const { id, alumno, puntuacion, comentario } = req.body;
@@ -260,67 +251,5 @@ router.post('/delete', async (req: Request, res: Response) => {
     }
 })
 
-//////////
-/////////
 export default router
 
-
-/// comentarios
-
-// router.put('/puntuar', async (req: Request, res: Response) => {
-//     try {
-//         const { id, alumno, puntuacion, comentario } = req.body;
-//         const clase = await Clase.findOne({
-//             where: { id },
-//             include: [{
-//                 model: Puntuacion,
-//                 attributes: ['usuario', 'puntuacion', 'comentario'],
-//             }]
-//         })
-//         if (clase) {
-//             if (clase.puntuaciones.length) {
-//                 const puntuacionAlumnoClase = clase.puntuaciones.filter(elemento => elemento.usuario === alumno);
-//                 if (puntuacionAlumnoClase.length) {
-//                     const puntuacionAlumno = await Puntuacion.findOne({
-//                         where: {
-//                             [Op.and]: [
-//                                 { usuario: alumno },
-//                                 { clase: id }
-//                             ]
-//                         }
-//                     })
-//                     if (puntuacionAlumno) {
-//                         await puntuacionAlumno.update({
-//                             puntuacion,
-//                             comentario
-//                         })
-//                     }
-//                 }
-//             } else {
-//                 await Puntuacion.create({
-//                     usuario: alumno,
-//                     clase: id,
-//                     puntuacion,
-//                     comentario
-//                 });
-//             }
-
-//             const claseActualizada = await Puntuacion.findOne({
-//                 where: {
-//                     [Op.and]: [
-//                         { usuario: alumno },
-//                         { clase: id }
-//                     ]
-//                 }, attributes: ['puntuacion', 'comentario']
-//             })
-
-//             res.send(claseActualizada)
-//         } else {
-//             return res.send(`No se encontró ninguna clase con el id ${id}`)
-//         }
-//     } catch (error) {
-//         return res.send(error)
-//     }
-// })
-
-// propiedades notNull de Clase: 
