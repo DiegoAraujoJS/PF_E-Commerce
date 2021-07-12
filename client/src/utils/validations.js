@@ -15,7 +15,7 @@ export const validationSchemaNewClass = yup.object().shape({
         .test('materia', 'Necesita elegir una materia', (value) => value),
         descripcion: yup
         .string()
-        .test('descriptionSize', 'La descripcion no debe ser mayor a 350 caracteres', (value) => value && value.length < 350),
+        .test('descriptionSize', 'La descripcion no debe ser mayor a 350 caracteres', (value) => !value || value.length < 350 ),
     grado: yup
         .string()
         .test('grado', 'Necesita elegir un grado', (value) => value),

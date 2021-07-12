@@ -21,7 +21,7 @@ function newClass ( data ) {
                 dispatch({ type: actionsType.NEW_CLASS , payload: response.data }) 
             })
             .catch(err => { 
-                dispatch({ type: actionsType.NEW_CLASS, payload: err })
+                dispatch({ type: actionsType.NEW_CLASS, payload: null })
             })    
         }
 }
@@ -33,7 +33,7 @@ function registerAction ( data ) {
                 dispatch({ type: actionsType.NEW_REGISTER , payload: response.data }) 
             })
             .catch(err => { 
-                dispatch({ type: actionsType.NEW_REGISTER, payload: err })
+                dispatch({ type: actionsType.NEW_REGISTER, payload: null })
             })    
         }
 }
