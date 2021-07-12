@@ -6,6 +6,45 @@ import { newClass } from '../../Actions/Actions';
 import { connect } from 'react-redux';
 
 
+const materias = [
+    "Física",
+    "Biología",
+    "Anatomía y fisiología",
+    "Matemáticas",
+    "Química",
+    "Ecología",
+    "Metodología de la investigación",
+    "Ciencias sociales",
+    "Geografía",
+    "Economía",
+    "Medio ambiente",
+    "Biografías",
+    "Arte",
+    "Historia del arte",
+    "Filosofía",
+    "Historia",
+    "Ética y valores",
+    "Literatura",
+    "Lengua española",
+    "Inglés",
+    "Informática",
+    "Psicología",
+    "Educación física",
+    "Tecnología",
+    "Política",
+    "Religión",
+    "Salud",
+    "Educación",
+]
+
+const niveles = [
+    "Primaria", "Secundaria", "Terciaria", "Universitaria"
+]
+
+const grados = [
+    "Primer grado", "Segundo grado", "Tercer grado", "Cuarto grado", "Quinto grado", "Sexto grado"
+]
+
 
 const AddClass = ( newClass ) => {
     return (
@@ -26,7 +65,7 @@ const AddClass = ( newClass ) => {
                     newClass(values)
 				}}			
         >
-          {({ handleSubmit, handleChange, values, errors, touched }) => (
+          {({ handleSubmit, handleChange, values, errors }) => (
 					<Form className='mt-5' onSubmit={handleSubmit}>
 						<Form.Group>
 							<Row className='mb-3'>
@@ -88,8 +127,11 @@ const AddClass = ( newClass ) => {
 										onChange={handleChange}
 										value={values.materia}
 									>
-										<option value=''>Seleccione una materia</option>
-										<option value='Ingles'>Ingles</option>
+										<option value='' >Seleccione una materia</option>                                     
+										{ materias.map( (materia,i) => {
+                                            return <option key={i+10} value={materia}>{materia}</option>
+                                            }
+                                        ) }
 									</Form.Control>
 								</Col>
 
@@ -101,8 +143,11 @@ const AddClass = ( newClass ) => {
 										onChange={handleChange}
 										value={values.grado}                                        
 									>	
-                                        <option  value=''>Seleccione un nivel</option>
-										<option value='Primer Grado'>Primer Grado</option>
+                                        <option  value='' >Seleccione un nivel</option>										                                     
+										{ grados.map( (grado,i) => {
+                                            return <option key={i+20} value={grado}>{grado}</option>
+                                            }
+                                        ) }
 
 									</Form.Control>
 								</Col>
@@ -114,8 +159,11 @@ const AddClass = ( newClass ) => {
 										onChange={handleChange}
 										value={values.nivel}
 									>
-                                        <option  value=''>Seleccione un nivel</option>
-										<option value='Secundario'>Secundario</option>
+                                        <option  value='' >Seleccione un nivel</option>
+                                        { niveles.map( (nivel,i) => {
+                                            return <option key={i+30} value={nivel}>{nivel}</option>
+                                            }
+                                        ) }
 									</Form.Control>
 								</Col>
 							</Row>
