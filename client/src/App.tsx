@@ -93,7 +93,8 @@ function App() {
       
 
       <Route exact path='/registro' render={() => {
-          if (role === Role.USER || role === Role.PROFESSOR) {
+        console.log(role)
+          if (role !== Role.USER && role !== Role.PROFESSOR) {
             return <Register />
           }
           else {
