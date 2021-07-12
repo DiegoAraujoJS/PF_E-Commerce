@@ -2,10 +2,11 @@ import { actionsType } from '../constants/constants';
 
 let initialState = {
     searchInput: '',
-    professors: [{name:'ariel'}, {name:'asd'}],
+    professors: [{ name: 'ariel' }, { name: 'asd' }],
     professor: [],
-    claim:[],
-    class:{},
+    claim: [],
+    class: {},
+    newRegister: {}
 };
 
 const all = (state = initialState, action) => {
@@ -24,6 +25,11 @@ const all = (state = initialState, action) => {
             return {
                 ...state,
                 class: action.payload
+            }
+        case actionsType.NEW_REGISTER:
+            return {
+                ...state,
+                newRegister: action.payload
             }
         default:
             return state

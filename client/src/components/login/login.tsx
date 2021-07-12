@@ -60,6 +60,7 @@ function Login() {
             })
             localStorage.setItem('user', JSON.stringify({...login.data}))
             history.push('/home')
+            window.location.reload();
             
         } catch (error) {
             setWrongPassword(true)
@@ -98,7 +99,7 @@ function Login() {
                         <label htmlFor="floatingPassword">Password</label>
                     </div>
                     
-                    <input type="submit" value="login" className="w-100 btn btn-lg btn-primary mb-2" />
+                    <input type="submit" value="Login" className="w-100 btn btn-lg btn-primary mb-2" />
                 
                     <Link to='/registro'>
                         <button className="w-100 btn btn-lg btn-secondary mb-2">Regístrate</button>

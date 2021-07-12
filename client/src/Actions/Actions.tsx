@@ -26,5 +26,16 @@ function newClass ( data ) {
         }
 }
 
+function registerAction ( data ) {
+    return (dispatch) => {
+        axios.post('http://localhost:3001/api/session/register', data)
+            .then(response => {
+                dispatch({ type: actionsType.NEW_REGISTER , payload: response.data }) 
+            })
+            .catch(err => { 
+                dispatch({ type: actionsType.NEW_REGISTER, payload: err })
+            })    
+        }
+}
 
-export { getByIdClaim , newClass}
+export { getByIdClaim , newClass, registerAction}

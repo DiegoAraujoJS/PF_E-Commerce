@@ -5,11 +5,13 @@ import { useHistory } from "react-router-dom";
 import { UserProps } from '../../../../interfaces'
 import { Formik } from 'formik';
 import { validationSchemaRegister } from '../../utils/validations';
+import { registerAction } from '../../Actions/Actions';
+import { connect } from 'react-redux';
 
 enum ErrorType { INCOMPLETE_INPUTS, ALREADY_EXISTS }
 enum Role { USER, PROFESSOR, ADMIN }
 
-export default function Register() {
+const Register = ({registerAction,newRegister}) => {
 
   // const [mail, setMail] = React.useState('')
   // const [password, setPass] = React.useState('')
@@ -36,13 +38,14 @@ export default function Register() {
     }
     if (values.mail === 'braiansilva@gmail.com') user.role = Role.ADMIN;
     try {
-      const registro = await axios.post('http://localhost:3001/api/session/register', userWithPassword)
-      console.log(registro)
-      if (registro) alert("Se registro correctamente")
+      // const registro = await axios.post('http://localhost:3001/api/session/register', userWithPassword)
+      // console.log(registro)
+      // if (registro) alert("Se registro correctamente")
+      registerAction(userWithPassword)
+      if(newRegister)  alert("Se registro correctamente")
       history.push('/login')
     }
     catch (error) {
-
       if (error.response.data.type === ErrorType.ALREADY_EXISTS) {
         alert('El usuario ya existe!')
       } else if (error.response.data.type === ErrorType.INCOMPLETE_INPUTS) {
@@ -203,3 +206,17 @@ export default function Register() {
     </div>
   )
 }
+
+const mapStateToProps = (state) => {
+  return {
+    newRegister: state.newRegister
+  }
+}
+
+const mapDispachToProps = (dispatch) => {
+  return {
+    registerAction: (data) => dispatch(registerAction(data))
+  }
+}
+
+export default connect(mapStateToProps, mapDispachToProps)(Register)
