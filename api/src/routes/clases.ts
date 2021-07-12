@@ -13,64 +13,67 @@ router.get('/', async (req: Request, res: Response) => {
         let clases: any[] = []
         if (busqueda) {
             let palabrasSeparadas = (busqueda as string).split(" ");
-            palabrasSeparadas = palabrasSeparadas.filter(x => x!=='grado')
-            palabrasSeparadas = palabrasSeparadas.filter(x => x!=='año')
-            palabrasSeparadas = palabrasSeparadas.filter(x => x!=='anio')
+            palabrasSeparadas = palabrasSeparadas.filter(x => x !== 'grado')
+            palabrasSeparadas = palabrasSeparadas.filter(x => x !== 'año')
+            palabrasSeparadas = palabrasSeparadas.filter(x => x !== 'anio')
 
-            
-            
-            for (let x of palabrasSeparadas){
-                const c = await Clase.findAll({
-                    include: [Profesor],
-                    where: {
-                        [Op.or]: [{
-                            materia: {
-                                [Op.iLike]: `%${x}%`.replace("\'", '')
+
+            for (let x of palabrasSeparadas) {
+                try {
+                    const c = await Clase.findAll({
+                        include: [Profesor],
+                        where: {
+                            [Op.or]: [{
+                                materia: {
+                                    [Op.iLike]: `%${x.normalize("NFD").replace(/\p{Diacritic}/gu, "")}%`.replace("\'", '')  
+                                }
+                            },
+                            {
+                                nivel: {
+                                    [Op.iLike]: `%${x}%`.replace("\'", '')
+                                }
+                            },
+                            {
+                                grado: {
+                                    [Op.iLike]: `%${x}%`.replace("\'", '')
+                                }
+                            },
+                            {
+                                ciudad: {
+                                    [Op.iLike]: `%${x}%`.replace("\'", '')
+                                }
                             }
-                        },
-                        {
-                            nivel: {
-                                [Op.iLike]: `%${x}%`.replace("\'", '')
-                            }
-                        },
-                        {
-                            grado: {
-                                [Op.iLike]: `%${x}%`.replace("\'", '')
-                            }
-                        },
-                        {
-                            ciudad: {
-                                [Op.iLike]: `%${x}%`.replace("\'", '')
-                            }
+
+                            ]
                         }
-                        
-                        ]
-                    }
-                })
-                
-                clases.push(...c)
+                    })
+                    clases.push(...c)
+                }
+                catch (err) {
+                    console.log(err)
+                }
             }
-            
+
         }
-        return res.send(clases) 
-        
+        return res.send(clases)
+
     } catch (err) {
         res.send(err)
     }
 })
 
-router.get('/', async (req: Request, res: Response) => {
-    const clases = await Clase.findAll({
-        include: [Profesor]
-    })
-    return res.send(clases)
-})
+// router.get('/', async (req: Request, res: Response) => {
+//     const clases = await Clase.findAll({
+//         include: [Profesor]
+//     })
+//     return res.send(clases)
+// })
 ///////////
 //////////
 // Puntuar una clase
 router.post('/puntuar', async (req: Request, res: Response) => {
     try {
-    const { id, alumno, puntuacion, comentario } = req.body;
+        const { id, alumno, puntuacion, comentario } = req.body;
         const clase = await Clase.findOne({
             where: { id },
             include: [{
@@ -102,11 +105,11 @@ router.post('/puntuar', async (req: Request, res: Response) => {
                 comentario
             });
             const puntuaciones = await Puntuacion.findAll({
-                where: {clase: id},
+                where: { clase: id },
                 attributes: ['puntuacion']
             })
             console.log(puntuaciones)
-            let puntuacionClase = parseFloat((puntuaciones.map(elemento => elemento.puntuacion).reduce(function(a, b){ return a + b; })/puntuaciones.length).toFixed(2))
+            let puntuacionClase = parseFloat((puntuaciones.map(elemento => elemento.puntuacion).reduce(function (a, b) { return a + b; }) / puntuaciones.length).toFixed(2))
             let claseActualizada = await Clase.findOne({
                 where: { id },
                 include: [{
@@ -119,13 +122,13 @@ router.post('/puntuar', async (req: Request, res: Response) => {
                 claseActualizada = await claseActualizada.update({ puntuacion: puntuacionClase })
             }
             let clasesProfesor = await Clase.findAll({
-                where: {Profesor_mail: profesor},
+                where: { Profesor_mail: profesor },
                 attributes: ['puntuacion']
             })
             console.log(clasesProfesor)
-            let puntuacionProfesor = parseFloat((clasesProfesor.map(elemento => elemento.puntuacion).reduce(function(a, b){ return a + b; })/clasesProfesor.length).toFixed(2))
+            let puntuacionProfesor = parseFloat((clasesProfesor.map(elemento => elemento.puntuacion).reduce(function (a, b) { return a + b; }) / clasesProfesor.length).toFixed(2))
             console.log(clasesProfesor.map(elemento => elemento.puntuacion))
-            let profesorPorActualizar = await Profesor.findOne({ where: { User_mail: profesor }});
+            let profesorPorActualizar = await Profesor.findOne({ where: { User_mail: profesor } });
             if (profesorPorActualizar) {
                 profesorPorActualizar = await profesorPorActualizar.update({ puntuacion: puntuacionProfesor })
             }
@@ -140,7 +143,7 @@ router.post('/puntuar', async (req: Request, res: Response) => {
 // Actualizar la puntuacion de una clase
 router.put('/puntuar', async (req: Request, res: Response) => {
     try {
-    const { id, alumno, puntuacion, comentario } = req.body;
+        const { id, alumno, puntuacion, comentario } = req.body;
         const clase = await Clase.findOne({
             where: { id },
             include: [{
@@ -166,14 +169,14 @@ router.put('/puntuar', async (req: Request, res: Response) => {
                     })
                 } else {
                     return res.send(`${alumno} aún no ha comentado esta clase si desea cree una nueva puntuacion`)
-                } 
+                }
             }
             const puntuaciones = await Puntuacion.findAll({
-                where: {clase: id},
+                where: { clase: id },
                 attributes: ['puntuacion']
             })
             console.log(puntuaciones)
-            let puntuacionClase = parseFloat((puntuaciones.map(elemento => elemento.puntuacion).reduce(function(a, b){ return a + b; })/puntuaciones.length).toFixed(2))
+            let puntuacionClase = parseFloat((puntuaciones.map(elemento => elemento.puntuacion).reduce(function (a, b) { return a + b; }) / puntuaciones.length).toFixed(2))
             let claseActualizada = await Clase.findOne({
                 where: { id },
                 include: [{
@@ -186,13 +189,13 @@ router.put('/puntuar', async (req: Request, res: Response) => {
                 claseActualizada = await claseActualizada.update({ puntuacion: puntuacionClase })
             }
             let clasesProfesor = await Clase.findAll({
-                where: {Profesor_mail: profesor},
+                where: { Profesor_mail: profesor },
                 attributes: ['puntuacion']
             })
             console.log(clasesProfesor)
-            let puntuacionProfesor = parseFloat((clasesProfesor.map(elemento => elemento.puntuacion).reduce(function(a, b){ return a + b; })/clasesProfesor.length).toFixed(2))
+            let puntuacionProfesor = parseFloat((clasesProfesor.map(elemento => elemento.puntuacion).reduce(function (a, b) { return a + b; }) / clasesProfesor.length).toFixed(2))
             console.log(clasesProfesor.map(elemento => elemento.puntuacion))
-            let profesorPorActualizar = await Profesor.findOne({ where: { User_mail: profesor }});
+            let profesorPorActualizar = await Profesor.findOne({ where: { User_mail: profesor } });
             if (profesorPorActualizar) {
                 profesorPorActualizar = await profesorPorActualizar.update({ puntuacion: puntuacionProfesor })
             }
@@ -210,11 +213,14 @@ router.put('/puntuar', async (req: Request, res: Response) => {
 router.post('/add', async (req: Request, res: Response) => {
     const clase = req.body
     try {
-        const crearClase = await Clase.create(clase)
+        const crearClase = await Clase.create({
+            ...clase,
+            materia: req.body.materia.normalize("NFD").replace(/\p{Diacritic}/gu, "")
+        })
         res.send(crearClase)
     }
     catch (error) {
-        res.send(error)
+        res.status(404).send(new Error('Mail no valido'))
     }
 })
 

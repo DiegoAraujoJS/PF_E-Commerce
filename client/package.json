@@ -14,6 +14,7 @@
     "bootstrap": "^5.0.2",
     "daypilot-pro-react": "https://npm.daypilot.org/daypilot-pro-react/trial/2021.2.5000.tar.gz",
     "firebase": "^8.7.0",
+    "formik": "^2.2.9",
     "react": "^17.0.2",
     "react-bootstrap": "^1.6.1",
     "react-chat-engine": "^1.10.5",
@@ -27,7 +28,8 @@
     "redux-devtools-extension": "^2.13.9",
     "redux-thunk": "^2.3.0",
     "typescript": "^4.3.5",
-    "web-vitals": "^1.1.2"
+    "web-vitals": "^1.1.2",
+    "yup": "^0.32.9"
   },
   "scripts": {
     "start": "react-scripts start",

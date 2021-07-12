@@ -173,7 +173,7 @@ const bootstrap = async () => {
         nombre: 'Sumas y Restas',
         Profesor_mail: "edwardburgos@gmail.com",
         descripcion: 'Aprende a sumar y restar para ser el mejor de tu clase',
-        materia: 'Matemática',
+        materia: 'Matematica',
         grado: "Primer grado",
         nivel: 'Primario'
     })
@@ -181,7 +181,7 @@ const bootstrap = async () => {
         nombre: 'Aprende a comunicar',
         Profesor_mail: "edwardburgos@gmail.com",
         descripción: 'Aprende a comunicarte asertivamente con tu entorno',
-        materia: 'Comunicación',
+        materia: 'Comunicacion',
         score: 4.63,
         grado: "Cuarto grado",
         nivel: 'Terciario'
@@ -191,7 +191,7 @@ const bootstrap = async () => {
         nombre: 'Inglés para jóvenes',
         Profesor_mail: "edwardburgos@gmail.com",
         descripción: 'En esta clase te enseñaré todo lo que necesitas para tener un nivel intermedio de Inglés',
-        materia: 'Inglés',
+        materia: 'Ingles',
         score: 2.33,
         grado: "Sexto grado",
         nivel: 'Secundario'
