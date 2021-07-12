@@ -79,10 +79,11 @@ function App() {
       }
       }></Route>
 
-<Route exact path='/perfil' render={() => {
-            
+    <Route exact path='/perfil' render={() => {      
+          if(localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')).mail)  {    
             return < Redirect to={`/perfil/${JSON.parse(localStorage.getItem('user')).mail}`} />
           }           
+        }
       }
       ></Route>
       <Route path='/perfil/:email' exact render={({ match }) => {
