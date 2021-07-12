@@ -45,24 +45,19 @@ const styles = {
 class Calendar extends Component {
   constructor(props) {
     super(props);
-    var login=false
-    var booleano
-    if(login===true){
-      booleano="Enabled"
-    } else {
-      booleano="Disabled"
-    }
+    var email=this.props.email
     this.state = {
-      viewType: "WorkWeek",
+      viewType: "Week",
       durationBarVisible: true,
-      timeRangeSelectedHandling: booleano
+      timeRangeSelectedHandling:"disabled"
       ,
       onTimeRangeSelected: async (args) => {
         const dp = this.calendar;
         const modal = await DayPilot.Modal.prompt(
           "Create a new event:",
-          "Event 1"
+          "Disponible"
         );
+        
         dp.clearSelection();
         if (!modal.result) { return; }
         dp.events.add({
@@ -71,6 +66,24 @@ class Calendar extends Component {
           id: DayPilot.guid(),
           text: modal.result
         });
+        
+        const año=args.start.value.slice(0,-15)
+        const mes=args.start.value.slice(5,-12)
+        const dia=args.start.value.slice(8,-9)
+        const start=args.start.value.slice(11)
+        const end=args.end.value.slice(11)
+        
+        const horario1={
+          disponible: [[start,  end]],
+          email: email,
+          fecha: {
+              anio: año,
+              mes: mes,
+              dia: dia
+          }
+      }
+        await axios.post('http://localhost:3001/api/calendario/add', horario1)
+
       },
       eventDeleteHandling: "Update",
       onEventClick: async args => {
@@ -79,6 +92,43 @@ class Calendar extends Component {
         if (!modal.result) { return; }
         const e = args.e;
         e.data.text = modal.result;
+        if(e.data.text==="Ocupado"){
+          const año2=e.data.start.value.slice(0,-15)
+          const mes2=e.data.start.value.slice(5,-12)
+          const dia2=e.data.start.value.slice(8,-9)
+          const start2=e.data.start.value.slice(11)
+          const end2=e.data.end.value.slice(11)
+          const ocupado1={
+            ocupado: [[start2,  end2]],
+            email: email,
+            fecha: {
+                anio: año2,
+                mes: mes2,
+                dia: dia2
+            }
+        }
+          e.data.backColor="red"
+          await axios.put('http://localhost:3001/api/calendario/edit', ocupado1)
+        }
+        if(e.data.text==="Disponible"){
+          const año3=e.data.start.value.slice(0,-15)
+          const mes3=e.data.start.value.slice(5,-12)
+          const dia3=e.data.start.value.slice(8,-9)
+          const start3=e.data.start.value.slice(11)
+          const end3=e.data.end.value.slice(11)
+          const disponible1={
+            disponible: [[start3,  end3]],
+            email: email,
+            fecha: {
+                anio: año3,
+                mes: mes3,
+                dia: dia3
+            }
+        }
+          e.data.backColor="blue"
+          await axios.post('http://localhost:3001/api/calendario/add', disponible1)
+        }
+        console.log(e.data.backColor)
         dp.events.update(e);
       },
     };
@@ -94,7 +144,7 @@ class Calendar extends Component {
     const arrayProf = await axios.get(
       `http://localhost:3001/api/calendario/${email}`
     );
-    console.log("ARRAYPROF", arrayProf)
+    
     var tempo = [];
     if(arrayProf.data.length>0){arrayProf.data.map((prof) => {
       let año = prof.fecha.anio.toString();
@@ -107,21 +157,37 @@ class Calendar extends Component {
         mes = "0" + mes;
       }
       
-      tempo.push({
-        start: año + "-" + mes + "-" + dia + "T" + prof.disponible[0][0],
-        end: año + "-" + mes + "-" + dia + "T" + prof.disponible[0][1],
-        text: "Disponible",
-        backColor: "blue",
-        moveDisabled: true,
-        resizeDisabled: true,
-        
-      });
+      if(prof.disponible){prof.disponible.map((disp)=>{
+        tempo.push({
+          start: año + "-" + mes + "-" + dia + "T" + disp[0],
+          end: año + "-" + mes + "-" + dia + "T" + disp[1],
+          text: "Disponible",
+          backColor: "blue",
+          moveDisabled: true,
+          resizeDisabled: true,
+          
+        })
+      })}
+      if(prof.ocupado){prof.ocupado.map((ocup)=>{
+        tempo.push({
+          start: año + "-" + mes + "-" + dia + "T" + ocup[0],
+          end: año + "-" + mes + "-" + dia + "T" + ocup[1],
+          text: "Ocupado",
+          backColor: "red",
+          moveDisabled: true,
+          resizeDisabled: true,
+          
+        })
+      })}
+
+      ;
+
       
       
       return tempo;
     });}
 
-    console.log("Tempo", tempo);
+    
 
     const persons = tempo;
     
@@ -131,8 +197,48 @@ class Calendar extends Component {
       startDate: date(today, "yy/mm/dd"),
       events: persons,
     });
+  }
+    
 
-    /*     .then((res) => {
+  render() {
+    var { ...config } = this.state;
+    return (
+      <div style={styles.wrap}>
+        <div style={styles.left}>
+          <DayPilotNavigator
+            selectMode={"week"}
+            showMonths={1}
+            skipMonths={1}
+            startDate={date(today, "yy/mm/dd")}
+            selectionDay={date(today, "yy/mm/dd")}
+            onTimeRangeSelected={(args) => {
+              this.setState({
+                startDate: args.day,
+              });
+            }}
+          />
+        </div>
+        <div style={styles.main}>
+          <DayPilotCalendar
+            {...config}
+            ref={(component) => {
+              this.calendar = component && component.control;
+            }}
+          />
+        </div>
+      </div>
+    );
+  }
+}
+
+export default Calendar;
+
+
+
+
+
+
+/*     .then((res) => {
         var tempo = [];
 
         for (var i = 0; i < res.data.length; i++) {
@@ -174,41 +280,8 @@ class Calendar extends Component {
           events: persons,
         });
       }); */
-  } // aca termina el didmount
+   // aca termina el didmount
   /* start: "2021-07-07T10:30:00",
       end: "2021-07-07T13:00:00",
       text: "Esto es del back",
  */
-
-  render() {
-    var { ...config } = this.state;
-    return (
-      <div style={styles.wrap}>
-        <div style={styles.left}>
-          <DayPilotNavigator
-            selectMode={"week"}
-            showMonths={1}
-            skipMonths={1}
-            startDate={date(today, "yy/mm/dd")}
-            selectionDay={date(today, "yy/mm/dd")}
-            onTimeRangeSelected={(args) => {
-              this.setState({
-                startDate: args.day,
-              });
-            }}
-          />
-        </div>
-        <div style={styles.main}>
-          <DayPilotCalendar
-            {...config}
-            ref={(component) => {
-              this.calendar = component && component.control;
-            }}
-          />
-        </div>
-      </div>
-    );
-  }
-}
-
-export default Calendar;

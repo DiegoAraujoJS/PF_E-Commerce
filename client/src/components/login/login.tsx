@@ -54,11 +54,12 @@ function Login() {
     async function handleSubmit(e) {
         e.preventDefault()
         try {
-            const login = await axios.post('http://localhost:3001/api/session/login', {
+            const login = await axios.post(`http://localhost:3001/api/tokens/login`, {
                 mail: email,
                 password: password
             })
-            localStorage.setItem('user', JSON.stringify({...login.data}))
+            await auth()
+            
             history.push('/home')
             window.location.reload();
             
@@ -66,21 +67,24 @@ function Login() {
             setWrongPassword(true)
         }
     }
-
-    function signOut(e) {
-
-        auth.signOut();
-        if (localStorage.getItem('user')) {
-            localStorage.removeItem('user')
+    async function signOut(e) {
+        // auth.signOut();
+        try {
+            const logout = await axios.get('http://localhost:3001/api/tokens/logout')
             setLogoutSuccess('true')
-            
             alert("Se cerro sesión correctamente")
             window.location.reload();
-
-        } else {
+        } catch (err) {
             setLogoutSuccess('false')
-            alert("Fallo al cerrar sesión")
-        }           
+            alert("Fallo al cerrar sesión. No has iniciado sesión?")
+        }   
+    }
+    async function auth () {
+        try {
+            const auth = await axios.get(`http://localhost:3001/api/tokens/auth`)
+        } catch (err) {
+            console.log(err)
+        }
     }
 
     return (

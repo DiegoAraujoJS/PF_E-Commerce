@@ -10,11 +10,6 @@ import User from './Usuario';
 @Table
 export default class Reclamo extends Model {
 
-    // @PrimaryKey
-    // @ForeignKey(() => User)
-    // @Column
-    // email!: string;
-
     @ForeignKey(() => User)
     @Column ({allowNull: false})
     Denunciante_email!: string;
