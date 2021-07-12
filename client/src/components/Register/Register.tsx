@@ -38,11 +38,10 @@ const Register = ({registerAction,newRegister}) => {
     }
     if (values.mail === 'braiansilva@gmail.com') user.role = Role.ADMIN;
     try {
-      // const registro = await axios.post('http://localhost:3001/api/session/register', userWithPassword)
-      // console.log(registro)
-      // if (registro) alert("Se registro correctamente")
-      registerAction(userWithPassword)
-      if(newRegister)  alert("Se registro correctamente")
+      const registro = await axios.post('http://localhost:3001/api/session/register', userWithPassword)
+      console.log(registro)
+      if (registro) alert("Se registro correctamente")
+      
       history.push('/login')
     }
     catch (error) {

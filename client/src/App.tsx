@@ -49,11 +49,13 @@ function App() {
       
         {role !== undefined ? <Route exact path='/claim' render={() => {
           console.log(role)
-          if (role === 1) {
+          if (role === Role.ADMIN) {
             return <Claims/>
           } else {
-            return <Redirect to='/home'/>
+            <Redirect to='/home'/>
           }
+          
+          
       }
       }></Route> : null}
       
@@ -90,7 +92,6 @@ function App() {
             return <Profile >{match.params.email} </Profile>           
           }           
       } />
-      
 
       <Route exact path='/registro' render={() => {
         console.log(role)
