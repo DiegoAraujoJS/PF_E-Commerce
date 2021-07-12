@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useRef, useState , useImperativeHandle} from 'react';
 import logo from '../../logo.svg';
 import style from './login.module.css';
 import { loginWithGoogle /*  signIn, createUser */, auth } from '../../firebase';
@@ -88,6 +88,17 @@ function Login() {
         }
     }
 
+    const inputRef = useRef()
+
+    function myFunction() {
+        let showPassword: any = inputRef.current
+        if (showPassword && showPassword.type === "password") {
+            showPassword.type = "text";
+          } else {
+            showPassword.type = "password";
+        }
+    }
+
     return (
         <div className={"text-center " + style.height}>
             <div className={style.formSignin}>
@@ -100,8 +111,9 @@ function Login() {
                         <label htmlFor="floatingInput">Email</label>
                     </div>
                     <div className="form-floating">
-                        <input type='password' value={password} name='passValue' onChange={handleChange} placeholder='Contraseña' className="form-control"/>
+                        <input ref={inputRef} type='password' value={password} name='passValue' onChange={handleChange} placeholder='Contraseña' className="form-control"/>
                         <label htmlFor="floatingPassword">Password</label>
+                        <input type="checkbox" onClick={() => myFunction()}/>Show Password
                     </div>
                     
                     <input type="submit" value="Login" className="w-100 btn btn-lg btn-primary mb-2" />
