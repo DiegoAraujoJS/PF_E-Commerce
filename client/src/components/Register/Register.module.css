@@ -1,0 +1,39 @@
+:root {
+  --height: calc(100vh - 80px);
+  --bg-color: white;
+}
+.height {
+  height: var(--height);
+  display: flex;
+  align-items: center;
+  padding-top: 40px;
+  padding-bottom: 40px;
+  background-color: var(--bg-color);
+}
+
+.formRegister {
+  width: 100%;
+  max-width: 330px;
+  padding: 15px;
+  margin: auto;
+}
+
+.formRegister .checkbox {
+  font-weight: 400;
+}
+
+.formRegister input[id="inputEmail4"], 
+.formRegister input[id="inputAddress"],
+.formRegister input[id="inputCity"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.formRegister input[id="inputPassword4"],
+.formRegister input[id="inputAddress2"],
+.formRegister input[id="inputState"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}

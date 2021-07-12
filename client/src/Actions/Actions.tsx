@@ -1,6 +1,6 @@
 
 
-const GET_BY_ID = 'GET_BY_ID_CLAIM';
+// const GET_BY_ID = 'GET_BY_ID_CLAIM';
 // const SEARCH_INPUT = 'SEARCH_INPUT'
 
 const getByIdClaim = (id) => {
