@@ -5,7 +5,7 @@ import SearchBar from '../searchBar/SearchBar'
 export default function ClassContainer() {
     return (
         <div>
-            <SearchBar />
+            {/* <SearchBar /> */}
             <ClassCards />
         </div>
     )

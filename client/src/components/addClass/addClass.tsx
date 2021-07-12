@@ -1,6 +1,6 @@
 import React from 'react'
 import { Formik , Field} from 'formik';
-import { validationSchemaStepOne } from '../../utils/validations';
+import { validationSchemaNewClass } from '../../utils/validations';
 import { Form, Row, Col, Container, Button } from 'react-bootstrap';
 import { newClass } from '../../Actions/Actions';
 import { connect } from 'react-redux';
@@ -51,7 +51,7 @@ const AddClass = ( {newClass} ) => {
         <Container className='shadow p-3 mb-5 bg-white rounded flex'>
         <h1>Agrega tu propia Clase!</h1>
         <Formik
-				validationSchema={validationSchemaStepOne}
+				validationSchema={validationSchemaNewClass}
 				initialValues={{
                     nombre: "",
                     Profesor_mail: "",
@@ -64,7 +64,7 @@ const AddClass = ( {newClass} ) => {
                     newClass(values)
 				}}			
         >
-          {({ handleSubmit, handleChange, values, errors }) => (
+          {({ handleSubmit, handleChange, values, errors, handleBlur, touched }) => (
 					<Form className='mt-5' onSubmit={handleSubmit}>
 						<Form.Group>
 							<Row className='mb-3'>
@@ -74,12 +74,13 @@ const AddClass = ( {newClass} ) => {
 										name='nombre'
 										type='text'
 										onChange={handleChange}
+										onBlur={handleBlur}
 										value={values.nombre}
 										className={`form-control ${
-											errors.nombre ? 'is-invalid' : ''
+											errors.nombre && touched.nombre ? 'is-invalid' : ''
 										}`}
 									/>
-									{errors.nombre  ? (
+									{errors.nombre && touched.nombre ? (
 										<div className='invalid-feedback'>{errors.nombre}</div>
 									) : null}
 								</Col>
@@ -89,12 +90,13 @@ const AddClass = ( {newClass} ) => {
 										name='Profesor_mail'
 										type='text'
 										onChange={handleChange}
+										onBlur={handleBlur}
 										value={values.Profesor_mail}
 										className={`form-control ${
-											errors.Profesor_mail ? 'is-invalid' : ''
+											errors.Profesor_mail && touched.Profesor_mail ? 'is-invalid' : ''
 										}`}
 									/>
-									{errors.Profesor_mail ? (
+									{errors.Profesor_mail && touched.Profesor_mail ? (
 										<div className='invalid-feedback'>{errors.Profesor_mail}</div>
 									) : null}
 								</Col>
@@ -109,12 +111,13 @@ const AddClass = ( {newClass} ) => {
 										type='textarea'
                                         rows='4'
 										onChange={handleChange}
+										onBlur={handleBlur}
 										value={values.descripcion}
 										className={`form-control ${
-											errors.descripcion  ? 'is-invalid' : ''
+											errors.descripcion && touched.descripcion ? 'is-invalid' : ''
 										}`}
 									/>
-									{errors.descripcion ? (
+									{errors.descripcion && touched.descripcion ? (
 										<div className='invalid-feedback'>{errors.descripcion}</div>
 									) : null}
 								</Col>
@@ -124,9 +127,10 @@ const AddClass = ( {newClass} ) => {
 										as='select'
 										name='materia'
 										onChange={handleChange}
+										onBlur={handleBlur}
 										value={values.materia}
                                         className={`form-control ${
-											errors.materia  ? 'is-invalid' : ''
+											errors.materia && touched.materia ? 'is-invalid' : ''
 										}`}
 									>
 										<option value='' >Seleccione una materia</option>                                     
@@ -135,7 +139,7 @@ const AddClass = ( {newClass} ) => {
                                             }
                                         ) }
 									</Form.Control>
-                                    {errors.materia ? (
+                                    {errors.materia && touched.materia ? (
 										<div className='invalid-feedback'>{errors.materia}</div>
 									) : null}
 								</Col>
@@ -146,9 +150,10 @@ const AddClass = ( {newClass} ) => {
 										as='select'
 										name='grado'
 										onChange={handleChange}
+										onBlur={handleBlur}
 										value={values.grado}      
                                         className={`form-control ${
-											errors.grado  ? 'is-invalid' : ''
+											errors.grado && touched.grado ? 'is-invalid' : ''
 										}`}                                  
 									>	
                                         <option  value='' >Seleccione un nivel</option>										                                     
@@ -157,7 +162,7 @@ const AddClass = ( {newClass} ) => {
                                             }
                                         ) }
 									</Form.Control>
-                                    {errors.grado ? (
+                                    {errors.grado && touched.grado ? (
 										<div className='invalid-feedback'>{errors.grado}</div>
 									) : null}
 								</Col>
@@ -167,9 +172,10 @@ const AddClass = ( {newClass} ) => {
 										as='select'
 										name='nivel'
 										onChange={handleChange}
+										onBlur={handleBlur}
 										value={values.nivel}
                                         className={`form-control ${
-											errors.nivel  ? 'is-invalid' : ''
+											errors.nivel && touched.nivel ? 'is-invalid' : ''
 										}`}
 									>
                                         <option  value='' >Seleccione un nivel</option>
@@ -178,7 +184,7 @@ const AddClass = ( {newClass} ) => {
                                             }
                                         ) }
 									</Form.Control>
-                                    {errors.nivel ? (
+                                    {errors.nivel && touched.nivel ? (
 										<div className='invalid-feedback'>{errors.nivel}</div>
 									) : null}
 								</Col>

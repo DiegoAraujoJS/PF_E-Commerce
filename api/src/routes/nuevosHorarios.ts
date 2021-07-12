@@ -1,5 +1,7 @@
-const nuevosHorarios = (arrayHorarios: Array<string[]>, query?: any) => {
-    console.log("arrayHorarios",arrayHorarios)
+import editCalendar from "./editCalendar"
+
+const nuevosHorarios = (arrayHorarios: Array<string[]>, query?: any, queryAdd?: any) => {
+
     if (query) {
         var query_1: string = query[0].substring(0, 2) + query[0].substring(3, 5) + query[0].substring(6, 8)
         var query_2: string = query[1].substring(0, 2) + query[1].substring(3, 5) + query[1].substring(6, 8)
@@ -14,11 +16,10 @@ const nuevosHorarios = (arrayHorarios: Array<string[]>, query?: any) => {
             }
         }
     })
-    console.log("horarioNumero",horarioNumero)
+
     let numeros = horarioNumero && horarioNumero.map(elements => elements && elements.join().split(","))
 
     let ordenados = numeros && numeros.join().split(",").sort()
-    console.log("ordenados",ordenados)  
 
     let eliminarRepetidos = ordenados?.filter((item, index) => {
         return ordenados?.indexOf(item) === index;
@@ -26,7 +27,7 @@ const nuevosHorarios = (arrayHorarios: Array<string[]>, query?: any) => {
 
     let acomodarFechas = eliminarRepetidos?.map((item, index) => {
         if (query && query_1 && query_2) {
-            if (item > query_1 && item < query_2 ) {
+            if (item > query_1 && item < query_2) {
                 if (Number(ordenados[index]) - Number(query_1) < Number(query_2) - Number(ordenados[index])) {
                     return query_1
                 }
@@ -34,10 +35,10 @@ const nuevosHorarios = (arrayHorarios: Array<string[]>, query?: any) => {
                     return query_2
                 }
             }
-            else if(item === query_1 && index%2===0){
+            else if (item === query_1 && index % 2 === 0) {
                 return query_2
             }
-            else if(item === ordenados[index-1]){
+            else if (item === ordenados[index - 1]) {
                 return null
             }
             else {
@@ -48,7 +49,6 @@ const nuevosHorarios = (arrayHorarios: Array<string[]>, query?: any) => {
             return item
         }
     })
-    console.log("acomodarFechas",acomodarFechas)
 
     let horariosNuevos = acomodarFechas?.map(h => {
         if (h) {
@@ -58,17 +58,15 @@ const nuevosHorarios = (arrayHorarios: Array<string[]>, query?: any) => {
             }
         }
     })
-    console.log("horariosNuevos",horariosNuevos)
 
     let eliminarVacios = horariosNuevos.filter(fecha => fecha)
-    console.log("eliminarVacios",eliminarVacios)
 
     let horariosTuplas: Array<(string | undefined)[]> = []
 
     for (let i = 0; i < horariosNuevos.length; i += 2) {
         horariosTuplas.push([horariosNuevos && horariosNuevos[i], horariosNuevos && horariosNuevos[i + 1]])
     }
-    console.log("horariosTuplas",horariosTuplas)
+
     let completarHorario = horariosTuplas.map(e => {
         if (!e[1] && e[0]) {
             if (horariosTuplas && horariosTuplas[horariosTuplas.length - 2][1] && e[0] !== horariosTuplas[horariosTuplas.length - 2][1]) {
@@ -106,9 +104,29 @@ const nuevosHorarios = (arrayHorarios: Array<string[]>, query?: any) => {
             return e
         }
     })
-    console.log("completarHorario",completarHorario)
-    let resultado = completarHorario.filter(fecha => fecha[0] && fecha[1])
 
-    return resultado
+    let resultadoAdd = completarHorario.filter(fecha => fecha[0] && fecha[1])
+
+    // console.log("resultadoAdd", resultadoAdd)
+    // if (queryAdd) {
+    //     console.log("queryAdd", queryAdd)
+    //     if (queryAdd.disponible) {
+    //         let resultadoEdit = editCalendar(resultadoAdd, queryAdd)
+    //         console.log("resultadoEdit  1", resultadoEdit)
+    //         return resultadoEdit
+    //     }
+    //     else {
+    //         let resultadoEdit = editCalendar(resultadoAdd, queryAdd)
+    //         console.log("resultadoEdit  1", resultadoEdit)
+    //         return resultadoEdit
+    //     }
+    // }
+    // else {
+    //     console.log(resultadoAdd)
+    //     return resultadoAdd
+    // }
+
+    return resultadoAdd
 }
+
 export default nuevosHorarios
