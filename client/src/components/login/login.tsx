@@ -1,14 +1,11 @@
 import React, { useState } from 'react';
 import logo from '../../logo.svg';
-// import style from './login.module.css';
-import { loginWithGoogle,/*  signIn, createUser */ } from '../../firebase';
+import style from './login.module.css';
+import { loginWithGoogle /*  signIn, createUser */, auth } from '../../firebase';
 import {Link} from 'react-router-dom'
-import {auth} from '../../firebase'
+
 import axios from 'axios';
 import { useHistory } from "react-router-dom";
-
-
-// const clientId = '335971411859-5nphqdu952putvhvsd8db519ltc2klco.apps.googleusercontent.com'
 
 function Login() {
     const [email, setEmail] = useState('')
@@ -16,7 +13,7 @@ function Login() {
     const [errors, setErrors] = useState({email: null, password: null})
     const [wrongPassword, setWrongPassword] = React.useState(false)
     const [logoutSuccess, setLogoutSuccess] = React.useState('')
-    console.log(auth.currentUser)
+    // console.log(auth.currentUser)
 
     const history = useHistory()
 
@@ -40,12 +37,10 @@ function Login() {
             if(!email) {
                 //email, a pesar de estar vacío y entrar a esta validación, no cambia el estado
                 setErrors({...errors, email: 'Se necesita un E-mail'})
-                console.log('entro aca') 
             } else if(!/\S+@{1}[a-zA-Z]+\.{1}[a-z]{3}\.?[a-z]*/gm.test(email)) {
                 setErrors({...errors, email: 'E-mail inválido'}) 
             } else {
                 setErrors({...errors, email: null})
-                console.log('tambien acá')
             }
             if(!/[\S]/.test(password)) {
                 setErrors({...errors, password: 'No puede contener espacio blanco'})
@@ -58,17 +53,6 @@ function Login() {
 
     async function handleSubmit(e) {
         e.preventDefault()
-        // validateErrors();
-        // console.log(errors)
-        // if(errors.email || errors.password) {
-        //     alert('Fail')
-        // } else {
-        //     alert('Login successful');
-        // }
-
-
-        // console.log('auth', auth.currentUser)
-        // const response = await signIn(email, password);
         try {
             const login = await axios.post('http://localhost:3001/api/session/login', {
                 mail: email,
@@ -84,6 +68,7 @@ function Login() {
 
     function signOut(e) {
 
+        auth.signOut();
         if (localStorage.getItem('user')) {
             localStorage.removeItem('user')
             setLogoutSuccess('true')
@@ -96,8 +81,51 @@ function Login() {
             alert("Fallo al cerrar sesión")
         }           
     }
-    
-    
+
+    return (
+        <div className={"text-center " + style.height}>
+            <div className={style.formSignin}>
+                <form onSubmit={handleSubmit}>
+                    <img className="mb-4" src={logo} alt='logo' width="72" height="57"></img>
+            
+                    <h1 className="h3 mb-3 fw-normal">INICIAR SESIÓN</h1>
+                    <div className="form-floating">
+                        <input type='email' value={email} name='emailValue' onChange={handleChange} placeholder='Email' className="form-control"/>
+                        <label htmlFor="floatingInput">Email</label>
+                    </div>
+                    <div className="form-floating">
+                        <input type='password' value={password} name='passValue' onChange={handleChange} placeholder='Contraseña' className="form-control"/>
+                        <label htmlFor="floatingPassword">Password</label>
+                    </div>
+                    
+                    <input type="submit" value="login" className="w-100 btn btn-lg btn-primary mb-2" />
+                
+                    <Link to='/registro'>
+                        <button className="w-100 btn btn-lg btn-secondary mb-2">Regístrate</button>
+                    </Link>
+                    <button className="w-100 btn btn-lg btn-light mb-2" onClick={loginWithGoogle}>
+                        Sign in with Google
+                    </button>
+                    <button className="w-100 btn btn-lg btn-danger mb-2" onClick={signOut}>
+                        Logout
+                    </button>
+                    <div className="">
+                        {wrongPassword ? <span className={"badge bg-danger"}>
+                            El usuario o la contraseña son incorrectos</span> : ''}
+
+                        {logoutSuccess === 'true' ? <span className={"badge bg-danger"}>
+                            Fin de sesión exitosa</span> : ''}
+
+                        {logoutSuccess === 'false' ? <span className={"badge bg-danger"}>
+                            Debes haber iniciado sesion para deslogearte</span> : ''}
+                    </div>
+                </form>
+            </div>
+        </div>
+    )
+}
+
+export default Login;
 
     // const onSuccess = (res) => {
     //     console.log('[login Success] currentUser: ', res.profileObj);
@@ -114,71 +142,17 @@ function Login() {
     //     alert('Fail');
     // }
 
-    return (
-        <div className="container">
-                 
-       
-            <div>
-                <img src={logo} alt='logo'></img>
-            </div>
-            <div>
-                <h1>INICIAR SESIÓN</h1>
-                <button className="sign-in" onClick={loginWithGoogle}>
-                    Sign in with Google
-                </button>
-                <button className="sign-in" onClick={signOut}>
-                    Logout
-                </button>
-                <form onSubmit={handleSubmit}>
-                    <div>
-                       
-                    </div>
-                    <input type='text' value={email} name='emailValue' onChange={handleChange} placeholder='Email'/>
-                    <input type='password' value={password} name='passValue' onChange={handleChange} placeholder='Contraseña'/>
-                    <input type="submit" value="login" />
-                </form>
-                <Link to='/registro'>
-                    <button>Regístrate</button>
-                </Link>
-                
-            </div>
-            {wrongPassword ? <span style={{color:'red'}}>El usuario o la contraseña son incorrectos</span> : ''}
-            {logoutSuccess === 'true' ? <span style={{color:'red'}}>Fin de sesión exitosa</span> : ''}
-            {logoutSuccess === 'false' ? <span style={{color:'red'}}>Debes haber iniciado sesion para deslogearte</span> : ''}
-        </div>
-    )
-}
-
-export default Login;
+      // validateErrors();
+        // console.log(errors)
+        // if(errors.email || errors.password) {
+        //     alert('Fail')
+        // } else {
+        //     alert('Login successful');
+        // }
 
 
-/* <main className="form-signin">
-<form>
-  <img className="mb-4" src="../assets/brand/bootstrap-logo.svg" alt="" width="72" height="57"/>
-  <h1 className="h3 mb-3 fw-normal">Please sign in</h1>
-
-  <div className="form-floating">
-    <input type="email" className="form-control" id="floatingInput" placeholder="name@example.com"/>
-    <label htmlFor="floatingInput">Email address</label>
-  </div>
-  <div className="form-floating">
-    <input type="password" className="form-control" id="floatingPassword" placeholder="Password"/>
-    <label htmlFor="floatingPassword">Password</label>
-  </div>
-
-  <div className="checkbox mb-3">
-    <label>
-      <input type="checkbox" value="remember-me"></input>
-    </label>
-  </div>
-  <button className="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
-  <p className="mt-5 mb-3 text-muted">&copy; 2017–2021</p>
-</form>
-</main> */
-
-
-
-
+        // console.log('auth', auth.currentUser)
+        // const response = await signIn(email, password);
 
 
 
