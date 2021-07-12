@@ -220,7 +220,7 @@ router.post('/add', async (req: Request, res: Response) => {
         res.send(crearClase)
     }
     catch (error) {
-        res.send(error)
+        res.status(404).send(new Error('Mail no valido'))
     }
 })
 

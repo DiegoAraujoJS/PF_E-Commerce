@@ -10,18 +10,17 @@ const getByIdClaim = (id) => {
 };
 
 
-function newClass ( data: Object ) {
+function newClass ( data ) {
     return (dispatch) => {
-        console.log(data)
-        axios.post("http://localhost:3001/clases/add", data)
+        axios.post("http://localhost:3001/api/clases/add", data)
             .then(response => {
                 dispatch({ type: actionsType.NEW_CLASS , payload: response.data }) 
             })
-            .catch(err => { dispatch({ type: actionsType.NEW_CLASS, payload: "Error" })})    
+            .catch(err => { 
+                dispatch({ type: actionsType.NEW_CLASS, payload: err })
+            })    
         }
 }
-
-
 
 
 export { getByIdClaim , newClass}

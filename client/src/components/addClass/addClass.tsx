@@ -46,7 +46,7 @@ const grados = [
 ]
 
 
-const AddClass = ( newClass ) => {
+const AddClass = ( {newClass} ) => {
     return (
         <Container className='shadow p-3 mb-5 bg-white rounded flex'>
         <h1>Agrega tu propia Clase!</h1>
@@ -60,8 +60,7 @@ const AddClass = ( newClass ) => {
                     grado: "",
                     nivel: ""
 				}}
-				onSubmit={(values) => {
-                    console.log(values)
+				onSubmit={(values) => {   
                     newClass(values)
 				}}			
         >
