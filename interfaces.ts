@@ -9,16 +9,34 @@ enum Role {USER, PROFESSOR, ADMIN}
 
 type ArrayDePares = [`${number}:${number}:00`, `${number}:${number}:00`][]
 
-interface Horario{
-
+interface Horario {
     email: string;
     fecha: {
         anio: number,
         mes: number,
         dia: number
-    },
-    disponible: ArrayDePares,
-    ocupado?: ArrayDePares
+    };
+    disponible: ArrayDePares;
+    ocupado: ArrayDePares | null;
+}
+
+interface Disponible{
+    email: string;
+    fecha: {
+        anio: number,
+        mes: number,
+        dia: number
+    };
+    disponible: ArrayDePares;
+}
+interface Ocupado {
+    email: string;
+    fecha: {
+        anio: number,
+        mes: number,
+        dia: number
+    };
+    ocupado: ArrayDePares;
 }
 
 type CalendarioResponse = Horario[]
@@ -34,5 +52,5 @@ interface ProfesorProps {
 }
 
 
-export type {UserProps, ArrayDePares, Horario, CalendarioResponse, ProfesorProps}
+export type {UserProps, ArrayDePares, Disponible, Ocupado, CalendarioResponse, ProfesorProps, Horario}
 export {Role}
