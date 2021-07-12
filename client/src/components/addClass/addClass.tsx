@@ -126,6 +126,9 @@ const AddClass = ( newClass ) => {
 										name='materia'
 										onChange={handleChange}
 										value={values.materia}
+                                        className={`form-control ${
+											errors.materia  ? 'is-invalid' : ''
+										}`}
 									>
 										<option value='' >Seleccione una materia</option>                                     
 										{ materias.map( (materia,i) => {
@@ -133,6 +136,9 @@ const AddClass = ( newClass ) => {
                                             }
                                         ) }
 									</Form.Control>
+                                    {errors.materia ? (
+										<div className='invalid-feedback'>{errors.materia}</div>
+									) : null}
 								</Col>
 
 								<Col sm={12} md={4} className='p-4 mt-3'>
@@ -141,15 +147,20 @@ const AddClass = ( newClass ) => {
 										as='select'
 										name='grado'
 										onChange={handleChange}
-										value={values.grado}                                        
+										value={values.grado}      
+                                        className={`form-control ${
+											errors.grado  ? 'is-invalid' : ''
+										}`}                                  
 									>	
                                         <option  value='' >Seleccione un nivel</option>										                                     
 										{ grados.map( (grado,i) => {
                                             return <option key={i+20} value={grado}>{grado}</option>
                                             }
                                         ) }
-
 									</Form.Control>
+                                    {errors.grado ? (
+										<div className='invalid-feedback'>{errors.grado}</div>
+									) : null}
 								</Col>
                                 <Col sm={12} md={4} className='p-4 mt-3'>
 								<Form.Label className='text-uppercase'>Nivel</Form.Label>
@@ -158,6 +169,9 @@ const AddClass = ( newClass ) => {
 										name='nivel'
 										onChange={handleChange}
 										value={values.nivel}
+                                        className={`form-control ${
+											errors.nivel  ? 'is-invalid' : ''
+										}`}
 									>
                                         <option  value='' >Seleccione un nivel</option>
                                         { niveles.map( (nivel,i) => {
@@ -165,6 +179,9 @@ const AddClass = ( newClass ) => {
                                             }
                                         ) }
 									</Form.Control>
+                                    {errors.nivel ? (
+										<div className='invalid-feedback'>{errors.nivel}</div>
+									) : null}
 								</Col>
 							</Row>
                             <Row>
@@ -181,12 +198,13 @@ const AddClass = ( newClass ) => {
 		</Container>
     )
 }
+
 const mapStateToProps = (state) => {
-    console.log(state)
     return {
         class: state.class
     }
 }
+
 const mapDispachToProps = (dispatch) => {
     return {
         newClass: (data) => dispatch(newClass(data))
