@@ -66,13 +66,13 @@ class Calendar extends Component {
           id: DayPilot.guid(),
           text: modal.result
         });
-        console.log(args.start.value)
+        
         const año=args.start.value.slice(0,-15)
         const mes=args.start.value.slice(5,-12)
         const dia=args.start.value.slice(8,-9)
         const start=args.start.value.slice(11)
         const end=args.end.value.slice(11)
-        console.log("Esto es la fecha",año, mes, dia, start, end)
+        
         const horario1={
           disponible: [[start,  end]],
           email: email,
@@ -197,8 +197,48 @@ class Calendar extends Component {
       startDate: date(today, "yy/mm/dd"),
       events: persons,
     });
+  }
+    
 
-    /*     .then((res) => {
+  render() {
+    var { ...config } = this.state;
+    return (
+      <div style={styles.wrap}>
+        <div style={styles.left}>
+          <DayPilotNavigator
+            selectMode={"week"}
+            showMonths={1}
+            skipMonths={1}
+            startDate={date(today, "yy/mm/dd")}
+            selectionDay={date(today, "yy/mm/dd")}
+            onTimeRangeSelected={(args) => {
+              this.setState({
+                startDate: args.day,
+              });
+            }}
+          />
+        </div>
+        <div style={styles.main}>
+          <DayPilotCalendar
+            {...config}
+            ref={(component) => {
+              this.calendar = component && component.control;
+            }}
+          />
+        </div>
+      </div>
+    );
+  }
+}
+
+export default Calendar;
+
+
+
+
+
+
+/*     .then((res) => {
         var tempo = [];
 
         for (var i = 0; i < res.data.length; i++) {
@@ -240,41 +280,8 @@ class Calendar extends Component {
           events: persons,
         });
       }); */
-  } // aca termina el didmount
+   // aca termina el didmount
   /* start: "2021-07-07T10:30:00",
       end: "2021-07-07T13:00:00",
       text: "Esto es del back",
  */
-
-  render() {
-    var { ...config } = this.state;
-    return (
-      <div style={styles.wrap}>
-        <div style={styles.left}>
-          <DayPilotNavigator
-            selectMode={"week"}
-            showMonths={1}
-            skipMonths={1}
-            startDate={date(today, "yy/mm/dd")}
-            selectionDay={date(today, "yy/mm/dd")}
-            onTimeRangeSelected={(args) => {
-              this.setState({
-                startDate: args.day,
-              });
-            }}
-          />
-        </div>
-        <div style={styles.main}>
-          <DayPilotCalendar
-            {...config}
-            ref={(component) => {
-              this.calendar = component && component.control;
-            }}
-          />
-        </div>
-      </div>
-    );
-  }
-}
-
-export default Calendar;
