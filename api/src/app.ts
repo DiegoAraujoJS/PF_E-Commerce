@@ -18,7 +18,7 @@ app.use(session({
     saveUninitialized: false,
     resave: false,
     cookie: {
-        httpOnly: false,
+        httpOnly: true,
         secure: false,
         maxAge: 1000 * 60 * 60 * 24 * 7 
     }
@@ -29,7 +29,7 @@ app.use(
         origin: config.cors,
         credentials: true,
         methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'DELETE'],
-        allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept']
+        allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'authorization']
     } )
 )
 

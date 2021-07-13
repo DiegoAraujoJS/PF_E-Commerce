@@ -13,6 +13,8 @@ function Login() {
     const [errors, setErrors] = useState({email: null, password: null})
     const [wrongPassword, setWrongPassword] = React.useState(false)
     const [logoutSuccess, setLogoutSuccess] = React.useState('')
+    const [cooki, setCooki] = React.useState('')
+
     // console.log(auth.currentUser)
 
     const history = useHistory()
@@ -57,7 +59,9 @@ function Login() {
             const login = await axios.post(`http://localhost:3001/api/login`, {
                 mail: email,
                 password: password
-            }, { withCredentials: true })
+            })
+            document.cookie = `token=${JSON.stringify(login.data.token)}`
+            localStorage.setItem('login', 'true')
             
             history.push('/home')
             window.location.reload();
@@ -69,7 +73,7 @@ function Login() {
     async function signOut(e) {
         // auth.signOut();
         try {
-            const logout = await axios.post(`http://localhost:3001/api/login/logout`, null, { withCredentials: true })
+            const logout = await axios.post(`http://localhost:3001/api/login/logout`)
             setLogoutSuccess('true')
             alert("Se cerro sesión correctamente")
             // window.location.reload();
