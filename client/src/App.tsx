@@ -15,7 +15,7 @@ import Register from './components/Register/Register'
 import axios from 'axios';
 import NavBar from './components/NavBar/NavBar'
 import AddClass from './components/addClass/addClass';
-import SearchBar from './components/searchBar/SearchBar';
+
 import SearchBarHome from './components/searchBar/SearchBarHome';
 import getCookieValue from './cookieParser';
 
