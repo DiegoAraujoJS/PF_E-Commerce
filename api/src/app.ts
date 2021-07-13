@@ -23,15 +23,15 @@ app.use(session({
         maxAge: 1000 * 60 * 60 * 24 * 7 
     }
 }));
-
-app.use(
-    cors( {
-        origin: config.cors,
-        credentials: true,
-        methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'DELETE'],
-        allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'authorization']
-    } )
-)
+app.use(cors())
+// app.use(
+//     cors( {
+//         origin: config.cors,
+//         credentials: true,
+//         methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'DELETE'],
+//         allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'authorization']
+//     } )
+// )
 
 interface Error {
     message: string;

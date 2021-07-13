@@ -13,7 +13,6 @@ function Login() {
     const [password, setPassword] = useState('');
     const [errors, setErrors] = useState({email: null, password: null})
     const [wrongPassword, setWrongPassword] = React.useState(false)
-    const [logoutSuccess, setLogoutSuccess] = React.useState('')
     const [cooki, setCooki] = React.useState('')
 
     // console.log(auth.currentUser)
@@ -71,19 +70,6 @@ function Login() {
             setWrongPassword(true)
         }
     }
-    async function signOut(e) {
-        // auth.signOut();
-        try {
-            const logout = await axios.post(`http://localhost:3001/api/login/logout`)
-            localStorage.removeItem('login')
-            setLogoutSuccess('true')
-            alert("Se cerro sesión correctamente")
-            // window.location.reload();
-        } catch (err) {
-            setLogoutSuccess('false')
-            alert("Fallo al cerrar sesión. No has iniciado sesión?")
-        }   
-    }
 
     const inputRef = useRef()
     const eyeRef = useRef()
@@ -103,13 +89,15 @@ function Login() {
 
     const test: CSS.Properties = {
         position: 'relative',
-        border: '2px solid red',
+        display: 'flex',
+        alignItems: 'center'
     }
     const inputMargin: CSS.Properties = {
         margin: '0px'
     }
     const eyeTest: CSS.Properties = {
-        position: 'absolute'
+        position: 'absolute',
+        right: '15px'
     }
 
     return (
@@ -140,18 +128,9 @@ function Login() {
                     <button className="w-100 btn btn-lg btn-light mb-2" onClick={loginWithGoogle}>
                         Sign in with Google
                     </button>
-                    <button type="button" className="w-100 btn btn-lg btn-danger mb-2" onClick={signOut}>
-                        Logout
-                    </button>
                     <div className="">
                         {wrongPassword ? <span className={"badge bg-danger"}>
                             El usuario o la contraseña son incorrectos</span> : ''}
-
-                        {logoutSuccess === 'true' ? <span className={"badge bg-danger"}>
-                            Fin de sesión exitosa</span> : ''}
-
-                        {logoutSuccess === 'false' ? <span className={"badge bg-danger"}>
-                            Debes haber iniciado sesion para deslogearte</span> : ''}
                     </div>
                 </form>
             </div>
