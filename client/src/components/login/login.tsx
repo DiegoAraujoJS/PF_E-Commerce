@@ -76,10 +76,14 @@ function Login() {
 
     function myFunction() {
         let showPassword: any = inputRef.current
+        let eye: any = eyeRef.current
+
         if (showPassword && showPassword.type === "password") {
             showPassword.type = "text";
+            eye.className = "fa fa-eye";
           } else {
             showPassword.type = "password";
+            eye.className = "fa fa-eye-slash";
         }
     }
 
