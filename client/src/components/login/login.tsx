@@ -89,18 +89,26 @@ function Login() {
     }
 
     const inputRef = useRef()
+    const eyeRef = useRef()
 
     function myFunction() {
         let showPassword: any = inputRef.current
+        let eye: any = eyeRef.current
+
         if (showPassword && showPassword.type === "password") {
             showPassword.type = "text";
+            eye.className = "fa fa-eye";
           } else {
             showPassword.type = "password";
+            eye.className = "fa fa-eye-slash";
         }
     }
 
     return (
         <div className={"text-center " + style.height}>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"></link>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"></link>
+
             <div className={style.formSignin}>
                 <form onSubmit={handleSubmit}>
                     <img className="mb-4" src={logo} alt='logo' width="72" height="57"></img>
@@ -113,7 +121,7 @@ function Login() {
                     <div className="form-floating">
                         <input ref={inputRef} type='password' value={password} name='passValue' onChange={handleChange} placeholder='Contraseña' className="form-control"/>
                         <label htmlFor="floatingPassword">Password</label>
-                        <input type="checkbox" onClick={() => myFunction()}/>Show Password
+                        <i ref={eyeRef} className="fa fa-eye-slash" onClick={() => myFunction()}></i>
                     </div>
                     
                     <input type="submit" value="Login" className="w-100 btn btn-lg btn-primary mb-2" />
