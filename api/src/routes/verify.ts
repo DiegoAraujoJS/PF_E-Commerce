@@ -8,9 +8,6 @@ interface MiddlewareRequest extends Request {
 }
 
 router.post('/', validateToken, (req: any , res: Response) => {
-
-    console.log(req)
-    
     return res.send(req.data)
 })
 

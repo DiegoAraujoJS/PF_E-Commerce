@@ -7,6 +7,8 @@ import { Nav } from "react-bootstrap";
 import axios from 'axios';
 import { NavDropdown } from "react-bootstrap";
 import { Link } from 'react-router-dom';
+import deleteAllCookies from "../../cookieClearer";
+
 
 export default function SearchBar() {
 
@@ -21,6 +23,7 @@ export default function SearchBar() {
     // auth.signOut();
     try {
         const logout = await axios.post(`http://localhost:3001/api/login/logout`, {}, {withCredentials: true})
+        deleteAllCookies()
         localStorage.removeItem('login')
         alert("Se cerro sesión correctamente")
         // window.location.reload();

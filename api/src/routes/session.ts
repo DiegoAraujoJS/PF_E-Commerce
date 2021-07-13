@@ -17,6 +17,8 @@ router.post('/register', async (req:Request, res:Response) => {
     }
     if (newUser.lastName && newUser.name && newUser.mail && req.body.password){
 
+        console.log(req.body.password)
+
         const [user, created] = await User.findOrCreate({
             where: {
                 mail: req.body.mail

@@ -18,32 +18,38 @@ import AddClass from './components/addClass/addClass';
 
 import SearchBarHome from './components/searchBar/SearchBarHome';
 import getCookieValue from './cookieParser';
+import deleteAllCookies from './cookieClearer';
 
 enum Role {USER, PROFESSOR, ADMIN}
 function App() {
   const history = useHistory()
 
-  let [role, setRole] = React.useState(undefined)
+  let [role, setRole] = React.useState(10)
 
   React.useEffect(() => {
-    async function setRoleOfUser() {
+    async function setRoleOfUser() { 
       
       if (localStorage.getItem('login')) {
+        if (!document.cookie){
+          localStorage.removeItem('login')
+          console.log('local storage removed')
+          return <Redirect to='/home'/>
+        }
         const token = getCookieValue('token').slice(1, getCookieValue('token').length - 1)
         const roleOfUser = await axios.post(`http://localhost:3001/api/verify`, {},{ withCredentials: true, headers: {Authorization: token}})
-        console.log(roleOfUser)
+        console.log(roleOfUser.data.role)
         if (roleOfUser.status === 200) {
-          
+          console.log('status 200')
           setRole(roleOfUser.data.role)
         } else {
-          
+          console.log('else')
           setRole(undefined)      
         }
-        console.log(role)
+        
       }
     }
     setRoleOfUser()
-  }, [])
+  }, [role])
 
 
   return (
