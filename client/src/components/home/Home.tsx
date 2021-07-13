@@ -15,7 +15,7 @@ const Home = ({ dispatchInput }) => {
     
 
     function handleChange(e) {
-        console.log(searchInput)
+        
         switch(e.target.name) {
             case 'searchInput':
                 setSearchInput(e.target.value)
@@ -55,7 +55,7 @@ const Home = ({ dispatchInput }) => {
         
         const response: any = await axios.get(`http://localhost:3001/api/clases?busqueda=${searchInput}`)
         dispatchInput(response.data)
-        console.log(response)
+        
         history.push('/clases')
     }
 

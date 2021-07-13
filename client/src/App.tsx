@@ -15,32 +15,41 @@ import Register from './components/Register/Register'
 import axios from 'axios';
 import NavBar from './components/NavBar/NavBar'
 import AddClass from './components/addClass/addClass';
-import SearchBar from './components/searchBar/SearchBar';
+
 import SearchBarHome from './components/searchBar/SearchBarHome';
+import getCookieValue from './cookieParser';
+import deleteAllCookies from './cookieClearer';
 
 enum Role {USER, PROFESSOR, ADMIN}
 function App() {
   const history = useHistory()
 
-  let [role, setRole] = React.useState(undefined)
+  let [role, setRole] = React.useState(10)
 
   React.useEffect(() => {
-    async function setRoleOfUser() {
+    async function setRoleOfUser() { 
       
-      if (localStorage.getItem('user')) {
-        const roleOfUser = await axios.get(`http://localhost:3001/api/session/${JSON.parse(localStorage.getItem('user')).mail}`)
-        console.log('role ', roleOfUser)
-        if (roleOfUser.data === 1) {
-          console.log(localStorage.getItem('user'))
-          setRole(roleOfUser.data)
-        } else {
-          console.log('el servidor no encontro ningun usuario con ese id')    
-          setRole(roleOfUser.data)      
+      if (localStorage.getItem('login')) {
+        if (!document.cookie){
+          localStorage.removeItem('login')
+          console.log('local storage removed')
+          return <Redirect to='/home'/>
         }
+        const token = getCookieValue('token').slice(1, getCookieValue('token').length - 1)
+        const roleOfUser = await axios.post(`http://localhost:3001/api/verify`, {},{ withCredentials: true, headers: {Authorization: token}})
+        console.log(roleOfUser.data.role)
+        if (roleOfUser.status === 200) {
+          console.log('status 200')
+          setRole(roleOfUser.data.role)
+        } else {
+          console.log('else')
+          setRole(undefined)      
+        }
+        
       }
     }
     setRoleOfUser()
-  }, [])
+  }, [role])
 
 
   return (
@@ -50,7 +59,7 @@ function App() {
 
       
         {role !== undefined ? <Route exact path='/claim' render={() => {
-          console.log(role)
+          
           if (role === Role.ADMIN) {
             return <Claims/>
           } else {

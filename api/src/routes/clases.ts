@@ -99,7 +99,7 @@ router.post('/puntuar', async (req: Request, res: Response) => {
                 where: { clase: id },
                 attributes: ['puntuacion']
             })
-            console.log(puntuaciones)
+            
             let puntuacionClase = parseFloat((puntuaciones.map(elemento => elemento.puntuacion).reduce(function (a, b) { return a + b; }) / puntuaciones.length).toFixed(2))
             let claseActualizada = await Clase.findOne({
                 where: { id },
@@ -116,9 +116,9 @@ router.post('/puntuar', async (req: Request, res: Response) => {
                 where: { Profesor_mail: profesor },
                 attributes: ['puntuacion']
             })
-            console.log(clasesProfesor)
+            
             let puntuacionProfesor = parseFloat((clasesProfesor.map(elemento => elemento.puntuacion).reduce(function (a, b) { return a + b; }) / clasesProfesor.length).toFixed(2))
-            console.log(clasesProfesor.map(elemento => elemento.puntuacion))
+            
             let profesorPorActualizar = await Profesor.findOne({ where: { User_mail: profesor } });
             if (profesorPorActualizar) {
                 profesorPorActualizar = await profesorPorActualizar.update({ puntuacion: puntuacionProfesor })
@@ -166,7 +166,7 @@ router.put('/puntuar', async (req: Request, res: Response) => {
                 where: { clase: id },
                 attributes: ['puntuacion']
             })
-            console.log(puntuaciones)
+            
             let puntuacionClase = parseFloat((puntuaciones.map(elemento => elemento.puntuacion).reduce(function (a, b) { return a + b; }) / puntuaciones.length).toFixed(2))
             let claseActualizada = await Clase.findOne({
                 where: { id },
@@ -183,9 +183,9 @@ router.put('/puntuar', async (req: Request, res: Response) => {
                 where: { Profesor_mail: profesor },
                 attributes: ['puntuacion']
             })
-            console.log(clasesProfesor)
+            
             let puntuacionProfesor = parseFloat((clasesProfesor.map(elemento => elemento.puntuacion).reduce(function (a, b) { return a + b; }) / clasesProfesor.length).toFixed(2))
-            console.log(clasesProfesor.map(elemento => elemento.puntuacion))
+            
             let profesorPorActualizar = await Profesor.findOne({ where: { User_mail: profesor } });
             if (profesorPorActualizar) {
                 profesorPorActualizar = await profesorPorActualizar.update({ puntuacion: puntuacionProfesor })

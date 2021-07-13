@@ -1,7 +1,7 @@
 import { ProfesorProps, UserProps } from "../../interfaces"
 import Alumno from "./models/Alumno"
 import Clase from "./models/Clase"
-
+import axios from "axios"
 import Profesor from "./models/Profesor"
 
 import Reclamo from "./models/Reclamo"
@@ -16,7 +16,7 @@ const bootstrap = async () => {
         mail: "diegoaraujo@gmail.com",
         role: Role.ADMIN 
     }
-    const Diego = {...d, password:123456}
+    const Diego = {...d, password:"123456"}
 
     const b: UserProps = {
         name: `Braian`,
@@ -24,7 +24,7 @@ const bootstrap = async () => {
         mail: "braiansilva@gmail.com",
         role: Role.ADMIN
     }
-    const Braian = {...b, password:123456}
+    const Braian = {...b, password:"123456"}
 
     const e: UserProps = {
         name: 'Edward',
@@ -32,7 +32,7 @@ const bootstrap = async () => {
         mail: "edwardburgos@gmail.com",
         role: Role.ADMIN
     }
-    const Edward = {...e, password:123456}
+    const Edward = {...e, password:"123456"}
 
     const j: UserProps = {
         name: 'Javier',
@@ -40,7 +40,7 @@ const bootstrap = async () => {
         mail: "javiercarro@gmail.com",
         role: Role.ADMIN
     }
-    const Javi = {...j, password:123456}
+    const Javi = {...j, password:"123456"}
 
     const m: UserProps = {
         name: 'Mauro',
@@ -48,7 +48,7 @@ const bootstrap = async () => {
         mail: "mauroleonel@gmail.com", 
         role: Role.ADMIN
     }
-    const Mauro = {...m, password:123456}
+    const Mauro = {...m, password:"123456"}
 
 
     
@@ -102,7 +102,7 @@ const bootstrap = async () => {
     }
 
     for (const x of [Diego, Braian, Edward, Mauro, Javi]) {
-        await User.create(x)
+        await axios.post(`http://localhost:3001/api/session/register`, x)
     }
     for (const x of [DiegoProfe, BraianProfe, EdwardProfe, MauroProfe, JaviProfe]){
         await Profesor.create(x)

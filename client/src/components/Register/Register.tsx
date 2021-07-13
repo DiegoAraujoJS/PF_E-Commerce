@@ -5,7 +5,7 @@ import { useHistory } from "react-router-dom";
 import { UserProps } from '../../../../interfaces'
 import { Formik } from 'formik';
 import { validationSchemaRegister } from '../../utils/validations';
-
+import imageParser from '../../utils/imageParser';
 
 enum ErrorType { INCOMPLETE_INPUTS, ALREADY_EXISTS }
 enum Role { USER, PROFESSOR, ADMIN }
@@ -37,8 +37,8 @@ const Register = () => {
     }
     if (values.mail === 'braiansilva@gmail.com') user.role = Role.ADMIN;
     try {
-      const registro = await axios.post('http://localhost:3001/api/session/register', userWithPassword)
-      console.log(registro)
+      const registro = await axios.post('http://localhost:3001/api/session/register', userWithPassword, { withCredentials: true })
+      
       if (registro) alert("Se registro correctamente")
       
       history.push('/login')
@@ -88,7 +88,7 @@ const Register = () => {
                   // onChange={(e) => setMail(e.target.value)}
                   onChange={handleChange}
                   onBlur={handleBlur}
-                  type="text" id="inputEmail" placeholder="Email"
+                  type="text" id="inputEmail" 
                   className={`form-control ${errors.mail && touched.mail ? 'is-invalid' : ''}`}
                 />
                 {errors.mail && touched.mail && <div className='invalid-feedback'>{errors.mail}</div>}
@@ -104,13 +104,12 @@ const Register = () => {
                   onBlur={handleBlur}
                   type="password"
                   id="inputPassword4"
-                  placeholder="Password"
                   className={`form-control ${errors.password && touched.password ? 'is-invalid' : ''}`} 
                   />
                 {errors.password && touched.password  && <div className='invalid-feedback'>{errors.password}</div>}
               </div>
             </div>
-            <div className="form-group mt-2">
+            <div className="form-group col-md-6 mt-2">
               <label htmlFor="inputAddress">Nombre</label>
               <input
                 name="name"
@@ -120,11 +119,11 @@ const Register = () => {
                 onBlur={handleBlur}
                 type="text"
                 className={`form-control ${errors.name && touched.name ? 'is-invalid' : ''}`} 
-                id="inputAddress" placeholder="1234 Main St"
+                id="inputAddress" 
               />
               {errors.name && touched.name && <div className='invalid-feedback'>{errors.name}</div>}
             </div>
-            <div className="form-group mt-2">
+            <div className="form-group col-md-6 mt-2">
               <label htmlFor="inputAddress2">Apellido</label>
               <input
                 name="lastName"
@@ -134,7 +133,7 @@ const Register = () => {
                 onBlur={handleBlur}
                 type="text"
                 className={`form-control ${errors.lastName && touched.lastName ? 'is-invalid' : ''}`} 
-                id="inputAddress2" placeholder="Apartment, studio, or floor" 
+                id="inputAddress2"  
                 />
               {errors.lastName && touched.lastName && <div className='invalid-feedback'>{errors.lastName}</div>}
             </div>
@@ -201,6 +200,8 @@ const Register = () => {
           </form >
         )}
       </Formik>
+      
+      
     </div>
   )
 }

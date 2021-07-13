@@ -13,7 +13,7 @@ afterAll(() => {
     
   });
 
-describe ('guarda y modifica el calendario del profesor correctamente', () => {
+xdescribe ('guarda y modifica el calendario del profesor correctamente', () => {
     const horario1:Disponible = {
         disponible: [['12:00:00', '14:00:00']],
         email: 'edwardburgos@gmail.com',

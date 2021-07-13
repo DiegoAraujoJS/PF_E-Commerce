@@ -29,7 +29,7 @@ const profesorEjemplo = [
     id: 3,
   },
 ];
-console.log(profesorEjemplo);
+
 const styles = {
   wrap: {
     display: "flex",
@@ -232,56 +232,3 @@ class Calendar extends Component {
 }
 
 export default Calendar;
-
-
-
-
-
-
-/*     .then((res) => {
-        var tempo = [];
-
-        for (var i = 0; i < res.data.length; i++) {
-          let año = res.data[i].fecha.anio.toString();
-          let mes = res.data[i].fecha.mes.toString();
-          let dia = res.data[i].fecha.dia.toString();
-          if (dia.length === 1) {
-            dia = "0" + dia;
-          }
-          if (mes.length === 1) {
-            mes = "0" + mes;
-          }
-          tempo.push({
-            start:
-              año + "-" + mes + "-" + dia + "T" + res.data[i].disponible[0][0],
-            end:
-              año + "-" + mes + "-" + dia + "T" + res.data[i].disponible[0][1],
-            text: "Disponible troesma",
-            backColor: "red",
-            moveDisabled: true,
-            resizeDisabled: true,
-            toolTop: "hola manito",
-          });
-          tempo.push({
-            start:
-              año + "-" + mes + "-" + dia + "T" + res.data[i].ocupado[0][0],
-            end: año + "-" + mes + "-" + dia + "T" + res.data[i].ocupado[0][1],
-            text: "Ocupado troesma",
-          });
-        }//ACA TERRMINA EL FOR
-        console.log("Tempo", tempo);
-
-        const persons = tempo;
-        console.log("Nuevo profe", res);
-        this.setState({
-          bubble: null,
-          showToolTip: false,
-          startDate: date(today, "yy/mm/dd"),
-          events: persons,
-        });
-      }); */
-   // aca termina el didmount
-  /* start: "2021-07-07T10:30:00",
-      end: "2021-07-07T13:00:00",
-      text: "Esto es del back",
- */
