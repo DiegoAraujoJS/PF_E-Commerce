@@ -10,7 +10,7 @@ import firebase from 'firebase/app';
 
 function Chat(props) {
   const [user] = useAuthState(auth);
-  console.log(auth);
+  
 
   return (
     <div className="App">

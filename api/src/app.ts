@@ -5,8 +5,7 @@ import cors from 'cors'
 import config from './lib/config';
 import routes from './routes/index'
 import session from 'express-session'
-import dotenv from 'dotenv'
-dotenv.config()
+
 const app = express()
 
 app.use(express.urlencoded({extended: true, limit: '50mb'}));
@@ -15,17 +14,22 @@ app.use(cookieParser());
 app.use(morgan('dev'));
 app.use(session({
     name: 'session-id',
-    secret: process.env.SESSION_SECRET,
+    secret: config.session_secret,
     saveUninitialized: false,
     resave: false,
+    cookie: {
+        httpOnly: false,
+        secure: false,
+        maxAge: 1000 * 60 * 60 * 24 * 7 
+    }
 }));
 
 app.use(
     cors( {
-        origin: '*',
+        origin: config.cors,
         credentials: true,
         methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'DELETE'],
-        allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'authorization', 'user']
+        allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept']
     } )
 )
 
@@ -42,5 +46,5 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 })
 
 app.use('/api', routes)
-console.log('hola')
+
 export default app;

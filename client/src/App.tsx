@@ -28,13 +28,13 @@ function App() {
     async function setRoleOfUser() {
       
       if (localStorage.getItem('user')) {
-        const roleOfUser = await axios.get(`http://localhost:3001/api/session/${JSON.parse(localStorage.getItem('user')).mail}`)
-        console.log('role ', roleOfUser)
+        const roleOfUser = await axios.get(`http://localhost:3001/api/session/${JSON.parse(localStorage.getItem('user')).mail}`, { withCredentials: true })
+        
         if (roleOfUser.data === 1) {
-          console.log(localStorage.getItem('user'))
+          
           setRole(roleOfUser.data)
         } else {
-          console.log('el servidor no encontro ningun usuario con ese id')    
+          
           setRole(roleOfUser.data)      
         }
       }
@@ -50,7 +50,7 @@ function App() {
 
       
         {role !== undefined ? <Route exact path='/claim' render={() => {
-          console.log(role)
+          
           if (role === Role.ADMIN) {
             return <Claims/>
           } else {

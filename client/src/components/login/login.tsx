@@ -54,12 +54,10 @@ function Login() {
     async function handleSubmit(e) {
         e.preventDefault()
         try {
-            const login = await axios.post(`http://localhost:3001/api/tokens/login`, {
+            const login = await axios.post(`http://localhost:3001/api/login`, {
                 mail: email,
                 password: password
-            })
-            await auth()
-            localStorage.setItem('user', JSON.stringify({mail: email}))
+            }, { withCredentials: true })
             
             history.push('/home')
             window.location.reload();
@@ -71,21 +69,14 @@ function Login() {
     async function signOut(e) {
         // auth.signOut();
         try {
-            localStorage.removeItem('user')
+            const logout = await axios.post(`http://localhost:3001/api/login/logout`, null, { withCredentials: true })
             setLogoutSuccess('true')
             alert("Se cerro sesión correctamente")
-            window.location.reload();
+            // window.location.reload();
         } catch (err) {
             setLogoutSuccess('false')
             alert("Fallo al cerrar sesión. No has iniciado sesión?")
         }   
-    }
-    async function auth () {
-        try {
-            const auth = await axios.get(`http://localhost:3001/api/tokens/auth`)
-        } catch (err) {
-            console.log(err)
-        }
     }
 
     const inputRef = useRef()
@@ -124,7 +115,7 @@ function Login() {
                     <button className="w-100 btn btn-lg btn-light mb-2" onClick={loginWithGoogle}>
                         Sign in with Google
                     </button>
-                    <button className="w-100 btn btn-lg btn-danger mb-2" onClick={signOut}>
+                    <button type="button" className="w-100 btn btn-lg btn-danger mb-2" onClick={signOut}>
                         Logout
                     </button>
                     <div className="">
@@ -144,33 +135,3 @@ function Login() {
 }
 
 export default Login;
-
-    // const onSuccess = (res) => {
-    //     console.log('[login Success] currentUser: ', res.profileObj);
-    // }
-
-    // const onFailure = (res) => {
-    //     console.log('[Login failed] res:', res);
-    // }
-
-    // const onLogoutSuccess = () => {
-    //     alert('Logout made successfully');
-    // }
-    // const onLogoutFailure = () => {
-    //     alert('Fail');
-    // }
-
-      // validateErrors();
-        // console.log(errors)
-        // if(errors.email || errors.password) {
-        //     alert('Fail')
-        // } else {
-        //     alert('Login successful');
-        // }
-
-
-        // console.log('auth', auth.currentUser)
-        // const response = await signIn(email, password);
-
-
-
