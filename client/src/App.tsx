@@ -15,7 +15,7 @@ import Register from './components/Register/Register'
 import axios from 'axios';
 import NavBar from './components/NavBar/NavBar'
 import AddClass from './components/addClass/addClass';
-import SearchBar from './components/searchBar/SearchBar';
+
 import SearchBarHome from './components/searchBar/SearchBarHome';
 import getCookieValue from './cookieParser';
 
@@ -27,6 +27,12 @@ function App() {
 
   React.useEffect(() => {
     async function setRoleOfUser() {
+
+      const getUser = localStorage.getItem('login') === 'true' ? await axios.post(`http://localhost:3001/api/verify`, {}, {headers: {Authorization: getCookieValue('token')}}) : undefined
+
+      const roleOfUser = getUser ? getUser.data.role : undefined
+
+      console.log(roleOfUser)
       
       if (localStorage.getItem('login')) {
         const token = getCookieValue('token').slice(1, getCookieValue('token').length - 1)

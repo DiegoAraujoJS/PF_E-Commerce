@@ -1,6 +1,7 @@
 import React, { useRef, useState , useImperativeHandle} from 'react';
 import logo from '../../logo.svg';
 import style from './login.module.css';
+import CSS from 'csstype';
 import { loginWithGoogle /*  signIn, createUser */, auth } from '../../firebase';
 import {Link} from 'react-router-dom'
 
@@ -12,7 +13,8 @@ function Login() {
     const [password, setPassword] = useState('');
     const [errors, setErrors] = useState({email: null, password: null})
     const [wrongPassword, setWrongPassword] = React.useState(false)
-    const [logoutSuccess, setLogoutSuccess] = React.useState('')
+    const [cooki, setCooki] = React.useState('')
+
     // console.log(auth.currentUser)
 
     const history = useHistory()
@@ -74,28 +76,49 @@ function Login() {
             const logout = await axios.post(`http://localhost:3001/api/login/logout`, null, { withCredentials: true })
 
             localStorage.removeItem('login')
-            setLogoutSuccess('true')
+            
             alert("Se cerro sesión correctamente")
             // window.location.reload();
         } catch (err) {
-            setLogoutSuccess('false')
+            
             alert("Fallo al cerrar sesión. No has iniciado sesión?")
         }   
     }
 
     const inputRef = useRef()
+    const eyeRef = useRef()
 
     function myFunction() {
         let showPassword: any = inputRef.current
+        let eye: any = eyeRef.current
+
         if (showPassword && showPassword.type === "password") {
             showPassword.type = "text";
+            eye.className = "fa fa-eye";
           } else {
             showPassword.type = "password";
+            eye.className = "fa fa-eye-slash";
         }
+    }
+
+    const test: CSS.Properties = {
+        position: 'relative',
+        display: 'flex',
+        alignItems: 'center'
+    }
+    const inputMargin: CSS.Properties = {
+        margin: '0px'
+    }
+    const eyeTest: CSS.Properties = {
+        position: 'absolute',
+        right: '15px'
     }
 
     return (
         <div className={"text-center " + style.height}>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"></link>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"></link>
+
             <div className={style.formSignin}>
                 <form onSubmit={handleSubmit}>
                     <img className="mb-4" src={logo} alt='logo' width="72" height="57"></img>
@@ -105,10 +128,10 @@ function Login() {
                         <input type='email' value={email} name='emailValue' onChange={handleChange} placeholder='Email' className="form-control"/>
                         <label htmlFor="floatingInput">Email</label>
                     </div>
-                    <div className="form-floating">
-                        <input ref={inputRef} type='password' value={password} name='passValue' onChange={handleChange} placeholder='Contraseña' className="form-control"/>
+                    <div style={test} className="form-floating">
+                        <input style={inputMargin} ref={inputRef} type='password' value={password} name='passValue' onChange={handleChange} placeholder='Contraseña' className="form-control"/>
                         <label htmlFor="floatingPassword">Password</label>
-                        <input type="checkbox" onClick={() => myFunction()}/>Show Password
+                        <i style={eyeTest} ref={eyeRef} className="fa fa-eye-slash" onClick={() => myFunction()}></i>
                     </div>
                     
                     <input type="submit" value="Login" className="w-100 btn btn-lg btn-primary mb-2" />
@@ -119,18 +142,9 @@ function Login() {
                     <button className="w-100 btn btn-lg btn-light mb-2" onClick={loginWithGoogle}>
                         Sign in with Google
                     </button>
-                    <button type="button" className="w-100 btn btn-lg btn-danger mb-2" onClick={signOut}>
-                        Logout
-                    </button>
                     <div className="">
                         {wrongPassword ? <span className={"badge bg-danger"}>
                             El usuario o la contraseña son incorrectos</span> : ''}
-
-                        {logoutSuccess === 'true' ? <span className={"badge bg-danger"}>
-                            Fin de sesión exitosa</span> : ''}
-
-                        {logoutSuccess === 'false' ? <span className={"badge bg-danger"}>
-                            Debes haber iniciado sesion para deslogearte</span> : ''}
                     </div>
                 </form>
             </div>
