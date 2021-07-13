@@ -64,7 +64,9 @@ class Calendar extends Component {
           start: args.start,
           end: args.end,
           id: DayPilot.guid(),
-          text: modal.result
+          text: modal.result,
+          moveDisabled: true,
+          resizeDisabled: true,
         });
         
         const año=args.start.value.slice(0,-15)
