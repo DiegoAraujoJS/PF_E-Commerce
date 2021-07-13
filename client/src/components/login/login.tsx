@@ -74,6 +74,7 @@ function Login() {
         // auth.signOut();
         try {
             const logout = await axios.post(`http://localhost:3001/api/login/logout`)
+            localStorage.setItem('login', 'false')
             setLogoutSuccess('true')
             alert("Se cerro sesión correctamente")
             // window.location.reload();
