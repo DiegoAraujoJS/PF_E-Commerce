@@ -17,6 +17,7 @@ import NavBar from './components/NavBar/NavBar'
 import AddClass from './components/addClass/addClass';
 import SearchBar from './components/searchBar/SearchBar';
 import SearchBarHome from './components/searchBar/SearchBarHome';
+import getCookieValue from './cookieParser';
 
 enum Role {USER, PROFESSOR, ADMIN}
 function App() {
@@ -27,16 +28,18 @@ function App() {
   React.useEffect(() => {
     async function setRoleOfUser() {
       
-      if (localStorage.getItem('user')) {
-        const roleOfUser = await axios.get(`http://localhost:3001/api/session/${JSON.parse(localStorage.getItem('user')).mail}`, { withCredentials: true })
-        
-        if (roleOfUser.data === 1) {
+      if (localStorage.getItem('login')) {
+        const token = getCookieValue('token').slice(1, getCookieValue('token').length - 1)
+        const roleOfUser = await axios.post(`http://localhost:3001/api/verify`, {},{ withCredentials: true, headers: {Authorization: token}})
+        console.log(roleOfUser)
+        if (roleOfUser.status === 200) {
           
-          setRole(roleOfUser.data)
+          setRole(roleOfUser.data.role)
         } else {
           
-          setRole(roleOfUser.data)      
+          setRole(undefined)      
         }
+        console.log(role)
       }
     }
     setRoleOfUser()

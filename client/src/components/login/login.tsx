@@ -58,7 +58,9 @@ function Login() {
                 mail: email,
                 password: password
             }, { withCredentials: true })
-            
+            document.cookie = `token=${JSON.stringify(login.data.token)}`
+
+            localStorage.setItem('login', 'true')
             history.push('/home')
             window.location.reload();
             
@@ -70,6 +72,8 @@ function Login() {
         // auth.signOut();
         try {
             const logout = await axios.post(`http://localhost:3001/api/login/logout`, null, { withCredentials: true })
+
+            localStorage.removeItem('login')
             setLogoutSuccess('true')
             alert("Se cerro sesión correctamente")
             // window.location.reload();
