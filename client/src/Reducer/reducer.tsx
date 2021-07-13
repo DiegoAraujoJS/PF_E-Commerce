@@ -6,7 +6,8 @@ let initialState = {
     professor: [],
     claim: [],
     class: {},
-    newRegister: {}
+    newRegister: {},
+    user: {}
 };
 
 const all = (state = initialState, action) => {

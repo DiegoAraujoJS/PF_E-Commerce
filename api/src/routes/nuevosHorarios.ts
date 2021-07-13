@@ -107,25 +107,6 @@ const nuevosHorarios = (arrayHorarios: Array<string[]>, query?: any, queryAdd?: 
 
     let resultadoAdd = completarHorario.filter(fecha => fecha[0] && fecha[1])
 
-    // console.log("resultadoAdd", resultadoAdd)
-    // if (queryAdd) {
-    //     console.log("queryAdd", queryAdd)
-    //     if (queryAdd.disponible) {
-    //         let resultadoEdit = editCalendar(resultadoAdd, queryAdd)
-    //         console.log("resultadoEdit  1", resultadoEdit)
-    //         return resultadoEdit
-    //     }
-    //     else {
-    //         let resultadoEdit = editCalendar(resultadoAdd, queryAdd)
-    //         console.log("resultadoEdit  1", resultadoEdit)
-    //         return resultadoEdit
-    //     }
-    // }
-    // else {
-    //     console.log(resultadoAdd)
-    //     return resultadoAdd
-    // }
-
     return resultadoAdd
 }
 
