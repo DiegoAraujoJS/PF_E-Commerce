@@ -1,6 +1,7 @@
 import React, { useRef, useState , useImperativeHandle} from 'react';
 import logo from '../../logo.svg';
 import style from './login.module.css';
+import CSS from 'csstype';
 import { loginWithGoogle /*  signIn, createUser */, auth } from '../../firebase';
 import {Link} from 'react-router-dom'
 
@@ -104,6 +105,17 @@ function Login() {
         }
     }
 
+    const test: CSS.Properties = {
+        position: 'relative',
+        border: '2px solid red',
+    }
+    const inputMargin: CSS.Properties = {
+        margin: '0px'
+    }
+    const eyeTest: CSS.Properties = {
+        position: 'absolute'
+    }
+
     return (
         <div className={"text-center " + style.height}>
             <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"></link>
@@ -118,10 +130,10 @@ function Login() {
                         <input type='email' value={email} name='emailValue' onChange={handleChange} placeholder='Email' className="form-control"/>
                         <label htmlFor="floatingInput">Email</label>
                     </div>
-                    <div className="form-floating">
-                        <input ref={inputRef} type='password' value={password} name='passValue' onChange={handleChange} placeholder='Contraseña' className="form-control"/>
+                    <div style={test} className="form-floating">
+                        <input style={inputMargin} ref={inputRef} type='password' value={password} name='passValue' onChange={handleChange} placeholder='Contraseña' className="form-control"/>
                         <label htmlFor="floatingPassword">Password</label>
-                        <i ref={eyeRef} className="fa fa-eye-slash" onClick={() => myFunction()}></i>
+                        <i style={eyeTest} ref={eyeRef} className="fa fa-eye-slash" onClick={() => myFunction()}></i>
                     </div>
                     
                     <input type="submit" value="Login" className="w-100 btn btn-lg btn-primary mb-2" />
