@@ -1,13 +1,14 @@
 import editCalendar from "./editCalendar"
+import { CalendarioResponse, Horario, ArrayDePares, Fecha } from '../../../interfaces';
 
-const nuevosHorarios = (arrayHorarios: Array<string[]>, query?: any, queryAdd?: any) => {
-
+const nuevosHorarios = (arrayHorarios: Array<string[]>, query?:ArrayDePares|any, queryAdd?: ArrayDePares|any) => {
+    console.log("arrayHorarios", arrayHorarios)
     if (query) {
         var query_1: string = query[0].substring(0, 2) + query[0].substring(3, 5) + query[0].substring(6, 8)
         var query_2: string = query[1].substring(0, 2) + query[1].substring(3, 5) + query[1].substring(6, 8)
     }
 
-    let horarioNumero = arrayHorarios.map(h => {
+    let horarioNumero: string[][] = arrayHorarios?.map(h => {
         if (h) {
             if (h[0].length === 8 && h[1].length === 8) {
                 let sumaHorario_1 = h[0].substring(0, 2) + h[0].substring(3, 5) + h[0].substring(6, 8)
@@ -17,15 +18,15 @@ const nuevosHorarios = (arrayHorarios: Array<string[]>, query?: any, queryAdd?: 
         }
     })
 
-    let numeros = horarioNumero && horarioNumero.map(elements => elements && elements.join().split(","))
+    let numeros: string[][] = horarioNumero && horarioNumero?.map(elements => elements && elements?.join().split(","))
 
-    let ordenados = numeros && numeros.join().split(",").sort()
+    let ordenados: string[] = numeros && numeros?.join().split(",").sort()
 
-    let eliminarRepetidos = ordenados?.filter((item, index) => {
+    let eliminarRepetidos: string[] = ordenados?.filter((item, index) => {
         return ordenados?.indexOf(item) === index;
     })
 
-    let acomodarFechas = eliminarRepetidos?.map((item, index) => {
+    let acomodarFechas: string[] = eliminarRepetidos?.map((item, index) => {
         if (query && query_1 && query_2) {
             if (item > query_1 && item < query_2) {
                 if (Number(ordenados[index]) - Number(query_1) < Number(query_2) - Number(ordenados[index])) {
@@ -50,7 +51,7 @@ const nuevosHorarios = (arrayHorarios: Array<string[]>, query?: any, queryAdd?: 
         }
     })
 
-    let horariosNuevos = acomodarFechas?.map(h => {
+    let horariosNuevos: string[] = acomodarFechas?.map(h => {
         if (h) {
             if (h.length === 6) {
                 let horario = h.substring(0, 2) + ":" + h.substring(2, 4) + ":" + h.substring(4, 6)
@@ -59,15 +60,15 @@ const nuevosHorarios = (arrayHorarios: Array<string[]>, query?: any, queryAdd?: 
         }
     })
 
-    let eliminarVacios = horariosNuevos.filter(fecha => fecha)
+    let eliminarVacios: string[] = horariosNuevos.filter(fecha => fecha)
 
     let horariosTuplas: Array<(string | undefined)[]> = []
 
-    for (let i = 0; i < horariosNuevos.length; i += 2) {
+    for (let i = 0; i < eliminarVacios.length; i += 2) {
         horariosTuplas.push([horariosNuevos && horariosNuevos[i], horariosNuevos && horariosNuevos[i + 1]])
     }
 
-    let completarHorario = horariosTuplas.map(e => {
+    let completarHorario: string[][] = horariosTuplas?.map(e => {
         if (!e[1] && e[0]) {
             if (horariosTuplas && horariosTuplas[horariosTuplas.length - 2][1] && e[0] !== horariosTuplas[horariosTuplas.length - 2][1]) {
                 if (e[0].substring(0, 2) + e[0].substring(3, 5) + e[0].substring(6, 8) > query_2) {
@@ -104,8 +105,8 @@ const nuevosHorarios = (arrayHorarios: Array<string[]>, query?: any, queryAdd?: 
             return e
         }
     })
-
-    let resultadoAdd = completarHorario.filter(fecha => fecha[0] && fecha[1])
+    console.log("completarHorario", completarHorario)
+    let resultadoAdd : ArrayDePares[]|string[][] = completarHorario?.filter(fecha => fecha[0] && fecha[1])
 
     // console.log("resultadoAdd", resultadoAdd)
     // if (queryAdd) {
@@ -125,7 +126,7 @@ const nuevosHorarios = (arrayHorarios: Array<string[]>, query?: any, queryAdd?: 
     //     console.log(resultadoAdd)
     //     return resultadoAdd
     // }
-
+    console.log("resultadoAdd", resultadoAdd)
     return resultadoAdd
 }
 

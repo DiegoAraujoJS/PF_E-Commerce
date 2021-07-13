@@ -4,7 +4,7 @@ import Profesor from '../models/Profesor'
 import User from '../models/Usuario';
 import { Op, where } from 'sequelize'
 import { isNullishCoalesce } from 'typescript';
-import { CalendarioResponse, Horario, ArrayDePares } from '../../../interfaces';
+import { CalendarioResponse, Horario, ArrayDePares, Fecha } from '../../../interfaces';
 import nuevosHorarios from './nuevosHorarios';
 import editCalendar from './editCalendar';
 const router = Router()
@@ -35,10 +35,11 @@ let queryBack: CalendarioResponse = [
 ]
 
 
+
 router.post('/add', async (req: Request, res: Response) => {
 
     let query: Horario = req.body
-
+    console.log("query", query )
     const query_disponible_1: string = query.disponible[0][0].substring(0, 2) + query.disponible[0][0].substring(3, 5) + query.disponible[0][0].substring(6, 8)
     const query_disponible_2: string = query.disponible[0][1].substring(0, 2) + query.disponible[0][1].substring(3, 5) + query.disponible[0][1].substring(6, 8)
     const query_ocupado_1: string = query.ocupado && query.ocupado[0][0].substring(0, 2) + query.ocupado[0][0].substring(3, 5) + query.ocupado[0][0].substring(6, 8)
@@ -49,45 +50,46 @@ router.post('/add', async (req: Request, res: Response) => {
     if(query.disponible && query.ocupado && query_ocupado_1 >= query_disponible_1 && query_ocupado_1 <=  query_disponible_2 || query_disponible_1 >= query_disponible_1 && query_disponible_1 <= query_ocupado_2) return res.send("Los horarios disponibles y ocupados entran en conflicto entre si")
 
     try {
-        if ( query.disponible && query.disponible[0][0].substring(0,2) < "00" || query.disponible[0][1].substring(0,2) > "24") return res.send("El horario disponible es incorrecto")
-
-        let profesor = await Profesor.findOne({
+        let profesor: Profesor = await Profesor.findOne({
             where: {
                 User_mail: query.email
             }
         })
-
+      
         if (profesor) {
             if (profesor.calendario) {
-                let indice = profesor.calendario.findIndex(element => element.fecha.anio === query.fecha.anio && element.fecha.mes === query.fecha.mes && element.fecha.dia === query.fecha.dia)
-
-                let calendario = profesor.calendario[indice]
-
+                let indice :number = profesor.calendario?.findIndex(element => element.fecha.anio === query.fecha.anio && element.fecha.mes === query.fecha.mes && element.fecha.dia === query.fecha.dia)
+              
+                let calendario:Horario = profesor.calendario[indice]
+                console.log("calendario", calendario )
                 if (calendario) {
 
-                    let nuevaFecha = {
+                    let nuevaFecha : Fecha = {
+                        email: query.email,
+                        fecha: query.fecha,
                         disponible: calendario.disponible ? query.disponible ? nuevosHorarios([...calendario.disponible, query.disponible[0]], query.ocupado && query.ocupado[0] ) : calendario.disponible : null,
                         ocupado: calendario.ocupado ? query.ocupado ? nuevosHorarios([...calendario.ocupado, query.ocupado[0]], query.disponible[0] ) : calendario.ocupado : null,
                     }
-         
-                    let nuevoDisponible = query.ocupado ? editCalendar(nuevaFecha.disponible, query.ocupado[0]) : nuevaFecha.disponible;
-                   
-                    let nuevoOcupado =  query.disponible ? editCalendar(nuevaFecha.ocupado, query.disponible[0]) : nuevaFecha.ocupado;
-                      
-                    let resultado = {
+
+                    console.log("nuevaFecha", nuevaFecha )
+                    let nuevoDisponible: ArrayDePares[] | string[][] = query.ocupado && query.ocupado[0] ? editCalendar(nuevaFecha.disponible, query.ocupado[0]) : nuevosHorarios([...calendario.disponible, query.disponible[0]]) ;
+                    console.log("nuevoDisponible", nuevoDisponible )
+                    let nuevoOcupado: ArrayDePares[] | string[][] = query.disponible && query.disponible[0] ? editCalendar(nuevaFecha.ocupado, query.disponible[0]) : nuevosHorarios([...calendario.ocupado, query.ocupado[0]]);
+
+                    let resultado: Fecha = {
                         email: query.email,
                         fecha: query.fecha,
-                        disponible: nuevoDisponible,
-                        ocupado: nuevoOcupado,
-                    }
+                        disponible: nuevoDisponible ? nuevoDisponible : nuevaFecha.disponible,
+                        ocupado: nuevoOcupado ? nuevoOcupado : nuevaFecha.ocupado,
+                    }           
 
-                    let nuevoCalendario = profesor.calendario.map((e, i) => i === indice ? resultado : e)
+                    let nuevoCalendario: Fecha[] = profesor.calendario?.map((e, i) => i === indice ? resultado : e)
 
                     profesor.set({
                         ...profesor,
                         calendario: nuevoCalendario
                     })
-                    let calendarioEditado = await profesor.save()
+                    let calendarioEditado: Profesor = await profesor.save()
 
                     res.send(calendarioEditado)
 
@@ -105,7 +107,7 @@ router.post('/add', async (req: Request, res: Response) => {
                             }
                         ]
                     })
-                    let calendarioEditado = await profesor.save()
+                    let calendarioEditado : Profesor= await profesor.save()
                     return res.send(calendarioEditado)
                 }
             }
@@ -121,13 +123,14 @@ router.post('/add', async (req: Request, res: Response) => {
                         }
                     ]
                 })
-                let calendarioEditado = await profesor.save()
+                let calendarioEditado: Profesor = await profesor.save()
                 return res.send(calendarioEditado)
             }
         }
     }
     catch (error) {
-        return res.send(error)
+        console.log(error)
+        return res.send("Ops! hubo un error")
     }
 });
 

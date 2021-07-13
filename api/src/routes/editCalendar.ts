@@ -1,12 +1,13 @@
-const editCalendar = (arrayHorarios: Array<string[]>, query?:any) => {
+import { CalendarioResponse, Horario, ArrayDePares, Fecha } from '../../../interfaces';
+const editCalendar = (arrayHorarios: ArrayDePares[]|string[][], query?: ArrayDePares|any) => {
 
-    let completarHorario = arrayHorarios.map(h => {
+    let completarHorario: ArrayDePares[]|string[][] = arrayHorarios?.map(( h:string|any ) => {
 
         if (query) {
-            let sumaHorario_1 = h[0].substring(0, 2) + h[0].substring(3, 5) + h[0].substring(6, 8)
-            let sumaHorario_2 = h[1].substring(0, 2) + h[1].substring(3, 5) + h[1].substring(6, 8)
-            let sumaHorarioOcupado_1 = query[0].substring(0, 2) + query[0].substring(3, 5) + query[0].substring(6, 8)
-            let sumaHorarioOcupado_2 = query[1].substring(0, 2) + query[1].substring(3, 5) + query[1].substring(6, 8)
+            let sumaHorario_1: string = h[0].substring(0, 2) + h[0].substring(3, 5) + h[0].substring(6, 8)
+            let sumaHorario_2: string = h[1].substring(0, 2) + h[1].substring(3, 5) + h[1].substring(6, 8)
+            let sumaHorarioOcupado_1: string  = query[0].substring(0, 2) + query[0].substring(3, 5) + query[0].substring(6, 8)
+            let sumaHorarioOcupado_2: string = query[1].substring(0, 2) + query[1].substring(3, 5) + query[1].substring(6, 8)
 
 
             if (sumaHorario_1 >= sumaHorarioOcupado_1 && sumaHorario_2 <= sumaHorarioOcupado_2) {
@@ -54,7 +55,7 @@ const editCalendar = (arrayHorarios: Array<string[]>, query?:any) => {
         }
     })
 
-    let resultado = completarHorario.filter(horarios => horarios)
+    let resultado: ArrayDePares[]|any[][] = completarHorario?.map(((horarios: ArrayDePares|string[] ) => { if(horarios) return horarios }))
 
     return resultado
 

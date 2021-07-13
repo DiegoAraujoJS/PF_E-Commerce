@@ -51,6 +51,16 @@ interface ProfesorProps {
     score: number;
 }
 
+interface Fecha {
+    email: string;
+    fecha: {
+        anio: number,
+        mes: number,
+        dia: number
+    };
+    disponible: ArrayDePares[] | string[][];
+    ocupado: ArrayDePares[] | null | string[][];
+}
 
-export type {UserProps, ArrayDePares, Disponible, Ocupado, CalendarioResponse, ProfesorProps, Horario}
+export type {UserProps, ArrayDePares, Disponible, Ocupado, CalendarioResponse, ProfesorProps, Horario, Fecha}
 export {Role}
