@@ -76,7 +76,7 @@ router.post('/add', async (req: Request, res: Response) => {
                         email: query.email,
                         fecha: query.fecha,
                         disponible: nuevaFecha.disponible,
-                        ocupado: nuevoOcupado && nuevoOcupado.length > 0 ? nuevoOcupado : nuevaFecha.ocupado,
+                        ocupado: nuevoOcupado && nuevoOcupado.length > 0 ? nuevoOcupado : calendario.ocupado,
                     }           
     
                     let nuevoCalendario: Fecha[] = profesor.calendario?.map((e, i) => i === indice ? resultadoAdd : e)
