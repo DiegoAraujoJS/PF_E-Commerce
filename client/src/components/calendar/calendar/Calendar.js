@@ -57,16 +57,6 @@ class Calendar extends Component {
           "Create a new event:",
           "Disponible"
         );
-        
-        dp.clearSelection();
-        if (!modal.result) { return; }
-        dp.events.add({
-          start: args.start,
-          end: args.end,
-          id: DayPilot.guid(),
-          text: modal.result
-        });
-        
         const año=args.start.value.slice(0,-15)
         const mes=args.start.value.slice(5,-12)
         const dia=args.start.value.slice(8,-9)
@@ -82,7 +72,25 @@ class Calendar extends Component {
               dia: dia
           }
       }
-        await axios.post('http://localhost:3001/api/calendario/add', horario1)
+        const resss=await axios.post('http://localhost:3001/api/calendario/add', horario1)
+        console.log(resss.data)
+        dp.clearSelection();
+        if (!modal.result) { return; }
+        if(resss.data!=="Todo mal"){dp.events.add({
+          start: args.start,
+          end: args.end,
+          id: DayPilot.guid(),
+          text: modal.result,
+          moveDisabled: true,
+          resizeDisabled: true,
+          borderColor:"black"
+        });}
+        else {
+          return alert("El horario añadido es invalido")
+          console.log("Todo mal")
+        }
+        
+        
 
       },
       eventDeleteHandling: "Update",
@@ -165,7 +173,7 @@ class Calendar extends Component {
           backColor: "blue",
           moveDisabled: true,
           resizeDisabled: true,
-          
+          borderColor:"black"
         })
       })}
       if(prof.ocupado){prof.ocupado.map((ocup)=>{
@@ -176,7 +184,7 @@ class Calendar extends Component {
           backColor: "red",
           moveDisabled: true,
           resizeDisabled: true,
-          
+          borderColor:"black"
         })
       })}
 
