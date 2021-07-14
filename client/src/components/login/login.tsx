@@ -17,9 +17,6 @@ function Login() {
 
     const history = useHistory()
 
-
-
-    
     function handleChange(e) {
         validateErrors()
         switch(e.target.name) {
@@ -61,7 +58,6 @@ function Login() {
                 password: password
             }, { withCredentials: true })
             document.cookie = `token=${JSON.stringify(login.data.token)}`
-
             localStorage.setItem('login', 'true')
             history.push('/home')
             window.location.reload();

@@ -8,7 +8,7 @@ import reclamos from './reclamos'
 import sessions from './session'
 import alumnos from './alumnos'
 import calendario from './calendario'
-
+import allCountries from './allCountries'
 
 const router = Router()
 
@@ -21,5 +21,6 @@ router.use('/reclamos', reclamos)
 router.use('/alumnos', alumnos)
 router.use('/calendario', calendario)
 router.use('/session', sessions)
+router.use('/allCountries', allCountries)
 
 export default router

@@ -13,18 +13,18 @@ import Chat from './components/Chat/Chat'
 import Home from './components/home/Home'
 import Register from './components/Register/Register'
 import axios from 'axios';
-import NavBar from './components/NavBar/NavBar'
+
 import AddClass from './components/addClass/addClass';
 
 import SearchBarHome from './components/searchBar/SearchBarHome';
 import getCookieValue from './cookieParser';
-import deleteAllCookies from './cookieClearer';
+
 
 enum Role {USER, PROFESSOR, ADMIN}
 function App() {
   const history = useHistory()
 
-  let [role, setRole] = React.useState(10)
+  let [user, setUser] = React.useState<{name: string, lastName: string, role: number, mail: string} | undefined>({name: '', lastName: '', role: null, mail: ''})
 
   React.useEffect(() => {
     async function setRoleOfUser() { 
@@ -36,20 +36,21 @@ function App() {
           return <Redirect to='/home'/>
         }
         const token = getCookieValue('token').slice(1, getCookieValue('token').length - 1)
-        const roleOfUser = await axios.post(`http://localhost:3001/api/verify`, {},{ withCredentials: true, headers: {Authorization: token}})
-        console.log(roleOfUser.data.role)
-        if (roleOfUser.status === 200) {
+        const thisUser = await axios.post(`http://localhost:3001/api/verify`, {},{ withCredentials: true, headers: {Authorization: token}})
+        
+        if (thisUser.status === 200) {
           console.log('status 200')
-          setRole(roleOfUser.data.role)
+          setUser(thisUser.data)
         } else {
           console.log('else')
-          setRole(undefined)      
+          setUser(undefined)      
         }
+        
         
       }
     }
     setRoleOfUser()
-  }, [role])
+  }, [])
 
 
   return (
@@ -58,9 +59,9 @@ function App() {
       <Route path='/clases/add'><AddClass /></Route>
 
       
-        {role !== undefined ? <Route exact path='/claim' render={() => {
+        {user.role !== undefined ? <Route exact path='/claim' render={() => {
           
-          if (role === Role.ADMIN) {
+          if (user.role === Role.ADMIN) {
             return <Claims/>
           } else {
             <Redirect to='/home'/>
@@ -71,7 +72,7 @@ function App() {
       }></Route> : null}
       
       <Route exact path='/claim/:id' render={() => {
-          if (role === Role.ADMIN) {
+          if (user.role === Role.ADMIN) {
             return <DetailClaim />
           }
           else  {
@@ -83,7 +84,7 @@ function App() {
       </Route>
 
       <Route exact path='/claim/id/add' render={() => {
-          if (role === Role.ADMIN) {
+          if (user.role === Role.ADMIN) {
             return <AddClaim />
           }
           else {
@@ -92,9 +93,10 @@ function App() {
       }
       }></Route>
 
-    <Route exact path='/perfil' render={() => {      
-          if(localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')).mail)  {    
-            return < Redirect to={`/perfil/${JSON.parse(localStorage.getItem('user')).mail}`} />
+    <Route exact path='/perfil' render={() => {
+      console.log(user)      
+          if(user.mail)  {    
+            return < Redirect to={`/perfil/${user.mail}`} />
           }           
         }
       }
@@ -105,7 +107,7 @@ function App() {
       } />
 
       <Route exact path='/registro' render={() => {
-          if (role === Role.USER || role === Role.PROFESSOR) {
+          if (user.role === Role.USER || user.role === Role.PROFESSOR) {
             return < Redirect to="/home" />
           }
           else {
