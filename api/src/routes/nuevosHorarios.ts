@@ -1,8 +1,8 @@
 import editCalendar from "./editCalendar"
 import { CalendarioResponse, Horario, ArrayDePares, Fecha } from '../../../interfaces';
 
-const nuevosHorarios = (arrayHorarios: Array<string[]>, query?:ArrayDePares|any, queryAdd?: ArrayDePares|any) => {
-    console.log("arrayHorarios", arrayHorarios)
+const nuevosHorarios = (arrayHorarios: ArrayDePares[]|string[][], query?:ArrayDePares|any) => {
+
     if (query) {
         var query_1: string = query[0].substring(0, 2) + query[0].substring(3, 5) + query[0].substring(6, 8)
         var query_2: string = query[1].substring(0, 2) + query[1].substring(3, 5) + query[1].substring(6, 8)
@@ -105,28 +105,9 @@ const nuevosHorarios = (arrayHorarios: Array<string[]>, query?:ArrayDePares|any,
             return e
         }
     })
-    console.log("completarHorario", completarHorario)
+
     let resultadoAdd : ArrayDePares[]|string[][] = completarHorario?.filter(fecha => fecha[0] && fecha[1])
 
-    // console.log("resultadoAdd", resultadoAdd)
-    // if (queryAdd) {
-    //     console.log("queryAdd", queryAdd)
-    //     if (queryAdd.disponible) {
-    //         let resultadoEdit = editCalendar(resultadoAdd, queryAdd)
-    //         console.log("resultadoEdit  1", resultadoEdit)
-    //         return resultadoEdit
-    //     }
-    //     else {
-    //         let resultadoEdit = editCalendar(resultadoAdd, queryAdd)
-    //         console.log("resultadoEdit  1", resultadoEdit)
-    //         return resultadoEdit
-    //     }
-    // }
-    // else {
-    //     console.log(resultadoAdd)
-    //     return resultadoAdd
-    // }
-    console.log("resultadoAdd", resultadoAdd)
     return resultadoAdd
 }
 

@@ -58,8 +58,8 @@ interface Fecha {
         mes: number,
         dia: number
     };
-    disponible: ArrayDePares[] | string[][];
-    ocupado: ArrayDePares[] | null | string[][];
+    disponible?: ArrayDePares[] | string[][];
+    ocupado?: ArrayDePares[] | null | string[][];
 }
 
 export type {UserProps, ArrayDePares, Disponible, Ocupado, CalendarioResponse, ProfesorProps, Horario, Fecha}
