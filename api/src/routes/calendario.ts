@@ -59,7 +59,7 @@ router.post('/add', async (req: Request, res: Response) => {
         if (profesor) {
             if (profesor.calendario) {
                 let indice :number = profesor.calendario?.findIndex(element => element.fecha.anio === query.fecha.anio && element.fecha.mes === query.fecha.mes && element.fecha.dia === query.fecha.dia)
-              
+               
                 let calendario:Horario = profesor.calendario[indice]
     
                 if (calendario) {
@@ -76,7 +76,7 @@ router.post('/add', async (req: Request, res: Response) => {
                         email: query.email,
                         fecha: query.fecha,
                         disponible: nuevaFecha.disponible,
-                        ocupado: nuevoOcupado && nuevoOcupado.length > 0 ? nuevoOcupado : calendario.ocupado,
+                        ocupado: nuevoOcupado && nuevoOcupado.length > 0 ? nuevoOcupado : undefined,
                     }           
     
                     let nuevoCalendario: Fecha[] = profesor.calendario?.map((e, i) => i === indice ? resultadoAdd : e)
@@ -144,7 +144,7 @@ router.put('/edit', async (req: Request, res: Response) => {
                 let indice:number = profesor.calendario.findIndex(element => element.fecha.anio === query.fecha.anio && element.fecha.mes === query.fecha.mes && element.fecha.dia === query.fecha.dia)
 
                 let calendario: Horario = profesor.calendario[indice]
-
+          
                 if (calendario) {
                         let nuevaFecha: Fecha = {
                             email: query.email,
@@ -152,17 +152,19 @@ router.put('/edit', async (req: Request, res: Response) => {
                             ocupado: calendario.ocupado ? query.ocupado ? nuevosHorarios([...calendario.ocupado, query.ocupado[0]]) : calendario.ocupado : query.ocupado
                         }
                         let nuevoDisponible: ArrayDePares[] | string[][] = query.ocupado && query.ocupado[0] ? editCalendar(calendario.disponible, query.ocupado[0]) : calendario.disponible ;
-
+                        console.log("nuevaFecha", nuevaFecha)
+                        console.log("nuevoDisponible", nuevoDisponible)
                         let resultadoEdit: Fecha = {
                             email: query.email,
                             fecha: query.fecha,                     
                             ocupado: nuevaFecha.ocupado,
-                            disponible: nuevoDisponible && nuevoDisponible.length > 0 ? nuevoDisponible : calendario.disponible
+                            disponible: nuevoDisponible && nuevoDisponible.length > 0 ? nuevoDisponible : undefined
                         }    
-                       
+           
+                        console.log("resultadoEdit", resultadoEdit)
                         let nuevoCalendario = profesor.calendario.map((fecha, i) => i === indice ? resultadoEdit : fecha)
                         
-
+                        console.log("nuevoCalendario", nuevoCalendario)
                         profesor.set({
                             ...profesor,
                             calendario: nuevoCalendario
