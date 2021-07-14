@@ -43,7 +43,7 @@ router.post('/add', async (req: Request, res: Response) => {
     const query_disponible_2: string = query.disponible[0][1].substring(0, 2) + query.disponible[0][1].substring(3, 5) + query.disponible[0][1].substring(6, 8)
     const query_ocupado_1: string = query.ocupado && query.ocupado[0][0].substring(0, 2) + query.ocupado[0][0].substring(3, 5) + query.ocupado[0][0].substring(6, 8)
     const query_ocupado_2: string = query.ocupado && query.ocupado[0][1].substring(0, 2) + query.ocupado[0][1].substring(3, 5) + query.ocupado[0][1].substring(6, 8)
-
+    console.log("Query", query_disponible_1)
     if(query.disponible && query_disponible_1 < "0" && query_disponible_1 > "240000"  || query_disponible_2 < "0" && query_disponible_2 > "240000" || query_disponible_2 < query_disponible_1) return res.send("El horario disponible es incorrecto")
     if(query.ocupado && query_ocupado_1 < "0" && query_ocupado_1 > "240000"  || query_disponible_2 < "0" && query_ocupado_2 > "240000" || query_ocupado_2 < query_disponible_1) return res.send("El horario ocupado es incorrecto")
     if(query.disponible && query.ocupado && query_ocupado_1 >= query_disponible_1 && query_ocupado_1 <=  query_disponible_2 || query_disponible_1 >= query_disponible_1 && query_disponible_1 <= query_ocupado_2) return res.send("Los horarios disponibles y ocupados entran en conflicto entre si")
@@ -56,15 +56,16 @@ router.post('/add', async (req: Request, res: Response) => {
                 User_mail: query.email
             }
         })
-
+        
         if (profesor) {
             if (profesor.calendario) {
                 let indice = profesor.calendario.findIndex(element => element.fecha.anio === query.fecha.anio && element.fecha.mes === query.fecha.mes && element.fecha.dia === query.fecha.dia)
-
+                
                 let calendario = profesor.calendario[indice]
-
+                console.log("Pasa por aqui el add1")
+               
                 if (calendario) {
-
+                    console.log("Pasa por aqui el add2")
                     let nuevaFecha = {
                         disponible: calendario.disponible ? query.disponible ? nuevosHorarios([...calendario.disponible, query.disponible[0]], query.ocupado && query.ocupado[0] ) : calendario.disponible : null,
                         ocupado: calendario.ocupado ? query.ocupado ? nuevosHorarios([...calendario.ocupado, query.ocupado[0]], query.disponible[0] ) : calendario.ocupado : null,
@@ -80,7 +81,7 @@ router.post('/add', async (req: Request, res: Response) => {
                         disponible: nuevoDisponible,
                         ocupado: nuevoOcupado,
                     }
-
+                    console.log("Pasa por aqui el add3")
                     let nuevoCalendario = profesor.calendario.map((e, i) => i === indice ? resultado : e)
 
                     profesor.set({
@@ -88,11 +89,12 @@ router.post('/add', async (req: Request, res: Response) => {
                         calendario: nuevoCalendario
                     })
                     let calendarioEditado = await profesor.save()
-
+                    
                     res.send(calendarioEditado)
 
                 }
                 else {
+                    console.log("Pasa por aqui el add4")
                     profesor.set({
                         ...profesor,
                         calendario: [

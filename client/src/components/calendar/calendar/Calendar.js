@@ -6,6 +6,8 @@ import {
 } from "daypilot-pro-react";
 import "./CalendarStyles.css";
 import axios from "axios";
+import getCookieValue from "../../../cookieParser";
+
 
 const today = new Date();
 const date = (fecha, formato) => {};
@@ -45,6 +47,9 @@ const styles = {
 class Calendar extends Component {
   constructor(props) {
     super(props);
+
+    
+    
     var email=this.props.email
     this.state = {
       viewType: "Week",
@@ -52,21 +57,16 @@ class Calendar extends Component {
       timeRangeSelectedHandling:"disabled"
       ,
       onTimeRangeSelected: async (args) => {
+        const token = getCookieValue('token').slice(1, getCookieValue('token').length - 1)
+        const roleOfUser = await axios.post(`http://localhost:3001/api/verify`, {},{ withCredentials: true, headers: {Authorization: token}})
+        console.log(roleOfUser.data.mail)
+        console.log("Token?", token)
+        if(roleOfUser.data.mail===email){
         const dp = this.calendar;
         const modal = await DayPilot.Modal.prompt(
           "Create a new event:",
           "Disponible"
         );
-        
-        dp.clearSelection();
-        if (!modal.result) { return; }
-        dp.events.add({
-          start: args.start,
-          end: args.end,
-          id: DayPilot.guid(),
-          text: modal.result
-        });
-        
         const año=args.start.value.slice(0,-15)
         const mes=args.start.value.slice(5,-12)
         const dia=args.start.value.slice(8,-9)
@@ -82,11 +82,29 @@ class Calendar extends Component {
               dia: dia
           }
       }
-        await axios.post('http://localhost:3001/api/calendario/add', horario1)
+        const resss=await axios.post('http://localhost:3001/api/calendario/add', horario1)
+        console.log(resss.data)
 
+
+        dp.clearSelection();
+        if (!modal.result) { return; }
+        if(resss.data!=="Todo mal"){
+          console.log("Todo bien")
+          dp.events.add({
+          start: args.start,
+          end: args.end,
+          id: DayPilot.guid(),
+          text: modal.result
+        });}else {
+          return alert("Los horarios estan mal")
+        }
+        
+        
+}
       },
       eventDeleteHandling: "Update",
       onEventClick: async args => {
+        
         const dp = this.calendar;
         const modal = await DayPilot.Modal.prompt("Update event text:", args.e.text());
         if (!modal.result) { return; }
@@ -126,7 +144,8 @@ class Calendar extends Component {
             }
         }
           e.data.backColor="blue"
-          await axios.post('http://localhost:3001/api/calendario/add', disponible1)
+          const ress=await axios.post('http://localhost:3001/api/calendario/add', disponible1)
+          console.log(ress)
         }
         console.log(e.data.backColor)
         dp.events.update(e);

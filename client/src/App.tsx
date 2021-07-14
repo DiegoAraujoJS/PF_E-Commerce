@@ -25,7 +25,7 @@ function App() {
   const history = useHistory()
 
   let [role, setRole] = React.useState(10)
-
+  
   React.useEffect(() => {
     async function setRoleOfUser() { 
       
@@ -37,7 +37,7 @@ function App() {
         }
         const token = getCookieValue('token').slice(1, getCookieValue('token').length - 1)
         const roleOfUser = await axios.post(`http://localhost:3001/api/verify`, {},{ withCredentials: true, headers: {Authorization: token}})
-        console.log(roleOfUser.data.role)
+        console.log(roleOfUser.data.mail)
         if (roleOfUser.status === 200) {
           console.log('status 200')
           setRole(roleOfUser.data.role)
@@ -93,6 +93,7 @@ function App() {
       }></Route>
 
     <Route exact path='/perfil' render={() => {      
+          
           if(localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')).mail)  {    
             return < Redirect to={`/perfil/${JSON.parse(localStorage.getItem('user')).mail}`} />
           }           

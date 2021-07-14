@@ -37,7 +37,7 @@ router.post('/', async (req:MiddlewareRequest, res: Response) => {
 })
 
 router.post('/logout', async (req: MiddlewareRequest, res: Response) => {
-    console.log(req)
+    console.log(req.session)
     if (!req.session.token) return res.status(400).send('You are not logged in.')
     req.session.token = '';
     return res.send('Successfully logged out.')
