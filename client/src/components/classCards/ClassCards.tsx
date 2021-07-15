@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import CSS from 'csstype';
 import ClassCard from '../classCard/ClassCard';
-/* import { connect } from 'react-redux';
-import axios from 'axios'
-import {ButtonGroup, Button} from 'react-bootstrap'
-import { User, Profesor, Class } from '../classCard/interfaces'; */
 import { store } from '../../Store/store';
 import { Button, Col, Container, Dropdown, DropdownButton, Form, InputGroup, ListGroup, ListGroupItem, Pagination, Row } from 'react-bootstrap';
 import { connect } from 'react-redux';

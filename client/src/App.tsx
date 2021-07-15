@@ -56,7 +56,7 @@ function App() {
     <BrowserRouter>
       <Route path='/'><SearchBarHome /></Route>
 
-      {user.role ? <Route exact path='/clases/add' render={() => {
+      {user.role !== undefined ? <Route exact path='/clases/add' render={() => {
           console.log(user.role)
           if (user.role === Role.ADMIN || user.role === Role.PROFESSOR) {
             return <AddClass/>

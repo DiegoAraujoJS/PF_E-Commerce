@@ -12,8 +12,6 @@ function validateToken(req: MiddlewareRequest, res: Response, next: () => void){
         if (err) return res.status(400).send('incorrect token')
         
         req.data = data
-
-        console.log(req.body.email, req.data.mail)
         next()
     })
 }

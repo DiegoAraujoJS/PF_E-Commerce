@@ -8,6 +8,8 @@ import {
 import "./CalendarStyles.css";
 import axios from "axios";
 
+let RoleAdmin = 2
+
 const today = new Date();
 const date = (fecha, formato) => {};
 const profesorEjemplo = [
@@ -152,7 +154,7 @@ class Calendar extends Component {
     this.state.token = token
     
     const email=this.props.email
-    if (thisUser && email === thisUser.data.mail){
+    if (thisUser && (email === thisUser.data.mail || thisUser.data.role === RoleAdmin) ){
       this.state.isUser = true;
     }
     if(email===undefined && localStorage.getItem('user')!==null)email=JSON.parse(localStorage.getItem('user')).mail
