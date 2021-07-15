@@ -198,28 +198,7 @@ const bootstrap = async () => {
         grado: "Sexto grado",
         nivel: 'Secundario',
         date:  {year: 2021, month: 8, day: 7, time: ['1212121w']}
-    })
-
-    // await Clase.create({
-    //     materia: 'matematica',
-    //     Profesor_mail: "diegoaraujo@gmail.com",
-    //     grado: "primer grado"
-    // })
-    // await Clase.create({
-    //     materia: 'matematica',
-    //     Profesor_mail: "braiansilva@gmail.com",
-    //     grado: "primer grado"
-    // })
-    // await Reclamo.create({
-    //     Denunciante_email: "edwardburgos@gmail.com",
-    //     Denunciado_email: "braiansilva@gmail.com",
-    //     Admin_email: "juanperez3@gmail.com"
-        
-    // })
-
-
-    
-
+    })    
 
 }
 export default bootstrap

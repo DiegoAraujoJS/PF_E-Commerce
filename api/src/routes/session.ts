@@ -1,7 +1,7 @@
 import { Router, Request, Response } from "express";
 import User from "../models/Usuario";
 import {UserProps, Role} from '../../../interfaces'
-import { hashPassword } from "./auth";
+import { hashPassword } from "../utils/auth";
 const router = Router()
 
 type Users = UserProps[]

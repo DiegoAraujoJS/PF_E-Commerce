@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import getCookieValue from "../../../cookieParser";
 import {
   DayPilot,
   DayPilotCalendar,
@@ -47,89 +48,98 @@ class Calendar extends Component {
     super(props);
     var email=this.props.email
     this.state = {
+      isUser: false,
+      token: '',
       viewType: "Week",
       durationBarVisible: true,
       timeRangeSelectedHandling:"disabled"
       ,
       onTimeRangeSelected: async (args) => {
-        const dp = this.calendar;
-        const modal = await DayPilot.Modal.prompt(
-          "Create a new event:",
-          "Disponible"
-        );
-        
-        dp.clearSelection();
-        if (!modal.result) { return; }
-        dp.events.add({
-          start: args.start,
-          end: args.end,
-          id: DayPilot.guid(),
-          text: modal.result
-        });
-        
-        const año=args.start.value.slice(0,-15)
-        const mes=args.start.value.slice(5,-12)
-        const dia=args.start.value.slice(8,-9)
-        const start=args.start.value.slice(11)
-        const end=args.end.value.slice(11)
-        
-        const horario1={
-          disponible: [[start,  end]],
-          email: email,
-          fecha: {
-              anio: año,
-              mes: mes,
-              dia: dia
-          }
-      }
-        await axios.post('http://localhost:3001/api/calendario/add', horario1)
+        if (this.state.isUser) {
 
-      },
+          const dp = this.calendar;
+          const modal = await DayPilot.Modal.prompt(
+            "Create a new event:",
+            "Disponible"
+          );
+          
+          dp.clearSelection();
+          if (!modal.result) { return; }
+          dp.events.add({
+            start: args.start,
+            end: args.end,
+            id: DayPilot.guid(),
+            text: modal.result
+          });
+          
+          const año=args.start.value.slice(0,-15)
+          const mes=args.start.value.slice(5,-12)
+          const dia=args.start.value.slice(8,-9)
+          const start=args.start.value.slice(11)
+          const end=args.end.value.slice(11)
+          
+          const horario1={
+            disponible: [[start,  end]],
+            email: email,
+            fecha: {
+                anio: año,
+                mes: mes,
+                dia: dia
+            }
+        } 
+          console.log(email)
+          await axios.post('http://localhost:3001/api/calendario/add', horario1, {headers: {Authorization: this.state.token}})
+  
+        }
+        },
       eventDeleteHandling: "Update",
       onEventClick: async args => {
-        const dp = this.calendar;
-        const modal = await DayPilot.Modal.prompt("Update event text:", args.e.text());
-        if (!modal.result) { return; }
-        const e = args.e;
-        e.data.text = modal.result;
-        if(e.data.text==="Ocupado"){
-          const año2=e.data.start.value.slice(0,-15)
-          const mes2=e.data.start.value.slice(5,-12)
-          const dia2=e.data.start.value.slice(8,-9)
-          const start2=e.data.start.value.slice(11)
-          const end2=e.data.end.value.slice(11)
-          const ocupado1={
-            ocupado: [[start2,  end2]],
-            email: email,
-            fecha: {
-                anio: año2,
-                mes: mes2,
-                dia: dia2
-            }
+        if (this.state.isUser){
+
+          const dp = this.calendar;
+          const modal = await DayPilot.Modal.prompt("Update event text:", args.e.text());
+          if (!modal.result) { return; }
+          const e = args.e;
+          e.data.text = modal.result;
+          if(e.data.text==="Ocupado"){
+            const año2=e.data.start.value.slice(0,-15)
+            const mes2=e.data.start.value.slice(5,-12)
+            const dia2=e.data.start.value.slice(8,-9)
+            const start2=e.data.start.value.slice(11)
+            const end2=e.data.end.value.slice(11)
+            const ocupado1={
+              ocupado: [[start2,  end2]],
+              email: email,
+              fecha: {
+                  anio: año2,
+                  mes: mes2,
+                  dia: dia2
+              }
+          }
+            e.data.backColor="red"
+            await axios.put('http://localhost:3001/api/calendario/edit', ocupado1, {headers: {Authorization: this.state.token}})
+          }
+          if(e.data.text==="Disponible"){
+            const año3=e.data.start.value.slice(0,-15)
+            const mes3=e.data.start.value.slice(5,-12)
+            const dia3=e.data.start.value.slice(8,-9)
+            const start3=e.data.start.value.slice(11)
+            const end3=e.data.end.value.slice(11)
+            const disponible1={
+              disponible: [[start3,  end3]],
+              email: email,
+              fecha: {
+                  anio: año3,
+                  mes: mes3,
+                  dia: dia3
+              }
+          }
+            e.data.backColor="blue"
+            await axios.post('http://localhost:3001/api/calendario/add', disponible1, {headers: {Authorization: this.state.token}})
+          }
+          console.log(e.data.backColor)
+          dp.events.update(e);
         }
-          e.data.backColor="red"
-          await axios.put('http://localhost:3001/api/calendario/edit', ocupado1)
-        }
-        if(e.data.text==="Disponible"){
-          const año3=e.data.start.value.slice(0,-15)
-          const mes3=e.data.start.value.slice(5,-12)
-          const dia3=e.data.start.value.slice(8,-9)
-          const start3=e.data.start.value.slice(11)
-          const end3=e.data.end.value.slice(11)
-          const disponible1={
-            disponible: [[start3,  end3]],
-            email: email,
-            fecha: {
-                anio: año3,
-                mes: mes3,
-                dia: dia3
-            }
-        }
-          e.data.backColor="blue"
-          await axios.post('http://localhost:3001/api/calendario/add', disponible1)
-        }
-        console.log(e.data.backColor)
-        dp.events.update(e);
       },
     };
   }
@@ -137,8 +147,14 @@ class Calendar extends Component {
   async componentDidMount() {
 
     // load event data
+    const token = getCookieValue('token').replaceAll("\"", '')
+    const thisUser = await axios.post(`http://localhost:3001/api/verify`, {},{ withCredentials: true, headers: {Authorization: token}})
+    this.state.token = token
     
-    var email=this.props.email
+    const email=this.props.email
+    if (thisUser && email === thisUser.data.mail){
+      this.state.isUser = true;
+    }
     if(email===undefined && localStorage.getItem('user')!==null)email=JSON.parse(localStorage.getItem('user')).mail
     
     const arrayProf = await axios.get(
