@@ -13,6 +13,16 @@ const getByIdClaim = (id) => {
     }
 };
 
+const getAll = () => {
+    return async (dispatch) => {
+        try{
+        const response = await axios.get('http://localhost:3001/api/clases/all')
+        dispatch({type: actionsType.GET_ALL_CLASS, payload: response.data})
+      }
+      catch(err){
+          console.log(err)
+      }
+    }
+};
 
-
-export { getByIdClaim }
+export { getByIdClaim, getAll }

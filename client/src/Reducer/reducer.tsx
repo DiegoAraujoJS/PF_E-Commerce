@@ -6,8 +6,7 @@ let initialState = {
     professor: [],
     claim: [],
     class: {},
-    newRegister: {},
-    user: {}
+    clases: [],
 };
 
 const all = (state = initialState, action) => {
@@ -21,6 +20,11 @@ const all = (state = initialState, action) => {
             return {
                 ...state,
                 searchInput: action.payload
+            }
+        case actionsType.GET_ALL_CLASS:
+            return {
+                ...state,
+                clases: action.payload
             }
         default:
             return state
