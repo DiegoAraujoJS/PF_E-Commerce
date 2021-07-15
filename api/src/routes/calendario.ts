@@ -218,14 +218,3 @@ router.put('/edit', async (req: Request, res: Response) => {
 });
 
 export default router
-
-
-
-// // TodasLasSemanas lo puede mandar el front si el profesor pone ''tengo disponibles los lunes de 14 a 18''
-// interface TodasLasSemanas {
-//     email: string,
-//     dia: {
-//         nombre: 'lunes' | 'martes' | 'miercoles' | 'jueves' | 'viernes' | 'sabado' | 'domingo',
-//     },
-//     disponible: arrayDePares,
-// }

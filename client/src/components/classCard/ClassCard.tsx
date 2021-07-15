@@ -1,4 +1,3 @@
-import React from 'react';
 import CSS from 'csstype';
 import { Class} from './interfaces';
 import {Card, /* Button */} from 'react-bootstrap'

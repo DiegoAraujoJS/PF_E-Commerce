@@ -1,4 +1,3 @@
-import React from "react";
 import Claim from "./Claim";
 import style from './Claims.module.css';
 

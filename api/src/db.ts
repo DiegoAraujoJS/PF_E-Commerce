@@ -1,7 +1,5 @@
 import { Sequelize } from "sequelize-typescript";
 import config from './lib/config'
-import Usuario from './models/Usuario'
-import Ciudad from './models/Ciudad'
 
 
 const sequelize = new Sequelize ({

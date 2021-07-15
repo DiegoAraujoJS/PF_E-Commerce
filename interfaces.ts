@@ -6,8 +6,8 @@ interface UserProps {
 }
 
 enum Role {USER, PROFESSOR, ADMIN}
-
-type ArrayDePares = [`${number}:${number}:00`, `${number}:${number}:00`][]
+type Time = [`${number}:${number}:00`, `${number}:${number}:00`]
+type ArrayDePares = Time[]
 
 interface Horario {
     email: string;
@@ -52,5 +52,5 @@ interface ProfesorProps {
 }
 
 
-export type {UserProps, ArrayDePares, Disponible, Ocupado, CalendarioResponse, ProfesorProps, Horario}
+export type {UserProps, ArrayDePares, Disponible, Ocupado, CalendarioResponse, ProfesorProps, Horario, Time}
 export {Role}

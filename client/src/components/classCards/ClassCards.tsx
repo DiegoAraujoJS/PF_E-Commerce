@@ -1,17 +1,13 @@
-import React from 'react'
 import CSS from 'csstype';
 import ClassCard from '../classCard/ClassCard';
-/* import { connect } from 'react-redux';
-import axios from 'axios'
-import {ButtonGroup, Button} from 'react-bootstrap'
-import { User, Profesor, Class } from '../classCard/interfaces'; */
 import { store } from '../../Store/store';
+import { useState, useEffect } from 'react';
 
 export default function ClassCards() {
 
-    const [clases, setClases] = React.useState([])
+    const [clases, setClases] = useState([])
 
-    React.useEffect(() => {
+    useEffect(() => {
         async function fetchDataStart() {
             
             const searchInput = store.getState().searchInput

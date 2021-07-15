@@ -1,4 +1,3 @@
-import React from 'react'
 import { Formik, Field } from 'formik';
 import { validationSchemaNewClass } from '../../utils/validations';
 import { Form, Row, Col, Container, Button } from 'react-bootstrap';
