@@ -23,15 +23,15 @@ const ClassCard: React.FC<Class> = (props) => {
         <Card>
             <Card.Header>{props.nombre}</Card.Header>
             <Card.Body className='container d-flex flex-row justify-content-around align-items-center'>
-                <img style={profileImg} src={props.profesor.foto} alt={props.profesor.nombre}/>
+                <img style={profileImg} src={props.profesor && props.profesor.foto} alt={props.profesor && props.profesor.nombre}/>
                 <div>
                     <Card.Title>* * * * *</Card.Title>
-                    <Card.Title>{props.materia + ' - ' + props.grado + ' - ' + props.nivel}</Card.Title>
+                    <Card.Title>{props && props.materia + ' - ' + props && props.grado + ' - ' + props && props.nivel}</Card.Title>
                     <Card.Text style={descLimit}>
-                        {props.descripcion}
+                        {props && props.descripcion}
                     </Card.Text>
                 </div>
-                <Card.Text style={cityPos}>{props.profesor.ciudad}</Card.Text>
+                <Card.Text style={cityPos}>{props.profesor && props.profesor.ciudad}</Card.Text>
             </Card.Body>
         </Card>
     )

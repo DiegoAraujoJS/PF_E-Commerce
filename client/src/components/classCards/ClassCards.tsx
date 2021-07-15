@@ -61,6 +61,9 @@ function ClassCards({ clases, getAll }: any) {
                 setClassFilter(filtrados)
             }
         }
+        else if(search === ''){
+            setClassFilter(clases)
+        }
     }, [search])
 
 
@@ -261,7 +264,7 @@ function ClassCards({ clases, getAll }: any) {
                                 } else {
                                     return null;
                                 }
-                            }) : clases && clases.length > 0 ? clases.map((clase, i) => <li className="m-3" key={i + 10}>
+                            }) : clases && clases.length > 0 && search.length === 0 ? clases.map((clase, i) => <li className="m-3" key={i + 10}>
                                 <ClassCard
                                     nombre={clase.nombre}
                                     descripcion={clase.descripcion}
