@@ -67,8 +67,8 @@ router.post('/add', async (req: Request, res: Response) => {
                     await profesor.calendario[indice].disponible.map( async (e)=>{
                        
                        
-                        if(!(query.disponible[0][0].slice(0,-6)<e[0].slice(0,-6) && query.disponible[0][0].slice(0,-6)<e[1].slice(0,-6) && query.disponible[0][1].slice(0,-6)<=e[0].slice(0,-6) && query.disponible[0][1].slice(0,-6)<e[1].slice(0,-6) && query.disponible[0][1].slice(0,-6)===query.disponible[0][0].slice(0,-6)||
-                             query.disponible[0][0].slice(0,-6)>e[0].slice(0,-6) && query.disponible[0][0].slice(0,-6)>=e[1].slice(0,-6) && query.disponible[0][1].slice(0,-6)>e[0].slice(0,-6) && query.disponible[0][1].slice(0,-6)>e[1].slice(0,-6) && query.disponible[0][1].slice(0,-6)===query.disponible[0][0].slice(0,-6)))                       
+                        if(!(query.disponible[0][0].slice(0,-6)<e[0].slice(0,-6) && query.disponible[0][0].slice(0,-6)<e[1].slice(0,-6) && query.disponible[0][1].slice(0,-6)<=e[0].slice(0,-6) && query.disponible[0][1].slice(0,-6)<e[1].slice(0,-6) ||
+                             query.disponible[0][0].slice(0,-6)>e[0].slice(0,-6) && query.disponible[0][0].slice(0,-6)>=e[1].slice(0,-6) && query.disponible[0][1].slice(0,-6)>e[0].slice(0,-6) && query.disponible[0][1].slice(0,-6)>e[1].slice(0,-6) ))                       
                            {
                            
                             return res.send("Todo mal")
