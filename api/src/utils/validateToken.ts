@@ -13,7 +13,7 @@ function validateToken(req: MiddlewareRequest, res: Response, next: () => void){
         
         req.data = data
 
-        console.log(req.body.email, req.data.mail)
+        console.log(req.body.email, req.data.role)
         next()
     })
 }

@@ -4,7 +4,7 @@ import Profesor from '../models/Profesor'
 import User from '../models/Usuario';
 import { Op, where } from 'sequelize'
 import { isNullishCoalesce } from 'typescript';
-import { CalendarioResponse, Horario, ArrayDePares } from '../../../interfaces';
+import { CalendarioResponse, Horario, ArrayDePares, Role } from '../../../interfaces';
 import nuevosHorarios from './nuevosHorarios';
 import editCalendar from './editCalendar';
 import validateToken from '../utils/validateToken';
@@ -36,13 +36,15 @@ let queryBack: CalendarioResponse = [
 ]
 
 interface MiddlewareRequest extends Request {
-    data: {mail: string};
+    data: {mail: string, role: number};
 }
 
 router.post('/add', validateToken, async (req: MiddlewareRequest, res: Response) => {
     let query: Horario = req.body
 
-    if (req.body.email != req.data.mail) return res.status(400).send('You are not authorized.')
+    if (req.data.role !== 2 && req.body.email != req.data.mail) {
+        return res.status(400).send('You are not authorized.')
+    }
 
     const query_disponible_1: string = query.disponible[0][0].substring(0, 2) + query.disponible[0][0].substring(3, 5) + query.disponible[0][0].substring(6, 8)
     const query_disponible_2: string = query.disponible[0][1].substring(0, 2) + query.disponible[0][1].substring(3, 5) + query.disponible[0][1].substring(6, 8)
@@ -163,7 +165,9 @@ router.get('/:usuario', async (req: Request, res: Response) => {
 router.put('/edit', validateToken, async (req: MiddlewareRequest, res: Response) => {
     let query: Horario = req.body
 
-    if (req.body.email != req.data.mail) return res.status(400).send('You are not authorized.')
+    if (req.data.role !== 2 && req.body.email != req.data.mail) {
+             return res.status(400).send('You are not authorized.')
+    }
 
     try {
         let profesor = await Profesor.findOne({
