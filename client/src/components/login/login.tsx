@@ -17,7 +17,11 @@ function Login() {
 
     const history = useHistory()
 
-
+    React.useEffect(() => {
+        if(localStorage.getItem('login') === 'true') {
+            history.push('/home')
+        }
+    }, [])
 
     
     function handleChange(e) {

@@ -11,14 +11,20 @@ import deleteAllCookies from "../../cookieClearer";
 
 
 export default function SearchBar() {
+  const [logged, setLogged] = React.useState(false)
 
   function loggedOrNot() {
     if(localStorage.getItem('login') === 'true') {
-      return true;
+      setLogged(true)
     } else {
-      return false;
+      setLogged(false)
     }
   }
+
+  React.useEffect(() => {
+    loggedOrNot()
+  }, [])
+
   async function signOut() {
     // auth.signOut();
     try {
@@ -26,6 +32,7 @@ export default function SearchBar() {
         deleteAllCookies()
         localStorage.removeItem('login')
         alert("Se cerro sesión correctamente")
+        setLogged(false)
         // window.location.reload();
     } catch (err) {
         alert("Fallo al cerrar sesión")
@@ -42,22 +49,22 @@ export default function SearchBar() {
           <Link className={'nav-link ms-4 text-decoration-none'} to={"/calendar"}>calendar</Link>
           <Link className={'nav-link ms-4 text-decoration-none'} to={"/perfil"}>perfil</Link>
           <Link className={'nav-link ms-4 text-decoration-none'} to={"/chat"}>chat</Link>
-          {loggedOrNot() ? 
-            <NavDropdown className={'ms-4 text-decoration-none justify-content-end'} title="Logeado" id="basic-nav-dropdown">
-              <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.2">
-                Another action
-              </NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-              <NavDropdown.Divider />
-              <NavDropdown.Item onClick={() => signOut()}>
-                Desconectarse
-              </NavDropdown.Item>
-            </NavDropdown>
+          {logged ?
+              <NavDropdown className={'ms-4 text-decoration-none justify-content-end'} title="Logeado" id="basic-nav-dropdown">
+                <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
+                <NavDropdown.Item href="#action/3.2">
+                  Another action
+                </NavDropdown.Item>
+                <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
+                <NavDropdown.Divider />
+                <NavDropdown.Item onClick={() => signOut()}>
+                  Desconectarse
+                </NavDropdown.Item>
+              </NavDropdown>
             :
-            <Navbar.Text className={'justify-content-end'}>
-              <Link to='login'>Iniciar sesión</Link> ¿No tienes cuenta? <Link to='/registro'>Regístrate!</Link>
-            </Navbar.Text>
+              <Navbar.Text className={'ms-4 justify-content-end'}>
+                <Link to='login'>Iniciar sesión</Link> ¿No tienes cuenta? <Link to='/registro'>Regístrate!</Link>
+              </Navbar.Text>
           }
         </Nav>
       </Navbar.Collapse>
