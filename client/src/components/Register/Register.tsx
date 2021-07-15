@@ -44,9 +44,9 @@ const Register = () => {
       history.push('/login')
     }
     catch (error) {
-      if (error.response.data.type === ErrorType.ALREADY_EXISTS) {
+      if (error.response && error.response.data.type ===  ErrorType.ALREADY_EXISTS) {
         alert('El usuario ya existe!')
-      } else if (error.response.data.type === ErrorType.INCOMPLETE_INPUTS) {
+      } else if (error.response && error.response.data.type === ErrorType.INCOMPLETE_INPUTS) {
         alert('Debe ingresar mail, nombre y apellido')
       }
     }
