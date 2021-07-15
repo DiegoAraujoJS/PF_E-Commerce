@@ -1,7 +1,7 @@
-import React, { useRef, useState , useImperativeHandle} from 'react';
+import { useRef, useState } from 'react';
 import logo from '../../logo.svg';
 import style from './login.module.css';
-import { loginWithGoogle /*  signIn, createUser */, auth } from '../../firebase';
+import { loginWithGoogle } from '../../firebase';
 import {Link} from 'react-router-dom'
 import CSS from 'csstype';
 
@@ -12,7 +12,7 @@ function Login() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('');
     const [errors, setErrors] = useState({email: null, password: null})
-    const [wrongPassword, setWrongPassword] = React.useState(false)
+    const [wrongPassword, setWrongPassword] = useState(false)
     // console.log(auth.currentUser)
 
     const history = useHistory()

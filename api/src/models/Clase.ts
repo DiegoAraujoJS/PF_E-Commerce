@@ -1,5 +1,5 @@
 import { Model, Column, Table, CreatedAt, UpdatedAt, ForeignKey,DataType,  BelongsTo, HasMany } from 'sequelize-typescript';
-import { DecimalDataType } from 'sequelize/types';
+import { Time } from '../../../interfaces';
 import Profesor from './Profesor';
 import Puntuacion from './Puntuacion';
 @Table
@@ -22,6 +22,9 @@ export default class Clase extends Model {
     @Column 
     ciudad!: string
 
+    @Column ({allowNull: false, type: DataType.JSON})
+    date!: {year: number, month: number, day: number, time: Time}
+
     @ForeignKey(() => Profesor)
     @Column
     Profesor_mail!: string
@@ -36,38 +39,3 @@ export default class Clase extends Model {
     puntuaciones!: Puntuacion[];
 
 }
-
-// const Clase =  sequelize.define('Clase', {
-//     nombre: {
-//         type: DataType.STRING,
-//         allowNull: false
-//     },
-//     puntuacion: {
-//         type: DataType.FLOAT,
-//         allowNull: false
-//     },
-//     grado: {
-//         type: DataType.STRING,
-//         allowNull: false
-//     },
-//     nivel: {
-//         type: DataType.STRING,
-//         allowNull: false
-//     },
-//     materia: {
-//         type: DataType.STRING,
-//         allowNull: false
-//     },
-//     descripcion: {
-//         type: DataType.TEXT,
-//         allowNull: false
-//     },
-//     // nombre: 'Clase de matemática quinto año',
-//     // puntuacion: 4.3,
-//     // grado: 'quinto año',
-//     // nivel: 'secundaria',
-//     // materia: 'matematica', 
-//     // descripcion: 'en esta clase veremos...'
-// })
-
-// export {Clase}

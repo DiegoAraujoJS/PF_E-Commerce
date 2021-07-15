@@ -1,5 +1,4 @@
-import React from 'react';
-
+import { useState, useEffect } from 'react';
 import './App.css';
 import Login from './components/login/login';
 import { BrowserRouter, Redirect, Route, useHistory } from 'react-router-dom';
@@ -15,7 +14,6 @@ import Register from './components/Register/Register'
 import axios from 'axios';
 
 import AddClass from './components/addClass/addClass';
-
 import SearchBarHome from './components/searchBar/SearchBarHome';
 import getCookieValue from './cookieParser';
 
@@ -24,9 +22,9 @@ enum Role {USER, PROFESSOR, ADMIN}
 function App() {
   const history = useHistory()
 
-  let [user, setUser] = React.useState<{name: string, lastName: string, role: number, mail: string} | undefined>({name: '', lastName: '', role: null, mail: ''})
+  let [user, setUser] = useState<{name: string, lastName: string, role: number, mail: string} | undefined>({name: '', lastName: '', role: null, mail: ''})
 
-  React.useEffect(() => {
+  useEffect(() => {
     async function setRoleOfUser() { 
       
       if (localStorage.getItem('login')) {
@@ -35,7 +33,7 @@ function App() {
           console.log('local storage removed')
           return <Redirect to='/home'/>
         }
-        const token = getCookieValue('token').slice(1, getCookieValue('token').length - 1)
+        const token = getCookieValue('token').replaceAll("\"", '')
         const thisUser = await axios.post(`http://localhost:3001/api/verify`, {},{ withCredentials: true, headers: {Authorization: token}})
         
         if (thisUser.status === 200) {
@@ -48,6 +46,7 @@ function App() {
         
         
       }
+      
     }
     setRoleOfUser()
   }, [])
@@ -56,8 +55,16 @@ function App() {
   return (
     <BrowserRouter>
       <Route path='/'><SearchBarHome /></Route>
-      <Route path='/clases/add'><AddClass /></Route>
 
+      {user.role ? <Route exact path='/clases/add' render={() => {
+          console.log(user.role)
+          if (user.role === Role.ADMIN || user.role === Role.PROFESSOR) {
+            return <AddClass/>
+          } else {
+            <Redirect to='/home'/>
+          }
+      }
+      }></Route> : null}
       
         {user.role !== undefined ? <Route exact path='/claim' render={() => {
           
@@ -66,8 +73,6 @@ function App() {
           } else {
             <Redirect to='/home'/>
           }
-          
-          
       }
       }></Route> : null}
       

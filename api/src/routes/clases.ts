@@ -199,7 +199,15 @@ router.put('/puntuar', async (req: Request, res: Response) => {
 })
 
 
-
+router.get('/all', async (req: Request, res: Response) => {
+    try {
+        const clases = await Clase.findAll()
+        res.send(clases)
+    }
+    catch (error) {
+        res.status(404).send("Ops! hubo un error")
+    }
+})
 
 router.post('/add', async (req: Request, res: Response) => {
     const clase = req.body

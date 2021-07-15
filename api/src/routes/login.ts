@@ -2,7 +2,7 @@ import {sign} from 'jsonwebtoken'
 import { Router, Request, Response} from 'express'
 
 import User from '../models/Usuario'
-import { decrypt } from './auth'
+import { decrypt } from '../utils/auth'
 
 const router = Router()
 

@@ -1,4 +1,3 @@
-import {Request, Response } from "express";
 import bcrypt from 'bcrypt'
 
 function hashPassword(password: string) {

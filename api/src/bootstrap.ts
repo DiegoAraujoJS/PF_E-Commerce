@@ -175,7 +175,8 @@ const bootstrap = async () => {
         descripcion: 'Aprende a sumar y restar para ser el mejor de tu clase',
         materia: 'Matematica',
         grado: "Primer grado",
-        nivel: 'Primario'
+        nivel: 'Primario',
+        date:  {year: 2021, month: 8, day: 7, time: ['1212121w']}
     })
     await Clase.create({
         nombre: 'Aprende a comunicar',
@@ -184,7 +185,8 @@ const bootstrap = async () => {
         materia: 'Comunicacion',
         score: 4.63,
         grado: "Cuarto grado",
-        nivel: 'Terciario'
+        nivel: 'Terciario',
+        date:  {year: 2021, month: 8, day: 7, time: ['1212121w']}
     })
 
     await Clase.create({
@@ -194,29 +196,9 @@ const bootstrap = async () => {
         materia: 'Ingles',
         score: 2.33,
         grado: "Sexto grado",
-        nivel: 'Secundario'
-    })
-
-    // await Clase.create({
-    //     materia: 'matematica',
-    //     Profesor_mail: "diegoaraujo@gmail.com",
-    //     grado: "primer grado"
-    // })
-    // await Clase.create({
-    //     materia: 'matematica',
-    //     Profesor_mail: "braiansilva@gmail.com",
-    //     grado: "primer grado"
-    // })
-    // await Reclamo.create({
-    //     Denunciante_email: "edwardburgos@gmail.com",
-    //     Denunciado_email: "braiansilva@gmail.com",
-    //     Admin_email: "juanperez3@gmail.com"
-        
-    // })
-
-
-    
-
+        nivel: 'Secundario',
+        date:  {year: 2021, month: 8, day: 7, time: ['1212121w']}
+    })    
 
 }
 export default bootstrap
