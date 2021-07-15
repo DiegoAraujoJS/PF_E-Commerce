@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 import { useRef, useState, useEffect } from "react";
-=======
-import { useRef, useState } from "react";
->>>>>>> DiegoMartes13
 import "./Chat.css";
 import axios from "axios";
 import getCookieValue from "../../cookieParser";
