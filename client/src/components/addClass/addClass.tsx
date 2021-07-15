@@ -56,7 +56,8 @@ const AddClass = () => {
 					descripcion: "",
 					materia: "",
 					grado: "",
-					nivel: ""
+					nivel: "",
+					hasta:"",
 				}}
 
 				onSubmit={async (values, { resetForm }) => {
@@ -106,6 +107,21 @@ const AddClass = () => {
 									/>
 									{errors.Profesor_mail && touched.Profesor_mail ? (
 										<div className='invalid-feedback'>{errors.Profesor_mail}</div>
+									) : null}
+								</Col>
+								<Col sm={12} md={8}>
+									<Form.Label className='text-uppercase'>hasta:</Form.Label>
+									<Field
+										name='hasta'
+										type='time'
+										onChange={handleChange}
+										onBlur={handleBlur}
+										value={values.hasta}
+										className={`form-control ${errors.hasta && touched.hasta ? 'is-invalid' : ''
+											}`}
+									/>
+									{errors.hasta && touched.hasta ? (
+										<div className='invalid-feedback'>{errors.hasta}</div>
 									) : null}
 								</Col>
 							</Row>
@@ -193,6 +209,7 @@ const AddClass = () => {
 									) : null}
 								</Col>
 							</Row>
+							
 							<Row>
 								<Col className='d-flex justify-content-center'>
 									<Button type='submit' className='text-uppercase'>
