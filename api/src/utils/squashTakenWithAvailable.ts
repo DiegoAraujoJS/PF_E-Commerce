@@ -1,29 +1,49 @@
-import { Disponible, Ocupado } from "../../../interfaces";
+import {
+  Disponible,
+  Ocupado
+} from "../../../interfaces";
+function getArrayDepth(value) {
+  return Array.isArray(value) ? 
+    1 + Math.max(...value.map(getArrayDepth)) :
+    0;
+}
 import flatInline from "./flatInline";
+
 const squashTakenWithAvailable = (available: [number, number][], taken: [number, number][]) => {
-    const newAvailable = flatInline([...available]) 
-        // disponible: [[10, 12]]
-        // ocupado: [[14, 16], [18, 20]]
+  const newAvailable = flatInline([...available])
+  console.log('newAvailable', newAvailable)
 
-        // disponbie: [[10, 12], [19, 22]<==]
-        // ocupado: [[14, 16], [18, 19]]
+  const oldOcupado = flatInline(taken)
+  console.log('oldOcupado', oldOcupado)
 
-    const oldOcupado = taken
+  let newOcupado = oldOcupado.filter(ocupado => !newAvailable.find(range => range[0] <= ocupado[0] && range[1] >= ocupado[1]))
+  const sortedNewAvailable = newAvailable.flat().sort().reverse()
+  const newTakenTransform = newOcupado.map(ocupado => {
+    let min = ocupado[0]
+    let max = ocupado[1]
+    
+    console.log(sortedNewAvailable)
+    console.log(min, max)
+    if (sortedNewAvailable[0] >= min && sortedNewAvailable[sortedNewAvailable.length - 1] >= max) {
+      return [min, sortedNewAvailable[0]]
+    }
+    if (sortedNewAvailable[0] <= min && sortedNewAvailable[sortedNewAvailable.length - 1] <= max) {
+      return [sortedNewAvailable[sortedNewAvailable.length - 1], max] // el return de array seria de orden dos
+    }
+    if (sortedNewAvailable[0] >= min && sortedNewAvailable[sortedNewAvailable.length - 1] <= max) {
+      console.log('entre')
+      const taken1: [number, number][] = [[min, sortedNewAvailable[0]]]
+      const taken2: [number, number][] = [[sortedNewAvailable[sortedNewAvailable.length - 1], max]]
 
-    let newOcupado = oldOcupado.filter(ocupado => ! newAvailable.find(range => range[0] <= ocupado[0] && range[1] >= ocupado[1]))
+      return [squashTakenWithAvailable(available, taken1), squashTakenWithAvailable(available, taken2)]
+    }
+  })
+  let flattenedNewTakenTransform;
 
-    newOcupado = newOcupado.map(ocupado => {
-        let min = ocupado[0]
-        let max = ocupado[1]
-        const superSetsOfMin = newAvailable.find(range => range[0] <= min && range[1] >= min)
-        const superSetsOfMax = newAvailable.find(range => range[0] <= max && range[1] >= max)
-        
-        if (superSetsOfMin){
-            return [superSetsOfMin[1], max]
-        } else if (superSetsOfMax){
-            return [min, superSetsOfMax[0]]
-        } else {
-            return ocupado
-        }
-    })
+  if (getArrayDepth(newTakenTransform) > 2) {
+    console.log('entre')
+    flattenedNewTakenTransform = newTakenTransform.flat(getArrayDepth(newTakenTransform) - 2)
+    return flattenedNewTakenTransform
+  }
+  return newTakenTransform
 }
