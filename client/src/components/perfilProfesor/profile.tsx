@@ -5,7 +5,8 @@ import Calendar from "../calendar/Calendar"
 import { ProfesorProps} from '../../../../interfaces';
 import getCookieValue from '../../cookieParser';
 import ChatRoom from '../Chat/ChatRoom';
-
+import icon_editar from '../../images/editar_perfil.png'
+import { useHistory } from "react-router-dom";
 const Role = {
     USER: 0,
     PROFESSOR: 1,
@@ -14,6 +15,7 @@ const Role = {
 
 
 function Profile(email) {
+    const history = useHistory()
     const [userLoged, setUserLoged] = useState();
     const propEmail = {
         email: email && email.children ? email.children[0] : null
@@ -63,19 +65,26 @@ function Profile(email) {
         );
         setUserLoged(userResponse.data);
       };
-      
+      const handleClick = (e) => {
+        e.preventDefault();
+        history.push('/editPerfil')
+ 
+    }
 
     useEffect(() => {
         fetchProfs()
         getUserLoged()
 
+ 
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     
     return (
         <div className={style.container}>
+
             <section className={style.sectionOne}>
                 <div className={style.profileContainer}>
+                <img src={icon_editar} className={style.icon} onClick={ (e) => handleClick(e)}/>
                     <img src={prof.foto} alt="..." width="130" height="130" className={style.profile} />
                     <div className="media-body mb-5">
                         <h4 className="mt-0 mb-0">{prof.name} {prof.lastName} </h4>
