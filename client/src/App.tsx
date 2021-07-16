@@ -12,7 +12,7 @@ import Chat from './components/Chat/Chat'
 import Home from './components/home/Home'
 import Register from './components/Register/Register'
 import axios from 'axios';
-
+import EditProfile from './components/editProfile/editProfile'
 import AddClass from './components/addClass/addClass';
 import SearchBarHome from './components/searchBar/SearchBarHome';
 import getCookieValue from './cookieParser';
@@ -120,7 +120,7 @@ function App() {
           }           
       }
       }></Route>
-
+      <Route exact path ='/editPerfil'> <EditProfile /></Route>
       <Route exact path='/login'><Login /></Route>
       <Route exact path='/calendar'><CalendarApp /></Route>
       <Route exact path='/chat'><Chat /></Route>
