@@ -25,7 +25,7 @@ router.get('/', async (req: Request, res: Response) => {
                         where: {
                             [Op.or]: [{
                                 materia: {
-                                    [Op.iLike]: `%${x.normalize("NFD").replace(/\p{Diacritic}/gu, "")}%`.replace("\'", '')  
+                                    [Op.iLike]: `%${x.normalize("NFD").replace(/\p{Diacritic}/gu, "")}%`.replace("\'", '')
                                 }
                             },
                             {
@@ -99,7 +99,7 @@ router.post('/puntuar', async (req: Request, res: Response) => {
                 where: { clase: id },
                 attributes: ['puntuacion']
             })
-            
+
             let puntuacionClase = parseFloat((puntuaciones.map(elemento => elemento.puntuacion).reduce(function (a, b) { return a + b; }) / puntuaciones.length).toFixed(2))
             let claseActualizada = await Clase.findOne({
                 where: { id },
@@ -116,9 +116,9 @@ router.post('/puntuar', async (req: Request, res: Response) => {
                 where: { Profesor_mail: profesor },
                 attributes: ['puntuacion']
             })
-            
+
             let puntuacionProfesor = parseFloat((clasesProfesor.map(elemento => elemento.puntuacion).reduce(function (a, b) { return a + b; }) / clasesProfesor.length).toFixed(2))
-            
+
             let profesorPorActualizar = await Profesor.findOne({ where: { User_mail: profesor } });
             if (profesorPorActualizar) {
                 profesorPorActualizar = await profesorPorActualizar.update({ puntuacion: puntuacionProfesor })
@@ -166,7 +166,7 @@ router.put('/puntuar', async (req: Request, res: Response) => {
                 where: { clase: id },
                 attributes: ['puntuacion']
             })
-            
+
             let puntuacionClase = parseFloat((puntuaciones.map(elemento => elemento.puntuacion).reduce(function (a, b) { return a + b; }) / puntuaciones.length).toFixed(2))
             let claseActualizada = await Clase.findOne({
                 where: { id },
@@ -183,9 +183,9 @@ router.put('/puntuar', async (req: Request, res: Response) => {
                 where: { Profesor_mail: profesor },
                 attributes: ['puntuacion']
             })
-            
+
             let puntuacionProfesor = parseFloat((clasesProfesor.map(elemento => elemento.puntuacion).reduce(function (a, b) { return a + b; }) / clasesProfesor.length).toFixed(2))
-            
+
             let profesorPorActualizar = await Profesor.findOne({ where: { User_mail: profesor } });
             if (profesorPorActualizar) {
                 profesorPorActualizar = await profesorPorActualizar.update({ puntuacion: puntuacionProfesor })
@@ -203,6 +203,32 @@ router.get('/all', async (req: Request, res: Response) => {
     try {
         const clases = await Clase.findAll()
         res.send(clases)
+    }
+    catch (error) {
+        res.status(404).send("Ops! hubo un error")
+    }
+})
+
+router.get('/nivel/:nivel', async (req: Request, res: Response) => {
+    const { nivel } = req.params
+    try {
+        const clases = await Clase.findAll({
+            where: { nivel: nivel }
+        })
+        return res.send(clases)
+    }
+    catch (error) {
+        res.status(404).send("Ops! hubo un error")
+    }
+})
+
+router.get('/puntuacion/:puntuacion', async (req: Request, res: Response) => {
+    const { puntuacion } = req.params
+    try {
+        const clases = await Clase.findAll({
+            where: { puntuacion: puntuacion }
+        })
+        return res.send(clases)
     }
     catch (error) {
         res.status(404).send("Ops! hubo un error")
