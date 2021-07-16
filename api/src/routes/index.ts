@@ -9,7 +9,7 @@ import sessions from './session'
 import alumnos from './alumnos'
 import calendario from './calendario'
 import allCountries from './allCountries'
-
+import market from './market'
 const router = Router()
 
 router.use('/verify', verify)
@@ -22,5 +22,6 @@ router.use('/alumnos', alumnos)
 router.use('/calendario', calendario)
 router.use('/session', sessions)
 router.use('/allCountries', allCountries)
+router.use('/market', market)
 
 export default router

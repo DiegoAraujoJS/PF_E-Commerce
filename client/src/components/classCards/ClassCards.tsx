@@ -195,13 +195,7 @@ function ClassCards({ clases, getAll }: any) {
 
     return (
         <Container className='container d-flex flex-column mt-3 justify-content-around' >
-            <link rel="stylesheet"
-                href="https://fonts.googleapis.com/css?family=Tangerine"></link>
-            {/* Botones de paginacion <ButtonGroup>
-                <Button>Left</Button>
-                <Button>Middle</Button>
-                <Button>Right</Button>
-            </ButtonGroup> */}
+
             <Row className="d-flex justify-content-center mb-3">
                 <Col sm={2} md={2}>
                     <div>
@@ -216,14 +210,6 @@ function ClassCards({ clases, getAll }: any) {
                 <Col sm={8} md={8} >
                     <Form.Control type="text" placeholder="Busca por el nombre de la clase" onChange={handleChange} />
                 </Col >
-            </Row>
-            <Row className="d-flex justify-content-center mb-3">
-                <Col sm={4} md={4} className="d-flex align-items-center justify-content-evenly">
-                    <h1 style={{ fontFamily: "Tangerine" }} ><strong>Crea tu propia clase!</strong></h1>
-                    <Button style={{ fontSize: "1rem" }} onClick={() => window.location.href = "./clases/add"} variant="secondary" >
-                        Ir
-                    </Button>
-                </Col>
             </Row>
             <Row>
                 <Col>

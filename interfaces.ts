@@ -48,9 +48,21 @@ interface ProfesorProps {
     foto: string
     name: string;
     User_mail: string;
-    score: number;
+    score: number; 
+}
+
+interface IClase{
+    id?: number;
+    nombre: string;
+    grado: string;
+    nivel: string;
+    materia: string;
+    descripcion: string;
+    ciudad: string;
+    date: {year: number, month: number, day: number, time: Time}
+    Profesor_mail: string
 }
 
 
-export type {UserProps, ArrayDePares, Disponible, Ocupado, CalendarioResponse, ProfesorProps, Horario, Time}
+export type {UserProps, ArrayDePares, Disponible, Ocupado, CalendarioResponse, ProfesorProps, Horario, Time, IClase}
 export {Role}

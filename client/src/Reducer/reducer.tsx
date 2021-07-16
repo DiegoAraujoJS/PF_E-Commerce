@@ -7,6 +7,9 @@ let initialState = {
     claim: [],
     class: {},
     clases: [],
+    user_mail: '',
+    user_name: '',
+    user_lastName: ''
 };
 
 const all = (state = initialState, action) => {
@@ -25,6 +28,14 @@ const all = (state = initialState, action) => {
             return {
                 ...state,
                 clases: action.payload
+            }
+        case actionsType.SET_USER_DATA:
+            console.log(action.payload);
+            return {
+                ...state,
+                user_mail: action.payload.mail,
+                user_name: action.payload.mail,
+                user_lastName: action.payload.lastName
             }
         default:
             return state

@@ -1,9 +1,8 @@
 import axios from "axios";
 import { actionsType } from "../constants/constants";
 
-const GET_BY_ID = 'GET_BY_ID_CLAIM';
+// const GET_BY_ID = 'GET_BY_ID_CLAIM';
 // const SEARCH_INPUT = 'SEARCH_INPUT'
-
 
 const getByIdClaim = (id) => {
     return async (dispatch) => {
@@ -25,4 +24,15 @@ const getAll = () => {
     }
 };
 
-export { getByIdClaim, getAll }
+const getUserLoged = (payload) => {
+    console.log(payload);
+    return (dispatch) => {
+        try{
+            return dispatch({type: actionsType.SET_USER_DATA, payload: payload})
+        } catch(err) {
+            console.log(err)
+        }
+    }
+}
+
+export { getByIdClaim, getAll, getUserLoged }

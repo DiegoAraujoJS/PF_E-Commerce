@@ -46,7 +46,7 @@ const bootstrap = async () => {
         name: 'Mauro',
         lastName: 'Leonel',
         mail: "mauroleonel@gmail.com", 
-        role: Role.ADMIN
+        role: Role.PROFESSOR
     }
     const Mauro = {...m, password:"123456"}
 

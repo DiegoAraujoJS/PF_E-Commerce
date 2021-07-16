@@ -5,23 +5,28 @@ export const validationSchemaNewClass = yup.object().shape({
         .string()
         .required('Este campo es obligatorio')
         .test('nameSize', 'El nombre es demaciado largo', (value) => value && value.length < 80),
-    Profesor_mail: yup
-        .string()
-        .email('Debe ser un email válido')
-        .required('Este campo es obligatorio')
-        .test('mailSize', 'El email es demaciado largo', (value) => value && value.length < 30),
     materia: yup
         .string()
         .test('materia', 'Necesita elegir una materia', (value) => value),
-        descripcion: yup
+    descripcion: yup
         .string()
-        .test('descriptionSize', 'La descripcion no debe ser mayor a 350 caracteres', (value) => !value || value.length < 350 ),
+        .test('descriptionSize', 'La descripcion no debe ser mayor a 350 caracteres', (value) => !value || value.length < 350),
     grado: yup
         .string()
         .test('grado', 'Necesita elegir un grado', (value) => value),
     nivel: yup
         .string()
-        .test('nivel', 'Necesita elegir un nivel', (value) => value)
+        .test('nivel', 'Necesita elegir un nivel', (value) => value),
+    dia: yup
+        .string()
+        .test('dia', 'Necesita elegir el dia de la clase', (value) => value),
+    desde: yup
+        .string()
+        .test('desde', 'Necesita elegir un comienzo a la clase', (value) => value),
+    hasta: yup
+        .string()
+        .test('hasta', 'Necesita elegir un comienzo a la clase', (value) => value),
+
 });
 
 

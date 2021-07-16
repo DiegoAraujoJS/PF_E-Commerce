@@ -1,14 +1,19 @@
 import { useRef, useState } from 'react';
+import { bindActionCreators} from "redux";
 import logo from '../../logo.svg';
 import style from './login.module.css';
 import { loginWithGoogle } from '../../firebase';
 import {Link} from 'react-router-dom'
 import CSS from 'csstype';
-
+import { actionsType } from '../../constants/constants';
 import axios from 'axios';
 import { useHistory } from "react-router-dom";
+import {connect} from 'react-redux'
+import getCookieValue from '../../cookieParser';
+import { getUserLoged } from '../../Actions/Actions';
+import { store } from '../../Store/store';
 
-function Login() {
+function Login(props) {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('');
     const [errors, setErrors] = useState({email: null, password: null})
@@ -59,6 +64,13 @@ function Login() {
             }, { withCredentials: true })
             document.cookie = `token=${JSON.stringify(login.data.token)}`
             localStorage.setItem('login', 'true')
+            const user = await axios.post(`http://localhost:3001/api/verify`, {}, {headers: {Authorization: getCookieValue('token').replaceAll("\"", '')}})
+            console.log(user)
+
+
+            if (user !== null) props.getUserLoged({mail: user.data.mail, name: user.data.name, lastName: user.data.lastName})
+
+            console.log(store.getState())
             history.push('/home')
             window.location.reload();
             
@@ -128,7 +140,7 @@ function Login() {
                     </button>
                     <div className="">
                         {wrongPassword ? <span className={"badge bg-danger"}>
-                            El usuario o la contraseña son incorrectos</span> : ''}
+                            El usuario o la contraseña son incorrectos</span> : null}
                     </div>
                 </form>
             </div>
@@ -136,7 +148,19 @@ function Login() {
     )
 }
 
-export default Login;
+const mapDispatchToProps = (dispatch) => {
+    return bindActionCreators({getUserLoged}, dispatch);
+}
+// const mapStateToProps = (state) => {
+//     return {
+//         user_mail: state.user_mail,
+//         user_name: state.user_name,
+//         user_lastName: state.user_lastName
+//     }
+// }
+
+
+export default connect(null,mapDispatchToProps)(Login)
 
 
 

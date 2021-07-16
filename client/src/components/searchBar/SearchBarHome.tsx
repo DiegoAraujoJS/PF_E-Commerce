@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Navbar } from "react-bootstrap";
 import { Nav } from "react-bootstrap";
 // import { Form } from 'react-bootstrap'
@@ -8,9 +8,33 @@ import axios from 'axios';
 import { NavDropdown } from "react-bootstrap";
 import { Link } from 'react-router-dom';
 import deleteAllCookies from "../../cookieClearer";
-
+import getCookieValue from "../../cookieParser";
 
 export default function SearchBar() {
+  enum Role {USER, PROFESSOR, ADMIN}
+  let [user, setUser] = useState<{name: string, lastName: string, role: number, mail: string} | undefined>({name: '', lastName: '', role: null, mail: ''})
+
+  useEffect(() => {
+    async function setRoleOfUser() {       
+      if (localStorage.getItem('login')) {
+        if (!document.cookie){
+          localStorage.removeItem('login')
+          console.log('local storage removed')
+        }
+        const token = getCookieValue('token').replaceAll("\"", '')
+        const thisUser = await axios.post(`http://localhost:3001/api/verify`, {},{ withCredentials: true, headers: {Authorization: token}})
+        
+        if (thisUser.status === 200) {
+          console.log('status 200')
+          setUser(thisUser.data)
+        } else {
+          console.log('else')
+          setUser(undefined)      
+        }  
+      }
+    }
+    setRoleOfUser()
+  }, [])
 
   function loggedOrNot() {
     if(localStorage.getItem('login') === 'true') {
@@ -39,9 +63,10 @@ export default function SearchBar() {
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="mr-auto">
           <Link className={'nav-link ms-4 text-decoration-none'} to={"/home"}>Home</Link>
-          <Link className={'nav-link ms-4 text-decoration-none'} to={"/calendar"}>calendar</Link>
-          <Link className={'nav-link ms-4 text-decoration-none'} to={"/perfil"}>perfil</Link>
-          <Link className={'nav-link ms-4 text-decoration-none'} to={"/chat"}>chat</Link>
+          <Link className={'nav-link ms-4 text-decoration-none'} to={"/calendar"}>Calendar</Link>
+          <Link className={'nav-link ms-4 text-decoration-none'} to={"/perfil"}>Profile</Link>
+          <Link className={'nav-link ms-4 text-decoration-none'} to={"/chat"}>Chat</Link>
+          <Link className={'nav-link ms-4 text-decoration-none'} to={"/clases"}>Class</Link>
           {loggedOrNot() ? 
             <NavDropdown className={'ms-4 text-decoration-none justify-content-end'} title="Logeado" id="basic-nav-dropdown">
               <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
@@ -58,6 +83,11 @@ export default function SearchBar() {
             <Navbar.Text className={'justify-content-end'}>
               <Link to='login'>Iniciar sesión</Link> ¿No tienes cuenta? <Link to='/registro'>Regístrate!</Link>
             </Navbar.Text>
+          }
+           {loggedOrNot() && user.role === Role.PROFESSOR ? 
+              <Link className={'nav-link ms-4 text-decoration-none'} to={"/clases/add"}>Agrega tu Propia Clase!</Link>
+            :
+             null
           }
         </Nav>
       </Navbar.Collapse>
