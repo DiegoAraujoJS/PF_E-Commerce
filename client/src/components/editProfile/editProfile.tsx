@@ -16,7 +16,7 @@ const EditProfile = () => {
             })
             alert("Cambios Realizados")
         } catch (err) {
-            alert("Algo salio mal xD")
+            alert("Algo salio mal")
         }
 
 
