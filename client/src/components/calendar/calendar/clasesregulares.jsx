@@ -83,7 +83,7 @@ export const Clasesregulares = (props) => {
                             alert("Se ha producido un error al añadir los horarios")
                         }
                     }
-                    window.location.reload(); 
+                    
                 }
                 catch (err) {
                     alert("Se ha producido un error al añadir los horarios")

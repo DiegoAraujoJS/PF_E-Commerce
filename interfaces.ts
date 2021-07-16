@@ -12,9 +12,9 @@ type ArrayDePares = Time[]
 interface Horario {
     email: string;
     fecha: {
-        anio: number,
-        mes: number,
-        dia: number
+        anio: any,
+        mes: any,
+        dia: any
     };
     disponible: ArrayDePares;
     ocupado: ArrayDePares | null;

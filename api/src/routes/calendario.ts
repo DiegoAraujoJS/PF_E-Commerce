@@ -41,6 +41,7 @@ interface MiddlewareRequest extends Request {
 
 router.post('/add', validateToken, async (req: MiddlewareRequest, res: Response) => {
     let query: Horario = req.body
+    console.log("Query original", query)
 
     if (req.body.email != req.data.mail) return res.status(400).send('You are not authorized.')
 
@@ -52,52 +53,62 @@ router.post('/add', validateToken, async (req: MiddlewareRequest, res: Response)
     if(query.disponible && query_disponible_1 < "0" && query_disponible_1 > "240000"  || query_disponible_2 < "0" && query_disponible_2 > "240000" || query_disponible_2 < query_disponible_1) return res.send("El horario disponible es incorrecto")
     if(query.ocupado && query_ocupado_1 < "0" && query_ocupado_1 > "240000"  || query_disponible_2 < "0" && query_ocupado_2 > "240000" || query_ocupado_2 < query_disponible_1) return res.send("El horario ocupado es incorrecto")
     if(query.disponible && query.ocupado && query_ocupado_1 >= query_disponible_1 && query_ocupado_1 <=  query_disponible_2 || query_disponible_1 >= query_disponible_1 && query_disponible_1 <= query_ocupado_2) return res.send("Los horarios disponibles y ocupados entran en conflicto entre si")
-
+console.log("Punto 1")
     try {
         if ( query.disponible && query.disponible[0][0].substring(0,2) < "00" || query.disponible[0][1].substring(0,2) > "24") return res.send("El horario disponible es incorrecto")
-
+        console.log("Punto 2")
         let profesor = await Profesor.findOne({
             where: {
                 User_mail: query.email
             }
+           
         })
 
         if (profesor) {
+            console.log("Punto 3")
             if (profesor.calendario) {
-                let indice = profesor.calendario.findIndex(element => element.fecha.anio === query.fecha.anio && element.fecha.mes === query.fecha.mes && element.fecha.dia === query.fecha.dia)
-
+                console.log("Profesor", profesor.calendario)
+                console.log("Query", query)
+                console.log("Punto 3.55")
+                let indice = profesor.calendario.findIndex(element => parseInt(element.fecha.anio) == query.fecha.anio && parseInt(element.fecha.mes) == query.fecha.mes && parseInt(element.fecha.dia) == query.fecha.dia)
+                console.log("indi", indice)
                 let calendario = profesor.calendario[indice]
-
+                console.log("Calendario", calendario)
                 if (calendario) {
-
+                    console.log("Punto 4.5")
                     let nuevaFecha = {
                         disponible: calendario.disponible ? query.disponible ? nuevosHorarios([...calendario.disponible, query.disponible[0]], query.ocupado && query.ocupado[0] ) : calendario.disponible : null,
                         ocupado: calendario.ocupado ? query.ocupado ? nuevosHorarios([...calendario.ocupado, query.ocupado[0]], query.disponible[0] ) : calendario.ocupado : null,
                     }
+                    console.log(nuevaFecha)
+                    console.log("Punto 5.5")
          
                     let nuevoDisponible = query.ocupado ? editCalendar(nuevaFecha.disponible, query.ocupado[0]) : nuevaFecha.disponible;
-                   
-                    let nuevoOcupado =  query.disponible ? editCalendar(nuevaFecha.ocupado, query.disponible[0]) : nuevaFecha.ocupado;
-                      
+                    console.log(nuevaFecha.ocupado, query.disponible[0])
+                    console.log(query.disponible)
+                    console.log("Punto 6.5")
+                    
+                    let nuevoOcupado =  query.disponible && nuevaFecha.ocupado ? editCalendar(nuevaFecha.ocupado, query.disponible[0]) : nuevaFecha.ocupado;
+                    console.log("Punto 7.5")
                     let resultado = {
                         email: query.email,
                         fecha: query.fecha,
                         disponible: nuevoDisponible,
                         ocupado: nuevoOcupado,
                     }
-
+                    console.log("Punto 8.5")
                     let nuevoCalendario = profesor.calendario.map((e, i) => i === indice ? resultado : e)
-
                     profesor.set({
                         ...profesor,
                         calendario: nuevoCalendario
                     })
                     let calendarioEditado = await profesor.save()
-
+                    console.log("Punto 4")
                     res.send(calendarioEditado)
 
                 }
                 else {
+                    console.log("Punto 5")
                     profesor.set({
                         ...profesor,
                         calendario: [
@@ -115,6 +126,7 @@ router.post('/add', validateToken, async (req: MiddlewareRequest, res: Response)
                 }
             }
             else {
+                console.log("Punto 6")
                 profesor.set({
                     ...profesor,
                     calendario: [
@@ -132,6 +144,7 @@ router.post('/add', validateToken, async (req: MiddlewareRequest, res: Response)
         }
     }
     catch (error) {
+        console.log("Punto 7")
         return res.send(error)
     }
 });
