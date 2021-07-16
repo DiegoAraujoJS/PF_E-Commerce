@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Navbar } from "react-bootstrap";
 import { Nav } from "react-bootstrap";
-// import { Form } from 'react-bootstrap'
+import { Form } from 'react-bootstrap'
 // import { FormControl } from 'react-bootstrap'
-// import { Button } from 'react-bootstrap'
+import { Button } from 'react-bootstrap'
+import CSS from 'csstype';
 import axios from 'axios';
 import { NavDropdown } from "react-bootstrap";
 import { Link } from 'react-router-dom';
@@ -57,12 +58,20 @@ export default function SearchBar() {
     }
   }
 
+  const dropBox: CSS.Properties = {
+    width: '350px'
+  }
+  const inputSizeLim: CSS.Properties = {
+    position: 'relative',
+    width: '200px'
+  }
+
   return (
     <Navbar bg="light" expand="lg" style={{ height: "10vh" ,}}>
       <Navbar.Brand className={'ms-3'} href="#home">Tus Clases</Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
-        <Nav className="mr-auto">
+        <Nav >
           <Link className={'nav-link ms-4 text-decoration-none'} to={"/home"}>Home</Link>
           <Link className={'nav-link ms-4 text-decoration-none'} to={"/calendar"}>Calendar</Link>
           <Link className={'nav-link ms-4 text-decoration-none'} to={"/perfil"}>Profile</Link>
@@ -75,9 +84,23 @@ export default function SearchBar() {
               </NavDropdown.Item>
             </NavDropdown>
             :
-            <Navbar.Text className={'justify-content-end'}>
-              <Link to='login'>Iniciar sesión</Link> ¿No tienes cuenta? <Link to='/registro'>Regístrate!</Link>
-            </Navbar.Text>
+            <NavDropdown className={'ms-4 text-decoration-none'} title="Cuenta" id="basic-nav-dropdown">
+              <Form className={'d-flex flex-column aling-items-center'} style={dropBox}>
+                <Form.Control style={inputSizeLim} className={'d-flex justify-content-center'} type="email" placeholder="Email" />
+                <Form.Control style={inputSizeLim} type="password" placeholder="Contraseña" />
+                <Form.Check type="checkbox" label="Mostrar contraseña" />
+                <Button style={inputSizeLim} variant="primary" type="submit">
+                  Entrar
+                </Button>
+              </Form>
+            </NavDropdown>
+            // <NavDropdown  className={'ms-4 text-decoration-none justify-content-end'} title="Cuenta" id="basic-nav-dropdown">
+            //   <Form>
+            //     <Form.Control  className={'ms-3 mb-3'} type='email' placeholder='Email'/>
+            //     <Form.Control className={'ms-3 mb-3'} type='password' placeholder='Contraseña'/>
+            //     <Form.Check type="checkbox" label="Mostrar contraseña" />
+            //   </Form>
+            // </NavDropdown>
           }
           {loggedOrNot() && user.role === Role.PROFESSOR ?
             <Link className={'nav-link ms-4 text-decoration-none'} to={"/clases/add"}>Agrega tu Propia Clase!</Link>
