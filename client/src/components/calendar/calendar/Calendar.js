@@ -1,7 +1,9 @@
 import React, { Component } from "react";
+import { Clasesregulares } from "./clasesregulares";
 import getCookieValue from "../../../cookieParser";
 import {
   DayPilot,
+  DayPilotDate,
   DayPilotCalendar,
   DayPilotNavigator,
 } from "daypilot-pro-react";
@@ -48,6 +50,7 @@ class Calendar extends Component {
     super(props);
     var email=this.props.email
     this.state = {
+      allowEventOverlap: false,
       isUser: false,
       token: '',
       viewType: "Week",
@@ -56,28 +59,26 @@ class Calendar extends Component {
       ,
       onTimeRangeSelected: async (args) => {
         if (this.state.isUser) {
-
           const dp = this.calendar;
           const modal = await DayPilot.Modal.prompt(
             "Create a new event:",
             "Disponible"
           );
-          
           dp.clearSelection();
           if (!modal.result) { return; }
           dp.events.add({
             start: args.start,
             end: args.end,
             id: DayPilot.guid(),
-            text: modal.result
+            text: modal.result,
+            moveDisabled: true,
+          resizeDisabled: true,
           });
-          
           const año=args.start.value.slice(0,-15)
           const mes=args.start.value.slice(5,-12)
           const dia=args.start.value.slice(8,-9)
           const start=args.start.value.slice(11)
           const end=args.end.value.slice(11)
-          
           const horario1={
             disponible: [[start,  end]],
             email: email,
@@ -88,6 +89,7 @@ class Calendar extends Component {
             }
         } 
           console.log(email)
+          console.log("Token",this.state.token)
           await axios.post('http://localhost:3001/api/calendario/add', horario1, {headers: {Authorization: this.state.token}})
   
         }
@@ -95,7 +97,6 @@ class Calendar extends Component {
       eventDeleteHandling: "Update",
       onEventClick: async args => {
         if (this.state.isUser){
-
           const dp = this.calendar;
           const modal = await DayPilot.Modal.prompt("Update event text:", args.e.text());
           if (!modal.result) { return; }
@@ -143,24 +144,20 @@ class Calendar extends Component {
       },
     };
   }
-
   async componentDidMount() {
 
     // load event data
     const token = getCookieValue('token').replaceAll("\"", '')
     const thisUser = await axios.post(`http://localhost:3001/api/verify`, {},{ withCredentials: true, headers: {Authorization: token}})
     this.state.token = token
-    
     const email=this.props.email
     if (thisUser && email === thisUser.data.mail){
       this.state.isUser = true;
     }
     if(email===undefined && localStorage.getItem('user')!==null)email=JSON.parse(localStorage.getItem('user')).mail
-    
     const arrayProf = await axios.get(
       `http://localhost:3001/api/calendario/${email}`
     );
-    
     var tempo = [];
     if(arrayProf.data.length>0){arrayProf.data.map((prof) => {
       let año = prof.fecha.anio.toString();
@@ -172,7 +169,6 @@ class Calendar extends Component {
       if (mes.length === 1) {
         mes = "0" + mes;
       }
-      
       if(prof.disponible){prof.disponible.map((disp)=>{
         tempo.push({
           start: año + "-" + mes + "-" + dia + "T" + disp[0],
@@ -181,7 +177,6 @@ class Calendar extends Component {
           backColor: "blue",
           moveDisabled: true,
           resizeDisabled: true,
-          
         })
       })}
       if(prof.ocupado){prof.ocupado.map((ocup)=>{
@@ -191,22 +186,12 @@ class Calendar extends Component {
           text: "Ocupado",
           backColor: "red",
           moveDisabled: true,
-          resizeDisabled: true,
-          
+          resizeDisabled: true,  
         })
       })}
-
-      ;
-
-      
-      
       return tempo;
     });}
-
-    
-
     const persons = tempo;
-    
     this.setState({
       bubble: null,
       showToolTip: false,
@@ -217,6 +202,7 @@ class Calendar extends Component {
     
 
   render() {
+    const propsEmail={email:this.props.email}
     var { ...config } = this.state;
     return (
       <div style={styles.wrap}>
@@ -226,13 +212,14 @@ class Calendar extends Component {
             showMonths={1}
             skipMonths={1}
             startDate={date(today, "yy/mm/dd")}
-            selectionDay={date(today, "yy/mm/dd")}
+            selectionDay={"2021-07-15"}
             onTimeRangeSelected={(args) => {
               this.setState({
                 startDate: args.day,
               });
             }}
           />
+          {this.state.isUser? <Clasesregulares {...propsEmail}/>:null}
         </div>
         <div style={styles.main}>
           <DayPilotCalendar
