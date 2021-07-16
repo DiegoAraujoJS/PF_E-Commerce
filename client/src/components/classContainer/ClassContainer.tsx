@@ -87,9 +87,9 @@ function ClassContainer({ clases, getAll }) {
     console.log(classFilter)
 
     return (
-        <Container className="container-fluid form m-0">
+        <div className="container-fluid pt-5" style={{ backgroundColor: '#ededed' }}>
             <Row>
-                <Col sm={4} md={4}>
+                <Col sm={3} md={3}>
                     <h5 className="font-weight-bold">Categorias</h5>
                     <ListGroup>
                         <ListGroup.Item action onClick={() => nivel !== "Primario" ? setNivel("Primario") : setNivel("")} className="d-flex justify-content-between align-items-center category"> Primario <span className="badge badge-primary badge-pill">328</span> </ListGroup.Item>
@@ -97,6 +97,8 @@ function ClassContainer({ clases, getAll }) {
                         <ListGroup.Item action onClick={() => nivel !== "Terciario" ? setNivel("Terciario") : setNivel("")} className="d-flex justify-content-between align-items-center category"> Terciario <span className="badge badge-primary badge-pill">32</span> </ListGroup.Item>
                         <ListGroup.Item action onClick={() => nivel !== "Universitario" ? setNivel("Universitario") : setNivel("")} className="d-flex justify-content-between align-items-center category"> Universitario <span className="badge badge-primary badge-pill">48</span> </ListGroup.Item>
                     </ListGroup>
+                    
+                    <div className="d-flex">
                     <div className="py-3">
                         <h5 className="font-weight-bold"> Edad</h5>
                         <form className="brand">
@@ -161,14 +163,15 @@ function ClassContainer({ clases, getAll }) {
                             </div>
                         </form>
                     </div>
+                    </div>
                 </Col>
-                <Col sm={8} md={8}>
+                <Col sm={9} md={9}>
                     {/* <SearchBar /> */}
                     <ClassCards clasesFiltradas={classFilter ? classFilter : clases} />
 
                 </Col>
             </Row>
-        </Container>
+        </div>
     )
 }
 
