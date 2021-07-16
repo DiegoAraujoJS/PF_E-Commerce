@@ -72,7 +72,7 @@ console.log("Punto 1")
                 console.log("Profesor", profesor.calendario)
                 console.log("Query", query)
                 console.log("Punto 3.55")
-                let indice = profesor.calendario.findIndex(element => parseInt(element.fecha.anio) == query.fecha.anio && parseInt(element.fecha.mes) == query.fecha.mes && parseInt(element.fecha.dia) == query.fecha.dia)
+                let indice = profesor.calendario.findIndex(element => element.fecha.anio == query.fecha.anio && element.fecha.mes == query.fecha.mes && element.fecha.dia == query.fecha.dia)
                 console.log("indi", indice)
                 let calendario = profesor.calendario[indice]
                 console.log("Calendario", calendario)
