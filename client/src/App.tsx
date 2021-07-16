@@ -73,15 +73,15 @@ function App() {
       }>
       </Route>
 
-      <Route exact path='/claim/id/add' render={() => {
+      {/* <Route exact path='/claim/id/add' render={() => {
           if (role === Role.ADMIN) {
-            return <AddClaim />
+            return <AddClaim/>
           }
           else {
             return < Redirect to="/home" />
           }        
       }
-      }></Route>
+      }></Route> */}
 
     <Route exact path='/perfil' render={() => {      
           if(localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')).mail)  {    
@@ -108,7 +108,7 @@ function App() {
       <Route exact path='/login'><Login /></Route>
       <Route exact path='/calendar'><CalendarApp /></Route>
       <Route exact path='/chat'><Chat /></Route>
-      <Route exact path='/claim/add'><AddClaim /></Route>
+      <Route exact path='/claim/id/add'><AddClaim /></Route>
       <Route exact path='/home'><Home /></Route>
       <Route exact path='/clases'><ClassContainer /></Route>
     </BrowserRouter>
