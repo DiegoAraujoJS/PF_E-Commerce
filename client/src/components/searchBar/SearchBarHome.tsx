@@ -120,17 +120,17 @@ export default function SearchBar() {
   }
 
   return (
-    <Navbar bg="light" expand="lg" style={{ height: "10vh" ,}}>
-      <Navbar.Brand className={'ms-3'} href="#home">Tus Clases</Navbar.Brand>
-      <Navbar.Toggle aria-controls="basic-navbar-nav" />
-      <Navbar.Collapse id="basic-navbar-nav">
-        <Nav >
-          <Link className={'nav-link ms-4 text-decoration-none'} to={"/home"}>Home</Link>
-          <Link className={'nav-link ms-4 text-decoration-none'} to={"/calendar"}>Calendar</Link>
-          <Link className={'nav-link ms-4 text-decoration-none'} to={"/perfil"}>Profile</Link>
-          <Link className={'nav-link ms-4 text-decoration-none'} to={"/chat"}>Chat</Link>
-          <Link className={'nav-link ms-4 text-decoration-none'} to={"/clases"}>Class</Link>
-          {loggedOrNot() ?
+    <Navbar bg="light" expand="lg">
+    <Navbar.Brand className={'ms-3'} href="#home">Tus Clases</Navbar.Brand>
+    <Navbar.Toggle aria-controls="basic-navbar-nav" />
+    <Navbar.Collapse id="basic-navbar-nav">
+      <Nav className="mr-auto">
+        <Link className={'nav-link ms-4 text-decoration-none'} to={"/home"}>Home</Link>
+        <Link className={'nav-link ms-4 text-decoration-none'} to={"/calendar"}>Calendar</Link>
+        <Link className={'nav-link ms-4 text-decoration-none'} to={"/perfil"}>Profile</Link>
+        <Link className={'nav-link ms-4 text-decoration-none'} to={"/chat"}>Chat</Link>
+        <Link className={'nav-link ms-4 text-decoration-none'} to={"/clases"}>Class</Link>
+        {loggedOrNot() ?
             <NavDropdown className={'ms-4 text-decoration-none justify-content-end'} title="Logeado" id="basic-nav-dropdown">
               <NavDropdown.Item onClick={() => signOut()}>
                 Desconectarse
@@ -150,22 +150,15 @@ export default function SearchBar() {
                 </Navbar.Text>
               </Form>
             </NavDropdown>
-            // <NavDropdown  className={'ms-4 text-decoration-none justify-content-end'} title="Cuenta" id="basic-nav-dropdown">
-            //   <Form>
-            //     <Form.Control  className={'ms-3 mb-3'} type='email' placeholder='Email'/>
-            //     <Form.Control className={'ms-3 mb-3'} type='password' placeholder='Contraseña'/>
-            //     <Form.Check type="checkbox" label="Mostrar contraseña" />
-            //   </Form>
-            // </NavDropdown>
-          }
-          {loggedOrNot() && user.role === Role.PROFESSOR ?
-            <Link className={'nav-link ms-4 text-decoration-none'} to={"/clases/add"}>Agrega tu Propia Clase!</Link>
-            :
-            null
-          }
-        </Nav>
-      </Navbar.Collapse>
-    </Navbar>
+        }
+        {loggedOrNot() && user.role === Role.PROFESSOR ?
+          <Link className={'nav-link ms-4 text-decoration-none'} to={"/clases/add"}>Agrega tu Propia Clase!</Link>
+          :
+          null
+        }
+      </Nav>
+    </Navbar.Collapse>
+  </Navbar>
   );
 }
 
