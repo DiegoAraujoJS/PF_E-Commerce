@@ -11,26 +11,26 @@ import deleteAllCookies from "../../cookieClearer";
 import getCookieValue from "../../cookieParser";
 
 export default function SearchBar() {
-  enum Role {USER, PROFESSOR, ADMIN}
-  let [user, setUser] = useState<{name: string, lastName: string, role: number, mail: string} | undefined>({name: '', lastName: '', role: null, mail: ''})
+  enum Role { USER, PROFESSOR, ADMIN }
+  let [user, setUser] = useState<{ name: string, lastName: string, role: number, mail: string } | undefined>({ name: '', lastName: '', role: null, mail: '' })
 
   useEffect(() => {
-    async function setRoleOfUser() {       
+    async function setRoleOfUser() {
       if (localStorage.getItem('login')) {
-        if (!document.cookie){
+        if (!document.cookie) {
           localStorage.removeItem('login')
           console.log('local storage removed')
         }
         const token = getCookieValue('token').replaceAll("\"", '')
-        const thisUser = await axios.post(`http://localhost:3001/api/verify`, {},{ withCredentials: true, headers: {Authorization: token}})
-        
+        const thisUser = await axios.post(`http://localhost:3001/api/verify`, {}, { withCredentials: true, headers: { Authorization: token } })
+
         if (thisUser.status === 200) {
           console.log('status 200')
           setUser(thisUser.data)
         } else {
           console.log('else')
-          setUser(undefined)      
-        }  
+          setUser(undefined)
+        }
       }
     }
     setRoleOfUser()
@@ -38,7 +38,7 @@ export default function SearchBar() {
 
   function loggedOrNot() {
     let logged = localStorage.getItem('login')
-    if(localStorage.getItem('login') === 'true') {
+    if (localStorage.getItem('login') === 'true') {
       return true;
     } else {
       return false;
@@ -47,18 +47,18 @@ export default function SearchBar() {
   async function signOut() {
     // auth.signOut();
     try {
-        const logout = await axios.post(`http://localhost:3001/api/login/logout`, {}, {withCredentials: true})
-        deleteAllCookies()
-        localStorage.removeItem('login')
-        alert("Se cerro sesión correctamente")
-        // window.location.reload();
+      const logout = await axios.post(`http://localhost:3001/api/login/logout`, {}, { withCredentials: true })
+      deleteAllCookies()
+      localStorage.removeItem('login')
+      alert("Se cerro sesión correctamente")
+      // window.location.reload();
     } catch (err) {
-        alert("Fallo al cerrar sesión")
-    }   
-}
+      alert("Fallo al cerrar sesión")
+    }
+  }
 
   return (
-    <Navbar bg="light" expand="lg">
+    <Navbar bg="light" expand="lg" style={{ height: "10vh" ,}}>
       <Navbar.Brand className={'ms-3'} href="#home">Tus Clases</Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
@@ -68,7 +68,7 @@ export default function SearchBar() {
           <Link className={'nav-link ms-4 text-decoration-none'} to={"/perfil"}>Profile</Link>
           <Link className={'nav-link ms-4 text-decoration-none'} to={"/chat"}>Chat</Link>
           <Link className={'nav-link ms-4 text-decoration-none'} to={"/clases"}>Class</Link>
-          {loggedOrNot() ? 
+          {loggedOrNot() ?
             <NavDropdown className={'ms-4 text-decoration-none justify-content-end'} title="Logeado" id="basic-nav-dropdown">
               <NavDropdown.Item onClick={() => signOut()}>
                 Desconectarse
@@ -79,10 +79,10 @@ export default function SearchBar() {
               <Link to='login'>Iniciar sesión</Link> ¿No tienes cuenta? <Link to='/registro'>Regístrate!</Link>
             </Navbar.Text>
           }
-           {loggedOrNot() && user.role === Role.PROFESSOR ? 
-              <Link className={'nav-link ms-4 text-decoration-none'} to={"/clases/add"}>Agrega tu Propia Clase!</Link>
+          {loggedOrNot() && user.role === Role.PROFESSOR ?
+            <Link className={'nav-link ms-4 text-decoration-none'} to={"/clases/add"}>Agrega tu Propia Clase!</Link>
             :
-             null
+            null
           }
         </Nav>
       </Navbar.Collapse>

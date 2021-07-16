@@ -14,6 +14,10 @@ function ClassContainer({ clases, getAll }) {
         value: "",
         check: false
     })
+    const [size, setSize] = useState({
+        name : "",
+        length: 0
+    })
 
     React.useEffect(() => {
         getAll()
@@ -29,6 +33,10 @@ function ClassContainer({ clases, getAll }) {
                         check: false
                     })
                     const response: any = await axios.get(`http://localhost:3001/api/clases/nivel/${nivel}`)
+                    setSize({
+                        name : nivel,
+                        length : response.length
+                    })
                     if (response) return setClassFilter(response.data)
                 }
                 else if (nivel === "") {
@@ -86,15 +94,15 @@ function ClassContainer({ clases, getAll }) {
     console.log(classFilter)
 
     return (
-        <div className="container-fluid pt-5" style={{ backgroundColor: '#ededed' }}>
+        <div className="container-fluid pt-5" style={{ backgroundColor: '#ededed', height:"90vh" }}>
             <Row>
-                <Col sm={3} md={3}>
+                <Col sm={12} md={5} lg={3}>
                     <h5 className="font-weight-bold">Categorias</h5>
                     <ListGroup>
-                        <ListGroup.Item action onClick={() => nivel !== "Primario" ? setNivel("Primario") : setNivel("")} className="d-flex justify-content-between align-items-center category"> Primario <span className="badge badge-primary badge-pill">328</span> </ListGroup.Item>
-                        <ListGroup.Item action onClick={() => nivel !== "Secundario" ? setNivel("Secundario") : setNivel("")} className="d-flex justify-content-between align-items-center category"> Secundario <span className="badge badge-primary badge-pill">112</span> </ListGroup.Item>
-                        <ListGroup.Item action onClick={() => nivel !== "Terciario" ? setNivel("Terciario") : setNivel("")} className="d-flex justify-content-between align-items-center category"> Terciario <span className="badge badge-primary badge-pill">32</span> </ListGroup.Item>
-                        <ListGroup.Item action onClick={() => nivel !== "Universitario" ? setNivel("Universitario") : setNivel("")} className="d-flex justify-content-between align-items-center category"> Universitario <span className="badge badge-primary badge-pill">48</span> </ListGroup.Item>
+                        <ListGroup.Item action onClick={() => nivel !== "Primario" ? setNivel("Primario") : setNivel("")} className="d-flex justify-content-between align-items-center category"> Primario <span className="badge badge-primary badge-pill">{size.name === "Primario" && size.length}</span> </ListGroup.Item>
+                        <ListGroup.Item action onClick={() => nivel !== "Secundario" ? setNivel("Secundario") : setNivel("")} className="d-flex justify-content-between align-items-center category"> Secundario <span className="badge badge-primary badge-pill">{size.name === "Secundario" && size.length}</span> </ListGroup.Item>
+                        <ListGroup.Item action onClick={() => nivel !== "Terciario" ? setNivel("Terciario") : setNivel("")} className="d-flex justify-content-between align-items-center category"> Terciario <span className="badge badge-primary badge-pill">{size.name === "Terciario" && size.length}</span> </ListGroup.Item>
+                        <ListGroup.Item action onClick={() => nivel !== "Universitario" ? setNivel("Universitario") : setNivel("")} className="d-flex justify-content-between align-items-center category"> Universitario <span className="badge badge-primary badge-pill">{size.name === "Universitario" && size.length}</span> </ListGroup.Item>
                     </ListGroup>
                     
                     <div className="d-flex">
@@ -164,7 +172,7 @@ function ClassContainer({ clases, getAll }) {
                     </div>
                     </div>
                 </Col>
-                <Col sm={9} md={9}>
+                <Col sm={12} md={7} lg={9}>
                     {/* <SearchBar /> */}
                     <ClassCards clasesFiltradas={classFilter ? classFilter : clases} />
 
