@@ -40,7 +40,7 @@ const materias = [
 ]
 
 const niveles = [
-	"Primaria", "Secundaria", "Terciaria", "Universitaria"
+	"Primario", "Secundario", "Terciario", "Universitario"
 ]
 
 const grados = [
@@ -194,6 +194,21 @@ console.log(fechaa.setDate(fechaa.getDate() + (i + 7 - fechaa.getDay()) % 7)) */
 										<div className='invalid-feedback'>{errors.hasta}</div>
 									) : null}
 								</Col>
+								<Col sm={12} md={8}>
+									<Form.Label className='text-uppercase'>hasta:</Form.Label>
+									<Field
+										name='hasta'
+										type='time'
+										onChange={handleChange}
+										onBlur={handleBlur}
+										value={values.hasta}
+										className={`form-control ${errors.hasta && touched.hasta ? 'is-invalid' : ''
+											}`}
+									/>
+									{errors.hasta && touched.hasta ? (
+										<div className='invalid-feedback'>{errors.hasta}</div>
+									) : null}
+								</Col>
 							</Row>
 							<Row>
 								<Col sm={6} md={6}>
@@ -279,6 +294,7 @@ console.log(fechaa.setDate(fechaa.getDate() + (i + 7 - fechaa.getDay()) % 7)) */
 									) : null}
 								</Col>
 							</Row>
+							
 							<Row>
 								<Col className='d-flex justify-content-center'>
 									<Button type='submit' className='text-uppercase'>

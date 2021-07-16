@@ -37,6 +37,7 @@ export default function SearchBar() {
   }, [])
 
   function loggedOrNot() {
+    let logged = localStorage.getItem('login')
     if(localStorage.getItem('login') === 'true') {
       return true;
     } else {
@@ -69,12 +70,6 @@ export default function SearchBar() {
           <Link className={'nav-link ms-4 text-decoration-none'} to={"/clases"}>Class</Link>
           {loggedOrNot() ? 
             <NavDropdown className={'ms-4 text-decoration-none justify-content-end'} title="Logeado" id="basic-nav-dropdown">
-              <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.2">
-                Another action
-              </NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-              <NavDropdown.Divider />
               <NavDropdown.Item onClick={() => signOut()}>
                 Desconectarse
               </NavDropdown.Item>
