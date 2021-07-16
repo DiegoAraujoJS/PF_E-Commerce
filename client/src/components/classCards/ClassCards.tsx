@@ -12,13 +12,15 @@ function ClassCards({ clases, getAll, clasesFiltradas }: any) {
 
     React.useEffect(() => {
         getAll()
-        setClassFilter(clases)
     }, [])
+
+    React.useEffect(() => {      
+        setClassFilter(clases)
+    }, [clases])
 
     React.useEffect(() => {
         setClassFilter(clasesFiltradas)
     }, [clasesFiltradas])
-
 
     console.log(clases)
 
