@@ -1,19 +1,18 @@
-body {
-  background-color: #63ffe0;
-}
-
 .calendarContainer {
   display: grid;
   position: center;
 }
 .container {
-  
   scroll-snap-type: y mandatory;
   overflow-y: scroll;
   height: 100vh;
   scroll-behavior: smooth;
 }
-
+.icon {
+  position: absolute; /*or fixed*/
+  right: 0px;
+  height: 7%;
+}
 .profile {
   border-radius: 70px;
 }
