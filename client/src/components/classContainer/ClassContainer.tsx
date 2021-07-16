@@ -8,7 +8,6 @@ import axios from 'axios'
 
 
 function ClassContainer({ clases, getAll }) {
-    const [show, setShow] = useState([])
     const [classFilter, setClassFilter] = useState([])
     const [nivel, setNivel] = useState("")
     const [numChexbox, setNumChexbox] = useState({

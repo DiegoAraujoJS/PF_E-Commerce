@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import CSS from 'csstype';
 import ClassCard from '../classCard/ClassCard';
-import { Button, Col, Container, Dropdown, DropdownButton, Form, InputGroup, ListGroup, ListGroupItem, Pagination, Row } from 'react-bootstrap';
+import { Alert, Button, Col, Container, Dropdown, DropdownButton, Form, InputGroup, ListGroup, ListGroupItem, Pagination, Row } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { getAll } from '../../Actions/Actions';
 
-function ClassCards({ clases, getAll , clasesFiltradas}: any) {
+function ClassCards({ clases, getAll, clasesFiltradas }: any) {
     const [search, setSearch] = useState("")
     const [classFilter, setClassFilter] = useState([])
     const [classProp, setClassProp] = useState("")
-    
+
     React.useEffect(() => {
         getAll()
     }, [])
@@ -72,7 +72,7 @@ function ClassCards({ clases, getAll , clasesFiltradas}: any) {
 
     useEffect(() => {
         determineNumberOfPages();
-    }, [ classFilter, clases ])
+    }, [classFilter, clases])
 
     useEffect(
         () => {
@@ -103,7 +103,7 @@ function ClassCards({ clases, getAll , clasesFiltradas}: any) {
 
         setPage({
             ...page,
-            totalPages: clases ? Math.ceil(clases.length / displayRecipes) : 0,
+            totalPages: clasesFiltradas ? Math.ceil(clasesFiltradas.length / displayRecipes) : Math.ceil(clases.length / displayRecipes),
             dataStartingIndex: 1,
             pageData: paginatedDataObject,
             clickedOnNumber: 1
@@ -173,7 +173,7 @@ function ClassCards({ clases, getAll , clasesFiltradas}: any) {
                 <Pagination.Item onClick={(e) => {
                     setCurrentClickedNumber(e);
                 }}
-                    key={i}
+                    key={i + 50}
                 >{i}
                 </Pagination.Item>
             );
@@ -189,6 +189,7 @@ function ClassCards({ clases, getAll , clasesFiltradas}: any) {
 
     console.log(dataFromPaginate)
     console.log(classFilter)
+    console.log(page)
     return (
         <div className="container-fluid">
 
@@ -211,7 +212,7 @@ function ClassCards({ clases, getAll , clasesFiltradas}: any) {
             <Row  >
                 <Col  >
                     <ul style={classListContainer}>
-                        {dataFromPaginate && dataFromPaginate.length > 0  ?
+                        {dataFromPaginate && dataFromPaginate.length > 0 ?
                             dataFromPaginate.map((clase, i) => (
                                 <ClassCard
                                     nombre={clase.nombre}
@@ -222,12 +223,11 @@ function ClassCards({ clases, getAll , clasesFiltradas}: any) {
                                     nivel={clase.nivel}
                                     profesor={clase.profesor}
                                     puntuacion={clase.puntuacion}
-                                    key={i+10}
+                                    key={i + 10}
                                 />
                             ))
-                     
-                            :  classFilter && classFilter.length > 0  ? classFilter.map((clase, i) => {
-             
+
+                            : classFilter ? classFilter.map((clase, i) => {
                                 if (i < 2) {
                                     return (
                                         <ClassCard
@@ -239,35 +239,41 @@ function ClassCards({ clases, getAll , clasesFiltradas}: any) {
                                             nivel={clase.nivel}
                                             profesor={clase.profesor}
                                             puntuacion={clase.puntuacion}
-                                            key={i+20}
+                                            key={i + 20}
                                         />
                                     );
                                 } else {
                                     return null;
                                 }
-                            }) 
-                            : clases && clases.length > 0  ? clases.map((clase, i) => {
-               
-                                if (i < 2) {
-                                    return (
-                                        <ClassCard
-                                            nombre={clase.nombre}
-                                            descripcion={clase.descripcion}
-                                            esPresencial={clase.esPresencial}
-                                            grado={clase.grado}
-                                            materia={clase.materia}
-                                            nivel={clase.nivel}
-                                            profesor={clase.profesor}
-                                            puntuacion={clase.puntuacion}
-                                            key={i+30}
-                                        />
-                                    );
-                                } else {
-                                    return null;
-                                }
-                            })                             
-                            :  <h2>No hay clases disponibles</h2>
+                            })
+                                : clases ? clases.map((clase, i) => {
+
+                                    if (i < 2) {
+                                        return (
+                                            <ClassCard
+                                                nombre={clase.nombre}
+                                                descripcion={clase.descripcion}
+                                                esPresencial={clase.esPresencial}
+                                                grado={clase.grado}
+                                                materia={clase.materia}
+                                                nivel={clase.nivel}
+                                                profesor={clase.profesor}
+                                                puntuacion={clase.puntuacion}
+                                                key={i + 30}
+                                            />
+                                        );
+                                    } else {
+                                        return null;
+                                    }
+                                })
+                                    : <Alert variant="info" className="text-center">
+                                        <h3>No hay clases disponibles</h3>
+                                    </Alert> 
                         }
+                        {classFilter && classFilter.length === 0 ?
+                            <Alert variant="info" className="text-center">
+                                <h3>No hay clases disponibles</h3>
+                            </Alert> : null}
                     </ul>
                 </Col>
             </Row>
@@ -295,8 +301,8 @@ function ClassCards({ clases, getAll , clasesFiltradas}: any) {
                                         <div />
                                     )}
                                 </div>
-                                <div  className="d-flex flex-row">{pageNumberRender()}</div>
-                                <div  className="d-flex flex-row">
+                                <div className="d-flex flex-row">{pageNumberRender()}</div>
+                                <div className="d-flex flex-row">
                                     {currentClickedNumber !== totalPages ? (
                                         <div className="d-flex flex-row">
                                             <span>
