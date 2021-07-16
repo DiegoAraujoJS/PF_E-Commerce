@@ -47,8 +47,7 @@ const ClassCard: React.FC<Class> = (props) => {
 
 const puntuacion = (num) => {
     return (<>{
-        num === 5 ?
-            <div><span className="fas fa-star">🌟</span> <span className="fas fa-star">🌟</span> <span className="fas fa-star">🌟</span> <span className="fas fa-star">🌟</span> <span className="fas fa-star">🌟</span></div>
+        num === 5 ? <div><span className="fas fa-star">🌟</span> <span className="fas fa-star">🌟</span> <span className="fas fa-star">🌟</span> <span className="fas fa-star">🌟</span> <span className="fas fa-star">🌟</span></div>
             : num === 4 ? <div> <span className="fas fa-star">🌟</span> <span className="fas fa-star">🌟</span> <span className="fas fa-star">🌟</span> <span className="fas fa-star">🌟</span> </div>
                 : num === 3 ? <div> <span className="fas fa-star">🌟</span> <span className="fas fa-star">🌟</span> <span className="fas fa-star">🌟</span> </div>
                     : num === 2 ? <div> <span className="fas fa-star">🌟</span> <span className="fas fa-star">🌟</span> </div>
