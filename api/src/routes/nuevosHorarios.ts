@@ -1,34 +1,45 @@
 import editCalendar from "./editCalendar"
+import flatInline from "../utils/flatInline"
+import flat from '../utils/flat'
+import { Horario, Disponible, Ocupado, DisponibleOcupadoTransform } from "../../../interfaces"
+const nuevosHorarios = (horariosActuales: Horario, queryDisponible?: Disponible, queryOcupado?: Ocupado): DisponibleOcupadoTransform => {
 
-const nuevosHorarios = (arrayHorarios: Array<string[]>, query?: any, queryAdd?: any) => {
+    const query_1: string = queryDisponible ? queryDisponible.disponible[0][0].substring(0, 2) + '.' + queryDisponible.disponible[0][0].substring(3, 5) : queryOcupado.ocupado[0][0].substring(0, 2) + '.' +  queryOcupado.ocupado[0][0].substring(3, 5)
+    const query_2: string = queryDisponible ? queryDisponible.disponible[0][1].substring(0, 2) + '.' + queryDisponible.disponible[0][1].substring(3, 5) : queryOcupado.ocupado[0][1].substring(0, 2) + '.' + queryOcupado.ocupado[0][1].substring(3, 5) 
 
-    if (query) {
-        var query_1: string = query[0].substring(0, 2) + query[0].substring(3, 5) + query[0].substring(6, 8)
-        var query_2: string = query[1].substring(0, 2) + query[1].substring(3, 5) + query[1].substring(6, 8)
+    const timeToNumberQuery: [number, number] = [parseFloat(query_1), parseFloat(query_2)]
+
+    const timeToNumberActualDisponible: [number, number][] = horariosActuales.disponible.map(h => {
+        let sumaHorario_1 = h[0].substring(0, 2) + '.' +  h[0].substring(3, 5)
+        let sumaHorario_2 = h[1].substring(0, 2) + '.' + h[1].substring(3, 5)
+        return [parseFloat(sumaHorario_1), parseFloat(sumaHorario_2)]
+    })
+
+    const timeToNumberActualOcupado: [number, number][] = horariosActuales.ocupado.map(h => {
+        let sumaHorario_1 = h[0].substring(0, 2) + '.' +  h[0].substring(3, 5)
+        let sumaHorario_2 = h[1].substring(0, 2) + '.' + h[1].substring(3, 5)
+        return [parseFloat(sumaHorario_1), parseFloat(sumaHorario_2)]
+    })
+
+    if (queryDisponible){
+
+        const newAvailable = flatInline([...timeToNumberActualDisponible, timeToNumberQuery]) //este va a ser nuevo si le pasan un disponible
+
+
+
+
+    } else if (queryOcupado) {
+
+        const newTaken = flatInline([...timeToNumberActualOcupado, timeToNumberQuery]) // este va a ser el nuevo ocupado si le pasan un ocupado
+
+        
+
     }
-
-    let horarioNumero = arrayHorarios.map(h => {
-        if (h) {
-            if (h[0].length === 8 && h[1].length === 8) {
-                let sumaHorario_1 = h[0].substring(0, 2) + h[0].substring(3, 5) + h[0].substring(6, 8)
-                let sumaHorario_2 = h[1].substring(0, 2) + h[1].substring(3, 5) + h[1].substring(6, 8)
-                return [sumaHorario_1, sumaHorario_2]
-            }
-        }
-    })
-
-    let numeros = horarioNumero && horarioNumero.map(elements => elements && elements.join().split(","))
-
-    let ordenados = numeros && numeros.join().split(",").sort()
-
-    let eliminarRepetidos = ordenados?.filter((item, index) => {
-        return ordenados?.indexOf(item) === index;
-    })
 
     let acomodarFechas = eliminarRepetidos?.map((item, index) => {
         if (query && query_1 && query_2) {
             if (item > query_1 && item < query_2) {
-                if (Number(ordenados[index]) - Number(query_1) < Number(query_2) - Number(ordenados[index])) {
+                if (Number(ordered[index]) - Number(query_1) < Number(query_2) - Number(ordered[index])) {
                     return query_1
                 }
                 else {
@@ -38,7 +49,7 @@ const nuevosHorarios = (arrayHorarios: Array<string[]>, query?: any, queryAdd?: 
             else if (item === query_1 && index % 2 === 0) {
                 return query_2
             }
-            else if (item === ordenados[index - 1]) {
+            else if (item === ordered[index - 1]) {
                 return null
             }
             else {
