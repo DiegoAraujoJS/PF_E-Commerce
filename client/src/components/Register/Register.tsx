@@ -41,7 +41,7 @@ const Register = () => {
       
       if (registro) alert("Se registro correctamente")
       
-      history.push('/login')
+      history.push('/home')
     }
     catch (error) {
       if (error.response && error.response.data.type ===  ErrorType.ALREADY_EXISTS) {
