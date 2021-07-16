@@ -94,7 +94,7 @@ function ClassContainer({ clases, getAll }) {
     console.log(classFilter)
 
     return (
-        <div className="container-fluid pt-5" style={{ backgroundColor: '#ededed', height:"90vh" }}>
+        <div className="container-fluid pt-5" style={{ backgroundColor: '#ededed', height:"100%" }}>
             <Row>
                 <Col sm={12} md={5} lg={3}>
                     <h5 className="font-weight-bold">Categorias</h5>

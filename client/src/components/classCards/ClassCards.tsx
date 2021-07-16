@@ -10,15 +10,19 @@ function ClassCards({ clases, getAll, clasesFiltradas }: any) {
     const [classFilter, setClassFilter] = useState([])
     const [classProp, setClassProp] = useState("")
 
-    React.useEffect(() => {
+    useEffect(() => {
         getAll()
     }, [])
 
-    React.useEffect(() => {      
+    useEffect(() => {      
         setClassFilter(clases)
     }, [clases])
 
-    React.useEffect(() => {
+    useEffect(() => {
+        setClassFilter(clasesFiltradas)
+    }, [clasesFiltradas])
+
+    useEffect(() => {
         setClassFilter(clasesFiltradas)
     }, [clasesFiltradas])
 
@@ -35,7 +39,6 @@ function ClassCards({ clases, getAll, clasesFiltradas }: any) {
     const handleChange = (e) => {
         setSearch(e.target.value)
     };
-
 
     useEffect(() => {
         if (clases && search) {
@@ -59,7 +62,6 @@ function ClassCards({ clases, getAll, clasesFiltradas }: any) {
             setClassFilter(clases)
         }
     }, [search])
-
 
     const [page, setPage] = useState({
         totalPages: null,
@@ -107,7 +109,7 @@ function ClassCards({ clases, getAll, clasesFiltradas }: any) {
 
         setPage({
             ...page,
-            totalPages: clasesFiltradas ? Math.ceil(clasesFiltradas.length / displayRecipes) : Math.ceil(clases.length / displayRecipes),
+            totalPages: clasesFiltradas.length > 0 ? Math.ceil(clasesFiltradas.length / displayRecipes) : Math.ceil(clases.length / displayRecipes),
             dataStartingIndex: 1,
             pageData: paginatedDataObject,
             clickedOnNumber: 1
@@ -187,13 +189,11 @@ function ClassCards({ clases, getAll, clasesFiltradas }: any) {
             key={currentClickedNumber}>{currentClickedNumber} </Pagination.Item>)
 
         let points = <Pagination.Item> ... </Pagination.Item>
-
+        console.log(currentPage)
         return [pages[currentClickedNumber - 3] ? points : null, pages[currentClickedNumber - 2], currentPage, pages[currentClickedNumber], pages[currentClickedNumber + 1] ? points : null];
     };
 
-    console.log(dataFromPaginate)
-    console.log(classFilter)
-    console.log(page)
+
     return (
         <div className="container-fluid">
 
@@ -201,10 +201,8 @@ function ClassCards({ clases, getAll, clasesFiltradas }: any) {
                 <Col sm={2} md={2}>
                     <div>
                         <select className="form-select" onChange={(e: any) => setClassProp(e.target.value)}>
-                            <option value="" >Filtros</option>
-                            <option value="nombre" >Nombre</option>
+                            <option value="nombre" >Nombre de la clase</option>
                             <option value="profesor" >Profesor</option>
-                            <option value="materia" >Materia</option>
                         </select>
                     </div>
                 </Col>

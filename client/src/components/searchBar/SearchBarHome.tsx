@@ -58,7 +58,7 @@ export default function SearchBar() {
   }
 
   return (
-    <Navbar bg="light" expand="lg" style={{ height: "10vh" ,}}>
+    <Navbar bg="light" expand="lg">
       <Navbar.Brand className={'ms-3'} href="#home">Tus Clases</Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
