@@ -25,6 +25,44 @@ const nuevosHorarios = (horariosActuales: Horario, queryDisponible?: Disponible,
 
         const newAvailable = flatInline([...timeToNumberActualDisponible, timeToNumberQuery]) //este va a ser nuevo si le pasan un disponible
 
+                                            // disponible: [[10, 12]]
+                                            // ocupado: [[14, 16], [18, 20]]
+
+                                            // disponbie: [[10, 12], [18, 20]<==]
+                                            // ocupado: [[14, 16]]
+
+                                            // disponible: [[10, 12]]
+                                            // ocupado: [[14, 16], [18, 20]]
+
+                                            // disponbie: [[10, 12], [17, 22]<==]
+                                            // ocupado: [[14, 16]]
+
+        // disponible: [[10, 12]]
+        // ocupado: [[14, 16], [18, 20]]
+
+        // disponbie: [[10, 12], [19, 22]<==]
+        // ocupado: [[14, 16], [18, 19]]
+
+        const oldOcupado = timeToNumberActualOcupado
+
+        let newOcupado = oldOcupado.filter(ocupado => ! newAvailable.find(range => range[0] <= ocupado[0] && range[1] >= ocupado[1]))
+
+        newOcupado = newOcupado.map(ocupado => {
+            let min = ocupado[0]
+            let max = ocupado[1]
+            const superSetsMin = newAvailable.find(range => range[0] <= min && range[1] >= min)
+            const superSetsMax = newAvailable.find(range => range[0] <= max && range[1] >= max)
+            
+            if (superSetsMin){
+                return [superSetsMin[1], max]
+            } else if (superSetsMax){
+                return [min, superSetsMax[0]]
+            } else {
+                return ocupado
+            }
+        })
+
+        
 
 
 
@@ -32,7 +70,7 @@ const nuevosHorarios = (horariosActuales: Horario, queryDisponible?: Disponible,
 
         const newTaken = flatInline([...timeToNumberActualOcupado, timeToNumberQuery]) // este va a ser el nuevo ocupado si le pasan un ocupado
 
-        
+
 
     }
 
