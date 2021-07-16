@@ -4,9 +4,16 @@ import axios from "axios";
 import getCookieValue from "../../cookieParser";
 import style from "./Chat.module.css";
 import ChatRoom from "./ChatRoom";
+import ListChatRoom from "./ListChatRoom";
 
 function Chat() {
   const [userLoged, setUserLoged] = useState();
+  const [userReference, setUserReference] = useState({
+    mail: "admin@admin.com",
+    role: 2,
+    name: "Admin",
+    lastName: "Admin",
+  });
 
   useEffect(() => {
     const getUserLoged = async () => {
@@ -19,15 +26,21 @@ function Chat() {
         {},
         { withCredentials: true, headers: { Authorization: token } }
       );
+      console.log(userResponse.data)
       setUserLoged(userResponse.data);
     };
     getUserLoged();
   }, []);
 
   return (
-    <div className={style.appContainer}>
+    <div className={"container"}>
       {userLoged ? (
-        <ChatRoom userLoged={userLoged} userReference={{mail: "diegoaraujo@gmail.com", role: 2, name: 'Mr Admin', lastName: 'Smith'}} />
+        <div className={"d-flex flex-row justify-content-center w-100"}>
+          <ListChatRoom
+            userLoged={userLoged}
+            userReference={userReference}
+          />
+        </div>
       ) : (
         "no hay usuario logeado"
       )}

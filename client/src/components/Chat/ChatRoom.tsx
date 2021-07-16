@@ -17,20 +17,18 @@ function unificar(mail1, mail2) {
   return orden;
 }
 
-interface PropsChat {
+interface ChatRoomData {
   userLoged: UserProps;
-  userReference: UserProps;
+  users: Array<UserProps>;
+  id: string;
 }
 
-export default function ChatRoom(props: React.PropsWithChildren<PropsChat>) {
+export default function ChatRoom(props: React.PropsWithChildren<ChatRoomData>) {
   const dummy: any = useRef();
 
-  let messagesRef = firestore.collection(
-    unificar(props.userLoged.mail, props.userReference.mail)
-  );
-
-  const query = messagesRef.orderBy("createdAt").limit(25);
-  const [messages] = useCollectionData(query, { idField: "id" });
+  let messagesRef = firestore.collection("chatsRooms").doc(props.id).collection("messages");
+  const queryMessages = messagesRef.orderBy("createdAt").limit(25);
+  const [messages] = useCollectionData(queryMessages, { idField: "id" });
 
   const [formValue, setFormValue] = useState("");
 
@@ -51,9 +49,9 @@ export default function ChatRoom(props: React.PropsWithChildren<PropsChat>) {
 
   return (
     <>
-      <div className="App">
+      <div className="App w-100">
         <nav className="navbar navbar-dark bg-dark">
-          <div className="container text-white fs-5">{props.userReference.name}</div>
+          <div className="container text-white fs-5">{props.users.map( (user) => (user.mail !== props.userLoged.mail) ? user.name: "")}</div>
         </nav>
         <section
           className={"d-flex flex-column justify-content-center bg-light"}

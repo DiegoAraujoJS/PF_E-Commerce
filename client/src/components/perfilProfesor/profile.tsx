@@ -104,8 +104,8 @@ function Profile(email) {
                 </div>
             </section>
             <section className={style.sectionThree}>
-            <div>
-                { userLoged ? <ChatRoom userLoged={userLoged} userReference={{mail: prof.User_mail, role: Role.PROFESSOR, name: prof.name, lastName: prof.lastName}}  /> : null}
+                <div>
+                    {/* { userLoged ? <ChatRoom userLoged={userLoged} userReference={{mail: prof.User_mail, role: Role.PROFESSOR, name: prof.name, lastName: prof.lastName}}  /> : null} */}
                 </div>
             </section>
             
