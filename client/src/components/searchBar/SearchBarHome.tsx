@@ -68,6 +68,7 @@ export default function SearchBar() {
           <Link className={'nav-link ms-4 text-decoration-none'} to={"/calendar"}>calendar</Link>
           <Link className={'nav-link ms-4 text-decoration-none'} to={"/perfil"}>perfil</Link>
           <Link className={'nav-link ms-4 text-decoration-none'} to={"/chat"}>chat</Link>
+          <Link className={'nav-link ms-4 text-decoration-none'} to={"/clases"}>Clases</Link>
           {loggedOrNot() ? 
             <NavDropdown className={'ms-4 text-decoration-none justify-content-end'} title="Logeado" id="basic-nav-dropdown">
               <NavDropdown.Item onClick={() => signOut()}>

@@ -35,7 +35,7 @@ const materias = [
 ]
 
 const niveles = [
-	"Primaria", "Secundaria", "Terciaria", "Universitaria"
+	"Primario", "Secundario", "Terciario", "Universitario"
 ]
 
 const grados = [
