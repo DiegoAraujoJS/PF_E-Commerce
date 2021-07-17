@@ -82,12 +82,51 @@ describe ('guarda y modifica el calendario del profesor correctamente', () => {
             dia: 16
         }
     }
+
+    const extendedAvailable: Disponible = {
+        disponible: [['18:00:00', '22:00:00']],
+        email: 'edwardburgos@gmail.com',
+        fecha: {
+            anio: 2021,
+            mes: 8,
+            dia: 20
+        }
+    }
+
+    const extendedTaken: Ocupado = {
+        ocupado: [['19:00:00', '21:00:00']],
+        email: 'edwardburgos@gmail.com',
+        fecha: {
+            anio: 2021,
+            mes: 8,
+            dia: 20
+        }
+    }
+    const expectedSixth: Horario = {
+        ocupado: [['19:00:00', '21:00:00']],
+        disponible: [['18:00:00', '19:00:00'], ['21:00:00', '22:00:00']],
+        email: 'edwardburgos@gmail.com',
+        fecha: {
+            anio: 2021,
+            mes: 8,
+            dia: 20
+        }
+    }
+
+    
+
+    const expectedFourthTest: CalendarioResponse = [...expectedThirdTest, {...newAvailable, ocupado: null}]
+    const expectedFifthTest: CalendarioResponse = [...expectedFourthTest, {...newNewAvailable, ocupado: null}]
+    const expectedSixthTest: CalendarioResponse = [...expectedFifthTest, expectedSixth]
+
+    let token;
     
     it('postea varios horarios correctamente', async () => {
     
-        
-        await axios.post('http://localhost:3001/api/calendario/add', horario1)
-        await axios.post('http://localhost:3001/api/calendario/add', horario2)
+        const login = await axios.post('http://localhost:3001/api/login', {mail: 'edwardburgos@gmail.com', password: '123456'})
+        token = login.data.token
+        await axios.post('http://localhost:3001/api/calendario/add', horario1, {headers: {Authorization: token}})
+        await axios.post('http://localhost:3001/api/calendario/add', horario2, {headers: {Authorization: token}})
         const Edward = await Profesor.findByPk('edwardburgos@gmail.com')
     
         return expect(Edward?.calendario).toEqual([{...horario1, disponible: horario1.disponible.concat(horario2.disponible), ocupado: null}])
@@ -96,7 +135,7 @@ describe ('guarda y modifica el calendario del profesor correctamente', () => {
 
     it ('deberia pisar horarios disponibles con horarios ocupados', async () => {
         
-        await axios.put('http://localhost:3001/api/calendario/edit', ocupado1)
+        await axios.put('http://localhost:3001/api/calendario/edit', ocupado1, {headers: {Authorization: token}})
         const Edward = await Profesor.findByPk('edwardburgos@gmail.com')
 
         console.log(Edward?.calendario)
@@ -106,7 +145,7 @@ describe ('guarda y modifica el calendario del profesor correctamente', () => {
     })
 
     it ('deberia pisar rangos de horarios: si tiene de disponible [\'18:00:00\', \'20:00:00\'] y le pasan de ocupado [\'19:00:00\', \'20:00:00\'], deberia quedar en disponible [\'18:00:00\', \'19:00:00\']', async () => {
-        await axios.put('http://localhost:3001/api/calendario/edit', ocupado2)
+        await axios.put('http://localhost:3001/api/calendario/edit', ocupado2, {headers: {Authorization: token}})
         const Edward = await Profesor.findByPk('edwardburgos@gmail.com')
 
         console.log(Edward?.calendario)
@@ -115,20 +154,28 @@ describe ('guarda y modifica el calendario del profesor correctamente', () => {
     })
 
     it ('debería agregar un objeto Disponible nuevo al array si se le pasa una nueva fecha', async () => {
-        await axios.post('http://localhost:3001/api/calendario/add', newAvailable)
+        await axios.post('http://localhost:3001/api/calendario/add', newAvailable, {headers: {Authorization: token}})
         const Edward = await Profesor.findByPk('edwardburgos@gmail.com')
 
-        return expect (Edward.calendario).toEqual([...expectedThirdTest, newAvailable])
+        return expect (Edward.calendario).toEqual(expectedFourthTest)
     })
 
     it ('paso 1) agregas un horario disponible. paso 2) ocupas ese horario. paso 3) lo volves a poner como disponible. Deberia quedar solo el disponible y no los dos', async () => {
-        await axios.post('http://localhost:3001/api/calendario/add', newNewAvailable)
-        await axios.put('http://localhost:3001/api/calendario/edit', newNewTaken)
-        await axios.post('http://localhost:3001/api/calendario/add', newNewAvailable)
+        await axios.post('http://localhost:3001/api/calendario/add', newNewAvailable, {headers: {Authorization: token}})
+        await axios.put('http://localhost:3001/api/calendario/edit', newNewTaken, {headers: {Authorization: token}})
+        await axios.post('http://localhost:3001/api/calendario/add', newNewAvailable, {headers: {Authorization: token}})
         const Edward = await Profesor.findByPk('edwardburgos@gmail.com')
 
-        return expect (Edward.calendario).toEqual([...expectedThirdTest, newAvailable, newNewAvailable])
+        return expect (Edward.calendario).toEqual(expectedFifthTest)
 
+    })
+
+    it ('deberia guardar como disponible a la diferencia entre el ocupado que le pasan y el disponible de antes', async () => {
+        await axios.post('http://localhost:3001/api/calendario/add', extendedAvailable, {headers: {Authorization: token}})
+        await axios.put('http://localhost:3001/api/calendario/edit', extendedTaken, {headers: {Authorization: token}})
+
+        const Edward = await Profesor.findByPk('edwardburgos@gmail.com')
+        return expect (Edward.calendario).toEqual(expectedSixthTest)
     })
 
     

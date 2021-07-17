@@ -26,13 +26,10 @@ const nuevosHorarios = (horariosActuales: Horario, queryDisponible?: Disponible,
             const available: [number, number][] = newHorario.disponible.map(parseToIntTuples)
             const taken : [number, number][] = horariosActuales.ocupado.map(parseToIntTuples)
             newHorario.ocupado = squashTakenWithAvailable(available, taken).map(parseToStringTuples)
-        } else {
-            newHorario.ocupado = null
-        }
+            if (newHorario.ocupado.length === 0) newHorario.ocupado = null 
+        } 
 
     } else if (queryOcupado) {
-
-
         
         newHorario.ocupado = horariosActuales.ocupado ? flatInline([...horariosActuales.ocupado.map(parseToIntTuples), ...queryOcupado.ocupado.map(parseToIntTuples)]).map(parseToStringTuples) : queryOcupado.ocupado
         
@@ -42,61 +39,11 @@ const nuevosHorarios = (horariosActuales: Horario, queryDisponible?: Disponible,
             console.log('taken', newHorario.ocupado.map(parseToIntTuples))
 
             newHorario.disponible = squashTakenWithAvailable(taken, available).map(parseToStringTuples)
+            if (newHorario.disponible.length === 0) newHorario.disponible = null 
         
             
-        } else {
-            newHorario.disponible = null
-        }
+        } 
     }
     return newHorario
 }
 export default nuevosHorarios
-// const horario1 = JSON.parse(`{
-//     "email": "edwardburgos@gmail.com",
-//     "fecha": {
-//         "anio": 2021,
-//         "mes": 8,
-//         "dia": 14
-//     },
-//     "disponible": [["12:00:00", "14:00:00"]],
-//     "ocupado": null
-    
-//   }`)
-//   const disponible1: Disponible = JSON.parse(`{
-//     "email": "edwardburgos@gmail.com",
-//     "fecha": {
-//         "anio": 2021,
-//         "mes": 8,
-//         "dia": 14
-//     },
-//     "disponible": [["18:00:00", "20:00:00"]]
-    
-//   }`)
-//   const ocupado1 = JSON.parse(`{
-//     "email": "edwardburgos@gmail.com",
-//     "fecha": {
-//         "anio": 2021,
-//         "mes": 8,
-//         "dia": 14
-//     },
-//     "ocupado": [["12:00:00", "14:00:00"]]
-    
-//   }`)
-//   const ocupado2 = JSON.parse(`{
-//     "email": "edwardburgos@gmail.com",
-//     "fecha": {
-//         "anio": 2021,
-//         "mes": 8,
-//         "dia": 14
-//     },
-//     "ocupado": [["19:00:00", "20:00:00"]]
-    
-//   }`)
-  
-// const newHorarios1 = nuevosHorarios(horario1, disponible1)
-// console.log ('1', newHorarios1)
-// const newHorarios2 = nuevosHorarios(newHorarios1, null, ocupado1)
-// // const newHorarios2 = nuevosHorarios(newHorarios, ocupado1)
-// console.log('2', newHorarios2)
-// const newHorarios3 = nuevosHorarios(newHorarios2, null, ocupado2)
-// console.log('3', newHorarios3)
