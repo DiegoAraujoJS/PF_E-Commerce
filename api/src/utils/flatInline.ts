@@ -5,7 +5,7 @@ const flatInline = (array: [number, number][]): [number, number][] => {
     for (let i = 0; i < array.length; i++) {
         if (i === 0) {
             ranges.push([array[0][0], array[0][1]])
-            console.log('ranges', ranges)
+            
         } else {
             let l = array[i][0]
             let r = array[i][1]
@@ -13,7 +13,7 @@ const flatInline = (array: [number, number][]): [number, number][] => {
             let max;
 
             if (!ranges.find(range => range[0] <= l && range[1] >= l)) {
-                console.log('primer if')
+                
                 min = l;
             }
             if (!ranges.find(range => range[0] <= r && range[1] >= r)) {
@@ -29,7 +29,7 @@ const flatInline = (array: [number, number][]): [number, number][] => {
             } else if (min && !max) {
 
 
-                const superSets = ranges.filter(range => range[0] <= r && range[1] >= r).flat().sort().reverse()
+                const superSets = ranges.filter(range => range[0] <= r && range[1] >= r).flat().sort((a, b) => a-b)
                 const maximumSuperSet = superSets[superSets.length - 1]
                 max = maximumSuperSet
                 ranges = ranges.filter(range => !(range[0] >= min && range[1] <= max))
@@ -38,8 +38,8 @@ const flatInline = (array: [number, number][]): [number, number][] => {
             } else if (!min && max) {
 
 
-                const superSets = ranges.filter(range => range[0] <= l && range[1] >= l).flat().sort().reverse()
-                console.log('superSets', superSets)
+                const superSets = ranges.filter(range => range[0] <= l && range[1] >= l).flat().sort((a, b) => a-b)
+                
                 const minimumSuperSet = superSets[0]
                 min = minimumSuperSet
                 ranges = ranges.filter(range => !(range[0] >= min && range[1] <= max))
