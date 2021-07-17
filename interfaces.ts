@@ -53,6 +53,7 @@ interface ProfesorProps {
     score: number; 
 }
 
+
 interface IClase{
     id?: number;
     nombre: string;
@@ -67,4 +68,5 @@ interface IClase{
 type DisponibleOcupadoTransform = {disponible: Disponible, ocupado: Ocupado}
 
 export type {UserProps, ArrayDePares, Disponible, Ocupado, CalendarioResponse, ProfesorProps, Horario, Time, DisponibleOcupadoTransform, IClase}
+
 export {Role}

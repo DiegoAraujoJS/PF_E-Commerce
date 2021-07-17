@@ -26,13 +26,10 @@ const nuevosHorarios = (horariosActuales: Horario, queryDisponible?: Disponible,
             const available: [number, number][] = newHorario.disponible.map(parseToIntTuples)
             const taken : [number, number][] = horariosActuales.ocupado.map(parseToIntTuples)
             newHorario.ocupado = squashTakenWithAvailable(available, taken).map(parseToStringTuples)
-        } else {
-            newHorario.ocupado = null
-        }
+            if (newHorario.ocupado.length === 0) newHorario.ocupado = null 
+        } 
 
     } else if (queryOcupado) {
-
-
         
         newHorario.ocupado = horariosActuales.ocupado ? flatInline([...horariosActuales.ocupado.map(parseToIntTuples), ...queryOcupado.ocupado.map(parseToIntTuples)]).map(parseToStringTuples) : queryOcupado.ocupado
         
@@ -41,11 +38,10 @@ const nuevosHorarios = (horariosActuales: Horario, queryDisponible?: Disponible,
             const taken: [number, number][] = newHorario.ocupado.map(parseToIntTuples)
 
             newHorario.disponible = squashTakenWithAvailable(taken, available).map(parseToStringTuples)
+            if (newHorario.disponible.length === 0) newHorario.disponible = null 
         
             
-        } else {
-            newHorario.disponible = null
-        }
+        } 
     }
     return newHorario
 }
