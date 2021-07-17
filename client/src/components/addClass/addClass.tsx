@@ -47,6 +47,9 @@ const grados = [
 	"Primer grado", "Segundo grado", "Tercer grado", "Cuarto grado", "Quinto grado", "Sexto grado"
 ]
 
+const años=[
+	"Primer año", "Segundo año", "Tercer año", "Cuarto año", "Quinto año"
+]
 
 
 
@@ -62,6 +65,7 @@ const AddClass = () => {
 	if(values.dias==="Sabado")i=6
 	if(values.dias==="Domingo")i=7
 console.log(fechaa.setDate(fechaa.getDate() + (i + 7 - fechaa.getDay()) % 7)) */
+	 
 	return (
 		<Container className='shadow p-3 mb-5 bg-white rounded flex'>
 			<h1>Agrega tu propia Clase!</h1>
@@ -107,7 +111,8 @@ console.log(fechaa.setDate(fechaa.getDate() + (i + 7 - fechaa.getDay()) % 7)) */
 								nivel: values.nivel,																						
 								nombre: values.nombre
 							}
-							await axios.post('http://localhost:3001/api/market/publish', publication, { headers: { Authorization: token } })
+							const hola=await axios.post('http://localhost:3001/api/market/publish', publication, { headers: { Authorization: token } })
+							console.log("HOLRA", hola)
 							actual.setDate(actual.getDate() + 7)
 						}
 
@@ -194,21 +199,6 @@ console.log(fechaa.setDate(fechaa.getDate() + (i + 7 - fechaa.getDay()) % 7)) */
 										<div className='invalid-feedback'>{errors.hasta}</div>
 									) : null}
 								</Col>
-								<Col sm={12} md={8}>
-									<Form.Label className='text-uppercase'>hasta:</Form.Label>
-									<Field
-										name='hasta'
-										type='time'
-										onChange={handleChange}
-										onBlur={handleBlur}
-										value={values.hasta}
-										className={`form-control ${errors.hasta && touched.hasta ? 'is-invalid' : ''
-											}`}
-									/>
-									{errors.hasta && touched.hasta ? (
-										<div className='invalid-feedback'>{errors.hasta}</div>
-									) : null}
-								</Col>
 							</Row>
 							<Row>
 								<Col sm={6} md={6}>
@@ -250,28 +240,6 @@ console.log(fechaa.setDate(fechaa.getDate() + (i + 7 - fechaa.getDay()) % 7)) */
 										<div className='invalid-feedback'>{errors.materia}</div>
 									) : null}
 								</Col>
-
-								<Col sm={12} md={4} className='p-4 mt-3'>
-									<Form.Label className='text-uppercase'>Grado</Form.Label>
-									<Form.Control
-										as='select'
-										name='grado'
-										onChange={handleChange}
-										onBlur={handleBlur}
-										value={values.grado}
-										className={`form-control ${errors.grado && touched.grado ? 'is-invalid' : ''
-											}`}
-									>
-										<option value='' >Seleccione un grado</option>
-										{grados.map((grado, i) => {
-											return <option key={i + 20} value={grado}>{grado}</option>
-										}
-										)}
-									</Form.Control>
-									{errors.grado && touched.grado ? (
-										<div className='invalid-feedback'>{errors.grado}</div>
-									) : null}
-								</Col>
 								<Col sm={12} md={4} className='p-4 mt-3'>
 									<Form.Label className='text-uppercase'>Nivel</Form.Label>
 									<Form.Control
@@ -293,6 +261,48 @@ console.log(fechaa.setDate(fechaa.getDate() + (i + 7 - fechaa.getDay()) % 7)) */
 										<div className='invalid-feedback'>{errors.nivel}</div>
 									) : null}
 								</Col>
+								{!(values.nivel==="Universitario") ? <Col sm={12} md={4} className='p-4 mt-3'>
+									<Form.Label className='text-uppercase'>Grado</Form.Label>
+									<Form.Control
+										as='select'
+										name='grado'
+										onChange={handleChange}
+										onBlur={handleBlur}
+										value={values.grado}
+										className={`form-control ${errors.grado && touched.grado ? 'is-invalid' : ''
+											}`}
+									>
+										<option value='' >Seleccione un grado</option>
+										{grados.map((grado, i) => {
+											return <option key={i + 20} value={grado}>{grado}</option>
+										}
+										)}
+									</Form.Control>
+									{errors.grado && touched.grado ? (
+										<div className='invalid-feedback'>{errors.grado}</div>
+									) : null}
+								</Col>:<Col sm={12} md={4} className='p-4 mt-3'>
+									<Form.Label className='text-uppercase'>Año</Form.Label>
+									<Form.Control
+										as='select'
+										name='grado'
+										onChange={handleChange}
+										onBlur={handleBlur}
+										value={values.grado}
+										className={`form-control ${errors.grado && touched.grado ? 'is-invalid' : ''
+											}`}
+									>
+										<option value='' >Seleccione un año</option>
+										{años.map((grado, i) => {
+											return <option key={i + 20} value={grado}>{grado}</option>
+										}
+										)}
+									</Form.Control>
+									{errors.grado && touched.grado ? (
+										<div className='invalid-feedback'>{errors.grado}</div>
+									) : null}
+								</Col>}
+								
 							</Row>
 							
 							<Row>
