@@ -1,5 +1,4 @@
 const flatInline = (array: [number, number][]): [number, number][] => {
-    let inLine = []
 
     let ranges: [number, number][] = []
     for (let i = 0; i < array.length; i++) {

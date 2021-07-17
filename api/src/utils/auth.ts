@@ -5,8 +5,6 @@ function hashPassword(password: string) {
         const salt = bcrypt.genSaltSync()
         const hashedPassword = bcrypt.hashSync(password, salt);
 
-        console.log(hashedPassword)
-
         return hashedPassword
     } catch(err){
         return 'error'

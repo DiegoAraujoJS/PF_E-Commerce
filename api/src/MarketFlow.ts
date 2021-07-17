@@ -26,7 +26,7 @@ class MarketFlow {
     }
 
     async publish (publication: IClase, token: string): Promise<any> {  
-        console.log(publication)
+        
         const payload: Disponible = {
             email: publication.Profesor_mail,
             disponible: [publication.date.time], 

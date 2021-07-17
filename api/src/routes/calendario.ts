@@ -1,12 +1,7 @@
 import { Request, Response, Router } from 'express'
-import Clase from './../models/Clase'
 import Profesor from '../models/Profesor'
-import User from '../models/Usuario';
-import { Op, where } from 'sequelize'
-import { isNullishCoalesce } from 'typescript';
-import { CalendarioResponse, Horario, ArrayDePares, Role, Disponible, Ocupado } from '../../../interfaces';
+import { CalendarioResponse, Horario, Disponible, Ocupado } from '../../../interfaces';
 import nuevosHorarios from './nuevosHorarios';
-import editCalendar from './editCalendar';
 import validateToken from '../utils/validateToken';
 const router = Router()
 // ejemplo
@@ -54,7 +49,7 @@ router.post('/add', validateToken, async (req: MiddlewareRequest, res: Response)
 
     try {
         if ( query.disponible && query.disponible[0][0].substring(0,2) < "00" || query.disponible[0][1].substring(0,2) > "24") return res.send("El horario disponible es incorrecto")
-        console.log("Punto 2")
+        
         let profesor = await Profesor.findOne({
             where: {
                 User_mail: query.email
@@ -63,7 +58,7 @@ router.post('/add', validateToken, async (req: MiddlewareRequest, res: Response)
         })
 
         if (profesor) {
-            console.log("Punto 3")
+            
             if (profesor.calendario) {
                 const indice = profesor.calendario.findIndex(element => element.fecha.anio === query.fecha.anio && element.fecha.mes === query.fecha.mes && element.fecha.dia === query.fecha.dia)
 
@@ -80,12 +75,12 @@ router.post('/add', validateToken, async (req: MiddlewareRequest, res: Response)
                         calendario: nuevoCalendario
                     })
                     let calendarioEditado = await profesor.save()
-                    console.log("Punto 4")
+                    
                     res.send(calendarioEditado)
 
                 }
                 else {
-                    console.log("Punto 5")
+                    
                     profesor.set({
                         ...profesor,
                         calendario: [
@@ -103,7 +98,7 @@ router.post('/add', validateToken, async (req: MiddlewareRequest, res: Response)
                 }
             }
             else {
-                console.log("Punto 6")
+                
                 profesor.set({
                     ...profesor,
                     calendario: [
@@ -121,7 +116,7 @@ router.post('/add', validateToken, async (req: MiddlewareRequest, res: Response)
         }
     }
     catch (error) {
-        console.log("Punto 7")
+        
         return res.send(error)
     }
 });
