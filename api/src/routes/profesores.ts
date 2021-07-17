@@ -153,6 +153,7 @@ router.post('/', async (req: Request, res: Response) => {
 router.put('/', async (req: Request, res: Response) => {
     const { ciudad, foto, descripcion } = req.body;
     const mail = req.body.usuario;
+    console.log("ACA ESTA EL BODYT XDDDDD",req.body)
     if (mail) {
         let usuario: any = await User.findOne({
             include: [{
@@ -161,7 +162,7 @@ router.put('/', async (req: Request, res: Response) => {
             where: {
                 mail: mail.toString()
             },
-            attributes: ['mail', 'nombre', 'apellido']
+            attributes: ['mail', 'name', 'lastName']
         });
         if (usuario) {
             if (usuario.profesor) {
@@ -176,12 +177,12 @@ router.put('/', async (req: Request, res: Response) => {
             include: [{
                 model: Profesor,
                 required: true,
-                attributes: ['ciudad', 'foto', 'descripcion']
+                attributes: ['city', 'foto', 'description']
             }],
             where: {
                 mail: mail.toString()
             },
-            attributes: ['mail', 'nombre', 'apellido']
+            attributes: ['mail', 'name', 'lastName']
         });
         return res.send(usuario);
     }

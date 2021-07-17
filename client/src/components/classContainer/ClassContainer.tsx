@@ -2,11 +2,9 @@ import React, { useState, useEffect } from 'react'
 import { Container, Row, Col, ListGroup } from 'react-bootstrap'
 import ClassCards from '../classCards/ClassCards'
 import "./ClassConteiner.css"
-import { connect } from 'react-redux';
-import { getAll } from '../../Actions/Actions';
 import axios from 'axios'
-
-
+import {connect} from 'react-redux'
+import { getAll } from '../../Actions/Actions'
 function ClassContainer({ clases, getAll }) {
     const [classFilter, setClassFilter] = useState([])
     const [nivel, setNivel] = useState("")
