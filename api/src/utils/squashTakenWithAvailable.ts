@@ -35,6 +35,7 @@ const squashTakenWithAvailable = (available: [number, number][], taken: [number,
     }
     if (min <= A && max >= B) {
       
+      
       const taken1: [number, number][] = [[min, sortedNewAvailable[0]]]
       const taken2: [number, number][] = [[sortedNewAvailable[sortedNewAvailable.length - 1], max]]
 
