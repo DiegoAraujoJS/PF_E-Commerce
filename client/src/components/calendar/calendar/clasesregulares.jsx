@@ -59,16 +59,23 @@ export const Clasesregulares = (props) => {
                     const userT= await axios.post(`http://localhost:3001/api/verify`, {},{ withCredentials: true, headers: {Authorization: token}})
                     var query1=(horas) + ":" + minutes + ":00"
                     var query2=horasfinal + ":" + minutes + ":00"
+                    console.log(date2.getFullYear().toString())
+                    var mes=(date2.getMonth() + 1).toString()
+                    if(mes.length<2){
+                        mes= "0"+ mes
+                    }
                     for(var i=0;i<values.nombre;i++){
+                        console.log(date2.getDate().toString())
                         const horario= {
                             email: props.email, //Arreglar lo de los mails
                             fecha: {
-                                anio: date2.getFullYear(),
-                                mes: date2.getMonth() + 1,
-                                dia: date2.getDate()
+                                anio: date2.getFullYear().toString(),
+                                mes: mes,
+                                dia: date2.getDate().toString()
                             },
                             disponible: [[query1, query2]]
                         }
+                        console.log("Horario", horario)
                         const clase= await axios.post('http://localhost:3001/api/calendario/add', horario, {headers: {Authorization: token}})
                         if (clase) {
                             console.log("Clase", clase)
