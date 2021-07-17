@@ -6,8 +6,10 @@ interface UserProps {
 }
 // En el file Calendar.js hay un Role admin no importado seteado en 2. Considerarlo si cambia Role
 enum Role {USER, PROFESSOR, ADMIN}
-type Time = [`${number}:${number}:00`, `${number}:${number}:00`]
+type Time = [`${number}${number}:${number}${number}:00`, `${number}${number}:${number}${number}:00`]
 type ArrayDePares = Time[]
+
+
 
 interface Horario {
     email: string;
@@ -62,7 +64,7 @@ interface IClase{
     date: {year: number, month: number, day: number, time: Time}
     Profesor_mail: string
 }
+type DisponibleOcupadoTransform = {disponible: Disponible, ocupado: Ocupado}
 
-
-export type {UserProps, ArrayDePares, Disponible, Ocupado, CalendarioResponse, ProfesorProps, Horario, Time, IClase}
+export type {UserProps, ArrayDePares, Disponible, Ocupado, CalendarioResponse, ProfesorProps, Horario, Time, DisponibleOcupadoTransform, IClase}
 export {Role}

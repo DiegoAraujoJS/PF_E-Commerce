@@ -11,7 +11,7 @@ router.get('/countries', async (req:Request, res:Response) => {
     } catch(err) {
         return res.status(400).send(err)
     }
-})
+}) // [{name: 'Bangladesh', flag: '}]
 
 router.post('/states', async (req:Request, res:Response) => {
     // const data = await get_countries()

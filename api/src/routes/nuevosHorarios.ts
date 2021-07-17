@@ -1,113 +1,102 @@
 import editCalendar from "./editCalendar"
+import flatInline from "../utils/flatInline"
+import flat from '../utils/flat'
+import { Horario, Disponible, Ocupado, DisponibleOcupadoTransform } from "../../../interfaces"
+import {parseToIntTuples, parseToStringTuples} from "../utils/parseString"
+import squashTakenWithAvailable from '../utils/squashTakenWithAvailable'
+const nuevosHorarios = (horariosActuales: Horario, queryDisponible?: Disponible, queryOcupado?: Ocupado): Horario => {
 
-const nuevosHorarios = (arrayHorarios: Array<string[]>, query?: any, queryAdd?: any) => {
-
-    if (query) {
-        var query_1: string = query[0].substring(0, 2) + query[0].substring(3, 5) + query[0].substring(6, 8)
-        var query_2: string = query[1].substring(0, 2) + query[1].substring(3, 5) + query[1].substring(6, 8)
+    let newHorario: Horario = {
+        disponible: null,
+        email: horariosActuales.email,
+        fecha: {
+            anio: horariosActuales.fecha.anio,
+            dia: horariosActuales.fecha.dia,
+            mes: horariosActuales.fecha.mes
+        },
+        ocupado: null
     }
+    
+    if (queryDisponible){
+        
+        newHorario.disponible = horariosActuales.disponible ? flatInline([...horariosActuales.disponible.map(parseToIntTuples), ...queryDisponible.disponible.map(parseToIntTuples)]).map(parseToStringTuples) : queryDisponible.disponible
+        
 
-    let horarioNumero = arrayHorarios.map(h => {
-        if (h) {
-            if (h[0].length === 8 && h[1].length === 8) {
-                let sumaHorario_1 = h[0].substring(0, 2) + h[0].substring(3, 5) + h[0].substring(6, 8)
-                let sumaHorario_2 = h[1].substring(0, 2) + h[1].substring(3, 5) + h[1].substring(6, 8)
-                return [sumaHorario_1, sumaHorario_2]
-            }
+        if (horariosActuales.ocupado) {
+            const available: [number, number][] = newHorario.disponible.map(parseToIntTuples)
+            const taken : [number, number][] = horariosActuales.ocupado.map(parseToIntTuples)
+            newHorario.ocupado = squashTakenWithAvailable(available, taken).map(parseToStringTuples)
+        } else {
+            newHorario.ocupado = null
         }
-    })
 
-    let numeros = horarioNumero && horarioNumero.map(elements => elements && elements.join().split(","))
+    } else if (queryOcupado) {
 
-    let ordenados = numeros && numeros.join().split(",").sort()
 
-    let eliminarRepetidos = ordenados?.filter((item, index) => {
-        return ordenados?.indexOf(item) === index;
-    })
+        
+        newHorario.ocupado = horariosActuales.ocupado ? flatInline([...horariosActuales.ocupado.map(parseToIntTuples), ...queryOcupado.ocupado.map(parseToIntTuples)]).map(parseToStringTuples) : queryOcupado.ocupado
+        
+        if (horariosActuales.disponible) {
+            const available: [number, number][] = horariosActuales.disponible.map(parseToIntTuples)
+            const taken: [number, number][] = newHorario.ocupado.map(parseToIntTuples)
+            console.log('taken', newHorario.ocupado.map(parseToIntTuples))
 
-    let acomodarFechas = eliminarRepetidos?.map((item, index) => {
-        if (query && query_1 && query_2) {
-            if (item > query_1 && item < query_2) {
-                if (Number(ordenados[index]) - Number(query_1) < Number(query_2) - Number(ordenados[index])) {
-                    return query_1
-                }
-                else {
-                    return query_2
-                }
-            }
-            else if (item === query_1 && index % 2 === 0) {
-                return query_2
-            }
-            else if (item === ordenados[index - 1]) {
-                return null
-            }
-            else {
-                return item
-            }
+            newHorario.disponible = squashTakenWithAvailable(taken, available).map(parseToStringTuples)
+        
+            
+        } else {
+            newHorario.disponible = null
         }
-        else {
-            return item
-        }
-    })
-
-    let horariosNuevos = acomodarFechas?.map(h => {
-        if (h) {
-            if (h.length === 6) {
-                let horario = h.substring(0, 2) + ":" + h.substring(2, 4) + ":" + h.substring(4, 6)
-                return horario
-            }
-        }
-    })
-
-    let eliminarVacios = horariosNuevos.filter(fecha => fecha)
-
-    let horariosTuplas: Array<(string | undefined)[]> = []
-
-    for (let i = 0; i < horariosNuevos.length; i += 2) {
-        horariosTuplas.push([horariosNuevos && horariosNuevos[i], horariosNuevos && horariosNuevos[i + 1]])
     }
-
-    let completarHorario = horariosTuplas.map(e => {
-        if (!e[1] && e[0]) {
-            if (horariosTuplas && horariosTuplas[horariosTuplas.length - 2][1] && e[0] !== horariosTuplas[horariosTuplas.length - 2][1]) {
-                if (e[0].substring(0, 2) + e[0].substring(3, 5) + e[0].substring(6, 8) > query_2) {
-                    return [query[1], e[0]]
-                }
-                else {
-                    return [horariosTuplas[horariosTuplas.length - 2][1], e[0]]
-                }
-            }
-            else if (horariosTuplas && horariosTuplas[horariosTuplas.length - 2][1] && e[0] === horariosTuplas[horariosTuplas.length - 2][1]) {
-                return [undefined, undefined]
-            }
-            else {
-                return [e[0], e[0]]
-            }
-        }
-        else if (!e[0] && e[1]) {
-            if (horariosTuplas && horariosTuplas[horariosTuplas.length - 2][1] && e[1] !== horariosTuplas[horariosTuplas.length - 2][1]) {
-                if (e[1].substring(0, 2) + e[1].substring(3, 5) + e[1].substring(6, 8) > query_2) {
-                    return [query[1], e[1]]
-                }
-                else {
-                    return [horariosTuplas[horariosTuplas.length - 2][1], e[1]]
-                }
-            }
-            else if (horariosTuplas && horariosTuplas[horariosTuplas.length - 2][1] && e[1] === horariosTuplas[horariosTuplas.length - 2][1]) {
-                return [undefined, undefined]
-            }
-            else {
-                return [e[1], e[1]]
-            }
-        }
-        else {
-            return e
-        }
-    })
-
-    let resultadoAdd = completarHorario.filter(fecha => fecha[0] && fecha[1])
-
-    return resultadoAdd
+    return newHorario
 }
-
 export default nuevosHorarios
+// const horario1 = JSON.parse(`{
+//     "email": "edwardburgos@gmail.com",
+//     "fecha": {
+//         "anio": 2021,
+//         "mes": 8,
+//         "dia": 14
+//     },
+//     "disponible": [["12:00:00", "14:00:00"]],
+//     "ocupado": null
+    
+//   }`)
+//   const disponible1: Disponible = JSON.parse(`{
+//     "email": "edwardburgos@gmail.com",
+//     "fecha": {
+//         "anio": 2021,
+//         "mes": 8,
+//         "dia": 14
+//     },
+//     "disponible": [["18:00:00", "20:00:00"]]
+    
+//   }`)
+//   const ocupado1 = JSON.parse(`{
+//     "email": "edwardburgos@gmail.com",
+//     "fecha": {
+//         "anio": 2021,
+//         "mes": 8,
+//         "dia": 14
+//     },
+//     "ocupado": [["12:00:00", "14:00:00"]]
+    
+//   }`)
+//   const ocupado2 = JSON.parse(`{
+//     "email": "edwardburgos@gmail.com",
+//     "fecha": {
+//         "anio": 2021,
+//         "mes": 8,
+//         "dia": 14
+//     },
+//     "ocupado": [["19:00:00", "20:00:00"]]
+    
+//   }`)
+  
+// const newHorarios1 = nuevosHorarios(horario1, disponible1)
+// console.log ('1', newHorarios1)
+// const newHorarios2 = nuevosHorarios(newHorarios1, null, ocupado1)
+// // const newHorarios2 = nuevosHorarios(newHorarios, ocupado1)
+// console.log('2', newHorarios2)
+// const newHorarios3 = nuevosHorarios(newHorarios2, null, ocupado2)
+// console.log('3', newHorarios3)
