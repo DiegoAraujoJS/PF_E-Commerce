@@ -12,15 +12,18 @@ function getArrayDepth(value) {
 }
 
 const squashTakenWithAvailable = (available: [number, number][], taken: [number, number][]) => {
+  let isFlattened: boolean;
   const newAvailable = flatInline([...available])
-  
-
+  console.log('new available', newAvailable, 'available', available)
+  isFlattened = newAvailable.length < available.length ? true : false
+  let whichFlattened = isFlattened ? newAvailable.find((tuple, i) => tuple !== available[i]) : null
+  console.log('whichFlattened', whichFlattened)
   const oldOcupado = flatInline(taken)
   
 
   let newOcupado = oldOcupado.filter(ocupado => !newAvailable.find(range => range[0] <= ocupado[0] && range[1] >= ocupado[1]))
   console.log('newOcupado',newOcupado)
-  const sortedNewAvailable = newAvailable.flat().sort((a, b) => a-b)
+  const sortedNewAvailable = isFlattened ? whichFlattened : available[available.length - 1]
   console.log(sortedNewAvailable)
   const newTakenTransform = newOcupado.map(ocupado => {
     let min = ocupado[0]
