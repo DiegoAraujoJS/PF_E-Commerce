@@ -26,22 +26,32 @@ const squashTakenWithAvailable = (available: [number, number][], taken: [number,
     let min = ocupado[0]
     let max = ocupado[1]
     
+    const A = sortedNewAvailable[0]
+    const B = sortedNewAvailable[sortedNewAvailable.length - 1]
+
+    console.log('A, B', A, B)
     
-    if (sortedNewAvailable[0] >= min && sortedNewAvailable[sortedNewAvailable.length - 1] >= max) {
+    if (min <= A && max <= A) {
       console.log('1')
-      return [min, sortedNewAvailable[0]]
+      return [min, max]
     }
-    if (sortedNewAvailable[0] <= min && sortedNewAvailable[sortedNewAvailable.length - 1] <= max) {
-      console.log('2')
-      return [sortedNewAvailable[sortedNewAvailable.length - 1], max] // el return de array seria de orden dos
+    if (min <= A && max >= A && max <= B) {
+      return [min, A]
     }
-    if (sortedNewAvailable[0] >= min && sortedNewAvailable[sortedNewAvailable.length - 1] <= max) {
+    if (min <= A && max >= B) {
       console.log('3')
       
       const taken1: [number, number][] = [[min, sortedNewAvailable[0]]]
       const taken2: [number, number][] = [[sortedNewAvailable[sortedNewAvailable.length - 1], max]]
 
       return [squashTakenWithAvailable(available, taken1), squashTakenWithAvailable(available, taken2)]
+    }
+    if (min >= A && min <= B && max >= B) {
+      console.log('2')
+      return [B, max] 
+    }
+    if (min >= A && min >= B) {
+      return [min, max]
     }
   })
   let flattenedNewTakenTransform;
@@ -54,39 +64,10 @@ const squashTakenWithAvailable = (available: [number, number][], taken: [number,
   return newTakenTransform
 }
 
-const horario1 = JSON.parse(`{
-  "email": "edwardburgos@gmail.com",
-  "fecha": {
-      "anio": 2021,
-      "mes": 8,
-      "dia": 14
-  },
-  "disponible": [["12:00:00", "14:00:00"]],
-  "ocupado": null
-  
-}`)
-const disponible1: Disponible = JSON.parse(`{
-  "email": "edwardburgos@gmail.com",
-  "fecha": {
-      "anio": 2021,
-      "mes": 8,
-      "dia": 14
-  },
-  "disponible": [["18:00:00", "20:00:00"]]
-  
-}`)
-const ocupado1 = JSON.parse(`{
-  "email": "edwardburgos@gmail.com",
-  "fecha": {
-      "anio": 2021,
-      "mes": 8,
-      "dia": 14
-  },
-  "ocupado": [["12:00:00", "14:00:00"]]
-  
-}`)
+export default squashTakenWithAvailable
 
-const squash = squashTakenWithAvailable([[12, 14]], [[12,14], [18,20]])
+const taken: [number, number][] = [[18, 20]]
+const available: [number, number][] = [[12, 14],[19, 20]]
+
+const squash = squashTakenWithAvailable(available, taken)
 console.log(squash)
-// export default squashTakenWithAvailable
-
