@@ -113,11 +113,51 @@ describe ('guarda y modifica el calendario del profesor correctamente', () => {
         }
     }
 
+    const upperAvailable: Disponible = {
+        disponible: [['16:00:00', '18:00:00']],
+        email: 'edwardburgos@gmail.com',
+        fecha: {
+            anio: 2021,
+            mes: 8,
+            dia: 22
+        }
+    }
+    const bottomAvailable: Disponible = {
+        disponible: [['20:00:00', '22:00:00']],
+        email: 'edwardburgos@gmail.com',
+        fecha: {
+            anio: 2021,
+            mes: 8,
+            dia: 22
+        }
+    }
+
+    const middleAvailable: Disponible = {
+        disponible: [['18:00:00', '20:00:00']],
+        email: 'edwardburgos@gmail.com',
+        fecha: {
+            anio: 2021,
+            mes: 8,
+            dia: 22
+        }
+    }
+
+    const expectedSeventh: Horario = {
+        disponible: [['16:00:00', '22:00:00']],
+        ocupado: null,
+        email: 'edwardburgos@gmail.com',
+        fecha: {
+            anio: 2021,
+            mes: 8,
+            dia: 22
+        }
+    }
     
 
     const expectedFourthTest: CalendarioResponse = [...expectedThirdTest, {...newAvailable, ocupado: null}]
     const expectedFifthTest: CalendarioResponse = [...expectedFourthTest, {...newNewAvailable, ocupado: null}]
     const expectedSixthTest: CalendarioResponse = [...expectedFifthTest, expectedSixth]
+    const expectedSeventhTest: CalendarioResponse = [...expectedSixthTest, expectedSeventh]
 
     let token;
     
@@ -178,7 +218,14 @@ describe ('guarda y modifica el calendario del profesor correctamente', () => {
         return expect (Edward.calendario).toEqual(expectedSixthTest)
     })
 
-    
+    it ('deberia guardar horarios uniéndolos con los horarios anteriores. 18 a 20 y 20 a 22 deberia unirse en 18 a 22', async () => {
+        await axios.post('http://localhost:3001/api/calendario/add', upperAvailable, {headers: {Authorization: token}})
+        await axios.post('http://localhost:3001/api/calendario/add', bottomAvailable, {headers: {Authorization: token}})
+        await axios.post('http://localhost:3001/api/calendario/add', middleAvailable, {headers: {Authorization: token}})
+
+        const Edward = await Profesor.findByPk('edwardburgos@gmail.com')
+        return expect (Edward.calendario).toEqual(expectedSeventhTest)
+    })
     
 })
 

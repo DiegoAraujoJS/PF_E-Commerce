@@ -20,7 +20,6 @@ const nuevosHorarios = (horariosActuales: Horario, queryDisponible?: Disponible,
     if (queryDisponible){
         
         newHorario.disponible = horariosActuales.disponible ? flatInline([...horariosActuales.disponible.map(parseToIntTuples), ...queryDisponible.disponible.map(parseToIntTuples)]).map(parseToStringTuples) : queryDisponible.disponible
-        
 
         if (horariosActuales.ocupado) {
             const available: [number, number][] = newHorario.disponible.map(parseToIntTuples)
