@@ -29,7 +29,8 @@ const Register = () => {
       lastName: values.lastName,
       mail: values.mail,
       name: values.name,
-      role: values.role
+      role: values.role,
+      city: values.city
     }
     let userWithPassword = {
       ...user,

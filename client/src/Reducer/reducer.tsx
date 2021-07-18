@@ -7,9 +7,12 @@ let initialState = {
     claim: [],
     class: {},
     clases: [],
-    user_mail: '',
-    user_name: '',
-    user_lastName: ''
+    user: {
+        user_mail: '',
+        user_name: '',
+        user_lastName: '',
+        user_city: ''
+    }
 };
 
 const all = (state = initialState, action) => {
@@ -33,9 +36,12 @@ const all = (state = initialState, action) => {
             console.log(action.payload);
             return {
                 ...state,
-                user_mail: action.payload.mail,
-                user_name: action.payload.mail,
-                user_lastName: action.payload.lastName
+                user: {
+                    user_mail: action.payload.mail !== "" && action.payload.mail,
+                    user_name: action.payload.name !== "" && action.payload.name,
+                    user_lastName: action.payload.lastName !== "" && action.payload.lastName,
+                    user_city: action.payload.user_city !== "" && action.payload.user_city
+                }
             }
         default:
             return state

@@ -22,6 +22,9 @@ export default class Clase extends Model {
     @Column 
     ciudad!: string
 
+    @Column 
+    esPresencial!: string
+
     @Column ({allowNull: false, type: DataType.JSON})
     date!: {year: number, month: number, day: number, time: Time}
 

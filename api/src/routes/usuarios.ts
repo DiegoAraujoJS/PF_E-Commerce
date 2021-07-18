@@ -11,12 +11,23 @@ function validateEmail(email: string) {
 }
 
 // Devolver usuarios
-router.get('/', async (req: Request, res: Response) => {
+router.get('/all', async (req: Request, res: Response) => {
     const usuarios = await Usuario.findAll({
         attributes: ['mail', 'name', 'lastName']
-    })
+    }) 
     res.send(usuarios)
 })
 
+router.get('/:mail', async (req: Request, res: Response) => {
+    const {mail} = req.params
+    console.log(mail)
+    try{
+    const usuario = await Usuario.findByPk(mail)
+    res.send(usuario)
+}
+catch(error){
+    console.log(error)
+}
+})
 
 export default router;
