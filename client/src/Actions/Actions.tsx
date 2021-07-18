@@ -35,4 +35,11 @@ const getUserLoged = (payload) => {
     }
 }
 
-export { getByIdClaim, getAll, getUserLoged }
+const modificarClasesPorComprar = (clasesPorComprar) => {
+    return {
+        type: 'MODIFICAR_CLASES_POR_COMPRAR',
+        clasesPorComprar
+    }
+}
+
+export { getByIdClaim, getAll, getUserLoged, modificarClasesPorComprar}

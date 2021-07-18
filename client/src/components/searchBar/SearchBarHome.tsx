@@ -9,6 +9,8 @@ import { NavDropdown } from "react-bootstrap";
 import { Link } from 'react-router-dom';
 import deleteAllCookies from "../../cookieClearer";
 import getCookieValue from "../../cookieParser";
+import logo from '../../images/logotipo.png'
+import s from './SearchBar.module.css'
 
 export default function SearchBar() {
   enum Role { USER, PROFESSOR, ADMIN }
@@ -58,8 +60,8 @@ export default function SearchBar() {
   }
 
   return (
-    <Navbar bg="light" expand="lg" style={{ height: "10vh" ,}}>
-      <Navbar.Brand className={'ms-3'} href="#home">Tus Clases</Navbar.Brand>
+    <Navbar  expand="lg" className={s.navbar}>
+      <Navbar.Brand className={'ms-3'} href="#home"><img src={logo} alt='U CLASES Logo' style={{height: '56px'}}></img></Navbar.Brand>
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="mr-auto">

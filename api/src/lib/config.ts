@@ -13,7 +13,8 @@ const config = {
 	host: process.env.API_host || 'localhost',
 	cors: process.env.CORS || 'http://localhost:3000',
 	secret: process.env.SECRET || "9u#6j2pB#UqZ@9sQ",
-	session_secret: process.env.SESSION_SECRET || "7QvMNrpfn.@Wj!3E"
+	session_secret: process.env.SESSION_SECRET || "7QvMNrpfn.@Wj!3E",
+	privateApiKey: process.env.STRIPE_PRIVATE_API_KEY || "1234566789"
 };
 
 export default config;
