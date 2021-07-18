@@ -9,7 +9,8 @@ let initialState = {
     clases: [],
     user_mail: '',
     user_name: '',
-    user_lastName: ''
+    user_lastName: '',
+    clasesPorComprar: []
 };
 
 const all = (state = initialState, action) => {
@@ -28,6 +29,11 @@ const all = (state = initialState, action) => {
             return {
                 ...state,
                 clases: action.payload
+            }
+        case actionsType.MODIFICAR_CLASES_POR_COMPRAR:
+            return {
+                ...state,
+                clasesPorComprar: action.clasesPorComprar
             }
         case actionsType.SET_USER_DATA:
             console.log(action.payload);

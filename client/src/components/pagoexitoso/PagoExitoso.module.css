@@ -1,0 +1,64 @@
+.container {
+    text-align: center;
+    padding: 2% 10%;
+}
+
+.title {
+    text-align: center;
+    margin: 0;
+    margin-bottom: 30px;
+    font-size: 1.8rem;
+    font-weight: 600;
+}
+
+.subtitle {
+    font-size: 1.5rem;
+    margin: 0;
+    margin-bottom: 15px;
+}
+
+.thanksImage {
+    width: 30%;
+    margin-bottom: 15px;
+}
+
+.agendar {
+    /* background: #2962ff url('../../images/googlecalendar.svg') 10px 10px no-repeat;
+    color: white;
+    font-weight: 500;
+    padding: 10px 10px 10px 36px; */
+
+    background: #2962ff;
+    color: white;
+    font-weight: 500;
+    padding: 10px 15px;
+    font-size: 1.1rem;
+    width: 35%;
+    display: inline-block;
+    border-radius: 1rem;
+    border: 1px solid transparent;
+    margin-bottom: 15px;
+}
+
+.agendar:hover {
+box-shadow: 1px 1px 12px -1px rgb(0 0 0 / 24%);
+  -webkit-box-shadow: 1px 1px 12px -1px rgb(0 0 0 / 24%);
+}
+
+.agendar:disabled{
+    background-color: #99b2f5;
+}
+
+.googleCalendar {
+    width: 5%;
+    vertical-align: middle;
+    margin-right: 5%;
+}
+
+.detalleContainer {
+    text-align: center;
+}
+
+.loadingGif {
+    width: 20%;
+}

@@ -10,6 +10,8 @@ import { NavDropdown } from "react-bootstrap";
 import { Link } from 'react-router-dom';
 import deleteAllCookies from "../../cookieClearer";
 import getCookieValue from "../../cookieParser";
+import logo from '../../images/logotipo.png'
+import s from './SearchBar.module.css'
 
 export default function SearchBar() {
   enum Role { USER, PROFESSOR, ADMIN }
@@ -120,17 +122,17 @@ export default function SearchBar() {
   }
 
   return (
-    <Navbar bg="light" expand="lg">
-    <Navbar.Brand className={'ms-3'} href="#home">Tus Clases</Navbar.Brand>
-    <Navbar.Toggle aria-controls="basic-navbar-nav" />
-    <Navbar.Collapse id="basic-navbar-nav">
-      <Nav className="mr-auto">
-        <Link className={'nav-link ms-4 text-decoration-none'} to={"/home"}>Home</Link>
-        <Link className={'nav-link ms-4 text-decoration-none'} to={"/calendar"}>Calendar</Link>
-        <Link className={'nav-link ms-4 text-decoration-none'} to={"/perfil"}>Profile</Link>
-        <Link className={'nav-link ms-4 text-decoration-none'} to={"/chat"}>Chat</Link>
-        <Link className={'nav-link ms-4 text-decoration-none'} to={"/clases"}>Class</Link>
-        {loggedOrNot() ?
+    <Navbar  expand="lg" className={s.navbar}>
+      <Navbar.Brand className={'ms-3'} href="#home"><img src={logo} alt='U CLASES Logo' style={{height: '56px'}}></img></Navbar.Brand>
+      <Navbar.Toggle aria-controls="basic-navbar-nav" />
+      <Navbar.Collapse id="basic-navbar-nav">
+        <Nav className="mr-auto">
+          <Link className={'nav-link ms-4 text-decoration-none'} to={"/home"}>Home</Link>
+          <Link className={'nav-link ms-4 text-decoration-none'} to={"/calendar"}>Calendar</Link>
+          <Link className={'nav-link ms-4 text-decoration-none'} to={"/perfil"}>Profile</Link>
+          <Link className={'nav-link ms-4 text-decoration-none'} to={"/chat"}>Chat</Link>
+          <Link className={'nav-link ms-4 text-decoration-none'} to={"/clases"}>Class</Link>
+          {loggedOrNot() ?
             <NavDropdown className={'ms-4 text-decoration-none justify-content-end'} title="Logeado" id="basic-nav-dropdown">
               <NavDropdown.Item onClick={() => signOut()}>
                 Desconectarse
