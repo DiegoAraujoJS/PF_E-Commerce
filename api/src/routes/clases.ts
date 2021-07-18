@@ -201,7 +201,7 @@ router.put('/puntuar', async (req: Request, res: Response) => {
 
 router.get('/all', async (req: Request, res: Response) => {
     try {
-        const clases = await Clase.findAll()
+        const clases = await Clase.findAll({include: Profesor})
         res.send(clases)
     }
     catch (error) {
@@ -209,31 +209,6 @@ router.get('/all', async (req: Request, res: Response) => {
     }
 })
 
-router.get('/nivel/:nivel', async (req: Request, res: Response) => {
-    const { nivel } = req.params
-    try {
-        const clases = await Clase.findAll({
-            where: { nivel: nivel }
-        })
-        return res.send(clases)
-    }
-    catch (error) {
-        res.status(404).send("Ops! hubo un error")
-    }
-})
-
-router.get('/puntuacion/:puntuacion', async (req: Request, res: Response) => {
-    const { puntuacion } = req.params
-    try {
-        const clases = await Clase.findAll({
-            where: { puntuacion: puntuacion }
-        })
-        return res.send(clases)
-    }
-    catch (error) {
-        res.status(404).send("Ops! hubo un error")
-    }
-})
 
 router.post('/add', async (req: Request, res: Response) => {
     const clase = req.body

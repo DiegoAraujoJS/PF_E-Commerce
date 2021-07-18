@@ -165,7 +165,7 @@ function App() {
           }           
       } />
 
-      <Route exact path='/registro' render={() => {
+      {/* <Route exact path='/registro' render={() => {
           if (user.role === Role.USER || user.role === Role.PROFESSOR) {
             return < Redirect to="/home" />
           }
@@ -173,7 +173,7 @@ function App() {
             return <Register />
           }           
       }
-      }></Route>
+      }></Route> */}
       <Route exact path ='/editPerfil'> <EditProfile /></Route>
       <Route exact path='/login'><Login /></Route>
       <Route exact path='/calendar'><CalendarApp /></Route>
