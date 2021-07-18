@@ -25,6 +25,7 @@
     "reflect-metadata": "^0.1.13",
     "sequelize": "^6.6.4",
     "sequelize-typescript": "^2.1.0",
+    "stripe": "^8.163.0",
     "ts-jest": "^27.0.3",
     "typescript": "^4.3.5"
   },
@@ -41,5 +42,4 @@
     "nodemon": "^2.0.9",
     "ts-node": "^10.0.0"
   }
-  
 }

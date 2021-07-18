@@ -14,7 +14,8 @@ const bootstrap = async () => {
         name: `Diego`,
         lastName: 'Araujo',
         mail: "diegoaraujo@gmail.com",
-        role: Role.ADMIN 
+        role: Role.ADMIN ,
+        city: "Buenos Aires",
     }
     const Diego = {...d, password:"123456"}
 
@@ -22,7 +23,8 @@ const bootstrap = async () => {
         name: `Braian`,
         lastName: 'Silva',
         mail: "braiansilva@gmail.com",
-        role: Role.ADMIN
+        role: Role.ADMIN,
+        city: "Buenos Aires",
     }
     const Braian = {...b, password:"123456"}
 
@@ -30,7 +32,8 @@ const bootstrap = async () => {
         name: 'Edward',
         lastName: 'Burgos',
         mail: "edwardburgos@gmail.com",
-        role: Role.ADMIN
+        role: Role.USER,
+        city: "Lima",
     }
     const Edward = {...e, password:"123456"}
 
@@ -38,7 +41,8 @@ const bootstrap = async () => {
         name: 'Javier',
         lastName: 'Carro',
         mail: "javiercarro@gmail.com",
-        role: Role.ADMIN
+        role: Role.USER,
+        city: "Lima",
     }
     const Javi = {...j, password:"123456"}
 
@@ -46,7 +50,8 @@ const bootstrap = async () => {
         name: 'Mauro',
         lastName: 'Leonel',
         mail: "mauroleonel@gmail.com", 
-        role: Role.PROFESSOR
+        role: Role.PROFESSOR,
+        city: "Cordoba",
     }
     const Mauro = {...m, password:"123456"}
 
@@ -174,57 +179,62 @@ const bootstrap = async () => {
         Profesor_mail: "edwardburgos@gmail.com",
         descripcion: 'Aprende a sumar y restar para ser el mejor de tu clase',
         materia: 'Matematica',
+        esPresencial: 'Virtual',
         grado: "Primer grado",
         nivel: 'Primario',
         puntuacion: 5,
-        date:  {year: 2021, month: 8, day: 7, time: ['1212121w']}
+        date:  {year: 2021, month: 8, day: 7, time: ['08:00:00','12:00:00']}
     })
     await Clase.create({
         nombre: 'Aprende a comunicar',
         Profesor_mail: "edwardburgos@gmail.com",
-        descripción: 'Aprende a comunicarte asertivamente con tu entorno',
+        descripcion: 'Aprende a comunicarte asertivamente con tu entorno',
         materia: 'Comunicacion',
+        esPresencial: 'Virtual',
         score: 4.63,
         grado: "Cuarto grado",
         nivel: 'Terciario',
         puntuacion: 3,
-        date:  {year: 2021, month: 8, day: 7, time: ['1212121w']}
+        date:  {year: 2021, month: 8, day: 7, time:  ['20:00:00','24:00:00']}
     })
 
     await Clase.create({
         nombre: 'Historia',
         Profesor_mail: "braiansilva@gmail.com",
-        descripción: 'En esta clase te enseñaré todo lo que necesitas de Historia',
+        descripcion: 'En esta clase te enseñaré todo lo que necesitas de Historia',
         materia: 'Historia',
+        esPresencial: 'Virtual',
         score: 4.33,
         grado: "Sexto grado",
         nivel: 'Secundario',
-        puntuacion: 5,
-        date:  {year: 2021, month: 8, day: 7, time: ['1212121w']}
+        puntuacion: 4.20,
+        date:  {year: 2021, month: 8, day: 7, time:  ['12:00:00','17:00:00']}
     })    
 
     await Clase.create({
         nombre: 'Filosofia',
         Profesor_mail: "diegoaraujo@gmail.com",
-        descripción: 'En esta clase te enseñaré todo lo que necesitas de Filosofia',
+        descripcion: 'En esta clase te enseñaré todo lo que necesitas de Filosofia',
         materia: 'Filosofia',
+        esPresencial: 'Presencial',
         score: 2.33,
         grado: "Sexto grado",
         nivel: 'Terciario',
         puntuacion: 4,
-        date:  {year: 2021, month: 8, day: 7, time: ['1212121w']}
+        date:  {year: 2021, month: 8, day: 7, time:  ['08:00:00','10:00:00']}
     })    
 
     await Clase.create({
         nombre: 'Inglés para jóvenes',
         Profesor_mail: "edwardburgos@gmail.com",
-        descripción: 'En esta clase te enseñaré todo lo que necesitas para tener un nivel intermedio de Inglés',
+        descripcion: 'En esta clase te enseñaré todo lo que necesitas para tener un nivel intermedio de Inglés',
         materia: 'Ingles',
+        esPresencial: 'Presencial',
         score: 2.33,
         grado: "Sexto grado",
         nivel: 'Secundario',
         puntuacion: 1,
-        date:  {year: 2021, month: 8, day: 7, time: ['1212121w']}
+        date:  {year: 2021, month: 8, day: 7, time:  ['15:00:00','19:00:00']}
     })    
 
 

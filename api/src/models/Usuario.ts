@@ -1,20 +1,21 @@
-import { Model, Column, Table, CreatedAt, UpdatedAt, DataType, Unique, PrimaryKey, ForeignKey, HasOne } from 'sequelize-typescript';
+import { Model, Column, Table, CreatedAt, UpdatedAt, DataType, Unique, PrimaryKey, ForeignKey, HasOne, HasMany } from 'sequelize-typescript';
 import Alumno from './Alumno';
 import Profesor from './Profesor';
 import { UserProps } from '../../../interfaces';
-
+import Puntuacion from './Puntuacion';
+import { ClasePorComprar } from '../../../interfaces';
 
 @Table
-export default class User extends Model implements UserProps{
-    @Column ({allowNull: false})
+export default class User extends Model implements UserProps {
+    @Column({ allowNull: false })
     name!: string;
 
     @PrimaryKey
     @Unique
-    @Column ({allowNull: false})
+    @Column({ allowNull: false })
     mail!: string;
 
-    @Column ({allowNull: false})
+    @Column({ allowNull: false })
     lastName!: string;
 
     @Column
@@ -33,6 +34,9 @@ export default class User extends Model implements UserProps{
 
     @HasOne(() => Profesor)
     profesor!: Profesor
+
+    @Column
+    city!: string;
 
     @HasOne(() => Alumno)
     alumno!: Alumno

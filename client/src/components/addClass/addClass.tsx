@@ -193,22 +193,7 @@ console.log(fechaa.setDate(fechaa.getDate() + (i + 7 - fechaa.getDay()) % 7)) */
 									{errors.hasta && touched.hasta ? (
 										<div className='invalid-feedback'>{errors.hasta}</div>
 									) : null}
-								</Col>
-								<Col sm={12} md={8}>
-									<Form.Label className='text-uppercase'>hasta:</Form.Label>
-									<Field
-										name='hasta'
-										type='time'
-										onChange={handleChange}
-										onBlur={handleBlur}
-										value={values.hasta}
-										className={`form-control ${errors.hasta && touched.hasta ? 'is-invalid' : ''
-											}`}
-									/>
-									{errors.hasta && touched.hasta ? (
-										<div className='invalid-feedback'>{errors.hasta}</div>
-									) : null}
-								</Col>
+								</Col>								
 							</Row>
 							<Row>
 								<Col sm={6} md={6}>

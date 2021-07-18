@@ -6,7 +6,8 @@ export interface Class {
     grado: string;
     nivel: string;
     esPresencial: boolean;
-    profesor: Profesor  
+    profesor: Profesor;
+    date: {year: number, month: number, day: number, time: [`${number}:${number}:00`, `${number}:${number}:00`]}
 }
 
 export interface Profesor extends User {
@@ -17,7 +18,9 @@ export interface Profesor extends User {
     updatedAt: string;
 }
 export interface User {
-    nombre: string;
-    apellido: string;
-    email: string;
+    name: string;
+    lastName: string;
+    User_mail: string;
+    score: number;
+    city: string;
 }
