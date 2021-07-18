@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { getAll } from '../../Actions/Actions';
 import { Class } from '../../interfaces';
 
-function ClassCards({ clases, getAll, clasesFiltradas, filtros }: any) {
+function ClassCards({ clases, getAll, clasesFiltradas }: any) {
     const [search, setSearch] = useState("")
     const [classFilter, setClassFilter] = useState([])
     const [classProp, setClassProp] = useState("")
@@ -110,7 +110,7 @@ function ClassCards({ clases, getAll, clasesFiltradas, filtros }: any) {
 
         setPage({
             ...page,
-            totalPages: (clasesFiltradas.length > 0 && filtros) ? Math.ceil(clasesFiltradas.length / displayRecipes) : !filtros ? Math.ceil(clases.length / displayRecipes) : 1,
+            totalPages: (classFilter.length > 0 ) ? Math.ceil(classFilter.length / displayRecipes) :  0,
             dataStartingIndex: 1,
             pageData: paginatedDataObject,
             clickedOnNumber: 1
