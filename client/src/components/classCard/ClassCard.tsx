@@ -33,6 +33,7 @@ const ClassCard: React.FC<Class> = (props) => {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
+    
     console.log(props)
     return (
         <div>

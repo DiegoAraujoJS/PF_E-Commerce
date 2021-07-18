@@ -27,7 +27,7 @@ function Chat() {
   return (
     <div className={style.appContainer}>
       {userLoged ? (
-        <ChatRoom userLoged={userLoged} userReference={{mail: "diegoaraujo@gmail.com", role: 2, name: 'Mr Admin', lastName: 'Smith', city:"Buenos Aires"}} />
+        <ChatRoom userLoged={userLoged} userReference={{mail: "diegoaraujo@gmail.com", role: 2, name: 'Mr Admin', lastName: 'Smith' }} />
       ) : (
         "no hay usuario logeado"
       )}

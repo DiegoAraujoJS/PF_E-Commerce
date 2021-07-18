@@ -15,7 +15,6 @@ const bootstrap = async () => {
         lastName: 'Araujo',
         mail: "diegoaraujo@gmail.com",
         role: Role.ADMIN ,
-        city: "Buenos Aires",
     }
     const Diego = {...d, password:"123456"}
 
@@ -24,7 +23,6 @@ const bootstrap = async () => {
         lastName: 'Silva',
         mail: "braiansilva@gmail.com",
         role: Role.ADMIN,
-        city: "Buenos Aires",
     }
     const Braian = {...b, password:"123456"}
 
@@ -33,7 +31,6 @@ const bootstrap = async () => {
         lastName: 'Burgos',
         mail: "edwardburgos@gmail.com",
         role: Role.USER,
-        city: "Lima",
     }
     const Edward = {...e, password:"123456"}
 
@@ -42,7 +39,6 @@ const bootstrap = async () => {
         lastName: 'Carro',
         mail: "javiercarro@gmail.com",
         role: Role.USER,
-        city: "Lima",
     }
     const Javi = {...j, password:"123456"}
 
@@ -51,7 +47,6 @@ const bootstrap = async () => {
         lastName: 'Leonel',
         mail: "mauroleonel@gmail.com", 
         role: Role.PROFESSOR,
-        city: "Cordoba",
     }
     const Mauro = {...m, password:"123456"}
 

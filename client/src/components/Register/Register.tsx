@@ -30,12 +30,12 @@ const Register: React.FC<Props> = ({ show, handleClose }) => {
   const history = useHistory()
 
   async function handleSubmitRegister(values) {
+    console.log(values)
     let user: UserProps = {
       lastName: values.lastName,
       mail: values.mail,
       name: values.name,
       role: values.role,
-      city: values.city
     }
     let userWithPassword = {
       ...user,
@@ -70,8 +70,7 @@ const Register: React.FC<Props> = ({ show, handleClose }) => {
             X
           </Button>
         </Modal.Header>
-        <Modal.Body>
-
+        <Modal.Body className="pb-0">
           <Formik
             validationSchema={validationSchemaRegister}
             initialValues={{
@@ -84,7 +83,7 @@ const Register: React.FC<Props> = ({ show, handleClose }) => {
               state: "",
             }}
             onSubmit={(values) => {
-
+              console.log(values)
               handleSubmitRegister(values)
 
             }}
@@ -172,10 +171,9 @@ const Register: React.FC<Props> = ({ show, handleClose }) => {
                   </div> */}
 
                   </div>
-
                   <Row className=" mt-2" >
                     <label className="form-check-label" htmlFor="gridCheck">Rol</label><br></br>
-                    <Col>
+                    <Col md={5} className="d-flex justify-content-evenly align-items-center p-0">
                       <label className="form-check-label mr-2" htmlFor="gridCheck">User</label><br></br>
                       <input
                         name="role"
@@ -185,8 +183,6 @@ const Register: React.FC<Props> = ({ show, handleClose }) => {
                         value={Role.USER}
                         defaultChecked
                       />
-                    </Col>
-                    <Col >
                       <label className="form-check-label mr-3" htmlFor="gridCheck">Profesor</label><br></br>
                       <input type="radio"
                         name="role"
@@ -196,17 +192,21 @@ const Register: React.FC<Props> = ({ show, handleClose }) => {
                     </Col>
                   </Row>
                 </div>
+                <Row  md={12} className=" mt-3 ">
+                  <Col sm={6} md={6} lg={6} className="d-flex justify-content-center">
+                    <button type="submit" id="local" className="btn btn-primary">Regístrate</button>
+                  </Col>
+                  <Col sm={6} md={6} lg={6}>
+                    <button onClick={googleSubmit} id="google" className="btn btn-primary " >Regístrate con Google</button>
+                    {alreadyCreated ? <span style={{ color: 'red' }}>El usuario ya está siendo usado</span> : ''}
+                  </Col>
+                </Row>
               </form >
             )}
           </Formik>
 
         </Modal.Body>
         <Modal.Footer>
-          <button type="submit" id="local" className="btn btn-primary">Regístrate</button>
-
-          <button onClick={googleSubmit} id="google" className="btn btn-primary " >Regístrate con Google</button>
-          {alreadyCreated ? <span style={{ color: 'red' }}>El usuario ya está siendo usado</span> : ''}
-
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>

@@ -13,8 +13,7 @@ router.post('/register', async (req:Request, res:Response) => {
         lastName: req.body.lastName,
         mail: req.body.mail,
         name: req.body.name,
-        role: req.body.role,
-        city: req.body.city,
+        role: req.body.role
     }
     if (newUser.lastName && newUser.name && newUser.mail && req.body.password){
 
