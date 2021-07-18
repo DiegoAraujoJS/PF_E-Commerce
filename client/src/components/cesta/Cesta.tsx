@@ -6,9 +6,9 @@ import { loadStripe } from '@stripe/stripe-js';
 import { useDispatch } from 'react-redux';
 import { modificarClasesPorComprar } from '../../Actions/Actions';
 import DetalleCesta from '../detallecesta/DetalleCesta';
-
+import config from '../../config/config'
 // This allows us to use Stripe
-const stripePromise = loadStripe(process.env.REACT_APP_STRIPE_PUBLIC_API_KEY);
+const stripePromise = loadStripe(config.REACT_APP_STRIPE_PUBLIC_API_KEY);
 
 export default function Cesta({ clasesPorComprar, moneda, cliente }) {
 

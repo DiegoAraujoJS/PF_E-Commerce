@@ -5,7 +5,7 @@ import cors from 'cors'
 import config from './lib/config';
 import routes from './routes/index'
 import session from 'express-session'
-
+import payment from './routes/payment'
 const app = express()
 
 app.use(express.urlencoded({extended: true, limit: '50mb'}));
@@ -55,5 +55,6 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
 })
 
 app.use('/api', routes)
+app.use('/', payment)
 
 export default app;

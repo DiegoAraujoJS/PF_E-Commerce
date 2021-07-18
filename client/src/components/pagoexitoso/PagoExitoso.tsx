@@ -6,6 +6,7 @@ import axios from 'axios';
 import Item from '../item/Item';
 import googleCalendar from '../../images/googlecalendar.svg';
 import loadingGif from '../../images/loadingGif.gif';
+import config from '../../config/config'
 declare global {
     interface Window {
         gapi: any;
@@ -131,8 +132,8 @@ export default function PagoExitoso() {
         gapi.load('client:auth2', () => {
 
             gapi.client.init({
-                apiKey: process.env.REACT_APP_GOOGLE_CALENDAR_API_KEY,
-                clientId: process.env.REACT_APP_GOOGLE_CALENDAR_CLIENT_ID,
+                apiKey: config.REACT_APP_GOOGLE_CALENDAR_API_KEY,
+                clientId: config.REACT_APP_GOOGLE_CALENDAR_CLIENT_ID,
                 discoveryDocs: DISCOVERY_DOCS,
                 scope: SCOPES
             })
