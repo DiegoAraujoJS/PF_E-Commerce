@@ -9,7 +9,7 @@ export default function ChatMessage(props) {
     return (
       <>
         {messageClass === "sent" ? (
-          <div className={"d-flex align-items-center flex-row-reverse py-1"}>
+          <div className={"my-1 bg-light"}>
             <img
               alt="alt"
               src={
@@ -18,10 +18,10 @@ export default function ChatMessage(props) {
               }
               className={"rounded-circle p-1 " + style.imgMessage}
             />
-            <span className={"badge rounded-pill bg-secondary fs-6 text-wrap text-break mw-100"}>{text}</span>
+            <span className={"fs-6 text-wrap text-break"}>{text}</span>
           </div>
         ) : (
-          <div className={"d-flex align-items-center flex-row  py-1"}>
+          <div className={"d-flex align-items-center flex-row  my-1"}>
             <img
               alt="alt"
               src={
@@ -30,7 +30,7 @@ export default function ChatMessage(props) {
               }
               className={"rounded-circle p-1 " + style.imgMessage}
             />
-            <span className={"badge rounded-pill bg-secondary fs-6 text-wrap text-break mw-100"}>{text}</span>
+            <span className={"fs-6 text-wrap text-break"}>{text}</span>
           </div>
         )}
       </>
