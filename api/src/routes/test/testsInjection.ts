@@ -174,10 +174,20 @@ export const eighthTest: {
 }
 
 export const ninthTest: {
+    previousPost: Disponible;
     firstPut: Ocupado;
     firstPost: Disponible;
     expected: CalendarioResponse;
 } = {
+    previousPost: {
+        email: 'diegoaraujo@gmail.com',
+        disponible: [['12:00:00', '20:00:00']],
+        fecha: {
+            anio: 2021,
+            dia: 9,
+            mes: 7
+        }
+    },
     firstPut: {
         email: 'diegoaraujo@gmail.com',
         ocupado: [['12:00:00', '20:00:00']],
@@ -203,6 +213,40 @@ export const ninthTest: {
         fecha: {
             anio: 2021,
             dia: 9,
+            mes: 7
+        }
+    }]
+}
+export const tenthTest : {
+    firstPost: Disponible;
+    firstDelete: Disponible;
+    expected: CalendarioResponse;
+} = {
+    firstPost: {
+        email: 'edwardburgos@gmail.com',
+        disponible: [['14:00:00', '18:00:00']],
+        fecha: {
+            anio: 2021,
+            dia: 30,
+            mes: 7
+        }
+    },
+    firstDelete: {
+        email: 'edwardburgos@gmail.com',
+        disponible: [['14:00:00', '18:00:00']],
+        fecha: {
+            anio: 2021,
+            dia: 30,
+            mes: 7
+        }
+    },
+    expected: [{
+        email: 'edwardburgos@gmail.com',
+        disponible: null,
+        ocupado: null,
+        fecha: {
+            anio: 2021,
+            dia: 30,
             mes: 7
         }
     }]

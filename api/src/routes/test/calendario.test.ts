@@ -119,13 +119,14 @@ describe ('guarda y modifica el calendario del profesor correctamente', () => {
         return expect (Diego.calendario).toEqual(eighthTest.expected)
     })
 
-    // it ('deberia guardar el especio ocupado que quedó alrededor del espacio disponible', async () => {
-    //     await axios.put('http://localhost:3001/api/calendario/edit', ninthTest.firstPut, {headers: {Authorization: tokenDiego}})
-    //     await axios.post('http://localhost:3001/api/calendario/add', ninthTest.firstPost, {headers: {Authorization: tokenDiego}})
+    it ('deberia guardar el especio ocupado que quedó alrededor del espacio disponible', async () => {
+        await axios.post('http://localhost:3001/api/calendario/add', ninthTest.previousPost, {headers: {Authorization: tokenDiego}})
+        await axios.put('http://localhost:3001/api/calendario/edit', ninthTest.firstPut, {headers: {Authorization: tokenDiego}})
+        await axios.post('http://localhost:3001/api/calendario/add', ninthTest.firstPost, {headers: {Authorization: tokenDiego}})
 
-    //     const Diego = await Profesor.findByPk('diegoaraujo@gmail.com')
-    //     return expect (Diego.calendario).toEqual(ninthTest.expected)
-    // })
+        const Diego = await Profesor.findByPk('diegoaraujo@gmail.com')
+        return expect (Diego.calendario).toEqual(ninthTest.expected)
+    })
     
 })
 

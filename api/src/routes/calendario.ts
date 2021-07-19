@@ -40,11 +40,14 @@ router.post('/add', validateToken, async (req: MiddlewareRequest, res: Response)
     if (req.data.role !== 2 && req.body.email != req.data.mail) {
         return res.status(400).send('You are not authorized.')
     }
+    let query_disponible_1
+    let query_disponible_2
+    if ( query.disponible) {
+        query_disponible_1 = query.disponible[0][0].substring(0, 2) + query.disponible[0][0].substring(3, 5) + query.disponible[0][0].substring(6, 8)
+        query_disponible_2 = query.disponible[0][1].substring(0, 2) + query.disponible[0][1].substring(3, 5) + query.disponible[0][1].substring(6, 8)
 
-    const query_disponible_1: string = query.disponible[0][0].substring(0, 2) + query.disponible[0][0].substring(3, 5) + query.disponible[0][0].substring(6, 8)
-    const query_disponible_2: string = query.disponible[0][1].substring(0, 2) + query.disponible[0][1].substring(3, 5) + query.disponible[0][1].substring(6, 8)
-
-    if(query.disponible && query_disponible_1 < "0" && query_disponible_1 > "240000"  || query_disponible_2 < "0" && query_disponible_2 > "240000" || query_disponible_2 < query_disponible_1) return res.send("El horario disponible es incorrecto")
+        if(query.disponible && query_disponible_1 < "0" && query_disponible_1 > "240000"  || query_disponible_2 < "0" && query_disponible_2 > "240000" || query_disponible_2 < query_disponible_1) return res.send("El horario disponible es incorrecto")
+    }
 
 
     try {
@@ -190,21 +193,22 @@ router.put('/edit', validateToken, async (req: MiddlewareRequest, res: Response)
     }
 });
 
-router.put('/delete', async (req:MiddlewareRequest, res:Response) => {
+router.put('/delete', validateToken, async (req:MiddlewareRequest, res:Response) => {
     if (req.data.role !== 2 && req.body.email != req.data.mail) {
         return res.status(400).send('You are not authorized.')
     }
 
-    if (!req.body.mail) return res.status(400).send('You have to send a valid email')
+    if (!req.body.email) return res.status(400).send('You have to send a valid email')
 
     try {
-        const professor = await Profesor.findByPk(req.body.mail)
+        const professor = await Profesor.findByPk(req.body.email)
         const calendar = professor.calendario
         const thisDate = calendar.find(c => c.fecha.anio === req.body.fecha.anio && c.fecha.mes === req.body.fecha.mes && c.fecha.dia === req.body.fecha.dia)
         let newDate: Horario = {email: professor.User_mail, fecha: thisDate.fecha, disponible: thisDate.disponible, ocupado: thisDate.ocupado}
 
         if (req.body.disponible) {
-            const newAvaliable = thisDate.disponible.filter(tuple => tuple !== req.body.disponible[0])
+            let newAvaliable = thisDate.disponible.filter(tuple => {console.log(tuple[0] === req.body.disponible[0][0], tuple[1] === req.body.disponible[0][1]);return !(tuple[0] === req.body.disponible[0][0] && tuple[1] === req.body.disponible[0][1])})
+            if (newAvaliable.length === 0) newAvaliable = null
             newDate.disponible = newAvaliable
             const calendarWithoutOldDate = calendar.filter(c => c !== thisDate)
             const newCalendar = [...calendarWithoutOldDate, newDate]
@@ -215,8 +219,9 @@ router.put('/delete', async (req:MiddlewareRequest, res:Response) => {
             const result = await professor.save()
             return res.send(result)
         } else if (req.body.ocupado) {
-            const newTaken = thisDate.ocupado.filter(tuple => tuple !== req.body.disponible[0])
-            newDate.ocupado = newTaken
+            let newAvaliable = thisDate.ocupado.filter(tuple => {return !(tuple[0] === req.body.ocupado[0][0] && tuple[1] === req.body.ocupado[0][1])})
+            if (newAvaliable.length === 0) newAvaliable = null
+            newDate.ocupado = newAvaliable
             const calendarWithoutOldDate = calendar.filter(c => c !== thisDate)
             const newCalendar = [...calendarWithoutOldDate, newDate]
             professor.set({
