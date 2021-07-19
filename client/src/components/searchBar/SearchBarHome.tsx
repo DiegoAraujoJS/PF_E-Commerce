@@ -187,7 +187,7 @@ export default function SearchBar() {
             }
           </Nav>
         </Navbar.Collapse>
-        <Link to={"/carrito"}>{carrito}</Link>
+        <Link to={"/cesta"}>{carrito}</Link>
       </Container>
     </Navbar>
   );
