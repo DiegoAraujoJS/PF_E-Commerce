@@ -54,7 +54,7 @@ function Chat() {
         </div>
       ) : (
         <div className={"d-flex flex-column justify-content-center align-items-center"}>
-          <h1 className={"mb-5"}>No hay un usuario logeado</h1>
+          <h1 className={"mb-5"}>No hay una sesión iniciada</h1>
           <img className={"w-75"} src={image} alt="Login" />
         </div>
       )}

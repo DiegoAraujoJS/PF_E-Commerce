@@ -107,7 +107,7 @@ console.log(fechaa.setDate(fechaa.getDate() + (i + 7 - fechaa.getDay()) % 7)) */
 								nivel: values.nivel,																						
 								nombre: values.nombre
 							}
-							await axios.post('http://localhost:3001/api/market/publish', publication, { headers: { Authorization: token } })
+							await axios.post('http://localhost:3001/api/market/publish', {...publication, token}, { headers: { Authorization: token } })
 							actual.setDate(actual.getDate() + 7)
 						}
 
