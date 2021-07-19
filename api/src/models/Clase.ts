@@ -4,11 +4,6 @@ import Profesor from './Profesor';
 import Puntuacion from './Puntuacion';
 @Table
 export default class Clase extends Model {
-    @PrimaryKey
-    @Unique
-    @Column({ autoIncrement: true })
-    id!: number;
-
     @Column
     nombre!: string;
 

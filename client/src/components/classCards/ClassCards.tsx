@@ -220,6 +220,7 @@ function ClassCards({ clasesFiltradas }: any) {
                                 //     date: {year: number, month: number, day: number, time: Time}
                                 // }
                                 <ClassCard
+                                    id={clase.id}
                                     nombre={clase.nombre}
                                     descripcion={clase.descripcion}
                                     esPresencial={clase.esPresencial}
@@ -238,6 +239,7 @@ function ClassCards({ clasesFiltradas }: any) {
                                 if (i < 2) {
                                     return (
                                         <ClassCard
+                                            id={clase.id}
                                             nombre={clase.nombre}
                                             descripcion={clase.descripcion}
                                             esPresencial={clase.esPresencial}
