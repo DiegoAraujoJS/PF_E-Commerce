@@ -58,7 +58,7 @@ export default function DetalleCesta({ moneda, cliente }) {
                             <p className={`${s.cantidadClases} ${s.marginBottom}`}>{clasesPorComprar.length === 1 ? '1 clase en la cesta' : `${clasesPorComprar.length} clases en la cesta`}</p>
                             <div>
                                 {
-                                    clasesPorComprar.map((e, i) => <Item key={i} id={e.id} imagen={e.imagen} nombre={e.nombre} precioDescuento={e.precioDescuento} precioOriginal={e.precioOriginal} moneda={moneda} dia={e.dia} horaInicio={e.horaInicio} horaFin={e.horaFin} profesor={e.profesor} comprado={false}></Item>)
+                                    clasesPorComprar.map((e, i) => <Item key={i} cliente={cliente} id={e.id} imagen={e.imagen} nombre={e.nombre} precioDescuento={e.precioDescuento} precioOriginal={e.precioOriginal} moneda={moneda} dia={e.dia} horaInicio={e.horaInicio} horaFin={e.horaFin} profesor={e.profesor} comprado={false}></Item>)
                                 }
                             </div>
                         </div>

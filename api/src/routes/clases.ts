@@ -25,7 +25,7 @@ router.get('/', async (req: Request, res: Response) => {
                         where: {
                             [Op.or]: [{
                                 materia: {
-                                    [Op.iLike]: `%${x.normalize("NFD").replace(/\p{Diacritic}/gu, "")}%`.replace("\'", '')
+                                    [Op.iLike]: `%${x}%`.replace("\'", '')
                                 }
                             },
                             {
