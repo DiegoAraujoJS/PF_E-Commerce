@@ -99,7 +99,7 @@ export const Clasesregulares = (props) => {
                 }
             }}
         >
-            {({ handleSubmit, handleChange, values, errors, handleBlur, touched }) => (
+             {({ handleSubmit, handleChange, values, errors, handleBlur, touched }) => (
                 <Form className='mt-7' onSubmit={handleSubmit}>
                     <Form.Group>
                     <Row>
@@ -127,7 +127,7 @@ export const Clasesregulares = (props) => {
                     </Row>
                     <Row className='mb-1'>
                             <Col sm={12} md={8}>
-                                <Form.Label className='text'>Cuantas semanas dura:</Form.Label>
+                                <Form.Label className='text'>Semanas:</Form.Label>
                                 <Field
                                     name='nombre'
                                     type='number'
@@ -161,7 +161,7 @@ export const Clasesregulares = (props) => {
                             </div>
                     <Row className='mb-1'>
                             <Col sm={12} md={8}>
-                                <Form.Label className='text'>Cuantas horas dura:</Form.Label>
+                                <Form.Label className='text'>Horas:</Form.Label>
                                 <Field
                                     name='horario'
                                     type='number'
