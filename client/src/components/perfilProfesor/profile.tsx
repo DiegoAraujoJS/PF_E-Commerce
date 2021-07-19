@@ -99,6 +99,7 @@ function Profile(email) {
                     <p className={style.description}>{prof.description}</p>
                     <img src={star} className={style.star}/>
                     <h4 className={style.score}>4.0 </h4>
+                    <div className={style.scrolldown}></div>
                 </div>
 
             </section>
