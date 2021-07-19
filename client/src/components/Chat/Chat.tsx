@@ -40,7 +40,7 @@ function Chat() {
     const user: UserChat = {
       mail: userResponse.data.mail,
       name: userResponse.data.name,
-      lastName: userResponse.data.name,
+      lastName: userResponse.data.lastName,
     };
     setUserLoged(user);
   };

@@ -69,7 +69,7 @@ export default function ChatRoom(props: React.PropsWithChildren<ChatRoomData>) {
             </button>
             <img
               src={profilePicture}
-              className={"rounded-circle p-1 mx-3 " + style.imgMessage}
+              className={"rounded-circle mx-3 " + style.imgMessage}
               alt="profile"
             />
             <span className="text-white fs-5 ">
@@ -85,7 +85,7 @@ export default function ChatRoom(props: React.PropsWithChildren<ChatRoomData>) {
         <section
           className={"d-flex flex-column justify-content-center bg-light"}
         >
-          <main className={"p-3 d-flex flex-column " + style.main}>
+          <main className={"d-flex flex-column justify-content-start p-3 border " + style.main}>
             {messages &&
               messages.map((msg: any, i) => (
                 <ChatMessage
@@ -101,7 +101,7 @@ export default function ChatRoom(props: React.PropsWithChildren<ChatRoomData>) {
               value={formValue}
               onChange={(e) => setFormValue(e.target.value)}
               placeholder="Envia un mensaje"
-              className={"border-0 rounded-0 w-100 px-3 fs-6 bg-light "}
+              className={"border rounded-0 w-100 px-3 fs-6 bg-light "}
             />
 
             <button

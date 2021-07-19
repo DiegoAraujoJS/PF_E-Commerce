@@ -133,7 +133,7 @@ function ListChatRoom(props: React.PropsWithChildren<PropsChat>) {
               Añadir
             </button>
           </div>
-          <ul className={"list-group " + style.listChats}>
+          <ul className={"list-group border" + style.listChats}>
             {chatRoom &&
               chatRoom.map((chat, i) => {
                 return (
@@ -149,7 +149,7 @@ function ListChatRoom(props: React.PropsWithChildren<PropsChat>) {
                           profilePicture ||
                           "https://api.adorable.io/avatars/23/abott@adorable.png"
                         }
-                        className={"rounded-circle p-1 " + style.imgMessage}
+                        className={"rounded-circle " + style.imgMessage}
                       />
                     </div>
                     <div className="d-flex w-75 justify-content-between">
