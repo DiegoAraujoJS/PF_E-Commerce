@@ -7,7 +7,7 @@ import style from "./Chat.module.css";
 import ChatMessage from "./ChatMessage";
 import ChatRoom from "./ChatRoom";
 import axios from "axios";
-// import profilePicture from "../../images/editar_perfil.png";
+import profilePicture from "../../images/profile_pic.svg";
 
 interface PropsChat {
   userLoged: UserChat;
@@ -99,7 +99,7 @@ function ListChatRoom(props: React.PropsWithChildren<PropsChat>) {
         />
       ) : (
         <div className={"w-75 "}>
-          <div className={"d-flex w-100 "}>
+          <div className={"d-flex w-100"}>
             {users && (
               <form className={"d-flex w-100"}>
                 <select
@@ -133,12 +133,12 @@ function ListChatRoom(props: React.PropsWithChildren<PropsChat>) {
               Añadir
             </button>
           </div>
-          <ul className={"list-group border" + style.listChats}>
+          <ul className={"list-group border rounded-0 rounded-bottom " + style.listChats}>
             {chatRoom &&
               chatRoom.map((chat, i) => {
                 return (
                   <li
-                    className="list-group-item list-group-item-action d-flex rounded-0"
+                    className="list-group-item list-group-item-action d-flex rounded-0 border-end-0 border-start-0"
                     key={i}
                     onClick={() => setChatSelected(chat)}
                   >
@@ -146,8 +146,8 @@ function ListChatRoom(props: React.PropsWithChildren<PropsChat>) {
                       <img
                         alt="alt"
                         src={
-                          // profilePicture ||
-                          "https://api.adorable.io/avatars/23/abott@adorable.png"
+                          profilePicture ||
+                          profilePicture
                         }
                         className={"rounded-circle " + style.imgMessage}
                       />

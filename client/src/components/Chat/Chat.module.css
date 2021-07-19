@@ -7,7 +7,7 @@
 /* 3F3D56 */
 
 .chatContainer {
-  max-width: 700px;
+  max-width: 750px;
   min-width: 360px;
 }
 .background {
@@ -39,6 +39,7 @@
 }
 
 .imgMessage {
+  min-width: 40px;
   width: 40px;
   height: 40px;
 }
