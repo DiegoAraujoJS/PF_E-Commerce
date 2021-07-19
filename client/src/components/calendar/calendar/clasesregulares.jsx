@@ -6,12 +6,14 @@ import getCookieValue from '../../../cookieParser';
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
 export const Clasesregulares = (props) => {
-    console.log("EWSTOS SON LOS PROPS DE CLASESREGULARAES",props.email)
     const [startDate, setStartDate] = React.useState(new Date());
+    let horasminmax =startDate.toISOString()
+    let date3 = new Date(horasminmax);
+    let horainicial=date3.getHours().toString()
     var minTime = new Date();
         minTime.setMinutes(0);
         minTime.setHours(8);
-        var maxTime = new Date();
+    var maxTime = new Date();
         maxTime.setMinutes(0);
         maxTime.setHours(23);
     const dias = [
@@ -95,7 +97,7 @@ export const Clasesregulares = (props) => {
                     <Form.Group>
                     <Row>
                          <Col sm={12} md={8}>
-									<Form.Label className='text'>Que dia:</Form.Label>
+									
 									<Form.Control
 										as='select'
 										name='dias'
@@ -105,7 +107,7 @@ export const Clasesregulares = (props) => {
 										className={`form-control ${errors.dias && touched.dias ? 'is-invalid' : ''
 											}`}
 									>
-										<option value='' >Seleccione un nivel</option>
+										<option value='' >Seleccione un dia</option>
 										{dias.map((nivel, i) => {
 											return <option key={i + 30} value={nivel}>{nivel}</option>
 										}
@@ -118,7 +120,7 @@ export const Clasesregulares = (props) => {
                     </Row>
                     <Row className='mb-1'>
                             <Col sm={12} md={8}>
-                                <Form.Label className='text'>Cuantas semanas</Form.Label>
+                                <Form.Label className='text'>Cuantas semanas dura:</Form.Label>
                                 <Field
                                     name='nombre'
                                     type='number'
@@ -135,14 +137,29 @@ export const Clasesregulares = (props) => {
                                 ) : null}
                             </Col>
                     </Row>
+                    <Col sm={12} md={8}>
+                                <Form.Label className='text'>Fecha inicial</Form.Label>
+                    <DatePicker
+                                    selected={startDate}
+                                    onChange={(date) => setStartDate(date)}
+                                    timeFormat="HH:mm"
+                                    timeIntervals={30}
+                                    timeCaption="time"
+                                    dateFormat="MMMM d, yyyy h:mm aa"
+                                    showTimeSelect
+                                    minDate={(new Date())}
+                                    minTime={minTime}
+                                    maxTime={maxTime}
+                            />
+                            </Col>
                     <Row className='mb-1'>
                             <Col sm={12} md={8}>
-                                <Form.Label className='text'>Cuantas horas</Form.Label>
+                                <Form.Label className='text'>Cuantas horas dura:</Form.Label>
                                 <Field
                                     name='horario'
                                     type='number'
                                     min="1"
-                                    max="24"
+                                    max={23-horainicial}
                                     onChange={handleChange}
                                     onBlur={handleBlur}
                                     value={values.horario}
@@ -154,17 +171,7 @@ export const Clasesregulares = (props) => {
                                 ) : null}
                             </Col>
                     </Row>
-                            <DatePicker
-                                    selected={startDate}
-                                    onChange={(date) => setStartDate(date)}
-                                    timeFormat="HH:mm"
-                                    timeIntervals={30}
-                                    timeCaption="time"
-                                    dateFormat="MMMM d, yyyy h:mm aa"
-                                    showTimeSelect
-                                    minTime={minTime}
-                                    maxTime={maxTime}
-                            />
+                            
                             <Col className='d-flex justify-content-center'>
 									<Button type='submit' className='text-uppercase'>
 										Enviar
