@@ -13,8 +13,9 @@ import getCookieValue from "../../cookieParser";
 import logo from '../../images/logotipo.png'
 import s from './SearchBar.module.css'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
+import { faEye, faEyeSlash, } from "@fortawesome/free-regular-svg-icons";
 import Register from '../Register/Register';
+import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 
 
 export default function SearchBar() {
@@ -140,51 +141,55 @@ export default function SearchBar() {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  return (
-    <Navbar bg="light"  expand="lg">
-    <Container className="container-fluid p-0"> 
-    <Navbar.Brand className={'ms-3'} href="#home"><img src={logo} alt='U CLASES Logo' style={{ height: '56px' }}></img></Navbar.Brand>
-    <Navbar.Toggle aria-controls="basic-navbar-nav" />
-      <Navbar.Collapse id="basic-navbar-nav">
-        <Nav className="mr-auto">
-          <Link className={'nav-link ms-4 text-decoration-none'} to={"/home"}>Home</Link>
-          <Link className={'nav-link ms-4 text-decoration-none'} to={"/calendar"}>Calendar</Link>
-          <Link className={'nav-link ms-4 text-decoration-none'} to={"/perfil"}>Profile</Link>
-          <Link className={'nav-link ms-4 text-decoration-none'} to={"/chat"}>Chat</Link>
-          <Link className={'nav-link ms-4 text-decoration-none'} to={"/clases"}>Class</Link>
+  const carrito = <FontAwesomeIcon icon={faShoppingCart} style={{fontSize:"30px", marginLeft:"25px"}} className=""/>
 
-          {loggedOrNot() ?
-            <NavDropdown className={'ms-4 text-decoration-none justify-content-end'} title="Logeado" id="basic-nav-dropdown">
-              <NavDropdown.Item onClick={() => signOut()}>
-                Desconectarse
-              </NavDropdown.Item>
-            </NavDropdown>
-            :
-            <NavDropdown className={'ms-4 text-decoration-none'} title="Cuenta" id="basic-nav-dropdown">
-              <Form className={'d-flex flex-column align-items-center'} style={dropBox} onSubmit={handleSubmit}>
-                <Form.Control style={inputSizeLim} className={'d-flex justify-content-center'} type="email" placeholder="Email" onChange={handleChange} />
-                <Form.Control style={inputSizeLim} type={showPassword} placeholder="Contraseña" onChange={handleChange} />
-                {showPassword === "password" ? eye : eyeSlash}
-  
-                <Button style={inputSizeLim} name='loginSubmit' variant="primary" type="submit">
-                  Entrar
-                </Button>
-                <Navbar.Text>
-                  ¿No tienes cuenta? <Button  onClick={() => handleShow()}> Registrarse </Button>
-                  <Register  show={show} handleClose={handleClose} />
-                </Navbar.Text>
-              </Form>
-            </NavDropdown>
-          }
-                    {loggedOrNot() && user.role === Role.PROFESSOR ?
-            <Link className={'nav-link ms-4 text-decoration-none'} to={"/clases/add"}>Agrega tu Propia Clase!</Link>
-            :
-            null
-          }
-        </Nav>
-      </Navbar.Collapse>
-    </Container>
-  </Navbar>
+  return (
+    // <Navbar expand="lg" className={s.navbar}>
+      <Navbar bg="light"  expand="lg">
+      <Container className="container-fluid p-0">
+        <Navbar.Brand className={'ms-3'} href="#home"><Link to={"/home"}><img src={logo} alt='U CLASES Logo' style={{ height: '56px' }}></img></Link></Navbar.Brand>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" />
+        <Navbar.Collapse id="basic-navbar-nav">
+          <Nav className="mr-auto">
+            <Link className={'nav-link ms-4 text-decoration-none'} to={"/home"}>Home</Link>
+            <Link className={'nav-link ms-4 text-decoration-none'} to={"/calendar"}>Calendar</Link>
+            <Link className={'nav-link ms-4 text-decoration-none'} to={"/perfil"}>Profile</Link>
+            <Link className={'nav-link ms-4 text-decoration-none'} to={"/chat"}>Chat</Link>
+            <Link className={'nav-link ms-4 text-decoration-none'} to={"/clases"}>Class</Link>
+
+            {loggedOrNot() ?
+              <NavDropdown className={'ms-4 text-decoration-none justify-content-end'} title="Logeado" id="basic-nav-dropdown">
+                <NavDropdown.Item onClick={() => signOut()}>
+                  Desconectarse
+                </NavDropdown.Item>
+              </NavDropdown>
+              :
+              <NavDropdown className={'ms-4 text-decoration-none'} title="Cuenta" id="basic-nav-dropdown">
+                <Form className={'d-flex flex-column align-items-center'} style={dropBox} onSubmit={handleSubmit}>
+                  <Form.Control style={inputSizeLim} className={'d-flex justify-content-center'} type="email" placeholder="Email" onChange={handleChange} />
+                  <Form.Control style={inputSizeLim} type={showPassword} placeholder="Contraseña" onChange={handleChange} />
+                  {showPassword === "password" ? eye : eyeSlash}
+
+                  <Button style={inputSizeLim} name='loginSubmit' variant="primary" type="submit">
+                    Entrar
+                  </Button>
+                  <Navbar.Text>
+                    ¿No tienes cuenta? <Button onClick={() => handleShow()}> Registrarse </Button>
+                    <Register show={show} handleClose={handleClose} />
+                  </Navbar.Text>
+                </Form>
+              </NavDropdown>
+            }
+            {loggedOrNot() && user.role === Role.PROFESSOR ?
+              <Link className={'nav-link ms-4 text-decoration-none'} to={"/clases/add"}>Agrega tu Propia Clase!</Link>
+              :
+              null
+            }
+          </Nav>
+        </Navbar.Collapse>
+        <Link to={"/cesta"}>{carrito}</Link>
+      </Container>
+    </Navbar>
   );
 }
 

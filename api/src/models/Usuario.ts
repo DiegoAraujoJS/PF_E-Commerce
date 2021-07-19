@@ -4,6 +4,11 @@ import Profesor from './Profesor';
 import { UserProps } from '../../../interfaces';
 import Puntuacion from './Puntuacion';
 import { ClasePorComprar } from '../../../interfaces';
+<<<<<<< HEAD
+=======
+import {Time, Class} from '../../../interfaces'
+
+>>>>>>> Braian-Domingo-18
 
 @Table
 export default class User extends Model implements UserProps {
@@ -40,6 +45,9 @@ export default class User extends Model implements UserProps {
 
     @HasOne(() => Alumno)
     alumno!: Alumno
+
+    @Column({ type: DataType.JSON})
+    carrito!: Class[]
 }
 
 

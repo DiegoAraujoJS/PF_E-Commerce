@@ -9,19 +9,20 @@ const router = Router()
 router.get('/', async (req: Request, res: Response) => {
     const { busqueda } = req.query
     if (!busqueda) return res.status(400).send('Debes ingresar un input como \'busqueda\'')
+
     try {
         let clases: any[] = []
+        let profesores: any[] = []
         if (busqueda) {
             let palabrasSeparadas = (busqueda as string).split(" ");
             palabrasSeparadas = palabrasSeparadas.filter(x => x !== 'grado')
             palabrasSeparadas = palabrasSeparadas.filter(x => x !== 'año')
             palabrasSeparadas = palabrasSeparadas.filter(x => x !== 'anio')
 
-
             for (let x of palabrasSeparadas) {
                 try {
                     const c = await Clase.findAll({
-                        include: [Profesor],
+                        include: [{ model: Profesor }],
                         where: {
                             [Op.or]: [{
                                 materia: {
@@ -38,24 +39,70 @@ router.get('/', async (req: Request, res: Response) => {
                                     [Op.iLike]: `%${x}%`.replace("\'", '')
                                 }
                             },
-                            {
-                                ciudad: {
-                                    [Op.iLike]: `%${x}%`.replace("\'", '')
-                                }
-                            }
-
                             ]
                         }
                     })
                     clases.push(...c)
+                    const p = await Profesor.findAll({
+                        include: [{ model: Clase }],
+                        where: {
+                            city: {
+                                [Op.iLike]: `%${x}%`.replace("\'", '')
+                            }
+                        }
+                    })
+                    profesores.push(...p)
                 }
+
                 catch (err) {
                     console.log(err)
                 }
             }
-
         }
-        return res.send(clases)
+
+        if (clases.length > 0 && profesores.length > 0) {
+            var clasesResult = [];
+
+            for (var i = 0; i < clases.flat().length; i++) {
+                for (var j = 0; j < profesores.flat().length; j++) {
+                    if (clases.flat()[i].Profesor_mail === profesores.flat()[j].User_mail) {
+                        clasesResult.push(clases[i])
+                    }
+                }
+            }
+
+            let hash = {};
+            let result = clasesResult.filter(o => hash[o.id] ? false : hash[o.id] = true)          
+
+            return res.send(result)
+        }
+        else if (clases.length > 0) {
+            let hash = {};
+            let result = clases.filter(o => hash[o.id] ? false : hash[o.id] = true)    
+            return res.send(result)
+        }
+        else {
+            let resultClases = profesores.map(e => {
+                return e.clases.map(c => {
+                    return c = {
+                        ...c.dataValues, profesor: {
+                            score: e.score,
+                            User_mail: e.User_mail,
+                            name: e.name,
+                            lastName: e.lasName,
+                            city: e.city,
+                            foto: e.foto,
+                            description: e.description
+                        }
+                    }
+                })
+
+            })
+            let clases = resultClases.flat()
+            let hash = {};
+            let result = clases.filter(o => hash[o.id] ? false : hash[o.id] = true)    
+            return res.send(result)
+        }
 
     } catch (err) {
         res.send(err)
@@ -70,7 +117,7 @@ router.post('/puntuar', async (req: Request, res: Response) => {
             include: [{
                 model: Profesor,
                 required: true,
-                attributes: ['ciudad', 'foto', 'descripcion'],
+                attributes: ['city', 'foto', 'description'],
             }],
             attributes: ['email', 'nombre', 'apellido']
         })
@@ -201,7 +248,7 @@ router.put('/puntuar', async (req: Request, res: Response) => {
 
 router.get('/all', async (req: Request, res: Response) => {
     try {
-        const clases = await Clase.findAll({include: Profesor})
+        const clases = await Clase.findAll({ include: Profesor })
         res.send(clases)
     }
     catch (error) {
@@ -212,6 +259,7 @@ router.get('/all', async (req: Request, res: Response) => {
 
 router.post('/add', async (req: Request, res: Response) => {
     const clase = req.body
+
     try {
         const crearClase = await Clase.create({
             ...clase,
@@ -226,13 +274,14 @@ router.post('/add', async (req: Request, res: Response) => {
 
 
 router.put('/edit', async (req: Request, res: Response) => {
-    const { id, descripcion, materia, nivel, grado, puntuacion } = req.body
+    const { id, descripcion, materia, nivel, grado, puntuacion, precio } = req.body
     const claseEditada = {
         descripcion,
         materia,
         nivel,
         grado,
         puntuacion,
+        precio
     }
     try {
         const clase: any = await Clase.findByPk(id);

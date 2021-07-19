@@ -1,4 +1,4 @@
-import { Model, Column, Table, CreatedAt, UpdatedAt, ForeignKey,DataType,  BelongsTo, HasMany } from 'sequelize-typescript';
+import { Model, Column, Table, CreatedAt, UpdatedAt, ForeignKey,DataType,  BelongsTo, HasMany, PrimaryKey, Unique} from 'sequelize-typescript';
 import { Time } from '../../../interfaces';
 import Profesor from './Profesor';
 import Puntuacion from './Puntuacion';
@@ -20,7 +20,10 @@ export default class Clase extends Model {
     descripcion!: string;
 
     @Column 
-    ciudad!: string
+    esPresencial!: string;
+
+    @Column 
+    precio!: string;
 
     @Column 
     esPresencial!: string

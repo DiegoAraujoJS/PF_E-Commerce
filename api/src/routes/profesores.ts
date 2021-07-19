@@ -15,7 +15,7 @@ router.get('/', async (req: Request, res: Response) => { // profesore?name=rod
             include: [{
                 model: Profesor,
                 required: true,
-                attributes: ['ciudad', 'foto', 'descripcion']
+                attributes: ['city', 'foto', 'description']
             }],
             where: {
                 [Op.or]: [
@@ -38,7 +38,7 @@ router.get('/', async (req: Request, res: Response) => { // profesore?name=rod
         include: [{
             model: Profesor,
             required: true,
-            attributes: ['ciudad', 'foto', 'descripcion']
+            attributes: ['city', 'foto', 'description']
         }],
         attributes: ['mail', 'nombre', 'apellido']
     })
@@ -138,7 +138,7 @@ router.post('/', async (req: Request, res: Response) => {
             include: [{
                 model: Profesor,
                 required: true,
-                attributes: ['ciudad', 'foto', 'descripcion']
+                attributes: ['city', 'foto', 'description']
             }],
             where: {
                 mail: mail.toString()
