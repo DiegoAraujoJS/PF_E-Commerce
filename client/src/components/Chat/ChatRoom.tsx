@@ -6,7 +6,7 @@ import firebase from "firebase/app";
 import { UserChat } from "./Chat";
 import style from "./Chat.module.css";
 import ChatMessage from "./ChatMessage";
-// import profilePicture from "../../images/editar_perfil.png";
+import profilePicture from "../../images/profile_pic.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
@@ -42,7 +42,7 @@ export default function ChatRoom(props: React.PropsWithChildren<ChatRoomData>) {
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       uid: props.userLoged.mail,
       name: props.userLoged.name,
-      photoURL: "https://api.adorable.io/avatars/23/abott@adorable.png",
+      photoURL: profilePicture,
     });
 
     setFormValue("");
@@ -68,7 +68,7 @@ export default function ChatRoom(props: React.PropsWithChildren<ChatRoomData>) {
               <FontAwesomeIcon icon={faArrowLeft} size={"1x"}/>
             </button>
             <img
-              src={"https://api.adorable.io/avatars/23/abott@adorable.png"}
+              src={profilePicture}
               className={"rounded-circle mx-3 " + style.imgMessage}
               alt="profile"
             />

@@ -1,5 +1,6 @@
 import React from "react";
 import style from "./Chat.module.css";
+import profilePicture from "../../images/profile_pic.svg";
 
 export default function ChatMessage(props) {
   const { text, uid, photoURL, createdAt, user } = props.message;
@@ -19,10 +20,7 @@ export default function ChatMessage(props) {
           </span>
           <img
             alt="alt"
-            src={
-              photoURL ||
-              "https://api.adorable.io/avatars/23/abott@adorable.png"
-            }
+            src={photoURL || profilePicture}
             className={"rounded-circle shadow " + style.imgMessage}
           />
         </div>
@@ -30,10 +28,7 @@ export default function ChatMessage(props) {
         <div className={"align-self-start my-1 d-flex align-items-center"}>
           <img
             alt="alt"
-            src={
-              photoURL ||
-              "https://api.adorable.io/avatars/23/abott@adorable.png"
-            }
+            src={photoURL || profilePicture}
             className={"rounded-circle me-1 shadow " + style.imgMessage}
           />
           <span
