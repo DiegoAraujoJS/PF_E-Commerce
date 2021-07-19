@@ -5,8 +5,9 @@ import Calendar from "../calendar/Calendar"
 import { ProfesorProps} from '../../../../interfaces';
 import getCookieValue from '../../cookieParser';
 import ChatRoom from '../Chat/ChatRoom';
-import icon_editar from '../../images/editar_perfil.png'
+import icon_edit from '../../images/editar.png'
 import { useHistory } from "react-router-dom";
+import star from '../../images/star.png'
 const Role = {
     USER: 0,
     PROFESSOR: 1,
@@ -84,14 +85,20 @@ function Profile(email) {
 
             <section className={style.sectionOne}>
                 <div className={style.profileContainer}>
-                <img src={icon_editar} className={style.icon} onClick={ (e) => handleClick(e)}/>
+                    <div className={style.icon}>
+                    <img src={icon_edit} className={style.image_icon}onClick={ (e) => handleClick(e)}/>
+                    <p className="small mb-4"> <i className="fas fa-map-marker-alt mr-2"></i>Editar tu perfil</p>
+                    </div>
+              
                     <img src={prof.foto} alt="..." width="130" height="130" className={style.profile} />
                     <div className="media-body mb-5">
                         <h4 className="mt-0 mb-0">{prof.name} {prof.lastName} </h4>
                         <p className="small mb-4"> <i className="fas fa-map-marker-alt mr-2"></i>{prof.city}</p>
                     </div>
                     <h1> Licenciado en Cs Naturales</h1>
-                    <h4>{prof.description}</h4>
+                    <p className={style.description}>{prof.description}</p>
+                    <img src={star} className={style.star}/>
+                    <h4 className={style.score}>4.0 </h4>
                 </div>
 
             </section>

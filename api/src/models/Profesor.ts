@@ -30,7 +30,7 @@ export default class Profesor extends Model implements ProfesorProps{
     @Column  ({type: DataType.TEXT})
     foto!: string;
     
-    @Column 
+    @Column  ({type: DataType.TEXT})
     description!: string;
 
     @Column ({type: DataType.JSON})
