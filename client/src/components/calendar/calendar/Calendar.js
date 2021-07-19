@@ -96,8 +96,29 @@ class Calendar extends Component {
   
         }
         },
+        onEventDelete:async  function(args) {
+            if(this.isUser){
+            console.log(args.e.data.start.value)
+            const año=args.e.data.start.value.slice(0,-15)
+            const mes=args.e.data.start.value.slice(5,-12)
+            const dia=args.e.data.start.value.slice(8,-9)
+            const start=args.e.data.start.value.slice(11)
+            const end=args.e.data.end.value.slice(11)
+            const horario1={
+              disponible: [[start,  end]],
+              email: email,
+              fecha: {
+                  anio: año,
+                  mes: mes,
+                  dia: dia
+              }
+          } 
+          await axios.put('http://localhost:3001/api/calendario/delete', horario1, {headers: {Authorization: this.token}})
+        }
+      },
       eventDeleteHandling: "Update",
       onEventClick: async args => {
+        console.log("BOrrar")
         if (this.state.isUser){
           const dp = this.calendar;
           const modal = await DayPilot.Modal.prompt("Update event text:", args.e.text());
@@ -149,13 +170,17 @@ class Calendar extends Component {
   async componentDidMount() {
 
     // load event data
+    
     const token = getCookieValue('token').replaceAll("\"", '')
     const thisUser = await axios.post(`http://localhost:3001/api/verify`, {},{ withCredentials: true, headers: {Authorization: token}})
     this.state.token = token
     const email=this.props.email
-    if (thisUser && (email === thisUser.data.mail || thisUser.data.role === RoleAdmin) ){
+    console.log(token)
+    const usuario= await (thisUser && (email === thisUser.data.mail))
+    if (usuario){
       this.state.isUser = true;
     }
+    console.log(this.state.isUser)
     if(email===undefined && localStorage.getItem('user')!==null)email=JSON.parse(localStorage.getItem('user')).mail
     const arrayProf = await axios.get(
       `http://localhost:3001/api/calendario/${email}`

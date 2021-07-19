@@ -6,7 +6,7 @@ import getCookieValue from '../../../cookieParser';
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
 export const Clasesregulares = (props) => {
-    console.log(props.email)
+    console.log("EWSTOS SON LOS PROPS DE CLASESREGULARAES",props.email)
     const [startDate, setStartDate] = React.useState(new Date());
     var minTime = new Date();
         minTime.setMinutes(0);
@@ -74,7 +74,7 @@ export const Clasesregulares = (props) => {
                             console.log("Clase", clase)
                             if(clase.data!=="El horario disponible es incorrecto"){
                                 date2.setDate(date2.getDate() + 7)
-                                alert("La clase se creo exitosamente")
+                                
                             }else{
                                 alert("Se ha producido un error al añadir los horarios")
                             }
