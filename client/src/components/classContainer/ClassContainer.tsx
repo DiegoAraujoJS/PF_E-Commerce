@@ -306,7 +306,7 @@ const ClassContainer: React.FC<Props> = ({ searchInput }) => {
 
                 </Col>
                 <Col sm={12} md={7} lg={9}>
-                    <ClassCards className="h-100" clasesFiltradas={classFilter ? classFilter : searchInput} />
+                    <ClassCards clasesFiltradas={classFilter ? classFilter : searchInput} />
                 </Col>
             </Row>
         </div >

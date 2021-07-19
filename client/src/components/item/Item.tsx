@@ -23,7 +23,7 @@ export default function Item({ cliente, id, imagen, nombre, precioDescuento, pre
     try {
       const result = await axios.get(`http://localhost:3001/api/carrito/${cliente}/${id}`)
       if (result.status === 200) {
-        dispatch(modificarClasesPorComprar(result.data.carrito));
+        dispatch(modificarClasesPorComprar(result.data));
       }
     } catch (error) {
       alert(error)

@@ -67,7 +67,7 @@ router.get('/:user/:id', async function (req: Request, res: Response) {
             carrito: clases
         })
         const result = await usuario.save()
-        res.send(result)
+        res.send(result.carrito)
     }
     catch (error) {
         console.log(error)

@@ -13,8 +13,9 @@ import getCookieValue from "../../cookieParser";
 import logo from '../../images/logotipo.png'
 import s from './SearchBar.module.css'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faEyeSlash } from "@fortawesome/free-regular-svg-icons";
+import { faEye, faEyeSlash, } from "@fortawesome/free-regular-svg-icons";
 import Register from '../Register/Register';
+import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 
 
 export default function SearchBar() {
@@ -140,6 +141,8 @@ export default function SearchBar() {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
+  const carrito = <FontAwesomeIcon icon={faShoppingCart} style={{fontSize:"30px", marginLeft:"25px"}} className=""/>
+
   return (
     // <Navbar expand="lg" className={s.navbar}>
       <Navbar   expand="lg" className={s.navbar}>
@@ -184,6 +187,7 @@ export default function SearchBar() {
             }
           </Nav>
         </Navbar.Collapse>
+        <Link to={"/carrito"}>{carrito}</Link>
       </Container>
     </Navbar>
   );

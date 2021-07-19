@@ -3,9 +3,14 @@ import CSS from 'csstype';
 import ClassCard from '../classCard/ClassCard';
 import { Alert, Button, Col, Container, Dropdown, DropdownButton, Form, InputGroup, ListGroup, ListGroupItem, Pagination, Row } from 'react-bootstrap';
 import { Class } from '../../../../interfaces';
+import axios from 'axios'
+import { connect } from 'react-redux';
 
-function ClassCards({ clasesFiltradas }: any) {
-    const [search, setSearch] = useState("")
+
+
+
+function ClassCards({ clasesFiltradas, dispatchInput }) {
+    const [searchInput, setSearchInput] = React.useState('')
     const [classFilter, setClassFilter] = useState([])
     const [classProp, setClassProp] = useState("")
 
@@ -24,35 +29,35 @@ function ClassCards({ clasesFiltradas }: any) {
     };
 
     const handleChange = (e) => {
-        setSearch(e.target.value)
+        setSearchInput(e.target.value)
     };
 
-    useEffect(() => {
-        if (classFilter && search) {
-            if (classProp && typeof classProp === 'string') {
-                let filtrados = classFilter.filter((clase:Class) => {
-                    if(classProp === "nombre" && clase ){
-                        return clase.nombre.toLowerCase().includes(search.toLowerCase())
-                    }
-                    else if(classProp === "profesor" && clase && clase.profesor){
-                        return clase.profesor.name.toLowerCase().includes(search.toLowerCase())
-                    }
-                    else return null
-                })
-                setClassFilter(filtrados)
+    // useEffect(() => {
+    //     if (classFilter && search) {
+    //         if (classProp && typeof classProp === 'string') {
+    //             let filtrados = classFilter.filter((clase: Class) => {
+    //                 if (classProp === "nombre" && clase) {
+    //                     return clase.nombre.toLowerCase().includes(search.toLowerCase())
+    //                 }
+    //                 else if (classProp === "profesor" && clase && clase.profesor) {
+    //                     return clase.profesor.name.toLowerCase().includes(search.toLowerCase())
+    //                 }
+    //                 else return null
+    //             })
+    //             setClassFilter(filtrados)
 
-            } else {
-                let filtrados = classFilter.filter(clase => {
-                    if (clase && clase.nombre) return clase.nombre.toLowerCase().includes(search.toLowerCase())
-                    else return null
-                })
-                setClassFilter(filtrados)
-            }
-        }
-        else if (search === '') {
-            setClassFilter(classFilter)
-        }
-    }, [search])
+    //         } else {
+    //             let filtrados = classFilter.filter(clase => {
+    //                 if (clase && clase.nombre) return clase.nombre.toLowerCase().includes(search.toLowerCase())
+    //                 else return null
+    //             })
+    //             setClassFilter(filtrados)
+    //         }
+    //     }
+    //     else if (search === '') {
+    //         setClassFilter(classFilter)
+    //     }
+    // }, [search])
 
     const [page, setPage] = useState({
         totalPages: null,
@@ -84,7 +89,7 @@ function ClassCards({ clasesFiltradas }: any) {
     const determineNumberOfPages = () => {
         let paginatedDataObject = {};
 
-        let dataLength = classFilter.length; 
+        let dataLength = classFilter.length;
         let chunkArray = [];
         let displayRecipes = 3
 
@@ -100,7 +105,7 @@ function ClassCards({ clasesFiltradas }: any) {
 
         setPage({
             ...page,
-            totalPages: (classFilter.length > 0 ) ? Math.ceil(classFilter.length / displayRecipes) :  0,
+            totalPages: (classFilter.length > 0) ? Math.ceil(classFilter.length / displayRecipes) : 0,
             dataStartingIndex: 1,
             pageData: paginatedDataObject,
             clickedOnNumber: 1
@@ -180,28 +185,31 @@ function ClassCards({ clasesFiltradas }: any) {
             key={currentClickedNumber}>{currentClickedNumber} </Pagination.Item>)
 
         let points = <Pagination.Item> ... </Pagination.Item>
-        console.log(totalPages)
-        console.log(pages)
         return [pages[currentClickedNumber - 3] ? points : null, pages[currentClickedNumber - 2], currentPage, pages[currentClickedNumber], pages[currentClickedNumber + 1] ? points : null];
     };
+
+
+    async function vaYBusca() {
+        const response: any = await axios.get(`http://localhost:3001/api/clases?busqueda=${searchInput}`)
+        dispatchInput(response.data)
+    }
 
     return (
         <div className="container-fluid">
 
             <Row className="d-flex justify-content-center mb-3">
-                <Col sm={3} md={3}>
-                    <div>
-                        <select className="form-select" onChange={(e: any) => setClassProp(e.target.value)}>
-                            <option value="nombre" >Nombre de la clase</option>
-                            <option value="profesor" >Nombre del Profesor</option>
-                        </select>
-                    </div>
-                </Col>
                 <Col sm={6} md={6} >
-                    <Form.Control type="text" placeholder="Busca por el nombre de la clase o profesor" onChange={handleChange} />
+                    <Form.Control type="text" placeholder="Matematica en Buenos Aires..." value={searchInput} onChange={handleChange}  />
                 </Col >
+                <Col sm={2} md={2}>
+                        <Button variant='primary' onClick={() => vaYBusca()}>Buscar</Button>                  
+                </Col>
             </Row>
-
+            <Row>
+                    <Alert variant="secondary" className="text-center p-0 d-flex justify-content-center">
+                         <p style={{fontWeight:600}} className="m-0 mt-2 mb-2">Busca por materia/ciudad/nivel/grado, puedes usar al mismo tiempo!</p>
+                    </Alert>
+            </Row>
             <Row  >
                 <Col  >
                     <ul style={classListContainer}>
@@ -258,8 +266,8 @@ function ClassCards({ clasesFiltradas }: any) {
                                 }
                             })
                                 : <Alert variant="info" className="text-center">
-                                        <h3>No hay clases disponibles</h3>
-                                    </Alert> 
+                                    <h3>No hay clases disponibles</h3>
+                                </Alert>
                         }
                         {classFilter && classFilter.length === 0 ?
                             <Alert variant="info" className="text-center">
@@ -321,7 +329,15 @@ function ClassCards({ clasesFiltradas }: any) {
 }
 
 
+const dispatchFuncToProps = (dispatch) => {
+    return {
+        dispatchInput: function (payload) {
+            dispatch({type: 'SEARCH_INPUT', payload})
+        }
+    }
+}
 
-export default ClassCards
+export default connect(null, dispatchFuncToProps)(ClassCards)
+
 
 
