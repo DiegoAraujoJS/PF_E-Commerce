@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { modificarClasesPorComprar } from '../../Actions/Actions';
 import axios from 'axios'
 
-export default function Item({ cliente, id , imagen, nombre, precioDescuento, precioOriginal, moneda, dia, horaInicio, horaFin, profesor, comprado }) {
+export default function Item({ cliente, id, imagen, nombre, precioDescuento, precioOriginal, moneda, dia, horaInicio, horaFin, profesor, comprado }) {
 
   // This allows use to modify Redux state's properties 
   const dispatch = useDispatch();
@@ -22,10 +22,10 @@ export default function Item({ cliente, id , imagen, nombre, precioDescuento, pr
     // dispatch(modificarClasesPorComprar(clasesActualizadas));
     try {
       const result = await axios.get(`http://localhost:3001/api/carrito/${cliente}/${id}`)
-      if(result.status === 200){
-        console.log(result.data)
-      }          
-  } catch (error) {
+      if (result.status === 200) {
+        dispatch(modificarClasesPorComprar(result.data.carrito));
+      }
+    } catch (error) {
       alert(error)
     }
   }
@@ -95,7 +95,7 @@ export default function Item({ cliente, id , imagen, nombre, precioDescuento, pr
                 </div>
               </div>
               <div className={s.prices}>
-              <p className={s.title}>Precio</p>
+                <p className={s.title}>Precio</p>
                 <div>
                   <span className={s.moneda}>{moneda}</span>
                   <span className={s.precio}>{precioDescuento.toFixed(2)}</span>
@@ -114,7 +114,7 @@ export default function Item({ cliente, id , imagen, nombre, precioDescuento, pr
             </div>
           </div>
       }
-      </>
+    </>
   );
 }
 
