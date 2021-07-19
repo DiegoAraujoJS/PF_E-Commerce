@@ -85,9 +85,9 @@ const EditProfile = () => {
                         </div>
                         <div className="row mt-3">
                         <div className="col-md-12"><label className="labels">Pon una descripción para los alumnos!</label><textarea className="form-control" onChange={(e) => inputsHandler(e)} id="description" /></div>
-                            <div className="col-md-12"><label className="labels">Contacto Telefonico</label><input type="text" className="form-control" placeholder="numero de celular" /></div>
+                         {/*    <div className="col-md-12"><label className="labels">Contacto Telefonico</label><input type="text" className="form-control" placeholder="numero de celular" /></div>
                             <div className="col-md-12"><label className="labels">Dirección</label><input type="text" className="form-control" placeholder="escribir direccion" /></div>
-                            <div className="col-md-12"><label className="labels">Educación</label><input type="text" className="form-control" placeholder="educacion" /></div>
+                            <div className="col-md-12"><label className="labels">Educación</label><input type="text" className="form-control" placeholder="educacion" /></div> */}
                         </div>
                         <div className="row mt-3">
                             <div className="col-md-6"><label className="labels">País</label><input type="text" className="form-control" placeholder="pais" id="ciudad" onChange={(e) => inputsHandler(e)}/></div>
