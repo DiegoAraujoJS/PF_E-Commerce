@@ -104,7 +104,9 @@ class Calendar extends Component {
             const dia=args.e.data.start.value.slice(8,-9)
             const start=args.e.data.start.value.slice(11)
             const end=args.e.data.end.value.slice(11)
-            const horario1={
+            let horario1
+            if(args.e.data.text==="Disponible"){
+            horario1={
               disponible: [[start,  end]],
               email: email,
               fecha: {
@@ -112,7 +114,17 @@ class Calendar extends Component {
                   mes: mes,
                   dia: dia
               }
-          } 
+          } }
+          else if(args.e.data.text==="Ocupado"){
+            horario1={
+              ocupado: [[start,  end]],
+              email: email,
+              fecha: {
+                  anio: año,
+                  mes: mes,
+                  dia: dia
+              }
+          } }
           await axios.put('http://localhost:3001/api/calendario/delete', horario1, {headers: {Authorization: this.token}})
         }
       },
