@@ -48,7 +48,7 @@ export default function Cesta() {
                 if (horaInicio[0].length === 1) horaInicio[0] = '0' + horaInicio[0];
                 if (horaFinal[0].length === 1) horaFinal[0] = '0' + horaFinal[0];                
                 let clasePorComprar = {
-                    id: e.id, // FALTA
+                    id: e.id, 
                     imagen: e.profesor.foto,
                     nombre: e.nombre,
                     precioDescuento: Number(e.precio.slice(1)),
