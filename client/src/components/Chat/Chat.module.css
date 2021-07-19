@@ -1,0 +1,66 @@
+:root {
+  --color_1: #2364f8;
+  --color_1_opaccity: rgba(54, 85, 156, 0.25);
+  --main_size: calc( 100vh - 100px - 6rem - 66px - 56px);
+  --list_size: calc(100vh - 100px - 6rem - 56px);
+}
+/* 3F3D56 */
+
+.chatContainer {
+  max-width: 750px;
+  min-width: 360px;
+}
+.background {
+  background-color: var(--color_1);
+}
+
+.main {
+  height: var(--main_size);
+  overflow-y: scroll;
+  background-size: 53px 53px;
+  background-image: radial-gradient(
+    transparent 28px,
+    var(--color_1_opaccity) 28px,
+    var(--color_1_opaccity) 32px,
+    transparent 32px
+  );
+}
+
+.main::-webkit-scrollbar {
+  width: 0.25rem;
+}
+
+.main::-webkit-scrollbar-track {
+  background: lightgray;
+}
+
+.main::-webkit-scrollbar-thumb {
+  background: #212529;
+}
+
+.imgMessage {
+  min-width: 40px;
+  width: 40px;
+  height: 40px;
+}
+
+.listChats {
+  height: var(--list_size);
+  overflow-y: scroll;
+  background-color: #F8F9FA;
+  background-image: url("../../images/chat-2.svg");
+  background-repeat: no-repeat;
+  background-position:center;
+  background-size: contain;
+}
+.listChats::-webkit-scrollbar {
+  width: 0.25rem;
+}
+
+.listChats::-webkit-scrollbar-track {
+  background: lightgray;
+}
+
+.listChats::-webkit-scrollbar-thumb {
+  background: var(--color_1);
+}

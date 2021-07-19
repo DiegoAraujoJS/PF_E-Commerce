@@ -1,0 +1,112 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+
+.containerCategorias {
+  float: left;
+  width: 9.99%;
+  height: 100%;
+  margin-left: 25px;
+}
+.wrapper {
+  padding: 30px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.tick {
+  display: block;
+  position: relative;
+  padding-left: 23px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  margin: 0;
+}
+
+.tick input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.check {
+  position: absolute;
+  top: 1px;
+  left: 0;
+  height: 18px;
+  width: 18px;
+  background-color: #f8f8f8;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+}
+
+.tick:hover input ~ .check {
+  background-color: #f3f3f3;
+}
+
+.tick input:checked ~ .check {
+  background-color: #61b15a;
+}
+
+.check:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.tick input:checked ~ .check:after {
+  display: block;
+  transform: rotate(45deg) scale(1);
+}
+
+.tick .check:after {
+  left: 6px;
+  top: 2px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg) scale(2);
+}
+
+.category {
+  font-size: 0.9rem;
+  cursor: pointer;
+}
+
+.list-group-item {
+  border: none;
+  padding: 0.3rem 0.4rem 0.3rem 0rem;
+}
+
+.badge-primary {
+  background-color: #defadb;
+  color: #48b83e;
+}
+
+.brand .check {
+  background-color: #fff;
+  top: 3px;
+  border: 1px solid #666;
+}
+
+.brand .tick {
+  font-size: 1rem;
+  padding-left: 25px;
+}
+
+.rating .check {
+  background-color: #fff;
+  border: 1px solid #666;
+  top: 0;
+}
+
+.brand .tick:hover input ~ .check,
+.rating .tick:hover input ~ .check {
+  background-color: #f9f9f9;
+}
+
+.brand .tick input:checked ~ .check,
+.rating .tick input:checked ~ .check {
+  background-color: #61b15a;
+}

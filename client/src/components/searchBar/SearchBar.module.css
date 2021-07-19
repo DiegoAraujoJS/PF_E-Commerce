@@ -1,0 +1,10 @@
+.inline {
+    display: inline;
+}
+
+.navbar {
+  background-color: #fff; 
+  border-bottom: 1px;
+  box-shadow: 1px 1px 12px -1px rgb(0 0 0 / 24%);
+  -webkit-box-shadow: 1px 1px 12px -1px rgb(0 0 0 / 24%);
+}

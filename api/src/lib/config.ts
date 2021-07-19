@@ -11,7 +11,10 @@ const config = {
 	dev: process.env.NODE_ENV !== 'production',
 	port: process.env.API_PORT || '3001',
 	host: process.env.API_host || 'localhost',
-	cors: process.env.CORS || 'localhost:3000',
+	cors: process.env.CORS || 'http://localhost:3000',
+	secret: process.env.SECRET || "9u#6j2pB#UqZ@9sQ",
+	session_secret: process.env.SESSION_SECRET || "7QvMNrpfn.@Wj!3E",
+	privateApiKey: process.env.STRIPE_PRIVATE_API_KEY || "sk_test_51JEWhNDNEDWq2u3Vqp31vMXUSALof4hsmDJqq846gqhLnt8GW5g6wtlMxSGPCtCSlaKDbt2RA3IdPJMcjZO0cYO800Q0E1Bz5D"
 };
 
 export default config;

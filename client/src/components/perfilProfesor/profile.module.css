@@ -1,0 +1,153 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+
+.calendarContainer {
+  display: grid;
+  position: center;
+  font-family: "Poppins", sans-serif;
+}
+
+.score {
+  float: left;
+  width: 9%;
+  margin-top: 31%;
+  margin-left: 1%;
+}
+.star {
+  float: left;
+  width: 7%;
+  margin-top: 30%;
+  margin-left: 41%;
+}
+.scrolldown {
+  height: 50px;
+  width: 30px;
+  border: 2px solid black;
+  position: absolute;
+  left: 49%;
+  bottom: 20px;
+  border-radius: 50px;
+  cursor: pointer;
+}
+.scrolldown::before,
+.scrolldown::after {
+  content: "";
+  position: absolute;
+  top: 20%;
+  left: 50%;
+  border: 2px solid black;
+  height: 10px;
+  width: 10px;
+  transform: translate(-50%, -50%) rotate(45deg);
+  border-top: transparent;
+  border-left: transparent;
+  animation: scrolldown 1s ease-in-out infinite;
+}
+.scrolldown::after {
+  top: 30%;
+  animation-delay: 0.3s;
+}
+@keyframes scrolldown {
+  0% {
+    opacity: 0;
+  }
+  30% {
+    opacity: 1;
+  }
+  60% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    top: 90%;
+  }
+}
+
+.container {
+  scroll-snap-type: y mandatory;
+  overflow-y: scroll;
+  height: 100vh;
+  scroll-behavior: smooth;
+  font-family: "Poppins", sans-serif;
+}
+.icon {
+  position: absolute; /*or fixed*/
+  right: 0px;
+  height: 1%;
+  margin-right: 30px;
+}
+.image_icon {
+  height: 70px;
+}
+.profile {
+  border-radius: 70px;
+}
+.h4Prof {
+  color: white;
+}
+.sectionOne {
+  color: white;
+  background-color: #00b0ff;
+  text-align: center;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  scroll-snap-align: start;
+  scroll-behavior: smooth;
+}
+.sectionTwo {
+  background-color: #00bfa6;
+  height: 100vh;
+  justify-content: center;
+  scroll-snap-align: start;
+  scroll-behavior: smooth;
+}
+.sectionThree {
+  background-color: #63ff9c;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  scroll-snap-align: start;
+  scroll-behavior: smooth;
+}
+/* .profile {
+  border-radius: 50%;
+}
+.rate {
+  float: left;
+  height: 46px;
+  padding: 0 10px;
+}
+.rate:not(:checked) > input {
+  position: absolute;
+  top: -9999px;
+}
+.rate:not(:checked) > label {
+  float: right;
+  width: 1em;
+  overflow: hidden;
+  white-space: nowrap;
+  cursor: pointer;
+  font-size: 30px;
+  color: #ccc;
+}
+.rate:not(:checked) > label:before {
+  content: "★ ";
+}
+.rate > input:checked ~ label {
+  color: #ffc700;
+}
+.rate:not(:checked) > label:hover,
+.rate:not(:checked) > label:hover ~ label {
+  color: #deb217;
+}
+.rate > input:checked + label:hover,
+.rate > input:checked + label:hover ~ label,
+.rate > input:checked ~ label:hover,
+.rate > input:checked ~ label:hover ~ label,
+.rate > label:hover ~ input:checked ~ label {
+  color: #c59b08;
+}
+ */

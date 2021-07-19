@@ -1,0 +1,167 @@
+.details {
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #6a6f73;
+}
+
+.label {
+    width: 50%;
+    display: inline-block;
+}
+
+.title {
+    font-size: 1.7rem;
+    font-weight: bold;
+}
+
+.marginBottom {
+    margin: 0;
+    margin-bottom: 16px;
+}
+
+.precio {
+    float: right;
+    width: 35%;
+    text-align: end;
+}
+.moneda {
+    font-weight: 600;
+    width: 15%;
+}
+
+.totalContainer {
+    display: flex;
+}
+
+.labelTotal {
+    width: 50%;
+    font-weight: 700;
+    font-size: 1.3rem;
+}
+
+.monedaTotal {
+    font-weight: 700;
+    font-size: 1.3rem;
+    width: 15%;
+}
+
+.precioTotal {
+    width: 35%;
+    font-size: 1.3rem;
+    font-weight: 700;
+    text-align: end;
+}
+
+.payButton, .seguirComprando {
+    background-color: #2962ff;
+    color: white;
+    font-weight: 500;
+    padding: 10px;
+    font-size: 1.1rem;
+    width: 100%;
+    border-radius: 1rem;
+    border: 1px solid transparent;
+}
+
+
+.seguirComprando {
+    width: 30%;
+}
+
+.payButton:hover, .seguirComprando:hover {
+box-shadow: 1px 1px 12px -1px rgb(0 0 0 / 24%);
+  -webkit-box-shadow: 1px 1px 12px -1px rgb(0 0 0 / 24%);
+}
+
+.payButton:disabled, .seguirComprando:disabled {
+    background-color: #99b2f5;
+}
+
+.enlace, .enlace:link, .enlace:visited, .enlace:hover, .enlace:active {
+    text-decoration: none;
+    color: #2962ff; 
+    font-weight: 600;
+}
+
+.container {
+    display: flex;
+}
+
+.childContainer {
+    width: 100%;
+    border: 1px solid #E7E8EA;
+    padding: 20px 20px;
+    text-align: center;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.svgImage {
+    width: 30%;
+    margin: 14px 0 30px 0;
+}
+
+.buttonDiv, .imageDiv {
+    width: 100%;
+    text-align: center;
+}
+
+.description {
+    width: 100%;
+}
+
+.left {
+    width: 60%;
+    display: inline-block;
+    margin-right: 20px;
+}
+
+
+.right {
+    width: 38%;
+    box-sizing: border-box;
+    display: inline-block;
+    border: 1px solid #E7E8EA;
+    padding: 10px 15px;
+    vertical-align: top;
+}
+
+.title {
+    font-size: 1.7rem;
+    font-weight: bold;
+}
+
+.cantidadClases {
+    font-size: 1.3rem;
+    font-weight: 600;
+}
+
+.marginBottom {
+    margin: 0;
+    margin-bottom: 16px;
+}
+
+.marginBottom30 {
+    margin: 0;
+    margin-bottom: 30px;
+}
+
+.marginRight {
+    margin-right: 10px;
+}
+
+.marginLeftRight {
+    margin-right: 10px;
+    margin-left: 30px;
+}
+
+
+
+.enlace {
+    font-weight: 700;
+}
+
+.inlineBlock {
+    display: inline-block;
+}
+
