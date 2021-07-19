@@ -141,7 +141,8 @@ export default function SearchBar() {
   const handleShow = () => setShow(true);
 
   return (
-    <Navbar expand="lg" bg="light">
+    // <Navbar expand="lg" className={s.navbar}>
+      <Navbar   expand="lg" className={s.navbar}>
       <Container className="container-fluid p-0">
         <Navbar.Brand className={'ms-3'} href="#home"><Link to={"/home"}><img src={logo} alt='U CLASES Logo' style={{ height: '56px' }}></img></Link></Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
