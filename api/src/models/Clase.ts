@@ -20,13 +20,10 @@ export default class Clase extends Model {
     descripcion!: string;
 
     @Column 
-    ciudad!: string
+    esPresencial!: string;
 
     @Column 
-    esPresencial!: string
-
-    @Column 
-    precio!: string
+    precio!: string;
 
     @Column ({allowNull: false, type: DataType.JSON})
     date!: {year: number, month: number, day: number, time: Time}

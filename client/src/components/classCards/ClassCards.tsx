@@ -10,15 +10,13 @@ import { connect } from 'react-redux';
 
 
 function ClassCards({ clasesFiltradas, dispatchInput }) {
-    const [searchInput, setSearchInput] = React.useState('')
+    const [search, setSearch] = React.useState('')
     const [classFilter, setClassFilter] = useState([])
-    const [classProp, setClassProp] = useState("")
 
 
     useEffect(() => {
         setClassFilter(clasesFiltradas)
     }, [clasesFiltradas])
-
 
     const classListContainer: CSS.Properties = {
         // position: 'relative',
@@ -27,37 +25,6 @@ function ClassCards({ clasesFiltradas, dispatchInput }) {
         paddingLeft: '0px',
         listStyleType: 'none',
     };
-
-    const handleChange = (e) => {
-        setSearchInput(e.target.value)
-    };
-
-    // useEffect(() => {
-    //     if (classFilter && search) {
-    //         if (classProp && typeof classProp === 'string') {
-    //             let filtrados = classFilter.filter((clase: Class) => {
-    //                 if (classProp === "nombre" && clase) {
-    //                     return clase.nombre.toLowerCase().includes(search.toLowerCase())
-    //                 }
-    //                 else if (classProp === "profesor" && clase && clase.profesor) {
-    //                     return clase.profesor.name.toLowerCase().includes(search.toLowerCase())
-    //                 }
-    //                 else return null
-    //             })
-    //             setClassFilter(filtrados)
-
-    //         } else {
-    //             let filtrados = classFilter.filter(clase => {
-    //                 if (clase && clase.nombre) return clase.nombre.toLowerCase().includes(search.toLowerCase())
-    //                 else return null
-    //             })
-    //             setClassFilter(filtrados)
-    //         }
-    //     }
-    //     else if (search === '') {
-    //         setClassFilter(classFilter)
-    //     }
-    // }, [search])
 
     const [page, setPage] = useState({
         totalPages: null,
@@ -188,9 +155,11 @@ function ClassCards({ clasesFiltradas, dispatchInput }) {
         return [pages[currentClickedNumber - 3] ? points : null, pages[currentClickedNumber - 2], currentPage, pages[currentClickedNumber], pages[currentClickedNumber + 1] ? points : null];
     };
 
-
+    const handleChange = (e) => {
+        setSearch(e.target.value)
+    };
     async function vaYBusca() {
-        const response: any = await axios.get(`http://localhost:3001/api/clases?busqueda=${searchInput}`)
+        const response: any = await axios.get(`http://localhost:3001/api/clases?busqueda=${search}`)
         dispatchInput(response.data)
     }
 
@@ -199,7 +168,7 @@ function ClassCards({ clasesFiltradas, dispatchInput }) {
 
             <Row className="d-flex justify-content-center mb-3">
                 <Col sm={6} md={6} >
-                    <Form.Control type="text" placeholder="Matematica en Buenos Aires..." value={searchInput} onChange={handleChange}  />
+                    <Form.Control type="text" placeholder="Matematica en Buenos Aires..." value={search} onChange={handleChange}  />
                 </Col >
                 <Col sm={2} md={2}>
                         <Button variant='primary' onClick={() => vaYBusca()}>Buscar</Button>                  
@@ -207,7 +176,7 @@ function ClassCards({ clasesFiltradas, dispatchInput }) {
             </Row>
             <Row>
                     <Alert variant="secondary" className="text-center p-0 d-flex justify-content-center">
-                         <p style={{fontWeight:600}} className="m-0 mt-2 mb-2">Busca por materia/ciudad/nivel/grado, puedes usar al mismo tiempo!</p>
+                         <p style={{fontWeight:600}} className="m-0 mt-2 mb-2">Busca por materia/ciudad/nivel/grado, puedes usarlas al mismo tiempo!</p>
                     </Alert>
             </Row>
             <Row  >
@@ -327,7 +296,6 @@ function ClassCards({ clasesFiltradas, dispatchInput }) {
         </div>
     )
 }
-
 
 const dispatchFuncToProps = (dispatch) => {
     return {
