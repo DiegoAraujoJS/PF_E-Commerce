@@ -70,6 +70,28 @@ const clasesPorComprar = [
     horaInicio: '5:30 PM', 
     horaFin: '6:00 PM',
     profesor: 'braiansilva@gmail.com'
+  },
+  {
+    id: 75,
+    imagen: 'https://images.unsplash.com/photo-1561657819-51c0511e35ab?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=751&q=80',
+    nombre: '4 horas de clase de ciencia',
+    precioDescuento: 14.30,
+    precioOriginal: 16.99,
+    dia: '20/07/2021', 
+    horaInicio: '5:30 PM', 
+    horaFin: '6:00 PM',
+    profesor: 'braiansilva@gmail.com'
+  },
+  {
+    id: 698,
+    imagen: 'https://images.unsplash.com/photo-1561657819-51c0511e35ab?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=751&q=80',
+    nombre: '4 horas de clase de ciencia',
+    precioDescuento: 14.30,
+    precioOriginal: 16.99,
+    dia: '21/07/2021', 
+    horaInicio: '5:30 PM', 
+    horaFin: '6:00 PM',
+    profesor: 'braiansilva@gmail.com'
   }
 ]
 

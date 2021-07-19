@@ -148,7 +148,6 @@ export default function PagoExitoso() {
                             'resource': element,
                             'conferenceDataVersion': 1
                         })
-
                         request.execute(event => {
                             window.open(event.htmlLink)
                         })
