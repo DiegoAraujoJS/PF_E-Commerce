@@ -11,7 +11,11 @@
 .icon {
   position: absolute; /*or fixed*/
   right: 0px;
-  height: 7%;
+  height: 1%;
+  margin-right: 30px;
+}
+.image_icon {
+  height: 70px;
 }
 .profile {
   border-radius: 70px;
@@ -20,6 +24,7 @@
   color: white;
 }
 .sectionOne {
+  color: white;
   background-color: #00b0ff;
   text-align: center;
   height: 100vh;

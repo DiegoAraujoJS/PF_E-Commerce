@@ -49,7 +49,7 @@ const EditProfile = () => {
                         <div className="col-md-3 border-right">
                             <span className="text-black-50">Selecciona una imagen</span>
                             <input type='file' onChange={(e) => imageHandler(e)} id='foto' />
-                            <div className="d-flex flex-column align-items-center text-center  p-3 py-5"><img className={styles.imgEdit} src={img} /><span className="font-weight-bold"></span><span className="text-black-50">amelly12@bbb.com</span><span> </span></div>
+                            <div className="d-flex flex-column align-items-center text-center  p-3 py-5"><img className={styles.imgEdit} src={img} /><span className="font-weight-bold">Tu imagen </span><span className="text-black-50"></span><span> </span></div>
                         </div>
                         <div className="row mt-2">
                             <div className="col-md-6"><label className="labels">Nombre</label><input type="text" className="form-control" placeholder="primer nombre" /></div>
