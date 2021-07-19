@@ -133,12 +133,12 @@ function ListChatRoom(props: React.PropsWithChildren<PropsChat>) {
               Añadir
             </button>
           </div>
-          <ul className={"list-group border" + style.listChats}>
+          <ul className={"list-group border rounded-0 " + style.listChats}>
             {chatRoom &&
               chatRoom.map((chat, i) => {
                 return (
                   <li
-                    className="list-group-item list-group-item-action d-flex rounded-0"
+                    className="list-group-item list-group-item-action d-flex rounded-0 border-start-0 border-end-0"
                     key={i}
                     onClick={() => setChatSelected(chat)}
                   >
