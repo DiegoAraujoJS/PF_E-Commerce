@@ -4,11 +4,8 @@ import Profesor from './Profesor';
 import { UserProps } from '../../../interfaces';
 import Puntuacion from './Puntuacion';
 import { ClasePorComprar } from '../../../interfaces';
-<<<<<<< HEAD
-=======
 import {Time, Class} from '../../../interfaces'
 
->>>>>>> Braian-Domingo-18
 
 @Table
 export default class User extends Model implements UserProps {

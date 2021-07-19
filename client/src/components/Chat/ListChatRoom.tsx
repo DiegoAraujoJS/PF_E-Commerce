@@ -7,7 +7,7 @@ import style from "./Chat.module.css";
 import ChatMessage from "./ChatMessage";
 import ChatRoom from "./ChatRoom";
 import axios from "axios";
-import profilePicture from "../../images/editar_perfil.png";
+// import profilePicture from "../../images/editar_perfil.png";
 
 interface PropsChat {
   userLoged: UserChat;
@@ -146,7 +146,7 @@ function ListChatRoom(props: React.PropsWithChildren<PropsChat>) {
                       <img
                         alt="alt"
                         src={
-                          profilePicture ||
+                          // profilePicture ||
                           "https://api.adorable.io/avatars/23/abott@adorable.png"
                         }
                         className={"rounded-circle " + style.imgMessage}

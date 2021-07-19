@@ -19,11 +19,7 @@ interface ClasePorComprar {
     dia: `${number}${number}/${number}${number}/${number}${number}${number}${number}`;
     horaInicio: `${number}${number}:${number}${number} ${'PM' | 'AM'}`;
     horaFin: `${number}${number}:${number}${number} ${'PM' | 'AM'}`;
-<<<<<<< HEAD
-    profesor: `${string}@${string}.${string}`;
-=======
     profesor: string;
->>>>>>> Braian-Domingo-18
 }
 
 interface Horario {
@@ -82,9 +78,6 @@ interface IClase{
 }
 type DisponibleOcupadoTransform = {disponible: Disponible, ocupado: Ocupado}
 
-<<<<<<< HEAD
-export type {UserProps, ArrayDePares, Disponible, Ocupado, CalendarioResponse, ProfesorProps, Horario, Time, DisponibleOcupadoTransform, IClase, ClasePorComprar}
-=======
 
 interface Class {
     id?: number;
@@ -117,6 +110,5 @@ interface User {
 }
 
 export type {UserProps, ArrayDePares, Disponible, Ocupado, CalendarioResponse, ProfesorProps, Horario, Time, DisponibleOcupadoTransform, IClase, ClasePorComprar, Class, Profesor, User}
->>>>>>> Braian-Domingo-18
 
 export {Role}

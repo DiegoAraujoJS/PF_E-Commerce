@@ -19,6 +19,7 @@ function Chat() {
     mail: "admin@admin.com",
     name: "Admin",
     lastName: "Admin",
+    city: "Buenos Aires"
   });
 
   useEffect(() => {
@@ -48,13 +49,9 @@ function Chat() {
   return (
     <div className={"mt-5 mx-auto " + style.chatContainer}>
       {userLoged ? (
-<<<<<<< HEAD
         <div className={"d-flex flex-row justify-content-center w-100"}>
           <ListChatRoom userLoged={userLoged} userReference={userReference} />
         </div>
-=======
-        <ChatRoom userLoged={userLoged} userReference={{mail: "diegoaraujo@gmail.com", role: 2, name: 'Mr Admin', lastName: 'Smith', city:"Buenos Aires" }} />
->>>>>>> Braian-Domingo-18
       ) : (
         <div className={"d-flex flex-column justify-content-center align-items-center"}>
           <h1 className={"mb-5"}>No hay un usuario logeado</h1>

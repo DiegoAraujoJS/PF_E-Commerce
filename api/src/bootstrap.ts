@@ -15,11 +15,7 @@ const bootstrap = async () => {
         lastName: 'Araujo',
         mail: "diegoaraujo@gmail.com",
         role: Role.ADMIN ,
-<<<<<<< HEAD
-        city: "Buenos Aires",
-=======
         city: "Buenos Aires"
->>>>>>> Braian-Domingo-18
     }
     const Diego = {...d, password:"123456"}
 
@@ -28,11 +24,7 @@ const bootstrap = async () => {
         lastName: 'Silva',
         mail: "braiansilva@gmail.com",
         role: Role.ADMIN,
-<<<<<<< HEAD
-        city: "Buenos Aires",
-=======
         city: "Buenos Aires"
->>>>>>> Braian-Domingo-18
     }
     const Braian = {...b, password:"123456"}
 
@@ -41,11 +33,7 @@ const bootstrap = async () => {
         lastName: 'Burgos',
         mail: "edwardburgos@gmail.com",
         role: Role.USER,
-<<<<<<< HEAD
-        city: "Lima",
-=======
         city: "Cordoba"
->>>>>>> Braian-Domingo-18
     }
     const Edward = {...e, password:"123456"}
 
@@ -54,11 +42,7 @@ const bootstrap = async () => {
         lastName: 'Carro',
         mail: "javiercarro@gmail.com",
         role: Role.USER,
-<<<<<<< HEAD
-        city: "Lima",
-=======
         city: "Lima"
->>>>>>> Braian-Domingo-18
     }
     const Javi = {...j, password:"123456"}
 
@@ -67,11 +51,7 @@ const bootstrap = async () => {
         lastName: 'Leonel',
         mail: "mauroleonel@gmail.com", 
         role: Role.PROFESSOR,
-<<<<<<< HEAD
-        city: "Cordoba",
-=======
         city: "Lima"
->>>>>>> Braian-Domingo-18
     }
     const Mauro = {...m, password:"123456"}
 
@@ -84,7 +64,7 @@ const bootstrap = async () => {
         User_mail: "diegoaraujo@gmail.com",
         city: "Buenos Aires",
         foto: "https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=547&q=80",
-        description: "Hola soy Diego me especializo en areas como la matematica, fisica, lengua, en especial en el arte. Me encanta enseñar es mi hobbie dese pequeño, conoci este sitio para empeza asi que cuando quiersa empezamos! Cualquier duda estoy a tu disposicion en el chat ",
+        description: "Profesor apasionado por enseñar",
         score: 3
     }
 
@@ -94,7 +74,7 @@ const bootstrap = async () => {
         User_mail: "braiansilva@gmail.com",
         city: "Buenos Aires",
         foto: "https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=547&q=80",
-        description: "Hola soy Braian me especializo en areas como la matematica, fisica, lengua, en especial en el arte. Me encanta enseñar es mi hobbie dese pequeño, conoci este sitio para empeza asi que cuando quiersa empezamos! Cualquier duda estoy a tu disposicion en el chat ",
+        description: "Profesor apasionado por enseñar",
         score: 3
     }
 
@@ -105,7 +85,7 @@ const bootstrap = async () => {
         score: 2.1,
         city: "Lima",
         foto: "https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=547&q=80",
-        description: "Hola soy Edward me especializo en areas como la matematica, fisica, lengua, en especial en el arte. Cualquier duda estoy a tu disposicion en el chat "
+        description: "Profesor apasionado por enseñar"
     }
     const MauroProfe: ProfesorProps = {
         name: 'Mauro',
@@ -113,7 +93,7 @@ const bootstrap = async () => {
         User_mail: "mauroleonel@gmail.com",
         city: "Lima",
         foto: "https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=547&q=80",
-        description: "Hola soy Mauro me especializo en areas como la matematica, fisica, lengua, en especial en el arte. Me encanta enseñar es mi hobbie dese pequeño, conoci este sitio para empeza asi que cuando quiersa empezamos! Cualquier duda estoy a tu disposicion en el chat ",
+        description: "Profesor apasionado por enseñar",
         score: 4
     }
     const JaviProfe: ProfesorProps = {
@@ -122,7 +102,7 @@ const bootstrap = async () => {
         User_mail: "javiercarro@gmail.com",
         city: "Lima",
         foto: "https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=547&q=80",
-        description: "Hola soy Javi me especializo en areas como la matematica, fisica, lengua, en especial en el arte. Me encanta enseñar es mi hobbie dese pequeño, conoci este sitio para empeza asi que cuando quiersa empezamos! Cualquier duda estoy a tu disposicion en el chat ",
+        description: "Profesor apasionado por enseñar",
         score: 4
     }
 
@@ -203,12 +183,8 @@ const bootstrap = async () => {
         grado: "Primer grado",
         nivel: 'Primario',
         puntuacion: 5,
-<<<<<<< HEAD
-        date:  {year: 2021, month: 8, day: 7, time: ['08:00:00','12:00:00']}
-=======
         date:  {year: 2021, month: 8, day: 7, time: ['08:00:00','12:00:00']},
         precio: "$2000"
->>>>>>> Braian-Domingo-18
     })
     await Clase.create({
         nombre: 'Aprende a comunicar',
@@ -220,12 +196,8 @@ const bootstrap = async () => {
         grado: "Cuarto grado",
         nivel: 'Terciario',
         puntuacion: 3,
-<<<<<<< HEAD
-        date:  {year: 2021, month: 8, day: 7, time:  ['20:00:00','24:00:00']}
-=======
         date:  {year: 2021, month: 8, day: 7, time:  ['20:00:00','24:00:00']},
         precio: "$2000"
->>>>>>> Braian-Domingo-18
     })
 
     await Clase.create({
@@ -238,12 +210,8 @@ const bootstrap = async () => {
         grado: "Sexto grado",
         nivel: 'Secundario',
         puntuacion: 4.20,
-<<<<<<< HEAD
-        date:  {year: 2021, month: 8, day: 7, time:  ['12:00:00','17:00:00']}
-=======
         date:  {year: 2021, month: 8, day: 7, time:  ['12:00:00','17:00:00']},
         precio: "$2000"
->>>>>>> Braian-Domingo-18
     })    
 
     await Clase.create({
@@ -256,12 +224,8 @@ const bootstrap = async () => {
         grado: "Sexto grado",
         nivel: 'Terciario',
         puntuacion: 4,
-<<<<<<< HEAD
-        date:  {year: 2021, month: 8, day: 7, time:  ['08:00:00','10:00:00']}
-=======
         date:  {year: 2021, month: 8, day: 7, time:  ['08:00:00','10:00:00']},
-        precio: "$2000"
->>>>>>> Braian-Domingo-18
+        precio: "$2000",
     })    
 
     await Clase.create({
@@ -274,12 +238,8 @@ const bootstrap = async () => {
         grado: "Sexto grado",
         nivel: 'Secundario',
         puntuacion: 1,
-<<<<<<< HEAD
-        date:  {year: 2021, month: 8, day: 7, time:  ['15:00:00','19:00:00']}
-=======
         date:  {year: 2021, month: 8, day: 7, time:  ['15:00:00','19:00:00']},
         precio: "$2000"
->>>>>>> Braian-Domingo-18
     })    
 
 

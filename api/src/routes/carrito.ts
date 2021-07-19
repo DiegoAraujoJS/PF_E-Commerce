@@ -1,14 +1,3 @@
-<<<<<<< HEAD
-import Router from 'express'
-import User from '../models/Usuario';
-
-const router = Router()
-
-router.get('./', function(){
-    const compra = User.findByPk()
-})
-
-=======
 import Router, { Request, Response } from 'express'
 import { ClasePorComprar } from '../../../interfaces';
 import User from '../models/Usuario';
@@ -87,5 +76,4 @@ router.get('/:user/:id', async function (req: Request, res: Response) {
 
 
 
->>>>>>> Braian-Domingo-18
-export default router
+export default router 
