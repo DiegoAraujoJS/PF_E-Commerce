@@ -176,7 +176,19 @@ function App() {
       }></Route> */}
       <Route exact path ='/editPerfil'> <EditProfile /></Route>
       <Route exact path='/login'><Login /></Route>
-      <Route exact path='/calendar'><CalendarApp /></Route>
+      
+      <Route exact path='/calendar' render={() => {    
+          if(user.mail)  {    
+            return < Redirect to={`/calendar/${user.mail}`} />
+          }           
+        }
+      }
+      ></Route>
+<Route path='/calendar/:email' exact render={({ match }) => {
+            return <CalendarApp >{match.params.email} </CalendarApp>           
+          }           
+      } />
+
       <Route exact path='/chat'><Chat /></Route>
       <Route exact path='/claim/add'><AddClaim /></Route>
       <Route exact path='/home'><Home /></Route>
