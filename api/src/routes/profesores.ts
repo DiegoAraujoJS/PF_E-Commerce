@@ -150,8 +150,8 @@ router.post('/', async (req: Request, res: Response) => {
     return res.send('Indique un correo');
 })
 
-router.put('/', async (req: Request, res: Response) => {
-    const { ciudad, foto, descripcion } = req.body;
+router.patch('/', async (req: Request, res: Response) => {
+    const { ciudad, foto, description } = req.body;
     const mail = req.body.usuario;
     console.log("ACA ESTA EL BODYT XDDDDD",req.body)
     if (mail) {
@@ -166,7 +166,11 @@ router.put('/', async (req: Request, res: Response) => {
         });
         if (usuario) {
             if (usuario.profesor) {
-                await usuario.profesor.update({ciudad, foto, descripcion})
+                await usuario.profesor.update({city:ciudad, foto:foto, description:description},{
+                    where:{
+                        User_mail:mail
+                    }
+                })
             } else {
                 return res.send(`No existe un profesor asociado a la cuenta ${mail} así que primero debe crearlo`)
             }

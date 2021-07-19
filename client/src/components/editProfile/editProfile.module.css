@@ -1,5 +1,13 @@
 .Container {
+  font-family: "Poppins", sans-serif;
+  margin-left: 600px;
 }
 .imgEdit {
-  height: 250px;
+  border-radius: 70px;
+  height: 200px;
+  margin-left: 450px;
 }
+.span_imagen {
+  font-size: 10px;
+}
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");

@@ -7,6 +7,7 @@ import getCookieValue from '../../cookieParser';
 import ChatRoom from '../Chat/ChatRoom';
 import icon_edit from '../../images/editar.png'
 import { useHistory } from "react-router-dom";
+import star from '../../images/star.png'
 const Role = {
     USER: 0,
     PROFESSOR: 1,
@@ -95,7 +96,9 @@ function Profile(email) {
                         <p className="small mb-4"> <i className="fas fa-map-marker-alt mr-2"></i>{prof.city}</p>
                     </div>
                     <h1> Licenciado en Cs Naturales</h1>
-                    <h4>{prof.description}</h4>
+                    <p className={style.description}>{prof.description}</p>
+                    <img src={star} className={style.star}/>
+                    <h4 className={style.score}>4.0 </h4>
                 </div>
 
             </section>

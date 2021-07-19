@@ -59,7 +59,7 @@ const bootstrap = async () => {
         User_mail: "diegoaraujo@gmail.com",
         city: "Buenos Aires",
         foto: "https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=547&q=80",
-        description: "Profesor apasionado por enseñar",
+        description: "Hola soy Diego me especializo en areas como la matematica, fisica, lengua, en especial en el arte. Me encanta enseñar es mi hobbie dese pequeño, conoci este sitio para empeza asi que cuando quiersa empezamos! Cualquier duda estoy a tu disposicion en el chat ",
         score: 3
     }
 
@@ -69,7 +69,7 @@ const bootstrap = async () => {
         User_mail: "braiansilva@gmail.com",
         city: "Buenos Aires",
         foto: "https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=547&q=80",
-        description: "Profesor apasionado por enseñar",
+        description: "Hola soy Braian me especializo en areas como la matematica, fisica, lengua, en especial en el arte. Me encanta enseñar es mi hobbie dese pequeño, conoci este sitio para empeza asi que cuando quiersa empezamos! Cualquier duda estoy a tu disposicion en el chat ",
         score: 3
     }
 
@@ -80,7 +80,7 @@ const bootstrap = async () => {
         score: 2.1,
         city: "Lima",
         foto: "https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=547&q=80",
-        description: "Profesor apasionado por enseñar"
+        description: "Hola soy Edward me especializo en areas como la matematica, fisica, lengua, en especial en el arte. Cualquier duda estoy a tu disposicion en el chat "
     }
     const MauroProfe: ProfesorProps = {
         name: 'Mauro',
@@ -88,7 +88,7 @@ const bootstrap = async () => {
         User_mail: "mauroleonel@gmail.com",
         city: "Lima",
         foto: "https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=547&q=80",
-        description: "Profesor apasionado por enseñar",
+        description: "Hola soy Mauro me especializo en areas como la matematica, fisica, lengua, en especial en el arte. Me encanta enseñar es mi hobbie dese pequeño, conoci este sitio para empeza asi que cuando quiersa empezamos! Cualquier duda estoy a tu disposicion en el chat ",
         score: 4
     }
     const JaviProfe: ProfesorProps = {
@@ -97,7 +97,7 @@ const bootstrap = async () => {
         User_mail: "javiercarro@gmail.com",
         city: "Lima",
         foto: "https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=547&q=80",
-        description: "Profesor apasionado por enseñar",
+        description: "Hola soy Javi me especializo en areas como la matematica, fisica, lengua, en especial en el arte. Me encanta enseñar es mi hobbie dese pequeño, conoci este sitio para empeza asi que cuando quiersa empezamos! Cualquier duda estoy a tu disposicion en el chat ",
         score: 4
     }
 
