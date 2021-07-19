@@ -4,6 +4,8 @@ import Profesor from './Profesor';
 import { UserProps } from '../../../interfaces';
 import Puntuacion from './Puntuacion';
 import { ClasePorComprar } from '../../../interfaces';
+import {Time, Class} from '../../../interfaces'
+
 
 @Table
 export default class User extends Model implements UserProps {
@@ -42,7 +44,7 @@ export default class User extends Model implements UserProps {
     alumno!: Alumno
 
     @Column({ type: DataType.JSON})
-    carrito!: ClasePorComprar[]
+    carrito!: Class[]
 }
 
 

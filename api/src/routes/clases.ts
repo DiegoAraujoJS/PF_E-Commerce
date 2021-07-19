@@ -226,13 +226,14 @@ router.post('/add', async (req: Request, res: Response) => {
 
 
 router.put('/edit', async (req: Request, res: Response) => {
-    const { id, descripcion, materia, nivel, grado, puntuacion } = req.body
+    const { id, descripcion, materia, nivel, grado, puntuacion,precio } = req.body
     const claseEditada = {
         descripcion,
         materia,
         nivel,
         grado,
         puntuacion,
+        precio
     }
     try {
         const clase: any = await Clase.findByPk(id);

@@ -1,11 +1,15 @@
 import CSS from 'csstype';
-import { Class } from '../../interfaces';
+import { Class } from '../../../../interfaces';
 import { Button, Card, Col, ListGroup, Modal, Row, } from 'react-bootstrap'
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCalendarAlt, faClock, faEnvelope, faStar } from '@fortawesome/free-regular-svg-icons';
 import { faMapMarkerAlt, faStar as starComplete, faStarHalfAlt } from '@fortawesome/free-solid-svg-icons';
 import { Link } from 'react-router-dom';
+import axios from 'axios'
+import { ClasePorComprar } from '../../../../interfaces';
+import getCookieValue from "../../cookieParser";
+import { string } from 'yup/lib/locale';
 
 const starEmpty = <FontAwesomeIcon icon={faStar} style={{ color: "#ffe516" }} />
 const starCompleta = <FontAwesomeIcon icon={starComplete} style={{ color: "#ffe516" }} />
@@ -33,7 +37,8 @@ const ClassCard: React.FC<Class> = (props) => {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-    
+
+
     console.log(props)
     return (
         <div>
@@ -45,7 +50,7 @@ const ClassCard: React.FC<Class> = (props) => {
                                 <Card.Header
                                     style={{ fontSize: "20px", borderTopRightRadius: "30px", borderTopLeftRadius: "30px" }}
                                     className='d-flex justify-content-center font-weight-bold '>{props.nombre}</Card.Header>
-                                <Card.Body  style={{ backgroundColor: '#c8c8c8', borderBottomRightRadius: "30px", borderBottomLeftRadius: "30px" }} className="d-lg-flex d-md-flex flex-row align-items-center card-body">
+                                <Card.Body style={{ backgroundColor: '#c8c8c8', borderBottomRightRadius: "30px", borderBottomLeftRadius: "30px" }} className="d-lg-flex d-md-flex flex-row align-items-center card-body">
                                     <Col sm={12} md={8} lg={4} className="d-flex justify-content-center">
                                         <Card.Img style={profileImg} src={props.profesor && props.profesor.foto} />
                                     </Col>
@@ -117,10 +122,20 @@ const ClassCard: React.FC<Class> = (props) => {
                         </Card.Body>
                     </Card>
                 </Modal.Body>
-                <Card.Title className="d-flex justify-content-center"> Precio de la clase: &nbsp;<span className="text-success ml-3">$2000</span> </Card.Title>
+                <Card.Title className="d-flex justify-content-center"> Precio de la clase: &nbsp;<span className="text-success ml-3">{props.precio}</span> </Card.Title>
                 <Modal.Footer className="justify-content-center">
                     <Link target="_blank" to="./cesta">
-                        <Button variant="primary" >
+                        <Button variant="primary" onClick={async () => {
+
+                            const payload: Class = {
+                                ...props
+                            }
+                            const token = getCookieValue('token').replaceAll("\"", '')
+                            const getUser = await axios.post(`http://localhost:3001/api/verify`, {}, { headers: { Authorization: token } })
+                            const addToCart = await axios.post(`http://localhost:3001/api/carrito/${getUser.data.mail}`, payload)
+
+
+                        }}>
                             Comprar Clase
                         </Button>
                     </Link>
@@ -141,15 +156,15 @@ const puntuacion = (num) => {
         //                     : num === 1 ? <span className="fas fa-star">🌟</span>
         //                         : <h4>No tiene puntuacion</h4>
 
-        num === 5 ? <div><p>{starCompleta}{starCompleta}{starCompleta}{starCompleta}{starCompleta}</p></div>
-            : (num < 5 && num >= 4.5) ? <div><p>{starCompleta}{starCompleta}{starCompleta}{starCompleta}{starHalf}</p></div>
-                : num === 4 || (num < 4.5 && num >= 4) ? <div><p>{starCompleta}{starCompleta}{starCompleta}{starCompleta}{starEmpty}</p></div>
-                    : (num < 4 && num >= 3.5) ? <div><p>{starCompleta}{starCompleta}{starCompleta}{starHalf}{starEmpty}</p></div>
-                        : num === 3 || (num < 3.5 && num >= 3) ? <div><p>{starCompleta}{starCompleta}{starCompleta}{starEmpty}{starEmpty}</p></div>
-                            : (num < 3 && num >= 2.5) ? <div><p>{starCompleta}{starCompleta}{starHalf}{starEmpty}{starEmpty}</p></div>
-                                : num === 2 || (num < 2.5 && num >= 2) ? <div><p>{starCompleta}{starCompleta}{starEmpty}{starEmpty}{starEmpty}</p></div>
-                                    : (num < 2 && num >= 1.5) ? <div><p>{starCompleta}{starHalf}{starEmpty}{starEmpty}{starEmpty}</p></div>
-                                        : num === 1 || (num < 1.5 && num >= 1) ? <div><p>{starCompleta}{starEmpty}{starEmpty}{starEmpty}{starEmpty}</p></div>
+        num === 5 ? <p>{starCompleta}{starCompleta}{starCompleta}{starCompleta}{starCompleta}</p>
+            : (num < 5 && num >= 4.5) ? <p>{starCompleta}{starCompleta}{starCompleta}{starCompleta}{starHalf}</p>
+                : num === 4 || (num < 4.5 && num >= 4) ? <p>{starCompleta}{starCompleta}{starCompleta}{starCompleta}{starEmpty}</p>
+                    : (num < 4 && num >= 3.5) ? <p>{starCompleta}{starCompleta}{starCompleta}{starHalf}{starEmpty}</p>
+                        : num === 3 || (num < 3.5 && num >= 3) ? <p>{starCompleta}{starCompleta}{starCompleta}{starEmpty}{starEmpty}</p>
+                            : (num < 3 && num >= 2.5) ? <p>{starCompleta}{starCompleta}{starHalf}{starEmpty}{starEmpty}</p>
+                                : num === 2 || (num < 2.5 && num >= 2) ? <p>{starCompleta}{starCompleta}{starEmpty}{starEmpty}{starEmpty}</p>
+                                    : (num < 2 && num >= 1.5) ? <p>{starCompleta}{starHalf}{starEmpty}{starEmpty}{starEmpty}</p>
+                                        : num === 1 || (num < 1.5 && num >= 1) ? <p>{starCompleta}{starEmpty}{starEmpty}{starEmpty}{starEmpty}</p>
                                             : <h4>No tiene puntuacion</h4>
     }
     </>

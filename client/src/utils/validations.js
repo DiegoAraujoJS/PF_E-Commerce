@@ -17,6 +17,9 @@ export const validationSchemaNewClass = yup.object().shape({
     nivel: yup
         .string()
         .test('nivel', 'Necesita elegir un nivel', (value) => value),
+    precio: yup
+        .number()
+        .required('Este campo es obligatorio'),
     dia: yup
         .string()
         .test('dia', 'Necesita elegir el dia de la clase', (value) => value),

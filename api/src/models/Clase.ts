@@ -1,9 +1,14 @@
-import { Model, Column, Table, CreatedAt, UpdatedAt, ForeignKey,DataType,  BelongsTo, HasMany } from 'sequelize-typescript';
+import { Model, Column, Table, CreatedAt, UpdatedAt, ForeignKey,DataType,  BelongsTo, HasMany, PrimaryKey, Unique} from 'sequelize-typescript';
 import { Time } from '../../../interfaces';
 import Profesor from './Profesor';
 import Puntuacion from './Puntuacion';
 @Table
 export default class Clase extends Model {
+    @PrimaryKey
+    @Unique
+    @Column({ autoIncrement: true })
+    id!: number;
+
     @Column
     nombre!: string;
 
@@ -24,6 +29,9 @@ export default class Clase extends Model {
 
     @Column 
     esPresencial!: string
+
+    @Column 
+    precio!: string
 
     @Column ({allowNull: false, type: DataType.JSON})
     date!: {year: number, month: number, day: number, time: Time}

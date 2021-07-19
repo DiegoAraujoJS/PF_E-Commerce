@@ -5,7 +5,7 @@ import "./ClassConteiner.css"
 import axios from 'axios'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
-import { Class } from '../../interfaces';
+import { Class } from '../../../../interfaces';
 import getCookieValue from '../../cookieParser';
 import { getAll } from '../../Actions/Actions'
 import { connect } from 'react-redux'
@@ -15,9 +15,11 @@ const star = <FontAwesomeIcon icon={faStar} style={{ color: "#ffc107" }} />
 
 type Props = {
     clases: Class[],
-    getAll: () => any
+    getAll: () => any,
+    searchInput: Class[]
 }
-const ClassContainer: React.FC<Props> = ({ clases, getAll }) => {
+
+const ClassContainer: React.FC<Props> = ({ searchInput }) => {
     const [classFilter, setClassFilter] = useState([])
     const [nivel, setNivel] = useState("")
     const [size, setSize] = useState({ name: "", length: 0 })
@@ -64,8 +66,8 @@ const ClassContainer: React.FC<Props> = ({ clases, getAll }) => {
 
     useEffect(() => {
         if (horario) {
-            if (clases && horario.desde && horario.hasta) {
-                let filtrados = clases.filter(clase => {
+            if (searchInput && horario.desde && horario.hasta) {
+                let filtrados = searchInput.filter(clase => {
                     if (clase && clase.date.time && clase.date.time.length === 2) {
                         let desde = horario.desde + ":00"
                         let hasta = horario.hasta + ":00"
@@ -86,14 +88,14 @@ const ClassContainer: React.FC<Props> = ({ clases, getAll }) => {
             }
         }
         else if (horario.desde === "" && horario.hasta === "") {
-            setClassFilter(clases)
+            setClassFilter(searchInput)
         }
     }, [horario])
 
     useEffect(() => {
-        if (clases && nivel && typeof nivel === 'string') {
+        if (searchInput && nivel && typeof nivel === 'string') {
 
-            let filtrados: Class[] = clases.filter((clase: Class) => {
+            let filtrados: Class[] = searchInput.filter((clase: Class) => {
                 if (clase && clase.nivel) {
                     if (clase.nivel === nivel) return clase
                     else return null
@@ -106,14 +108,14 @@ const ClassContainer: React.FC<Props> = ({ clases, getAll }) => {
         }
         else if (nivel === "") {
             setPuntuacion({ value: "", check: false })
-            setClassFilter(clases)
+            setClassFilter(searchInput)
         }
     }, [nivel])
 
     useEffect(() => {
-        if (clases && grado && typeof grado === 'string') {
+        if (searchInput && grado && typeof grado === 'string') {
 
-            let filtrados: Class[] = clases.filter((clase: Class) => {
+            let filtrados: Class[] = searchInput.filter((clase: Class) => {
                 if (clase && clase.grado) {
                     if (clase.grado === grado) return clase
                     else return null
@@ -125,7 +127,7 @@ const ClassContainer: React.FC<Props> = ({ clases, getAll }) => {
             setNivel(""); setPuntuacion({ value: "", check: false }); setHorario({ desde: "", hasta: "" }); setCity({ ...city, show: false, });
         }
         else if (grado === ""){ 
-            setClassFilter(clases) 
+            setClassFilter(searchInput) 
         }
     }, [grado])
 
@@ -134,12 +136,12 @@ const ClassContainer: React.FC<Props> = ({ clases, getAll }) => {
             let puntuacion = e.target.value
             if (e.target.checked === false) {
                 setPuntuacion({ value: "", check: false })
-                setClassFilter(clases)
+                setClassFilter(searchInput)
             }
             else {
                 setPuntuacion({ value: puntuacion, check: true })
 
-                let filtrados: Class[] = clases.filter((clase: Class) => {
+                let filtrados: Class[] = searchInput.filter((clase: Class) => {
                     if (clase && clase.puntuacion) {
                         if (clase.puntuacion.toString() === e.target.value || (clase.puntuacion >= Number(e.target.value) - 0.50 && clase.puntuacion <= e.target.value)) return clase
                         else return null
@@ -171,7 +173,7 @@ const ClassContainer: React.FC<Props> = ({ clases, getAll }) => {
         if (user.mail && city.name) {
 
             if (city.show === false) {
-                let filtrados: Class[] = clases.filter((clase: Class) => {
+                let filtrados: Class[] = searchInput.filter((clase: Class) => {
                     if (clase && clase.profesor.city) {
                         if (clase.profesor.city === city.name) return clase
                         else return null
@@ -183,35 +185,10 @@ const ClassContainer: React.FC<Props> = ({ clases, getAll }) => {
                 setNivel(""); setGrado(""); setPuntuacion({ value: "", check: false }); setHorario({ desde: "", hasta: "" });}
             else {
                 setCity({ ...city, show: false, })
-                setClassFilter(clases)
+                setClassFilter(searchInput)
             }
         }
     }
-
-
-    // useEffect(() => {
-    //     let filtrados = clases.filter(clase => {
-    //         if (clase) {
-    //                 let desde = horario.desde + ":00"
-    //                 let hasta = horario.hasta + ":00"
-    //                 let time = clase.date.time
-
-    //                 const search_desde: string = desde.substring(0, 2) + desde.substring(3, 5) + desde.substring(6, 8)
-    //                 const search_hasta: string = hasta.substring(0, 2) + hasta.substring(3, 5) + hasta.substring(6, 8)
-    //                 const clase_desde: string = time && time[0].substring(0, 2) + time[0].substring(3, 5) + time[0].substring(6, 8)
-    //                 const clase_hasta: string = time && time[1].substring(0, 2) + time[1].substring(3, 5) + time[1].substring(6, 8)
-
-    //                 if ((clase_desde && clase_hasta ? (clase_desde >= search_desde && clase_desde < search_hasta && clase_hasta <= search_hasta && clase_hasta > search_desde) : true) &&
-    //                     (clase.nivel === (nivel ? nivel : clase.nivel)) && (clase.grado === (grado ? grado : clase.grado)) &&
-    //                     (clase.puntuacion.toString() === (puntuacion.value ? puntuacion.value : clase.puntuacion)) &&
-    //                     (clase.profesor.city === (city.show && city.name ? city.name : clase.profesor.city))){ return clase }
-    //                 else return null
-    //             }
-    //             else return null
-    //         })
-    //     console.log(filtrados)
-    //     setClassFilter(filtrados)
-    // }, [horario, nivel, grado, puntuacion.value, city.show])
 
     return (
         <div className="container-fluid pt-5" style={{ backgroundColor: '#ededed', height: "100%" }}>
@@ -329,7 +306,7 @@ const ClassContainer: React.FC<Props> = ({ clases, getAll }) => {
 
                 </Col>
                 <Col sm={12} md={7} lg={9}>
-                    <ClassCards className="h-100" clasesFiltradas={classFilter ? classFilter : clases} />
+                    <ClassCards className="h-100" clasesFiltradas={classFilter ? classFilter : searchInput} />
                 </Col>
             </Row>
         </div >
@@ -337,7 +314,9 @@ const ClassContainer: React.FC<Props> = ({ clases, getAll }) => {
 }
 
 const mapStateToProps = (state) => {
+    console.log(state)
     return {
+        searchInput: state.searchInput,
         clases: state.clases
     }
 }

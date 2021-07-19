@@ -2,22 +2,13 @@ import React, { useState, useEffect } from 'react'
 import CSS from 'csstype';
 import ClassCard from '../classCard/ClassCard';
 import { Alert, Button, Col, Container, Dropdown, DropdownButton, Form, InputGroup, ListGroup, ListGroupItem, Pagination, Row } from 'react-bootstrap';
-import { connect } from 'react-redux';
-import { getAll } from '../../Actions/Actions';
-import { Class } from '../../interfaces';
+import { Class } from '../../../../interfaces';
 
-function ClassCards({ clases, getAll, clasesFiltradas }: any) {
+function ClassCards({ clasesFiltradas }: any) {
     const [search, setSearch] = useState("")
     const [classFilter, setClassFilter] = useState([])
     const [classProp, setClassProp] = useState("")
 
-    useEffect(() => {
-        getAll()
-    }, [])
-
-    useEffect(() => {      
-        setClassFilter(clases)
-    }, [clases])
 
     useEffect(() => {
         setClassFilter(clasesFiltradas)
@@ -37,9 +28,9 @@ function ClassCards({ clases, getAll, clasesFiltradas }: any) {
     };
 
     useEffect(() => {
-        if (clases && search) {
+        if (classFilter && search) {
             if (classProp && typeof classProp === 'string') {
-                let filtrados = clases.filter((clase:Class) => {
+                let filtrados = classFilter.filter((clase:Class) => {
                     if(classProp === "nombre" && clase ){
                         return clase.nombre.toLowerCase().includes(search.toLowerCase())
                     }
@@ -51,7 +42,7 @@ function ClassCards({ clases, getAll, clasesFiltradas }: any) {
                 setClassFilter(filtrados)
 
             } else {
-                let filtrados = clases.filter(clase => {
+                let filtrados = classFilter.filter(clase => {
                     if (clase && clase.nombre) return clase.nombre.toLowerCase().includes(search.toLowerCase())
                     else return null
                 })
@@ -59,7 +50,7 @@ function ClassCards({ clases, getAll, clasesFiltradas }: any) {
             }
         }
         else if (search === '') {
-            setClassFilter(clases)
+            setClassFilter(classFilter)
         }
     }, [search])
 
@@ -78,7 +69,7 @@ function ClassCards({ clases, getAll, clasesFiltradas }: any) {
 
     useEffect(() => {
         determineNumberOfPages();
-    }, [classFilter, clases])
+    }, [classFilter])
 
     useEffect(
         () => {
@@ -93,7 +84,7 @@ function ClassCards({ clases, getAll, clasesFiltradas }: any) {
     const determineNumberOfPages = () => {
         let paginatedDataObject = {};
 
-        let dataLength = classFilter.length ? classFilter.length : clases.length;
+        let dataLength = classFilter.length; 
         let chunkArray = [];
         let displayRecipes = 3
 
@@ -216,6 +207,18 @@ function ClassCards({ clases, getAll, clasesFiltradas }: any) {
                     <ul style={classListContainer}>
                         {dataFromPaginate && dataFromPaginate.length > 0 ?
                             dataFromPaginate.map((clase, i) => (
+                                // interface Class {
+                                //     id?: number;
+                                //     nombre: string;
+                                //     descripcion: string;
+                                //     puntuacion: number;
+                                //     materia: string;
+                                //     grado: string;
+                                //     nivel: string;
+                                //     esPresencial: boolean;
+                                //     profesor: Profesor;
+                                //     date: {year: number, month: number, day: number, time: Time}
+                                // }
                                 <ClassCard
                                     nombre={clase.nombre}
                                     descripcion={clase.descripcion}
@@ -226,6 +229,7 @@ function ClassCards({ clases, getAll, clasesFiltradas }: any) {
                                     profesor={clase.profesor}
                                     puntuacion={clase.puntuacion}
                                     date={clase.date}
+                                    precio={clase.precio}
                                     key={i + 10}
                                 />
                             ))
@@ -243,6 +247,7 @@ function ClassCards({ clases, getAll, clasesFiltradas }: any) {
                                             profesor={clase.profesor}
                                             puntuacion={clase.puntuacion}
                                             date={clase.date}
+                                            precio={clase.precio}
                                             key={i + 20}
                                         />
                                     );
@@ -250,27 +255,7 @@ function ClassCards({ clases, getAll, clasesFiltradas }: any) {
                                     return null;
                                 }
                             })
-                                : clases ? clases.map((clase, i) => {
-                                    if (i < 2) {
-                                        return (
-                                            <ClassCard
-                                                nombre={clase.nombre}
-                                                descripcion={clase.descripcion}
-                                                esPresencial={clase.esPresencial}
-                                                grado={clase.grado}
-                                                materia={clase.materia}
-                                                nivel={clase.nivel}
-                                                profesor={clase.profesor}
-                                                puntuacion={clase.puntuacion}
-                                                date={clase.date}
-                                                key={i + 30}
-                                            />
-                                        );
-                                    } else {
-                                        return null;
-                                    }
-                                })
-                                    : <Alert variant="info" className="text-center">
+                                : <Alert variant="info" className="text-center">
                                         <h3>No hay clases disponibles</h3>
                                     </Alert> 
                         }
@@ -335,18 +320,6 @@ function ClassCards({ clases, getAll, clasesFiltradas }: any) {
 
 
 
-const mapStateToProps = (state) => {
-    return {
-        clases: state.clases
-    }
-}
-
-const mapDispatchToProps = (dispatch) => {
-    return {
-        getAll: () => dispatch(getAll())
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(ClassCards)
+export default ClassCards
 
 

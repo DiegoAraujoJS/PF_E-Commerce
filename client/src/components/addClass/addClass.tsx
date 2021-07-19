@@ -75,11 +75,11 @@ console.log(fechaa.setDate(fechaa.getDate() + (i + 7 - fechaa.getDay()) % 7)) */
 					materia: "",
 					grado: "",
 					nivel: "",
-					
+					precio: 0,
+
 					dia: Week.Miercoles,
 					desde: "",
-					hasta: "",
-					
+					hasta: "",					
 
 				}}
 
@@ -279,7 +279,23 @@ console.log(fechaa.setDate(fechaa.getDate() + (i + 7 - fechaa.getDay()) % 7)) */
 									) : null}
 								</Col>
 							</Row>
-							
+							<Row>								
+								<Col sm={12} md={4}>
+									<Form.Label className='text-uppercase'>Precio</Form.Label>
+									<Field
+										name='precio'
+										type='number'
+										onChange={handleChange}
+										onBlur={handleBlur}
+										value={values.precio}
+										className={`form-control ${errors.precio && touched.precio ? 'is-invalid' : ''
+											}`}
+									/>
+									{errors.precio && touched.precio ? (
+										<div className='invalid-feedback'>{errors.precio}</div>
+									) : null}					
+								</Col>
+							</Row>
 							<Row>
 								<Col className='d-flex justify-content-center'>
 									<Button type='submit' className='text-uppercase'>

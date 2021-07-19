@@ -178,7 +178,8 @@ const bootstrap = async () => {
         grado: "Primer grado",
         nivel: 'Primario',
         puntuacion: 5,
-        date:  {year: 2021, month: 8, day: 7, time: ['08:00:00','12:00:00']}
+        date:  {year: 2021, month: 8, day: 7, time: ['08:00:00','12:00:00']},
+        precio: "$2000"
     })
     await Clase.create({
         nombre: 'Aprende a comunicar',
@@ -190,7 +191,8 @@ const bootstrap = async () => {
         grado: "Cuarto grado",
         nivel: 'Terciario',
         puntuacion: 3,
-        date:  {year: 2021, month: 8, day: 7, time:  ['20:00:00','24:00:00']}
+        date:  {year: 2021, month: 8, day: 7, time:  ['20:00:00','24:00:00']},
+        precio: "$2000"
     })
 
     await Clase.create({
@@ -203,7 +205,8 @@ const bootstrap = async () => {
         grado: "Sexto grado",
         nivel: 'Secundario',
         puntuacion: 4.20,
-        date:  {year: 2021, month: 8, day: 7, time:  ['12:00:00','17:00:00']}
+        date:  {year: 2021, month: 8, day: 7, time:  ['12:00:00','17:00:00']},
+        precio: "$2000"
     })    
 
     await Clase.create({
@@ -216,7 +219,8 @@ const bootstrap = async () => {
         grado: "Sexto grado",
         nivel: 'Terciario',
         puntuacion: 4,
-        date:  {year: 2021, month: 8, day: 7, time:  ['08:00:00','10:00:00']}
+        date:  {year: 2021, month: 8, day: 7, time:  ['08:00:00','10:00:00']},
+        precio: "$2000"
     })    
 
     await Clase.create({
@@ -229,7 +233,8 @@ const bootstrap = async () => {
         grado: "Sexto grado",
         nivel: 'Secundario',
         puntuacion: 1,
-        date:  {year: 2021, month: 8, day: 7, time:  ['15:00:00','19:00:00']}
+        date:  {year: 2021, month: 8, day: 7, time:  ['15:00:00','19:00:00']},
+        precio: "$2000"
     })    
 
 
