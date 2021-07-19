@@ -103,11 +103,11 @@ function Profile(email) {
                     <Calendar {...propEmail} />
                 </div>
             </section>
-            <section className={style.sectionThree}>
-            <div>
-                { userLoged ? <ChatRoom userLoged={userLoged} userReference={{mail: prof.User_mail, role: Role.PROFESSOR, name: prof.name, lastName: prof.lastName, city: prof.city}}  /> : null}
+            {/* <section className={style.sectionThree}>
+                <div>
+                    { userLoged ? <ChatRoom userLoged={userLoged} userReference={{mail: prof.User_mail, role: Role.PROFESSOR, name: prof.name, lastName: prof.lastName}}  /> : null}
                 </div>
-            </section>
+            </section> */}
             
 
         </div>

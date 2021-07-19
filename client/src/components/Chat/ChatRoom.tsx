@@ -3,34 +3,34 @@ import "./Chat.css";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { firestore } from "../../firebase";
 import firebase from "firebase/app";
-import { UserProps } from "../../../../interfaces";
+import { UserChat } from "./Chat";
 import style from "./Chat.module.css";
-import ChatMessage from './ChatMessage';
+import ChatMessage from "./ChatMessage";
+import profilePicture from "../../images/editar_perfil.png";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 
-function unificar(mail1, mail2) {
-  let orden;
-  if (mail1 < mail2) {
-    orden = mail1 + "-" + mail2;
-  } else {
-    orden = mail2 + "-" + mail1;
-  }
-  return orden;
+interface ChatData {
+  users: Array<UserChat>;
+  id: string;
 }
 
-interface PropsChat {
-  userLoged: UserProps;
-  userReference: UserProps;
+interface ChatRoomData {
+  userLoged: UserChat;
+  users: Array<UserChat>;
+  id: string;
+  setChatSelected: React.Dispatch<React.SetStateAction<ChatData>>;
 }
 
-export default function ChatRoom(props: React.PropsWithChildren<PropsChat>) {
+export default function ChatRoom(props: React.PropsWithChildren<ChatRoomData>) {
   const dummy: any = useRef();
 
-  let messagesRef = firestore.collection(
-    unificar(props.userLoged.mail, props.userReference.mail)
-  );
-
-  const query = messagesRef.orderBy("createdAt").limit(25);
-  const [messages] = useCollectionData(query, { idField: "id" });
+  let messagesRef = firestore
+    .collection("chatsRooms")
+    .doc(props.id)
+    .collection("messages");
+  const queryMessages = messagesRef.orderBy("createdAt").limit(25);
+  const [messages] = useCollectionData(queryMessages, { idField: "id" });
 
   const [formValue, setFormValue] = useState("");
 
@@ -41,8 +41,8 @@ export default function ChatRoom(props: React.PropsWithChildren<PropsChat>) {
       text: formValue,
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
       uid: props.userLoged.mail,
-      photoURL:
-        "https://tse3.mm.bing.net/th/id/OIP.sFI4WGRjHM9popoUUwLgdwAAAA?pid=ImgDet&w=260&h=280&rs=1",
+      name: props.userLoged.name,
+      photoURL: profilePicture,
     });
 
     setFormValue("");
@@ -51,14 +51,41 @@ export default function ChatRoom(props: React.PropsWithChildren<PropsChat>) {
 
   return (
     <>
-      <div className="App">
-        <nav className="navbar navbar-dark bg-dark">
-          <div className="container text-white fs-5">{props.userReference.name}</div>
+      <div className="App w-75">
+        <nav className={"navbar " + style.background}>
+          <div
+            className={
+              "w-100 d-flex flex-row justify-content-start align-items-center"
+            }
+          >
+            <button
+              className={
+                "text-white fs-6 mx-3 border-0 rounded-1 " +
+                style.background
+              }
+              onClick={() => props.setChatSelected({ users: [], id: "" })}
+            >
+              <FontAwesomeIcon icon={faArrowLeft} size={"1x"}/>
+            </button>
+            <img
+              src={profilePicture}
+              className={"rounded-circle mx-3 " + style.imgMessage}
+              alt="profile"
+            />
+            <span className="text-white fs-5 ">
+              {props.users.map((user) =>
+                user.mail !== props.userLoged.mail
+                  ? user.name + " " + user.lastName
+                  : ""
+              )}
+            </span>
+          </div>
         </nav>
+
         <section
           className={"d-flex flex-column justify-content-center bg-light"}
         >
-          <main className={"p-3 d-flex flex-column " + style.main}>
+          <main className={"d-flex flex-column justify-content-start p-3 border " + style.main}>
             {messages &&
               messages.map((msg: any, i) => (
                 <ChatMessage
@@ -74,9 +101,7 @@ export default function ChatRoom(props: React.PropsWithChildren<PropsChat>) {
               value={formValue}
               onChange={(e) => setFormValue(e.target.value)}
               placeholder="Envia un mensaje"
-              className={
-                "bg-dark text-light border-0 rounded-0 w-100 px-3 fs-6"
-              }
+              className={"border rounded-0 w-100 px-3 fs-6 bg-light "}
             />
 
             <button
