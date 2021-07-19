@@ -6,7 +6,8 @@ describe ('registra, autentica usuarios y guarda la informacion en un jwt', () =
         lastName: 'Perez',
         mail: 'pedro@gmail.com',
         name: 'Pedro',
-        role: 0
+        role: 0,
+        city: 'Buenos Aires'
     }
     const password = "123456"
     let token;

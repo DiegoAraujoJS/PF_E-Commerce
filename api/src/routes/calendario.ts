@@ -190,4 +190,49 @@ router.put('/edit', validateToken, async (req: MiddlewareRequest, res: Response)
     }
 });
 
+router.put('/delete', async (req:MiddlewareRequest, res:Response) => {
+    if (req.data.role !== 2 && req.body.email != req.data.mail) {
+        return res.status(400).send('You are not authorized.')
+    }
+
+    if (!req.body.mail) return res.status(400).send('You have to send a valid email')
+
+    try {
+        const professor = await Profesor.findByPk(req.body.mail)
+        const calendar = professor.calendario
+        const thisDate = calendar.find(c => c.fecha.anio === req.body.fecha.anio && c.fecha.mes === req.body.fecha.mes && c.fecha.dia === req.body.fecha.dia)
+        let newDate: Horario = {email: professor.User_mail, fecha: thisDate.fecha, disponible: thisDate.disponible, ocupado: thisDate.ocupado}
+
+        if (req.body.disponible) {
+            const newAvaliable = thisDate.disponible.filter(tuple => tuple !== req.body.disponible[0])
+            newDate.disponible = newAvaliable
+            const calendarWithoutOldDate = calendar.filter(c => c !== thisDate)
+            const newCalendar = [...calendarWithoutOldDate, newDate]
+            professor.set({
+                ...professor, 
+                calendario: newCalendar
+            })
+            const result = await professor.save()
+            return res.send(result)
+        } else if (req.body.ocupado) {
+            const newTaken = thisDate.ocupado.filter(tuple => tuple !== req.body.disponible[0])
+            newDate.ocupado = newTaken
+            const calendarWithoutOldDate = calendar.filter(c => c !== thisDate)
+            const newCalendar = [...calendarWithoutOldDate, newDate]
+            professor.set({
+                ...professor, 
+                calendario: newCalendar
+            })
+            const result = await professor.save()
+            return res.send(result)
+        }
+    } catch (err) {
+        return res.status(400).send(err)
+    }
+})
+
+router.post('/addTemp', async (req: MiddlewareRequest, res: Response) => {
+    
+})
+
 export default router

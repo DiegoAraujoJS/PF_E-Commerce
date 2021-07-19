@@ -2,6 +2,30 @@ import axios from 'axios'
 import Profesor from '../../models/Profesor'
 import {sequelize} from '../../db'
 import {CalendarioResponse, Disponible, Horario, Ocupado, ProfesorProps} from '../../../../interfaces'
+import {
+    horario1,
+    horario2,
+    ocupado1,
+    ocupado2,
+    expectedThirdTest,
+    newAvailable,
+    newNewAvailable,
+    newNewTaken,
+    extendedAvailable,
+    extendedTaken,
+    expectedSixth,
+    upperAvailable,
+    bottomAvailable,
+    middleAvailable,
+    expectedSeventh,
+    expectedFourthTest,
+    expectedFifthTest,
+    expectedSixthTest,
+    expectedSeventhTest,
+    eighthTest,
+    ninthTest
+} from './testsInjection'
+
 
 sequelize.addModels([Profesor])
 
@@ -14,159 +38,17 @@ afterAll(() => {
   });
 
 describe ('guarda y modifica el calendario del profesor correctamente', () => {
-    const horario1:Disponible = {
-        disponible: [['12:00:00', '14:00:00']],
-        email: 'edwardburgos@gmail.com',
-        fecha: {
-            anio: 2021,
-            mes: 8,
-            dia: 12
-        }
-    }
-    const horario2: Disponible = {
-        disponible: [['18:00:00', '20:00:00']],
-        email: 'edwardburgos@gmail.com',
-        fecha: {
-            anio: 2021,
-            mes: 8,
-            dia: 12
-        }
-    }
-    const ocupado1: Ocupado = {
-        ocupado: [['12:00:00', '14:00:00']],
-        email: 'edwardburgos@gmail.com',
-        fecha: {
-            anio: 2021,
-            mes: 8,
-            dia: 12
-        }
-    }
 
-    const ocupado2: Ocupado = {
-        ocupado: [['19:00:00', '20:00:00']],
-        email: 'edwardburgos@gmail.com',
-        fecha: {
-            anio: 2021,
-            mes: 8,
-            dia: 12
-        }
-    }
 
-    const expectedThirdTest: CalendarioResponse = [{email: 'edwardburgos@gmail.com', fecha: {anio: 2021, mes: 8, dia: 12}, disponible: [['18:00:00', '19:00:00']], ocupado: [['12:00:00', '14:00:00'],['19:00:00', '20:00:00']]}]
-
-    const newAvailable: Disponible = {
-        disponible: [['18:00:00', '20:00:00']],
-        email: 'edwardburgos@gmail.com',
-        fecha: {
-            anio: 2021,
-            mes: 8,
-            dia: 14
-        }
-    }
-    const newNewAvailable: Disponible = {
-        disponible: [['18:00:00', '20:00:00']],
-        email: 'edwardburgos@gmail.com',
-        fecha: {
-            anio: 2021,
-            mes: 8,
-            dia: 16
-        }
-    }
-    
-    const newNewTaken: Ocupado = {
-        ocupado: [['18:00:00', '20:00:00']],
-        email: 'edwardburgos@gmail.com',
-        fecha: {
-            anio: 2021,
-            mes: 8,
-            dia: 16
-        }
-    }
-
-    const extendedAvailable: Disponible = {
-        disponible: [['18:00:00', '22:00:00']],
-        email: 'edwardburgos@gmail.com',
-        fecha: {
-            anio: 2021,
-            mes: 8,
-            dia: 20
-        }
-    }
-
-    const extendedTaken: Ocupado = {
-        ocupado: [['19:00:00', '21:00:00']],
-        email: 'edwardburgos@gmail.com',
-        fecha: {
-            anio: 2021,
-            mes: 8,
-            dia: 20
-        }
-    }
-    const expectedSixth: Horario = {
-        ocupado: [['19:00:00', '21:00:00']],
-        disponible: [['18:00:00', '19:00:00'], ['21:00:00', '22:00:00']],
-        email: 'edwardburgos@gmail.com',
-        fecha: {
-            anio: 2021,
-            mes: 8,
-            dia: 20
-        }
-    }
-
-    const upperAvailable: Disponible = {
-        disponible: [['16:00:00', '18:00:00']],
-        email: 'edwardburgos@gmail.com',
-        fecha: {
-            anio: 2021,
-            mes: 8,
-            dia: 22
-        }
-    }
-    const bottomAvailable: Disponible = {
-        disponible: [['20:00:00', '22:00:00']],
-        email: 'edwardburgos@gmail.com',
-        fecha: {
-            anio: 2021,
-            mes: 8,
-            dia: 22
-        }
-    }
-
-    const middleAvailable: Disponible = {
-        disponible: [['18:00:00', '20:00:00']],
-        email: 'edwardburgos@gmail.com',
-        fecha: {
-            anio: 2021,
-            mes: 8,
-            dia: 22
-        }
-    }
-
-    const expectedSeventh: Horario = {
-        disponible: [['16:00:00', '22:00:00']],
-        ocupado: null,
-        email: 'edwardburgos@gmail.com',
-        fecha: {
-            anio: 2021,
-            mes: 8,
-            dia: 22
-        }
-    }
-    
-
-    const expectedFourthTest: CalendarioResponse = [...expectedThirdTest, {...newAvailable, ocupado: null}]
-    const expectedFifthTest: CalendarioResponse = [...expectedFourthTest, {...newNewAvailable, ocupado: null}]
-    const expectedSixthTest: CalendarioResponse = [...expectedFifthTest, expectedSixth]
-    const expectedSeventhTest: CalendarioResponse = [...expectedSixthTest, expectedSeventh]
-
-    let token;
+    let tokenEdward;
+    let tokenDiego;
     
     it('postea varios horarios correctamente', async () => {
     
         const login = await axios.post('http://localhost:3001/api/login', {mail: 'edwardburgos@gmail.com', password: '123456'})
-        token = login.data.token
-        await axios.post('http://localhost:3001/api/calendario/add', horario1, {headers: {Authorization: token}})
-        await axios.post('http://localhost:3001/api/calendario/add', horario2, {headers: {Authorization: token}})
+        tokenEdward = login.data.token
+        await axios.post('http://localhost:3001/api/calendario/add', horario1, {headers: {Authorization: tokenEdward}})
+        await axios.post('http://localhost:3001/api/calendario/add', horario2, {headers: {Authorization: tokenEdward}})
         const Edward = await Profesor.findByPk('edwardburgos@gmail.com')
     
         return expect(Edward?.calendario).toEqual([{...horario1, disponible: horario1.disponible.concat(horario2.disponible), ocupado: null}])
@@ -175,7 +57,7 @@ describe ('guarda y modifica el calendario del profesor correctamente', () => {
 
     it ('deberia pisar horarios disponibles con horarios ocupados', async () => {
         
-        await axios.put('http://localhost:3001/api/calendario/edit', ocupado1, {headers: {Authorization: token}})
+        await axios.put('http://localhost:3001/api/calendario/edit', ocupado1, {headers: {Authorization: tokenEdward}})
         const Edward = await Profesor.findByPk('edwardburgos@gmail.com')
 
         console.log(Edward?.calendario)
@@ -185,7 +67,7 @@ describe ('guarda y modifica el calendario del profesor correctamente', () => {
     })
 
     it ('deberia pisar rangos de horarios: si tiene de disponible [\'18:00:00\', \'20:00:00\'] y le pasan de ocupado [\'19:00:00\', \'20:00:00\'], deberia quedar en disponible [\'18:00:00\', \'19:00:00\']', async () => {
-        await axios.put('http://localhost:3001/api/calendario/edit', ocupado2, {headers: {Authorization: token}})
+        await axios.put('http://localhost:3001/api/calendario/edit', ocupado2, {headers: {Authorization: tokenEdward}})
         const Edward = await Profesor.findByPk('edwardburgos@gmail.com')
 
         console.log(Edward?.calendario)
@@ -194,16 +76,16 @@ describe ('guarda y modifica el calendario del profesor correctamente', () => {
     })
 
     it ('debería agregar un objeto Disponible nuevo al array si se le pasa una nueva fecha', async () => {
-        await axios.post('http://localhost:3001/api/calendario/add', newAvailable, {headers: {Authorization: token}})
+        await axios.post('http://localhost:3001/api/calendario/add', newAvailable, {headers: {Authorization: tokenEdward}})
         const Edward = await Profesor.findByPk('edwardburgos@gmail.com')
 
         return expect (Edward.calendario).toEqual(expectedFourthTest)
     })
 
     it ('paso 1) agregas un horario disponible. paso 2) ocupas ese horario. paso 3) lo volves a poner como disponible. Deberia quedar solo el disponible y no los dos', async () => {
-        await axios.post('http://localhost:3001/api/calendario/add', newNewAvailable, {headers: {Authorization: token}})
-        await axios.put('http://localhost:3001/api/calendario/edit', newNewTaken, {headers: {Authorization: token}})
-        await axios.post('http://localhost:3001/api/calendario/add', newNewAvailable, {headers: {Authorization: token}})
+        await axios.post('http://localhost:3001/api/calendario/add', newNewAvailable, {headers: {Authorization: tokenEdward}})
+        await axios.put('http://localhost:3001/api/calendario/edit', newNewTaken, {headers: {Authorization: tokenEdward}})
+        await axios.post('http://localhost:3001/api/calendario/add', newNewAvailable, {headers: {Authorization: tokenEdward}})
         const Edward = await Profesor.findByPk('edwardburgos@gmail.com')
 
         return expect (Edward.calendario).toEqual(expectedFifthTest)
@@ -211,21 +93,39 @@ describe ('guarda y modifica el calendario del profesor correctamente', () => {
     })
 
     it ('deberia guardar como disponible a la diferencia entre el ocupado que le pasan y el disponible de antes', async () => {
-        await axios.post('http://localhost:3001/api/calendario/add', extendedAvailable, {headers: {Authorization: token}})
-        await axios.put('http://localhost:3001/api/calendario/edit', extendedTaken, {headers: {Authorization: token}})
+        await axios.post('http://localhost:3001/api/calendario/add', extendedAvailable, {headers: {Authorization: tokenEdward}})
+        await axios.put('http://localhost:3001/api/calendario/edit', extendedTaken, {headers: {Authorization: tokenEdward}})
 
         const Edward = await Profesor.findByPk('edwardburgos@gmail.com')
         return expect (Edward.calendario).toEqual(expectedSixthTest)
     })
 
     it ('deberia guardar horarios uniéndolos con los horarios anteriores. 18 a 20 y 20 a 22 deberia unirse en 18 a 22', async () => {
-        await axios.post('http://localhost:3001/api/calendario/add', upperAvailable, {headers: {Authorization: token}})
-        await axios.post('http://localhost:3001/api/calendario/add', bottomAvailable, {headers: {Authorization: token}})
-        await axios.post('http://localhost:3001/api/calendario/add', middleAvailable, {headers: {Authorization: token}})
+        await axios.post('http://localhost:3001/api/calendario/add', upperAvailable, {headers: {Authorization: tokenEdward}})
+        await axios.post('http://localhost:3001/api/calendario/add', bottomAvailable, {headers: {Authorization: tokenEdward}})
+        await axios.post('http://localhost:3001/api/calendario/add', middleAvailable, {headers: {Authorization: tokenEdward}})
 
         const Edward = await Profesor.findByPk('edwardburgos@gmail.com')
         return expect (Edward.calendario).toEqual(expectedSeventhTest)
     })
+
+    it ('deberia guardar el especio disponible que quedó alrededor del espacio ocupado', async () => {
+        const login = await axios.post('http://localhost:3001/api/login', {mail: 'diegoaraujo@gmail.com', password: '123456'})
+        tokenDiego = login.data.token
+        await axios.post('http://localhost:3001/api/calendario/add', eighthTest.firstPost, {headers: {Authorization: tokenDiego}})
+        await axios.put('http://localhost:3001/api/calendario/edit', eighthTest.firstPut, {headers: {Authorization: tokenDiego}})
+
+        const Diego = await Profesor.findByPk('diegoaraujo@gmail.com')
+        return expect (Diego.calendario).toEqual(eighthTest.expected)
+    })
+
+    // it ('deberia guardar el especio ocupado que quedó alrededor del espacio disponible', async () => {
+    //     await axios.put('http://localhost:3001/api/calendario/edit', ninthTest.firstPut, {headers: {Authorization: tokenDiego}})
+    //     await axios.post('http://localhost:3001/api/calendario/add', ninthTest.firstPost, {headers: {Authorization: tokenDiego}})
+
+    //     const Diego = await Profesor.findByPk('diegoaraujo@gmail.com')
+    //     return expect (Diego.calendario).toEqual(ninthTest.expected)
+    // })
     
 })
 
