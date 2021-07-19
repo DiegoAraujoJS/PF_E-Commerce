@@ -37,7 +37,7 @@ app.use(
     cors(  {
         origin: config.cors,
         credentials: true,
-        methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'DELETE'],
+        methods: ['GET', 'POST', 'OPTIONS', 'PUT', 'DELETE','PATCH'],
         allowedHeaders: ['Origin', 'X-Requested-With', 'Content-Type', 'Accept', 'authorization']
     }  )
 )
