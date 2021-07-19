@@ -174,11 +174,7 @@ function ClassCards({ clasesFiltradas, dispatchInput }) {
                         <Button variant='primary' onClick={() => vaYBusca()}>Buscar</Button>                  
                 </Col>
             </Row>
-            <Row>
-                    <Alert variant="secondary" className="text-center p-0 d-flex justify-content-center">
-                         <p style={{fontWeight:600}} className="m-0 mt-2 mb-2">Busca por materia/ciudad/nivel/grado, puedes usarlas al mismo tiempo!</p>
-                    </Alert>
-            </Row>
+            
             <Row  >
                 <Col  >
                     <ul style={classListContainer}>
