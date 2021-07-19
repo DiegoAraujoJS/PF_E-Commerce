@@ -3,6 +3,7 @@ interface UserProps {
     lastName: string;
     mail: string;
     role: number;
+    city: string;
 }
 // En el file Calendar.js hay un Role admin no importado seteado en 2. Considerarlo si cambia Role
 enum Role {USER, PROFESSOR, ADMIN}

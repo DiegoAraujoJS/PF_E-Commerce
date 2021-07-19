@@ -36,6 +36,7 @@ const Register: React.FC<Props> = ({ show, handleClose }) => {
       mail: values.mail,
       name: values.name,
       role: values.role,
+      city: values.city,
     }
     let userWithPassword = {
       ...user,
