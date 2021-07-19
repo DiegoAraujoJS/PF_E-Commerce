@@ -20,8 +20,8 @@ export const Clasesregulares = (props) => {
         "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"
     ]
     return (
-        <Container className='shadow p-1 mb-1 bg-white rounded flex'>
-        <h4>Agregar horarios</h4>
+        <Container className='shadow p-1 mb-4 bg-white rounded flex'>
+        <h6>Agregar horarios</h6>
         <Formik
             initialValues={{
                 nombre: "",
@@ -61,22 +61,29 @@ export const Clasesregulares = (props) => {
                     const userT= await axios.post(`http://localhost:3001/api/verify`, {},{ withCredentials: true, headers: {Authorization: token}})
                     var query1=(horas) + ":" + minutes + ":00"
                     var query2=horasfinal + ":" + minutes + ":00"
+                    console.log(date2.getFullYear().toString())
+                    var mes=(date2.getMonth() + 1).toString()
+                    if(mes.length<2){
+                        mes= "0"+ mes
+                    }
                     for(var i=0;i<values.nombre;i++){
+                        console.log(date2.getDate().toString())
                         const horario= {
                             email: props.email, //Arreglar lo de los mails
                             fecha: {
-                                anio: date2.getFullYear(),
-                                mes: date2.getMonth() + 1,
-                                dia: date2.getDate()
+                                anio: date2.getFullYear().toString(),
+                                mes: mes,
+                                dia: date2.getDate().toString()
                             },
                             disponible: [[query1, query2]]
                         }
+                        console.log("Horario", horario)
                         const clase= await axios.post('http://localhost:3001/api/calendario/add', horario, {headers: {Authorization: token}})
                         if (clase) {
                             console.log("Clase", clase)
                             if(clase.data!=="El horario disponible es incorrecto"){
                                 date2.setDate(date2.getDate() + 7)
-                                
+                               
                             }else{
                                 alert("Se ha producido un error al añadir los horarios")
                             }
@@ -85,7 +92,7 @@ export const Clasesregulares = (props) => {
                             alert("Se ha producido un error al añadir los horarios")
                         }
                     }
-                    
+                    window.location.reload(); 
                 }
                 catch (err) {
                     alert("Se ha producido un error al añadir los horarios")
@@ -137,8 +144,8 @@ export const Clasesregulares = (props) => {
                                 ) : null}
                             </Col>
                     </Row>
-                    <Col sm={12} md={8}>
                                 <Form.Label className='text'>Fecha inicial</Form.Label>
+                    <div>
                     <DatePicker
                                     selected={startDate}
                                     onChange={(date) => setStartDate(date)}
@@ -151,7 +158,7 @@ export const Clasesregulares = (props) => {
                                     minTime={minTime}
                                     maxTime={maxTime}
                             />
-                            </Col>
+                            </div>
                     <Row className='mb-1'>
                             <Col sm={12} md={8}>
                                 <Form.Label className='text'>Cuantas horas dura:</Form.Label>
