@@ -5,8 +5,7 @@ import axios from 'axios'
 // import MarketFlow from '../../../../api/src/MarketFlow'
 import { IClase } from '../../../../interfaces';
 import getCookieValue from '../../cookieParser';
-import { store } from '../../Store/store';
-
+import Swal from 'sweetalert2'
 
 const materias = [
 	"Física",
@@ -49,8 +48,6 @@ const grados = [
 
 
 
-
-
 enum Week { Lunes, Martes, Miercoles, Jueves, Viernes, Sabado, Domingo }
 
 const AddClass = () => {
@@ -75,7 +72,7 @@ console.log(fechaa.setDate(fechaa.getDate() + (i + 7 - fechaa.getDay()) % 7)) */
 					materia: "",
 					grado: "",
 					nivel: "",
-					precio: 0,
+					precio: "",
 
 					dia: Week.Miercoles,
 					desde: "",
@@ -105,15 +102,28 @@ console.log(fechaa.setDate(fechaa.getDate() + (i + 7 - fechaa.getDay()) % 7)) */
 								grado: values.grado,
 								date: { day: actual.getDate(), month: actual.getMonth() + 1, year: actual.getFullYear(), time: [desde, hasta] },
 								nivel: values.nivel,																						
-								nombre: values.nombre
+								nombre: values.nombre,
+								precio: values.precio
 							}
-							await axios.post('http://localhost:3001/api/market/publish', publication, { headers: { Authorization: token } })
+							let response = await axios.post('http://localhost:3001/api/market/publish', publication, { headers: { Authorization: token } })
 							actual.setDate(actual.getDate() + 7)
-						}
+							console.log(response)
 
+							if(response.status === 200){
+								Swal.fire(
+									'Exito!',
+									'Tu clase se creo correctamente!',
+									'success'
+								  )
+							}
+						}
 					}
 					catch (err) {
-						alert("Email no esta registrado o no es profesor")
+						Swal.fire(
+							'Error!',
+							'El mail no es de un profesor registrado!',
+							'error'
+						  )
 					}
 				}}
 			>

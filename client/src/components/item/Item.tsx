@@ -6,6 +6,7 @@ import { IonIcon } from '@ionic/react';
 import { useDispatch, useSelector } from 'react-redux';
 import { modificarClasesPorComprar } from '../../Actions/Actions';
 import axios from 'axios'
+import Swal from 'sweetalert2'
 
 export default function Item({ cliente, id, imagen, nombre, precioDescuento, precioOriginal, moneda, dia, horaInicio, horaFin, profesor, comprado }) {
 
@@ -20,14 +21,37 @@ export default function Item({ cliente, id, imagen, nombre, precioDescuento, pre
   async function quitardeCesta() {
     // let clasesActualizadas = clasesPorComprar.filter(e => e.id !== id);
     // dispatch(modificarClasesPorComprar(clasesActualizadas));
-    try {
-      const result = await axios.get(`http://localhost:3001/api/carrito/${cliente}/${id}`)
-      if (result.status === 200) {
-        dispatch(modificarClasesPorComprar(result.data));
-      }
-    } catch (error) {
-      alert(error)
-    }
+    Swal.fire({
+      title: '¿Quieres eliminar de tu lista esta clase?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Si, eliminalo!',
+      cancelButtonText: 'No, quédatelo'
+    }).then((result) => {
+      if (result.isConfirmed) {
+
+          axios.get(`http://localhost:3001/api/carrito/${cliente}/${id}`)
+            .then(result => {
+              if (result.status === 200) {
+                dispatch(modificarClasesPorComprar(result.data));
+              }
+            })
+            .catch(error => alert(error))
+
+          Swal.fire(
+            'Eliminado!',
+            'Tu clase se ha eliminado de tu lista.',
+            'success'
+          )
+        } else if (result.dismiss === Swal.DismissReason.cancel) {
+          Swal.fire(
+            'Cancelado',
+            'Tu lista sigue intacta',
+            'error'
+          )
+        }
+      })
+
   }
   console.log(cliente)
   return (
@@ -109,7 +133,6 @@ export default function Item({ cliente, id, imagen, nombre, precioDescuento, pre
             <div className={s.quitarDeCesta}>
               <button onClick={quitardeCesta} className={s.quitarDeCestaButton}>
                 <IonIcon icon={closeCircleOutline} className={s.iconDumb}></IonIcon>
-                <span className={s.textDumb}>Quitar</span>
               </button>
             </div>
           </div>
