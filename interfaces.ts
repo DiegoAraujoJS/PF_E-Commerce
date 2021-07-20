@@ -74,7 +74,8 @@ interface IClase{
     descripcion: string;
     ciudad: string;
     date: {year: number, month: number, day: number, time: Time}
-    Profesor_mail: string,
+    Profesor_mail?: string,
+    User_mail?: string,
     precio: number|string,
 }
 type DisponibleOcupadoTransform = {disponible: Disponible, ocupado: Ocupado}

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container, Navbar } from "react-bootstrap";
+import { Container, Navbar, Col } from "react-bootstrap";
 import { Nav } from "react-bootstrap";
 import { Form } from 'react-bootstrap'
 // import { FormControl } from 'react-bootstrap'
@@ -100,7 +100,7 @@ export default function SearchBar() {
           'Se Inició sesión correctamente!',
           'success'
         )
-      //  window.location.reload();
+        //  window.location.reload();
       }
     } catch (error) {
       setWrongPassword(true)
@@ -125,7 +125,7 @@ export default function SearchBar() {
         'Se cerro sesión correctamente!',
         'success'
       )
-     // window.location.reload();
+      // window.location.reload();
     } catch (err) {
       Swal.fire(
         'Error!',
@@ -150,6 +150,7 @@ export default function SearchBar() {
     left: '80px',
     bottom: '30px',
   }
+
   const eye = <FontAwesomeIcon style={eyeTest} icon={faEye} className="mt-1" onClick={() => setShowPassword("text")} />
   const eyeSlash = <FontAwesomeIcon style={eyeTest} icon={faEyeSlash} className="mt-1" onClick={() => setShowPassword("password")} />
 
@@ -159,6 +160,23 @@ export default function SearchBar() {
   const handleShow = () => setShow(true);
 
   const book = <FontAwesomeIcon icon={faBook} style={{ fontSize: "30px", marginLeft: "25px" }} className="" />
+
+  const bookCSS: CSS.Properties = {
+    color: "white",
+    fontWeight: 500,
+    backgroundColor: "red",
+    borderRadius: "9999px",
+    paddingTop: "5px",
+    paddingBottom: "5px",
+    paddingLeft: "10px",
+    paddingRight: "10px",
+    width: "60%",
+    height: "60%",
+    position: 'relative',
+    right: "10px",
+    top: "11px",
+  }
+
 
 
   return (
@@ -205,9 +223,10 @@ export default function SearchBar() {
             }
           </Nav>
         </Navbar.Collapse>
-        <div> <Link to={"/cesta"}>{book}</Link><
-          span style={{ color: "white", fontWeight: 500, backgroundColor: "red", paddingLeft: "7px", paddingRight: "7px", borderRadius: "50%" }}>
-          {cestaLength}</span>
+
+        <div>
+          <Link to={"/cesta"}> {book} </Link>
+          {cestaLength > 0 ? <span style={bookCSS}> {cestaLength}</span> : null}
         </div>
       </Container>
     </Navbar>

@@ -39,7 +39,7 @@ class MarketFlow {
         const professor = await Profesor.findByPk(publication.Profesor_mail)
         
         this.suscribe(publication)
-        return Clase.create({...publication, ciudad: professor && professor.city})
+        return Clase.create({...publication, materia: publication.materia.normalize("NFD").replace(/\p{Diacritic}/gu, ""), ciudad: professor && professor.city})
         .then(() => {
             axios.post('http://localhost:3001/api/calendario/add', payload, {headers: {Authorization: token}})
         })

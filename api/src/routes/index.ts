@@ -11,7 +11,7 @@ import calendario from './calendario'
 import allCountries from './allCountries'
 import market from './market'
 import carrito from './carrito'
-import studentClasses from './studentClasses'
+import studentClasses from './studentClass'
 const router = Router()
 
 router.use('/verify', verify)
@@ -26,6 +26,6 @@ router.use('/session', sessions)
 router.use('/allCountries', allCountries)
 router.use('/market', market)
 router.use('/carrito', carrito)
-router.use('/studentClasses', studentClasses)
+router.use('/studentClass', studentClasses)
 
 export default router
