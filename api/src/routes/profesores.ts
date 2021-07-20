@@ -151,7 +151,7 @@ router.post('/', async (req: Request, res: Response) => {
 })
 
 router.patch('/', async (req: Request, res: Response) => {
-    const { ciudad, foto, description } = req.body;
+    const { ciudad, foto, description,education } = req.body;
     const mail = req.body.usuario;
     console.log("ACA ESTA EL BODYT XDDDDD",req.body)
     if (mail) {
@@ -166,7 +166,7 @@ router.patch('/', async (req: Request, res: Response) => {
         });
         if (usuario) {
             if (usuario.profesor) {
-                await usuario.profesor.update({city:ciudad, foto:foto, description:description},{
+                await usuario.profesor.update({city:ciudad, foto:foto, description:description,title:education},{
                     where:{
                         User_mail:mail
                     }
