@@ -10,6 +10,7 @@ const EditProfile = () => {
         usuario:"",
         ciudad:"",
         estado:"",
+        education:"",
         description:"",
         name:"",
         lastName:""
@@ -36,7 +37,8 @@ const EditProfile = () => {
                 foto: img,
                 usuario: thisUser.data.mail,
                 description: data.description,
-                ciudad:data.estado+", "+data.ciudad
+                ciudad:data.estado+", "+data.ciudad,
+                education:data.education
             })
             alert("Cambios Realizados")
         } catch (err) {
@@ -70,7 +72,7 @@ const EditProfile = () => {
         console.log(newdata)
     }
     return (
-        <div >
+        <div className={styles.body} >
             <div className={styles.Container}>
 
                 <div className="col-md-5 border-right">
@@ -85,9 +87,9 @@ const EditProfile = () => {
                         </div>
                         <div className="row mt-3">
                         <div className="col-md-12"><label className="labels">Pon una descripción para los alumnos!</label><textarea className="form-control" onChange={(e) => inputsHandler(e)} id="description" /></div>
-                         {/*    <div className="col-md-12"><label className="labels">Contacto Telefonico</label><input type="text" className="form-control" placeholder="numero de celular" /></div>
-                            <div className="col-md-12"><label className="labels">Dirección</label><input type="text" className="form-control" placeholder="escribir direccion" /></div>
-                            <div className="col-md-12"><label className="labels">Educación</label><input type="text" className="form-control" placeholder="educacion" /></div> */}
+                            {/*  <div className="col-md-12"><label className="labels">Contacto Telefonico</label><input type="text" className="form-control" placeholder="numero de celular" /></div>
+                            <div className="col-md-12"><label className="labels">Dirección</label><input type="text" className="form-control" placeholder="escribir direccion" /></div> */}
+                            <div className="col-md-12"><label className="labels">Si tenes una educacion o especialidad ponela acá:</label><input type="text" className="form-control" placeholder="educacion" onChange={(e) => inputsHandler(e)} id="education" /></div>
                         </div>
                         <div className="row mt-3">
                             <div className="col-md-6"><label className="labels">País</label><input type="text" className="form-control" placeholder="pais" id="ciudad" onChange={(e) => inputsHandler(e)}/></div>

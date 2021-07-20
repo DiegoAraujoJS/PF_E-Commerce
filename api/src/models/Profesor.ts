@@ -26,6 +26,9 @@ export default class Profesor extends Model implements ProfesorProps{
 
     @Column
     city!: string;
+
+    @Column  ({type: DataType.STRING})
+    title!: string;
     
     @Column  ({type: DataType.TEXT})
     foto!: string;

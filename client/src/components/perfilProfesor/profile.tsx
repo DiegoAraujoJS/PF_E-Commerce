@@ -22,7 +22,7 @@ function Profile(email) {
         email: email && email.children ? email.children[0] : null
     }
     
-    const [prof, setProf] = useState<ProfesorProps>({
+    const [prof, setProf] = useState<any>({
         User_mail: "",
         name: "",
         lastName: "",
@@ -95,7 +95,7 @@ function Profile(email) {
                         <h4 className="mt-0 mb-0">{prof.name} {prof.lastName} </h4>
                         <p className="small mb-4"> <i className="fas fa-map-marker-alt mr-2"></i>{prof.city}</p>
                     </div>
-                    <h1> Licenciado en Cs Naturales</h1>
+                    <h1> {prof.title}</h1>
                     <p className={style.description}>{prof.description}</p>
                     <img src={star} className={style.star}/>
                     <h4 className={style.score}>4.0 </h4>
