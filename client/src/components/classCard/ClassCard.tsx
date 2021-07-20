@@ -10,6 +10,7 @@ import axios from 'axios'
 import { ClasePorComprar } from '../../../../interfaces';
 import getCookieValue from "../../cookieParser";
 import { string } from 'yup/lib/locale';
+import Swal from 'sweetalert2';
 
 const starEmpty = <FontAwesomeIcon icon={faStar} style={{ color: "#ffe516" }} />
 const starCompleta = <FontAwesomeIcon icon={starComplete} style={{ color: "#ffe516" }} />
@@ -37,9 +38,13 @@ const ClassCard: React.FC<Class> = (props) => {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
+    function redirect_blank(url) {
+        var a = document.createElement('a');
+        a.target="_blank";
+        a.href=url;
+        a.click();
+      }
 
-
-    console.log(props)
     return (
         <div>
             <Row className='d-flex justify-content-center'>
@@ -124,21 +129,33 @@ const ClassCard: React.FC<Class> = (props) => {
                 </Modal.Body>
                 <Card.Title className="d-flex justify-content-center"> Precio de la clase: &nbsp;<span className="text-success ml-3">{props.precio}</span> </Card.Title>
                 <Modal.Footer className="justify-content-center">
-                    <Link target="_blank" to="./cesta">
+
                         <Button variant="primary" onClick={async () => {
 
                             const payload: Class = {
                                 ...props
                             }
+                            try{
                             const token = getCookieValue('token').replaceAll("\"", '')
                             const getUser = await axios.post(`http://localhost:3001/api/verify`, {}, { headers: { Authorization: token } })
-                            const addToCart = await axios.post(`http://localhost:3001/api/carrito/${getUser.data.mail}`, payload)
 
-
+                            if (getUser.status) {
+                                const addToCart = await axios.post(`http://localhost:3001/api/carrito/${getUser.data.mail}`, payload)
+                                if(addToCart.status === 200) redirect_blank("./cesta")
+                                }
+                            }
+                            catch(error) {
+                                console.log(error)
+                                Swal.fire(
+                                    'Error!',
+                                    'Debe iniciar seción para agregar una clase!',
+                                    'error'
+                                    )
+                            }
                         }}>
-                            Comprar Clase
+                           Agregar clase a mi lista
                         </Button>
-                    </Link>
+           
                 </Modal.Footer>
             </Modal>
         </div >

@@ -12,6 +12,7 @@ export default class Profesor extends Model implements ProfesorProps{
 
     @PrimaryKey
     @ForeignKey(() => User)
+    
     @Column
     User_mail!: string;
 

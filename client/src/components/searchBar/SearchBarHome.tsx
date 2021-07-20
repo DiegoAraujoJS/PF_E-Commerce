@@ -15,8 +15,8 @@ import s from './SearchBar.module.css'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash, } from "@fortawesome/free-regular-svg-icons";
 import Register from '../Register/Register';
-import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
-
+import { faBook, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
+import Swal from 'sweetalert2'
 
 export default function SearchBar() {
   enum Role { USER, PROFESSOR, ADMIN }
@@ -25,6 +25,7 @@ export default function SearchBar() {
   const [wrongPassword, setWrongPassword] = useState(false)
   const [errors, setErrors] = useState({ email: null, password: null })
   let [user, setUser] = useState<{ name: string, lastName: string, role: number, mail: string } | undefined>({ name: '', lastName: '', role: null, mail: '' })
+  const [cestaLength, setCestaLength] = useState(0)
 
   useEffect(() => {
     async function setRoleOfUser() {
@@ -39,6 +40,8 @@ export default function SearchBar() {
         if (thisUser.status === 200) {
           console.log('status 200')
           setUser(thisUser.data)
+          const clases = await axios.get(`http://localhost:3001/api/carrito/all/${thisUser.data.mail}`)
+          setCestaLength(clases.data.length)
         } else {
           console.log('else')
           setUser(undefined)
@@ -91,8 +94,14 @@ export default function SearchBar() {
       document.cookie = `token=${JSON.stringify(login.data.token)}`
       localStorage.setItem('login', 'true')
       const user = await axios.post(`http://localhost:3001/api/verify`, {}, { headers: { Authorization: getCookieValue('token').replaceAll("\"", '') } })
-      window.location.reload();
-
+      if (user.status === 200) {
+        Swal.fire(
+          'Exito!',
+          'Se Inició sesión correctamente!',
+          'success'
+        )
+      //  window.location.reload();
+      }
     } catch (error) {
       setWrongPassword(true)
     }
@@ -111,10 +120,18 @@ export default function SearchBar() {
       const logout = await axios.post(`http://localhost:3001/api/login/logout`, {}, { withCredentials: true })
       deleteAllCookies()
       localStorage.removeItem('login')
-      alert("Se cerro sesión correctamente")
-      // window.location.reload();
+      Swal.fire(
+        'Exito!',
+        'Se cerro sesión correctamente!',
+        'success'
+      )
+     // window.location.reload();
     } catch (err) {
-      alert("Fallo al cerrar sesión")
+      Swal.fire(
+        'Error!',
+        'Fallo al cerrar sesión!',
+        'error'
+      )
     }
   }
 
@@ -141,11 +158,12 @@ export default function SearchBar() {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const carrito = <FontAwesomeIcon icon={faShoppingCart} style={{fontSize:"30px", marginLeft:"25px"}} className=""/>
+  const book = <FontAwesomeIcon icon={faBook} style={{ fontSize: "30px", marginLeft: "25px" }} className="" />
+
 
   return (
     // <Navbar expand="lg" className={s.navbar}>
-      <Navbar bg="light"  expand="lg">
+    <Navbar bg="light" expand="lg">
       <Container className="container-fluid p-0">
         <Navbar.Brand className={'ms-3'} href="#home"><Link to={"/home"}><img src={logo} alt='U CLASES Logo' style={{ height: '56px' }}></img></Link></Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
@@ -187,7 +205,10 @@ export default function SearchBar() {
             }
           </Nav>
         </Navbar.Collapse>
-        <Link to={"/cesta"}>{carrito}</Link>
+        <div> <Link to={"/cesta"}>{book}</Link><
+          span style={{ color: "white", fontWeight: 500, backgroundColor: "red", paddingLeft: "7px", paddingRight: "7px", borderRadius: "50%" }}>
+          {cestaLength}</span>
+        </div>
       </Container>
     </Navbar>
   );

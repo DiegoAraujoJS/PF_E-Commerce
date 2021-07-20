@@ -7,6 +7,7 @@ import { Formik } from 'formik';
 import { validationSchemaRegister } from '../../utils/validations';
 import imageParser from '../../utils/imageParser';
 import { Button, Modal, Row, Col } from 'react-bootstrap';
+import Swal from 'sweetalert2';
 
 enum ErrorType { INCOMPLETE_INPUTS, ALREADY_EXISTS }
 enum Role { USER, PROFESSOR, ADMIN }
@@ -46,9 +47,13 @@ const Register: React.FC<Props> = ({ show, handleClose }) => {
     try {
       const registro = await axios.post('http://localhost:3001/api/session/register', userWithPassword, { withCredentials: true })
 
-      if (registro) alert("Se registro correctamente")
-
-      history.push('/home')
+      if (registro.status === 200)  {    
+       Swal.fire(
+        'Exito!',
+        'Se cerro sesión correctamente!',
+        'success'
+        )
+      }
     }
     catch (error) {
       if (error.response && error.response.data.type === ErrorType.ALREADY_EXISTS) {

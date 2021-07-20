@@ -5,6 +5,8 @@ import { Alert, Button, Col, Container, Dropdown, DropdownButton, Form, InputGro
 import { Class } from '../../../../interfaces';
 import axios from 'axios'
 import { connect } from 'react-redux';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 
 
@@ -163,15 +165,17 @@ function ClassCards({ clasesFiltradas, dispatchInput }) {
         dispatchInput(response.data)
     }
 
+    const searchIcon = <FontAwesomeIcon icon={faSearch}  className="ml-2 ml-2" />
+
     return (
         <div className="container-fluid">
 
             <Row className="d-flex justify-content-center mb-3">
-                <Col sm={6} md={6} >
-                    <Form.Control type="text" placeholder="Matematica en Buenos Aires..." value={search} onChange={handleChange}  />
+                <Col className="p-0" sm={6} md={6} >
+                    <Form.Control type="text" placeholder="Buscar clase..." value={search} onChange={handleChange}  />
                 </Col >
-                <Col sm={2} md={2}>
-                        <Button variant='primary' onClick={() => vaYBusca()}>Buscar</Button>                  
+                <Col className="p-0" sm={1} md={1}>
+                        <Button variant='primary' onClick={() => vaYBusca()}>{searchIcon}</Button>                  
                 </Col>
             </Row>
             
@@ -180,18 +184,6 @@ function ClassCards({ clasesFiltradas, dispatchInput }) {
                     <ul style={classListContainer}>
                         {dataFromPaginate && dataFromPaginate.length > 0 ?
                             dataFromPaginate.map((clase, i) => (
-                                // interface Class {
-                                //     id?: number;
-                                //     nombre: string;
-                                //     descripcion: string;
-                                //     puntuacion: number;
-                                //     materia: string;
-                                //     grado: string;
-                                //     nivel: string;
-                                //     esPresencial: boolean;
-                                //     profesor: Profesor;
-                                //     date: {year: number, month: number, day: number, time: Time}
-                                // }
                                 <ClassCard
                                     id={clase.id}
                                     nombre={clase.nombre}
@@ -207,7 +199,6 @@ function ClassCards({ clasesFiltradas, dispatchInput }) {
                                     key={i + 10}
                                 />
                             ))
-
                             : classFilter ? classFilter.map((clase, i) => {
                                 if (i < 2) {
                                     return (
@@ -230,8 +221,8 @@ function ClassCards({ clasesFiltradas, dispatchInput }) {
                                     return null;
                                 }
                             })
-                                : <Alert variant="info" className="text-center">
-                                    <h3>No hay clases disponibles</h3>
+                                : <Alert variant="secondary" className="text-center">
+                                    <h3>Realice una busqueda</h3>
                                 </Alert>
                         }
                         {classFilter && classFilter.length === 0 ?
