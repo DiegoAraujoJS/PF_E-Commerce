@@ -22,6 +22,8 @@ import DetalleClase from './components/detalleclase/DetalleClase';
 import CondicionesUso from './components/condicionesuso/CondicionesUso';
 import CondicionesServicio from './components/condicionesservicio/CondicionesServicio';
 import PoliticaPrivacidad from './components/politicaprivacidad/PoliticaPrivacidad';
+import StudentAddClass from './components/addClass/StudentaddClass';
+
 enum Role {USER, PROFESSOR, ADMIN}
 
 const moneda = 'USD';
@@ -201,6 +203,7 @@ function App() {
       <Route path="/condicionesdeuso" component={CondicionesUso}></Route>
       <Route path="/condicionesdelservicio" component={CondicionesServicio}></Route>
       <Route path="/politicadeprivacidad" component={PoliticaPrivacidad}></Route>
+      <Route exact path="/clases/estudianteAdd"> <StudentAddClass/></Route>
     </BrowserRouter>
 
   );
