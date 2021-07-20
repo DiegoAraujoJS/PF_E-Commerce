@@ -174,59 +174,59 @@ const bootstrap = async () => {
     //     Rango_id: 1
     // })
 
-    await Clase.create({
-        nombre: 'Sumas y Restas',
-        Profesor_mail: "edwardburgos@gmail.com",
-        descripcion: 'Aprende a sumar y restar para ser el mejor de tu clase',
-        materia: 'Matematica',
-        esPresencial: 'Virtual',
-        grado: "Primer grado",
-        nivel: 'Primario',
-        puntuacion: 5,
-        date:  {year: 2021, month: 8, day: 7, time: ['08:00:00','12:00:00']},
-        precio: "$2000"
-    })
-    await Clase.create({
-        nombre: 'Aprende a comunicar',
-        Profesor_mail: "edwardburgos@gmail.com",
-        descripcion: 'Aprende a comunicarte asertivamente con tu entorno',
-        materia: 'Comunicacion',
-        esPresencial: 'Virtual',
-        score: 4.63,
-        grado: "Cuarto grado",
-        nivel: 'Terciario',
-        puntuacion: 3,
-        date:  {year: 2021, month: 8, day: 7, time:  ['20:00:00','24:00:00']},
-        precio: "$2000"
-    })
+    // await Clase.create({
+    //     nombre: 'Sumas y Restas',
+    //     Profesor_mail: "edwardburgos@gmail.com",
+    //     descripcion: 'Aprende a sumar y restar para ser el mejor de tu clase',
+    //     materia: 'Matematica',
+    //     esPresencial: 'Virtual',
+    //     grado: "Primer grado",
+    //     nivel: 'Primario',
+    //     puntuacion: 5,
+    //     date:  {year: 2021, month: 8, day: 7, time: ['08:00:00','12:00:00']},
+    //     precio: "$2000"
+    // })
+    // await Clase.create({
+    //     nombre: 'Aprende a comunicar',
+    //     Profesor_mail: "edwardburgos@gmail.com",
+    //     descripcion: 'Aprende a comunicarte asertivamente con tu entorno',
+    //     materia: 'Comunicacion',
+    //     esPresencial: 'Virtual',
+    //     score: 4.63,
+    //     grado: "Cuarto grado",
+    //     nivel: 'Terciario',
+    //     puntuacion: 3,
+    //     date:  {year: 2021, month: 8, day: 7, time:  ['20:00:00','24:00:00']},
+    //     precio: "$2000"
+    // })
 
-    await Clase.create({
-        nombre: 'Historia',
-        Profesor_mail: "braiansilva@gmail.com",
-        descripcion: 'En esta clase te enseñaré todo lo que necesitas de Historia',
-        materia: 'Historia',
-        esPresencial: 'Virtual',
-        score: 4.33,
-        grado: "Sexto grado",
-        nivel: 'Secundario',
-        puntuacion: 4.20,
-        date:  {year: 2021, month: 8, day: 7, time:  ['12:00:00','17:00:00']},
-        precio: "$2000"
-    })    
+    // await Clase.create({
+    //     nombre: 'Historia',
+    //     Profesor_mail: "braiansilva@gmail.com",
+    //     descripcion: 'En esta clase te enseñaré todo lo que necesitas de Historia',
+    //     materia: 'Historia',
+    //     esPresencial: 'Virtual',
+    //     score: 4.33,
+    //     grado: "Sexto grado",
+    //     nivel: 'Secundario',
+    //     puntuacion: 4.20,
+    //     date:  {year: 2021, month: 8, day: 7, time:  ['12:00:00','17:00:00']},
+    //     precio: "$2000"
+    // })    
 
-    await Clase.create({
-        nombre: 'Filosofia',
-        Profesor_mail: "diegoaraujo@gmail.com",
-        descripcion: 'En esta clase te enseñaré todo lo que necesitas de Filosofia',
-        materia: 'Filosofia',
-        esPresencial: 'Presencial',
-        score: 2.33,
-        grado: "Sexto grado",
-        nivel: 'Terciario',
-        puntuacion: 4,
-        date:  {year: 2021, month: 8, day: 7, time:  ['08:00:00','10:00:00']},
-        precio: "$2000",
-    })    
+    // await Clase.create({
+    //     nombre: 'Filosofia',
+    //     Profesor_mail: "diegoaraujo@gmail.com",
+    //     descripcion: 'En esta clase te enseñaré todo lo que necesitas de Filosofia',
+    //     materia: 'Filosofia',
+    //     esPresencial: 'Presencial',
+    //     score: 2.33,
+    //     grado: "Sexto grado",
+    //     nivel: 'Terciario',
+    //     puntuacion: 4,
+    //     date:  {year: 2021, month: 8, day: 7, time:  ['08:00:00','10:00:00']},
+    //     precio: "$2000",
+    // })    
 
     await Clase.create({
         nombre: 'Inglés para jóvenes',
@@ -240,7 +240,35 @@ const bootstrap = async () => {
         puntuacion: 1,
         date:  {year: 2021, month: 8, day: 7, time:  ['15:00:00','19:00:00']},
         precio: "$2000"
-    })    
+    })
+    
+    
+
+    await Clase.create({
+        nombre: 'Sumas y Restas',
+        User_mail: "edwardburgos@gmail.com",
+        descripcion: 'Aprende a sumar y restar para ser el mejor de tu clase',
+        materia: 'Matematica',
+        esPresencial: 'Virtual',
+        grado: "Primer grado",
+        nivel: 'Primario',
+        puntuacion: 5,
+        date:  {year: 2021, month: 8, day: 7, time: ['08:00:00','12:00:00']},
+        precio: "$2000"
+    })
+
+    await Clase.create({
+        nombre: 'Sumas y Restas',
+        User_mail: 'braiansilva@gmail.com',
+        descripcion: 'Aprende a sumar y restar para ser el mejor de tu clase',
+        materia: 'Matematica',
+        esPresencial: 'Virtual',
+        grado: "Primer grado",
+        nivel: 'Primario',
+        puntuacion: 5,
+        date:  {year: 2021, month: 8, day: 7, time: ['08:00:00','12:00:00']},
+        precio: "$2000"
+    })
 
 
 }
