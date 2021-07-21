@@ -12,6 +12,7 @@ import allCountries from './allCountries'
 import market from './market'
 import carrito from './carrito'
 import studentClasses from './studentClass'
+import puntuacion from './puntuacion'
 const router = Router()
 
 router.use('/verify', verify)
@@ -27,5 +28,6 @@ router.use('/allCountries', allCountries)
 router.use('/market', market)
 router.use('/carrito', carrito)
 router.use('/studentClass', studentClasses)
+router.use('/puntuacion', puntuacion)
 
 export default router

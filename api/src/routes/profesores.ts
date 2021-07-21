@@ -4,46 +4,49 @@ import User from '../models/Usuario';
 import { Op } from 'sequelize'
 import Clase from '../models/Clase';
 import { ProfesorProps } from '../../../interfaces';
+import Puntuacion from '../models/Puntuacion';
 const router = Router();
 
 router.get('/', async (req: Request, res: Response) => { // profesore?name=rod
     let terminoBusqueda = req.query.nombre;
+    if (!terminoBusqueda) terminoBusqueda = ''
     let profesores = [];
-    if (terminoBusqueda) { // Siendo más extrictos sería > if (terminoBusqueda && typeof terminoBusqueda === 'string')
-        terminoBusqueda = terminoBusqueda.toString()
-        profesores = await User.findAll({
-            include: [{
-                model: Profesor,
-                required: true,
-                attributes: ['city', 'foto', 'description']
-            }],
-            where: {
-                [Op.or]: [
-                    {
-                        nombre:
-                            { [Op.iLike]: `%${terminoBusqueda}%` }
-                    },
-                    {
-                        apellido:
-                            { [Op.iLike]: `%${terminoBusqueda}%` }
-                    },
-                ]
-            },
-            attributes: ['mail', 'nombre', 'apellido']
-        })
-        if (profesores.length) return res.send(profesores);
-        return res.send(`No se encontraron coincidencias con ${terminoBusqueda.toString()}`)
-    }
+    // Siendo más extrictos sería > if (terminoBusqueda && typeof terminoBusqueda === 'string')
+    terminoBusqueda = terminoBusqueda.toString()
     profesores = await User.findAll({
         include: [{
             model: Profesor,
-            required: true,
-            attributes: ['city', 'foto', 'description']
+            required: true
         }],
-        attributes: ['mail', 'nombre', 'apellido']
+        where: {
+            [Op.or]: [
+                {
+                    name:
+                        { [Op.iLike]: `%${terminoBusqueda}%` }
+                },
+                {
+                    lastName:
+                        { [Op.iLike]: `%${terminoBusqueda}%` }
+                },
+            ]
+        }
     })
-    if (profesores.length) return res.send(profesores)
-    return res.send(`No se encontraron profesores`)
+    profesores = profesores.map(user => {
+        const prof = {
+            name: user.name,
+            lastName: user.lastName,
+            score: user.profesor.score,
+            city: user.city,
+            country: user.country,
+            state: user.state,
+            foto: user.foto,
+            description: user.profesor.description,
+            User_mail: user.mail
+        }
+        return prof
+    })
+    if (profesores.length) return res.send(profesores);
+    return res.send(`No se encontraron coincidencias con ${terminoBusqueda.toString()}`)
 })
 
 router.get('/:mail', async (req: Request, res: Response) => {
@@ -52,13 +55,25 @@ router.get('/:mail', async (req: Request, res: Response) => {
     const usuario: User | null = await User.findOne({
         include: [{
             model: Profesor,
-            attributes: ['city', 'foto', 'description']
+        }, {
+            model: Puntuacion
         }],
         where: {
             mail: mail.toString()
-        },
-        attributes: ['mail', 'name', 'lastName']
+        }
     });
+    
+    const classes = await Clase.findAll({
+        where: {
+            Profesor_mail: mail
+        },
+        include: Puntuacion
+    })
+    let howMany = 0
+    classes.forEach( c => {
+        howMany += c.puntuaciones.length
+    })
+
     if (usuario) {
         if (usuario.profesor) {
             
@@ -69,7 +84,8 @@ router.get('/:mail', async (req: Request, res: Response) => {
                     city: usuario.profesor.city,
                     foto: usuario.profesor.foto,
                     description: usuario.profesor.description,
-                    score: usuario.profesor.score
+                    score: usuario.profesor.score,
+                    puntuacionesHowMany: howMany
             }
             return res.send(
                 obj

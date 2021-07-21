@@ -8,7 +8,7 @@ import Alumno from './Alumno';
 @Table
 export default class Puntuacion extends Model {
     @PrimaryKey
-    @ForeignKey(() => Alumno)
+    @ForeignKey(() => User)
     @Column
     usuario!: string;
 

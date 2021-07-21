@@ -65,7 +65,8 @@ const bootstrap = async () => {
         city: "Buenos Aires",
         foto: "https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=547&q=80",
         description: "Profesor apasionado por enseñar",
-        score: 3
+        
+        
     }
 
     const BraianProfe: ProfesorProps = {
@@ -75,14 +76,14 @@ const bootstrap = async () => {
         city: "Buenos Aires",
         foto: "https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=547&q=80",
         description: "Profesor apasionado por enseñar",
-        score: 3
+        
     }
 
     const EdwardProfe: ProfesorProps = {
         name: 'Edward',
         lastName: 'Burgos',
         User_mail: "edwardburgos@gmail.com",
-        score: 2.1,
+        
         city: "Lima",
         foto: "https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=547&q=80",
         description: "Profesor apasionado por enseñar"
@@ -94,7 +95,7 @@ const bootstrap = async () => {
         city: "Lima",
         foto: "https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=547&q=80",
         description: "Profesor apasionado por enseñar",
-        score: 4
+        
     }
     const JaviProfe: ProfesorProps = {
         name: 'Javier',
@@ -103,7 +104,7 @@ const bootstrap = async () => {
         city: "Lima",
         foto: "https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=547&q=80",
         description: "Profesor apasionado por enseñar",
-        score: 4
+        
     }
 
     for (const x of [Diego, Braian, Edward, Mauro, Javi]) {
@@ -192,7 +193,7 @@ const bootstrap = async () => {
     //     descripcion: 'Aprende a comunicarte asertivamente con tu entorno',
     //     materia: 'Comunicacion',
     //     esPresencial: 'Virtual',
-    //     score: 4.63,
+    
     //     grado: "Cuarto grado",
     //     nivel: 'Terciario',
     //     puntuacion: 3,
@@ -206,7 +207,7 @@ const bootstrap = async () => {
     //     descripcion: 'En esta clase te enseñaré todo lo que necesitas de Historia',
     //     materia: 'Historia',
     //     esPresencial: 'Virtual',
-    //     score: 4.33,
+    
     //     grado: "Sexto grado",
     //     nivel: 'Secundario',
     //     puntuacion: 4.20,
@@ -220,7 +221,7 @@ const bootstrap = async () => {
     //     descripcion: 'En esta clase te enseñaré todo lo que necesitas de Filosofia',
     //     materia: 'Filosofia',
     //     esPresencial: 'Presencial',
-    //     score: 2.33,
+    
     //     grado: "Sexto grado",
     //     nivel: 'Terciario',
     //     puntuacion: 4,
@@ -234,7 +235,7 @@ const bootstrap = async () => {
         descripcion: 'En esta clase te enseñaré todo lo que necesitas para tener un nivel intermedio de Inglés',
         materia: 'Ingles',
         esPresencial: 'Presencial',
-        score: 2.33,
+        
         grado: "Sexto grado",
         nivel: 'Secundario',
         puntuacion: 1,
