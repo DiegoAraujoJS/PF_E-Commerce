@@ -1,15 +1,14 @@
 :root {
   --color_1: #2364f8;
-  --color_1_opaccity: rgba(54, 85, 156, 0.25);
+  --color_1_opaccity: rgba(54, 85, 156, 0.2);
   --main_size: calc( 100vh - 100px - 6rem - 66px - 56px);
-  --list_size: calc(100vh - 100px - 6rem - 56px);
+  --list_size: calc(100vh - 100px - 6rem - 56px - 10px);
 }
 /* 3F3D56 */
 
-.chatContainer {
-  max-width: 750px;
-  min-width: 360px;
-}
+/* .chatContainer {
+  
+} */
 .background {
   background-color: var(--color_1);
 }
@@ -35,7 +34,7 @@
 }
 
 .main::-webkit-scrollbar-thumb {
-  background: #212529;
+  background: var(--color_1);
 }
 
 .imgMessage {

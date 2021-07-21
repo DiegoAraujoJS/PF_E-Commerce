@@ -8,7 +8,10 @@ import style from "./Chat.module.css";
 import ChatMessage from "./ChatMessage";
 import profilePicture from "../../images/profile_pic.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowLeft } from "@fortawesome/free-solid-svg-icons";
+import {
+  faPaperPlane,
+  faChevronCircleDown,
+} from "@fortawesome/free-solid-svg-icons";
 
 interface ChatData {
   users: Array<UserChat>;
@@ -29,7 +32,7 @@ export default function ChatRoom(props: React.PropsWithChildren<ChatRoomData>) {
     .collection("chatsRooms")
     .doc(props.id)
     .collection("messages");
-  const queryMessages = messagesRef.orderBy("createdAt").limit(25);
+  const queryMessages = messagesRef.orderBy("createdAt", "desc");
   const [messages] = useCollectionData(queryMessages, { idField: "id" });
 
   const [formValue, setFormValue] = useState("");
@@ -48,17 +51,20 @@ export default function ChatRoom(props: React.PropsWithChildren<ChatRoomData>) {
     setFormValue("");
     dummy!.current.scrollIntoView({ behavior: "smooth" });
   };
+  function dummyCurrent() {
+    dummy!.current.scrollIntoView({ behavior: "smooth" });
+  }
 
   return (
     <>
-      <div className="App w-75">
+      <div className="App w-100">
         <nav className={"navbar " + style.background}>
           <div
             className={
               "w-100 d-flex flex-row justify-content-start align-items-center"
             }
           >
-            <button
+            {/* <button
               className={
                 "text-white fs-6 mx-3 border-0 rounded-1 " +
                 style.background
@@ -66,7 +72,7 @@ export default function ChatRoom(props: React.PropsWithChildren<ChatRoomData>) {
               onClick={() => props.setChatSelected({ users: [], id: "" })}
             >
               <FontAwesomeIcon icon={faArrowLeft} size={"1x"}/>
-            </button>
+            </button> */}
             <img
               src={profilePicture}
               className={"rounded-circle mx-3 " + style.imgMessage}
@@ -85,7 +91,14 @@ export default function ChatRoom(props: React.PropsWithChildren<ChatRoomData>) {
         <section
           className={"d-flex flex-column justify-content-center bg-light"}
         >
-          <main className={"d-flex flex-column justify-content-start p-3 border " + style.main}>
+          <main
+            className={
+              "d-flex flex-column-reverse justify-content-start p-3 border " +
+              style.main
+            }
+          >
+            <span ref={dummy}></span>
+            <FontAwesomeIcon className={"position-fixed text-secondary "} icon={faChevronCircleDown} size={"2x"} onClick={dummyCurrent}/>
             {messages &&
               messages.map((msg: any, i) => (
                 <ChatMessage
@@ -93,7 +106,6 @@ export default function ChatRoom(props: React.PropsWithChildren<ChatRoomData>) {
                   message={{ ...msg, user: props.userLoged.mail }}
                 />
               ))}
-            <span ref={dummy}></span>
           </main>
 
           <form onSubmit={sendMessage} className={"d-flex bg-dark w-100"}>
@@ -109,7 +121,7 @@ export default function ChatRoom(props: React.PropsWithChildren<ChatRoomData>) {
               disabled={!formValue}
               className={"px-4 py-3 bg-secondary border-0"}
             >
-              🕊️
+              <FontAwesomeIcon icon={faPaperPlane} size={"1x"} />
             </button>
           </form>
         </section>
