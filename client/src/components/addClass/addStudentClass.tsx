@@ -54,16 +54,9 @@ const grados = [
 enum Week { Lunes, Martes, Miercoles, Jueves, Viernes, Sabado, Domingo }
 
 const StudentAddClass = () => {
-	const [ min, setMinValue ] = useState(0);
-	const [ max, setMaxValue ] = useState(0);
-	/* if(values.dias==="Lunes")i=1
-	if(values.dias==="Martes")i=2
-	if(values.dias==="Miercoles")i=3
-	if(values.dias==="Jueves")i=4
-	if(values.dias==="Viernes")i=5
-	if(values.dias==="Sabado")i=6
-	if(values.dias==="Domingo")i=7
-console.log(fechaa.setDate(fechaa.getDate() + (i + 7 - fechaa.getDay()) % 7)) */
+	const [min, setMinValue] = useState(0);
+	const [max, setMaxValue] = useState(0);
+
 	return (
 		<Container className='shadow p-3 mb-5 bg-white rounded flex'>
 			<h1>Agrega tu propia Clase!</h1>
@@ -72,7 +65,7 @@ console.log(fechaa.setDate(fechaa.getDate() + (i + 7 - fechaa.getDay()) % 7)) */
 				validationSchema={validationSchemaNewClass}
 				initialValues={{
 					nombre: "",
-					
+
 					descripcion: "",
 					materia: "",
 					grado: "",
@@ -81,7 +74,7 @@ console.log(fechaa.setDate(fechaa.getDate() + (i + 7 - fechaa.getDay()) % 7)) */
 
 					dia: Week.Miercoles,
 					desde: "",
-					hasta: "",					
+					hasta: "",
 
 				}}
 
@@ -97,29 +90,29 @@ console.log(fechaa.setDate(fechaa.getDate() + (i + 7 - fechaa.getDay()) % 7)) */
 						console.log([values.desde, values.hasta])
 						let desde: `${number}:${number}:00` | any = values.desde + ':00'
 						let hasta: `${number}:${number}:00` | any = values.hasta + ':00'
-						
+
 						for (let i = 0; i < 1; i++) {
 							const publication: IClase = {
-								Profesor_mail: user.data.mail,
+								User_mail: user.data.mail,
 								descripcion: values.descripcion,
 								ciudad: '',
 								materia: values.materia,
 								grado: values.grado,
 								date: { day: actual.getDate(), month: actual.getMonth() + 1, year: actual.getFullYear(), time: [desde, hasta] },
-								nivel: values.nivel,																						
+								nivel: values.nivel,
 								nombre: values.nombre,
 								precio: values.precio
 							}
-							let response = await axios.post('http://localhost:3001/api/market/publish', publication, { headers: { Authorization: token } })
+							let response = await axios.post('http://localhost:3001/api/studentClass/add', publication)
 							actual.setDate(actual.getDate() + 7)
 							console.log(response)
 
-							if(response.status === 200){
+							if (response.status === 200) {
 								Swal.fire(
 									'Exito!',
 									'Tu clase se creo correctamente!',
 									'success'
-								  )
+								)
 							}
 						}
 					}
@@ -128,7 +121,7 @@ console.log(fechaa.setDate(fechaa.getDate() + (i + 7 - fechaa.getDay()) % 7)) */
 							'Error!',
 							'El mail no es de un profesor registrado!',
 							'error'
-						  )
+						)
 					}
 				}}
 			>
@@ -208,7 +201,7 @@ console.log(fechaa.setDate(fechaa.getDate() + (i + 7 - fechaa.getDay()) % 7)) */
 									{errors.hasta && touched.hasta ? (
 										<div className='invalid-feedback'>{errors.hasta}</div>
 									) : null}
-								</Col>								
+								</Col>
 							</Row>
 							<Row>
 								<Col sm={6} md={6}>
@@ -294,52 +287,38 @@ console.log(fechaa.setDate(fechaa.getDate() + (i + 7 - fechaa.getDay()) % 7)) */
 									) : null}
 								</Col>
 							</Row>
-							<Row>								
+							<Row>
 								<Col sm={12} md={4}>
 									<Form.Label className='text-uppercase'>Precio</Form.Label>
-									{/* <Field
-										name='precio'
-										type='number'
-										onChange={handleChange}
-										onBlur={handleBlur}
-										value={values.precio}
-										className={`form-control ${errors.precio && touched.precio ? 'is-invalid' : ''
-											}`}
-									/> */}
-									<div style={{display: 'flex', position: 'relative', height: 'fit-content', alignContent: 'space-between', width: '560px', alignItems: 'center'}}>
+									<div style={{ display: 'flex', position: 'relative', height: 'fit-content', alignContent: 'space-between', width: '560px', alignItems: 'center' }}>
 
-										<div style={{width: '325px'}}>
-										<Form.Label className='text-uppercase'>MIN</Form.Label>
-										<RangeSlider
-											value={min}
-											onChange={changeEvent => setMinValue(changeEvent.target.value)}
-											step={0.5}
-											max={50}
-											
-											/>
-											<Form.Label className='text-uppercase'>MAX</Form.Label>	
+										<div style={{ width: '325px' }}>
+											<Form.Label className='text-uppercase'>MIN</Form.Label>
 											<RangeSlider
-											
-											value={max}
-											onChange={changeEvent => setMaxValue(changeEvent.target.value)}
-											step={0.5}
-											max={50}
-											
+												value={min}
+												onChange={changeEvent => setMinValue(changeEvent.target.value)}
+												step={0.5}
+												max={50}
+												onBlur={handleBlur}
+												className={`form-control ${(Number(min) > Number(max)) ? 'is-invalid' : ''}`}
 											/>
-											{(Number(min) > Number(max)) ? <span>Coloca el rango correctamente</span> : <span></span>}
+											<Form.Label className='text-uppercase'>MAX</Form.Label>
+											<RangeSlider
+												value={max}
+												onChange={changeEvent => setMaxValue(changeEvent.target.value)}
+												step={0.5}
+												max={50}
+												onBlur={handleBlur}
+												className={`form-control ${(Number(min) > Number(max)) ? 'is-invalid' : ''}`}
+											/>
 										</div>
-										<div style={{fontSize: '35px', fontWeight: 'bold', width: '200px', height: 'fit-content', position: 'relative', paddingLeft:'30px'}}>
+										<div style={{ fontSize: '35px', fontWeight: 'bold', width: '200px', height: 'fit-content', position: 'relative', paddingLeft: '30px' }}>
 											{`$${min}-$${max}`}
 										</div>
-
-
 									</div>
-
-									
-									
 									{(Number(min) > Number(max)) ? (
-										<div className='invalid-feedback'>"Error"</div>
-									) : null}					
+										<div className='invalid-feedback d-flex'>Coloca el rango correctamente</div>
+									) : null}
 								</Col>
 							</Row>
 							<Row>
@@ -360,12 +339,3 @@ console.log(fechaa.setDate(fechaa.getDate() + (i + 7 - fechaa.getDay()) % 7)) */
 
 
 export default StudentAddClass
-
-
-// dia ==> lunes
-// hora desde ==> 08
-// hora hasta ==> 12
-// durante ==> n semanas
-
-
-

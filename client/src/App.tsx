@@ -22,7 +22,7 @@ import DetalleClase from './components/detalleclase/DetalleClase';
 import CondicionesUso from './components/condicionesuso/CondicionesUso';
 import CondicionesServicio from './components/condicionesservicio/CondicionesServicio';
 import PoliticaPrivacidad from './components/politicaprivacidad/PoliticaPrivacidad';
-import StudentAddClass from './components/addClass/StudentaddClass';
+import StudentAddClass from './components/addClass/addStudentClass';
 import Puntuar from './components/puntuar/Puntuar';
 
 enum Role {USER, PROFESSOR, ADMIN}
