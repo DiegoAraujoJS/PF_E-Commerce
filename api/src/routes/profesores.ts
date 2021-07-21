@@ -52,7 +52,7 @@ router.get('/:mail', async (req: Request, res: Response) => {
     const usuario: User | null = await User.findOne({
         include: [{
             model: Profesor,
-            attributes: ['city', 'foto', 'description']
+            attributes: ['city', 'foto', 'description', "score"]
         }],
         where: {
             mail: mail.toString()
@@ -61,7 +61,7 @@ router.get('/:mail', async (req: Request, res: Response) => {
     });
     if (usuario) {
         if (usuario.profesor) {
-            
+            console.log("USUARIO", usuario)
             let obj: ProfesorProps = {
                     User_mail: usuario.mail,
                     name: usuario.name,
@@ -71,6 +71,7 @@ router.get('/:mail', async (req: Request, res: Response) => {
                     description: usuario.profesor.description,
                     score: usuario.profesor.score
             }
+            console.log("OBJ", obj)
             return res.send(
                 obj
             )
