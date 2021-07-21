@@ -62,7 +62,8 @@ interface ProfesorProps {
     name: string;
     User_mail: string;
     score?: number; 
-    puntuacionesHowMany?: number
+    puntuacionesHowMany?: number;
+    history?: object
 }
 
 
