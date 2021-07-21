@@ -26,7 +26,7 @@ const ClassContainer: React.FC<Props> = ({ searchInput }) => {
     const [grado, setGrado] = useState("")
     const [puntuacion, setPuntuacion] = useState({ value: "", check: false })
     const [horario, setHorario] = useState({ desde: "", hasta: "" })
-    const grados = [ "Primer grado", "Segundo grado", "Tercer grado", "Cuarto grado", "Quinto grado", "Sexto grado"                                                                                                      ]
+    const grados = ["Primer grado", "Segundo grado", "Tercer grado", "Cuarto grado", "Quinto grado", "Sexto grado"]
     const [city, setCity] = useState({ name: "", show: false, length: 0, })
 
     let [user, setUser] = useState<{ name: string, lastName: string, role: number, mail: string } | undefined>({ name: '', lastName: '', role: null, mail: '' })
@@ -42,7 +42,7 @@ const ClassContainer: React.FC<Props> = ({ searchInput }) => {
 
                 if (thisUser.status === 200) {
                     setUser(thisUser.data)
-                } else {            
+                } else {
                     setUser(undefined)
                 }
             }
@@ -126,8 +126,8 @@ const ClassContainer: React.FC<Props> = ({ searchInput }) => {
             setSize({ name: "grado", length: filtrados.length });
             setNivel(""); setPuntuacion({ value: "", check: false }); setHorario({ desde: "", hasta: "" }); setCity({ ...city, show: false, });
         }
-        else if (grado === ""){ 
-            setClassFilter(searchInput) 
+        else if (grado === "") {
+            setClassFilter(searchInput)
         }
     }, [grado])
 
@@ -154,7 +154,7 @@ const ClassContainer: React.FC<Props> = ({ searchInput }) => {
                     return 0;
                 }))
                 setSize({ name: "puntuacion", length: filtrados.length })
-                setNivel(""); setGrado(""); setHorario({ desde: "", hasta: "" });  setCity({ ...city, show: false, });
+                setNivel(""); setGrado(""); setHorario({ desde: "", hasta: "" }); setCity({ ...city, show: false, });
             }
         }
     };
@@ -182,7 +182,8 @@ const ClassContainer: React.FC<Props> = ({ searchInput }) => {
                 })
                 setCity({ ...city, show: true, length: filtrados.length })
                 setClassFilter(filtrados)
-                setNivel(""); setGrado(""); setPuntuacion({ value: "", check: false }); setHorario({ desde: "", hasta: "" });}
+                setNivel(""); setGrado(""); setPuntuacion({ value: "", check: false }); setHorario({ desde: "", hasta: "" });
+            }
             else {
                 setCity({ ...city, show: false, })
                 setClassFilter(searchInput)
@@ -244,18 +245,25 @@ const ClassContainer: React.FC<Props> = ({ searchInput }) => {
                         : null}
 
                     <ListGroup className="py-3 ">
-                        <h5 className="font-weight-bold">Horarios</h5>
-                        <Form className="brand">
-                            <Form.Group className="mb-3">
-                                <h6 className="font-weight-bold">Desde:</h6>
-                                <Form.Control name="desde" value={horario.desde} type="time" onChange={handleChange} />
-                            </Form.Group>
-                            <Form.Group className="">
-                                <h6 className="font-weight-bold">Hasta:</h6>
-                                <Form.Control name="hasta" value={horario.hasta} type="time" onChange={handleChange} />
-                            </Form.Group>
-                        </Form>
-                        <span style={{ backgroundColor: "lightgreen", color: "green" }} className="badge badge-primary badge-pill">{(horario.desde && horario.hasta && size.name === "horario") && size.length}</span>
+                        <Row>
+                            <h5 className="font-weight-bold">Horarios</h5>
+
+                            <Form className="brand d-flex justify-content-evenly p-0">
+                                <Col sm={5} md={5}>
+                                    <Form.Group className="mb-3">
+                                        <h6 className="font-weight-bold">Desde:</h6>
+                                        <Form.Control name="desde" value={horario.desde} type="time" onChange={handleChange} />
+                                    </Form.Group>
+                                </Col>
+                                <Col sm={5} md={5}>
+                                    <Form.Group className="">
+                                        <h6 className="font-weight-bold">Hasta:</h6>
+                                        <Form.Control name="hasta" value={horario.hasta} type="time" onChange={handleChange} />
+                                    </Form.Group>
+                                </Col>
+                            </Form>
+                            <span style={{ backgroundColor: "lightgreen", color: "green" }} className="badge badge-primary badge-pill">{(horario.desde && horario.hasta && size.name === "horario") && size.length}</span>
+                        </Row>
                     </ListGroup>
 
                     <ListGroup className="py-3">

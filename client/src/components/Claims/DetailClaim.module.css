@@ -12,7 +12,7 @@
     flex-wrap: wrap;
     align-items: center;
     justify-content: center;
-    background-color: blanchedalmond;
+    background-color: #cbbfad;
     border: 2px solid rgb(204, 200, 200);
     border-radius: 15px;
 }
@@ -105,21 +105,21 @@
     margin-bottom: 30px;
 }
 
-.ban {
+/* .ban {
     background-color: rgb(151, 26, 3);
     padding: 10px 50px 10px 50px;
     border-radius: 10px;
     font-weight: 400;
     margin-left: 20px;
     margin-right: 20px;
-}
-
+} */
+/* 
 .ban:hover {
     background-color: rgb(255, 0, 0);
     color: white;
-}
+} */
 
-.desb {
+/* .desb {
     background-color: rgb(4, 165, 71);
     color: white;
     padding: 10px 50px 10px 50px;
@@ -127,9 +127,9 @@
     font-weight: 400;
     margin-left: 20px;
     margin-right: 20px;
-}
+} */
 
-.desb:hover {
+/* .desb:hover {
     background-color: rgb(43, 253, 1);
     color: black;
-}
+} */

@@ -15,7 +15,7 @@ import s from './SearchBar.module.css'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash, } from "@fortawesome/free-regular-svg-icons";
 import Register from '../Register/Register';
-import { faBook, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
+import { faBook, faShoppingCart, faUserTie } from "@fortawesome/free-solid-svg-icons";
 import Swal from 'sweetalert2'
 
 export default function SearchBar() {
@@ -69,39 +69,55 @@ export default function SearchBar() {
   }
 
   function handleChange(e) {
-    validateErrors()
-    switch (e.target.name) {
-      case 'emailValue':
-        setEmail(e.target[0].value)
-        break;
-      case 'passValue':
-        setPassword(e.target[1].value)
-        break;
-      default:
-        break;
+    if (e.target.name === "emailValue") {
+      setEmail(e.target[0].value)
     }
-
+    if (e.target.name === "passValue") {
+      setPassword(e.target[1].value)
+    }
   }
 
   async function handleSubmit(e) {
     e.preventDefault()
-    console.log(e)
+
     try {
       const login = await axios.post(`http://localhost:3001/api/login`, {
         mail: e.target[0].value,
         password: e.target[1].value
       }, { withCredentials: true })
-      document.cookie = `token=${JSON.stringify(login.data.token)}`
-      localStorage.setItem('login', 'true')
-      const user = await axios.post(`http://localhost:3001/api/verify`, {}, { headers: { Authorization: getCookieValue('token').replaceAll("\"", '') } })
-      if (user.status === 200) {
-        Swal.fire(
-          'Exito!',
-          'Se Inició sesión correctamente!',
-          'success'
-        )
-        //  window.location.reload();
+
+      if (login.status === 200) {
+        const reponse = await axios.get('http://localhost:3001/api/usuarios/' + e.target[0].value)
+
+        if (reponse.data.suspendido) {
+          const logout = await axios.post(`http://localhost:3001/api/login/logout`, {}, { withCredentials: true })
+
+          return Swal.fire({
+            title: 'Error!',
+            text: 'Su cuenta esta suspendida!',
+            icon: 'error',
+            willClose: () => window.location.reload()
+          })
+        }
+        else {
+
+          document.cookie = `token=${JSON.stringify(login.data.token)}`
+          localStorage.setItem('login', 'true')
+
+          const user = await axios.post(`http://localhost:3001/api/verify`, {}, { headers: { Authorization: getCookieValue('token').replaceAll("\"", '') } })
+          console.log(user)
+          if (user.status === 200) {
+            Swal.fire({
+              title: 'Exito!',
+              text: 'Se Inició sesión correctamente!',
+              icon: 'success',
+              willClose: () => window.location.reload()
+            })
+
+          }
+        }
       }
+
     } catch (error) {
       setWrongPassword(true)
     }
@@ -120,23 +136,26 @@ export default function SearchBar() {
       const logout = await axios.post(`http://localhost:3001/api/login/logout`, {}, { withCredentials: true })
       deleteAllCookies()
       localStorage.removeItem('login')
-      Swal.fire(
-        'Exito!',
-        'Se cerro sesión correctamente!',
-        'success'
-      )
-      // window.location.reload();
+      Swal.fire({
+        title: 'Exito!',
+        text: 'Se cerro sesión correctamente!',
+        icon: 'success',
+        willClose: () => window.location.reload()
+      })
+
     } catch (err) {
-      Swal.fire(
-        'Error!',
-        'Fallo al cerrar sesión!',
-        'error'
-      )
+      Swal.fire({
+        title: 'Error!',
+        text: 'Fallo al cerrar sesión!',
+        icon: 'error',
+        willClose: () => window.location.reload()
+      })
     }
   }
 
   const dropBox: CSS.Properties = {
-    width: '300px'
+    width: '300px',
+    height: '300px'
   }
   const inputSizeLim: CSS.Properties = {
     position: 'relative',
@@ -177,7 +196,7 @@ export default function SearchBar() {
     top: "11px",
   }
 
-
+  const admin = <FontAwesomeIcon icon={faUserTie} style={{ fontSize: "40px" }} className="" />
 
   return (
     // <Navbar expand="lg" className={s.navbar}>
@@ -185,7 +204,7 @@ export default function SearchBar() {
       <Container className="container-fluid p-0">
         <Navbar.Brand className={'ms-3'} href="#home"><Link to={"/home"}><img src={logo} alt='U CLASES Logo' style={{ height: '56px' }}></img></Link></Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
+        <Navbar.Collapse id="basic-navbar-navzzz ">
           <Nav className="mr-auto">
             <Link className={'nav-link ms-4 text-decoration-none'} to={"/home"}>Home</Link>
             <Link className={'nav-link ms-4 text-decoration-none'} to={"/calendar"}>Calendar</Link>
@@ -201,18 +220,20 @@ export default function SearchBar() {
               </NavDropdown>
               :
               <NavDropdown className={'ms-4 text-decoration-none'} title="Cuenta" id="basic-nav-dropdown">
-                <Form className={'d-flex flex-column align-items-center'} style={dropBox} onSubmit={handleSubmit}>
+                <Form className={'d-flex flex-column align-items-center justify-content-center'} style={dropBox} onSubmit={handleSubmit}>
                   <Form.Control style={inputSizeLim} className={'d-flex justify-content-center'} type="email" placeholder="Email" onChange={handleChange} />
-                  <Form.Control style={inputSizeLim} type={showPassword} placeholder="Contraseña" onChange={handleChange} />
-                  {showPassword === "password" ? eye : eyeSlash}
+                  <Form.Control className="mt-2" style={inputSizeLim} type={showPassword} placeholder="Contraseña" onChange={handleChange} />
+                  {showPassword === "password" ? eyeSlash : eye}
 
                   <Button style={inputSizeLim} name='loginSubmit' variant="primary" type="submit">
                     Entrar
                   </Button>
-                  <Navbar.Text>
+                  <Navbar.Text className="mt-5">
                     ¿No tienes cuenta? <Button onClick={() => handleShow()}> Registrarse </Button>
                     <Register show={show} handleClose={handleClose} />
                   </Navbar.Text>
+                  {wrongPassword ? <div className="badge bg-danger" >
+                    El usuario o la contraseña son incorrectos</div> : null}
                 </Form>
               </NavDropdown>
             }
@@ -223,13 +244,19 @@ export default function SearchBar() {
             }
           </Nav>
         </Navbar.Collapse>
-
-        <div>
-          <Link to={"/cesta"}> {book} </Link>
-          {cestaLength > 0 ? <span style={bookCSS}> {cestaLength}</span> : null}
+        {loggedOrNot() && user.role === Role.ADMIN ? <div className="d-flex">         
+          <Link className={'nav-link ms-4 text-decoration-none'} to={"/claim"}>Reclamos</Link>
+          {admin}
+          <h5 className="m-0">Admin</h5>
         </div>
+          : 
+          < div >
+          <Link to={"/cesta"}> {book} </Link>
+          {cestaLength > 0 ? <Link style={{ textDecoration: "none", }} to={"/cesta"}><span style={bookCSS}> {cestaLength}</span> </Link> : null}
+        </div>
+        }
       </Container>
-    </Navbar>
+    </Navbar >
   );
 }
 
