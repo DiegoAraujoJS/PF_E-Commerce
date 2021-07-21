@@ -22,8 +22,7 @@ export default class Alumno extends Model {
     @Column
     descripcion!: string;
 
-    @HasMany(() => Puntuacion)
-    puntuaciones!: Puntuacion[];
+    
 }
 
 export {Alumno}

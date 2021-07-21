@@ -61,7 +61,8 @@ interface ProfesorProps {
     foto: string
     name: string;
     User_mail: string;
-    score: number; 
+    score?: number; 
+    puntuacionesHowMany?: number
 }
 
 
