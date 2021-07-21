@@ -1,9 +1,8 @@
-import { useRef, useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import "./Chat.css";
 import axios from "axios";
 import getCookieValue from "../../cookieParser";
 import style from "./Chat.module.css";
-import ChatRoom from "./ChatRoom";
 import ListChatRoom from "./ListChatRoom";
 import image from "../../images/login.svg";
 
@@ -15,7 +14,7 @@ export interface UserChat {
 
 function Chat() {
   const [userLoged, setUserLoged] = useState<UserChat>();
-  const [userReference, setUserReference] = useState({
+  const [userReference, /* setUserReference */] = useState({
     mail: "admin@admin.com",
     name: "Admin",
     lastName: "Admin",
@@ -47,9 +46,9 @@ function Chat() {
   };
 
   return (
-    <div className={"mt-5 mx-auto " + style.chatContainer}>
+    <div className={"mt-5 mx-auto" + style.chatContainer}>
       {userLoged ? (
-        <div className={"d-flex flex-row justify-content-center w-100"}>
+        <div className={"d-flex flex-row justify-content-center w-75 mx-auto"}>
           <ListChatRoom userLoged={userLoged} userReference={userReference} />
         </div>
       ) : (
