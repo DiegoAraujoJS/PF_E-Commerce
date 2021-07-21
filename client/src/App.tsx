@@ -23,6 +23,7 @@ import CondicionesUso from './components/condicionesuso/CondicionesUso';
 import CondicionesServicio from './components/condicionesservicio/CondicionesServicio';
 import PoliticaPrivacidad from './components/politicaprivacidad/PoliticaPrivacidad';
 import StudentAddClass from './components/addClass/StudentaddClass';
+import Puntuar from './components/puntuar/Puntuar';
 
 enum Role {USER, PROFESSOR, ADMIN}
 
@@ -191,6 +192,7 @@ function App() {
           }           
       } />
 
+      <Route exact path='/puntuar'><Puntuar/></Route>
       <Route exact path='/chat'><Chat /></Route>
       <Route exact path='/claim/add'><AddClaim /></Route>
       <Route exact path='/home'><Home /></Route>
