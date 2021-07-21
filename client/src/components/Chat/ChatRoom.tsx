@@ -98,7 +98,12 @@ export default function ChatRoom(props: React.PropsWithChildren<ChatRoomData>) {
             }
           >
             <span ref={dummy}></span>
-            <FontAwesomeIcon className={"position-fixed text-secondary "} icon={faChevronCircleDown} size={"2x"} onClick={dummyCurrent}/>
+            <FontAwesomeIcon
+              className={"position-fixed text-secondary "}
+              icon={faChevronCircleDown}
+              size={"2x"}
+              onClick={dummyCurrent}
+            />
             {messages &&
               messages.map((msg: any, i) => (
                 <ChatMessage

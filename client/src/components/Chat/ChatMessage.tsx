@@ -10,34 +10,68 @@ export default function ChatMessage(props) {
   return (
     <>
       {messageClass === "sent" ? (
-        <div className={"align-self-end my-1 d-flex align-items-center"}>
-          <span
-            className={
-              "d-inline-block bg-white px-3 py-2 me-1 rounded-3 shadow fs-6 text-wrap text-break"
-            }
-          >
-            {text}
-          </span>
-          <img
-            alt="alt"
-            src={photoURL || profilePicture}
-            className={"rounded-circle shadow " + style.imgMessage}
-          />
+        <div className={"align-self-end my-1 "}>
+          <div className={"d-flex align-items-center"}>
+            <span
+              className={
+                "d-inline-block bg-white px-3 py-2 me-1 rounded-3 shadow fs-6 text-wrap text-break"
+              }
+            >
+              {text}
+            </span>
+            <img
+              alt="alt"
+              src={photoURL || profilePicture}
+              className={"rounded-circle shadow " + style.imgMessage}
+            />
+          </div>
+          <div className={"d-flex justify-content-start ms-4"}>
+            <small className={"text-secondary"}>
+              {createdAt.toDate().getHours() +
+                ":" +
+                createdAt.toDate().getMinutes() +
+                ":" +
+                createdAt.toDate().getSeconds() +
+                " " +
+                createdAt.toDate().getDay() +
+                "/" +
+                createdAt.toDate().getMonth() +
+                "/" +
+                createdAt.toDate().getFullYear()}
+            </small>
+          </div>
         </div>
       ) : (
-        <div className={"align-self-start my-1 d-flex align-items-center"}>
-          <img
-            alt="alt"
-            src={photoURL || profilePicture}
-            className={"rounded-circle me-1 shadow " + style.imgMessage}
-          />
-          <span
-            className={
-              "d-inline-block bg-white px-3 py-2 rounded-3 shadow fs-6 text-wrap text-break"
-            }
-          >
-            {text}
-          </span>
+        <div className={"align-self-start my-1 "}>
+          <div className={"d-flex align-items-center"}>
+            <img
+              alt="alt"
+              src={photoURL || profilePicture}
+              className={"rounded-circle shadow " + style.imgMessage}
+            />
+            <span
+              className={
+                "d-inline-block bg-white px-3 py-2 me-1 rounded-3 shadow fs-6 text-wrap text-break"
+              }
+            >
+              {text}
+            </span>
+          </div>
+          <div className={"d-flex justify-content-end me-4"}>
+            <small className={"text-secondary"}>
+              {createdAt.toDate().getHours() +
+                ":" +
+                createdAt.toDate().getMinutes() +
+                ":" +
+                createdAt.toDate().getSeconds() +
+                " " +
+                createdAt.toDate().getDay() +
+                "/" +
+                createdAt.toDate().getMonth() +
+                "/" +
+                createdAt.toDate().getFullYear()}
+            </small>
+          </div>
         </div>
       )}
     </>

@@ -40,7 +40,6 @@ function ListChatRoom(props: React.PropsWithChildren<PropsChat>) {
       getAllUsers();
     }
     if (chatRoom) {
-      console.log("Hay un chatRoom");
       setChatSelected(chatRoom[userSelected]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
