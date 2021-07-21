@@ -8,6 +8,8 @@ import ChatRoom from '../Chat/ChatRoom';
 import icon_edit from '../../images/editar.png'
 import { useHistory } from "react-router-dom";
 import star from '../../images/star.png'
+import { Rating, RatingView } from 'react-simple-star-rating'
+
 const Role = {
     USER: 0,
     PROFESSOR: 1,
@@ -40,7 +42,7 @@ function Profile(email) {
            
             if (propEmail) {
                 const response = await axios.get(`http://localhost:3001/api/profesores/${propEmail.email}`)
-              
+                console.log("RESPONSE", response)
                 await setProf({
                     ...response.data
                 })
@@ -97,8 +99,10 @@ function Profile(email) {
                     </div>
                     <h1> {prof.title}</h1>
                     <p className={style.description}>{prof.description}</p>
-                    <img src={star} className={style.star}/>
-                    <h4 className={style.score}>4.0 </h4>
+                    {prof.puntuacionesHowMany>2? <RatingView ratingValue={prof.score} /* RatingView Props */ /> :"Este profesor no tiene suficientes reviews"}
+
+
+                    
                     <div className={style.scrolldown}></div>
                 </div>
 
