@@ -3,7 +3,9 @@ import styles from './editProfile.module.css'
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import getCookieValue from '../../cookieParser';
+import { useHistory } from "react-router-dom";
 const EditProfile = () => {
+    const history = useHistory()
     const [img, setImg] = useState<any>('')
     const [data, setData] = useState<any>({
         foto: "",
@@ -46,7 +48,7 @@ const EditProfile = () => {
             alert("Algo salio mal")
         }
 
-
+        history.push(`/perfil/`)
     }
     
 

@@ -163,7 +163,7 @@ function App() {
       }
       ></Route>
       <Route path='/perfil/:email' exact render={({ match }) => {
-            return <Profile >{match.params.email} </Profile>           
+            return <Profile user={user.lastName}>{match.params.email} </Profile>           
           }           
       } />
 

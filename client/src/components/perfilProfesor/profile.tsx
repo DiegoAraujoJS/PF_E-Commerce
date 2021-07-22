@@ -8,6 +8,7 @@ import ChatRoom from '../Chat/ChatRoom';
 import icon_edit from '../../images/editar.png'
 import { useHistory } from "react-router-dom";
 import star from '../../images/star.png'
+
 const Role = {
     USER: 0,
     PROFESSOR: 1,
@@ -15,7 +16,8 @@ const Role = {
 }
 
 
-function Profile(email) {
+function Profile(email,{user}) {
+    console.log("ESTE ES EL USER",user)
     const history = useHistory()
     const [userLoged, setUserLoged] = useState();
     const propEmail = {
@@ -27,6 +29,7 @@ function Profile(email) {
         name: "",
         lastName: "",
         city: "",
+        title:"",
         foto: "",
         description: "", 
         score: 0
@@ -44,7 +47,7 @@ function Profile(email) {
                 await setProf({
                     ...response.data
                 })
-                
+                console.log(prof.title)
             }else
             {
              
@@ -65,6 +68,8 @@ function Profile(email) {
           { withCredentials: true, headers: { Authorization: token } }
         );
         setUserLoged(userResponse.data);
+        console.log("ESTE ES EL RESPONSE",userResponse.data)
+
       };
       const handleClick = (e) => {
         e.preventDefault();
@@ -75,7 +80,6 @@ function Profile(email) {
     useEffect(() => {
         fetchProfs()
         getUserLoged()
-
  
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
@@ -95,7 +99,7 @@ function Profile(email) {
                         <h4 className="mt-0 mb-0">{prof.name} {prof.lastName} </h4>
                         <p className="small mb-4"> <i className="fas fa-map-marker-alt mr-2"></i>{prof.city}</p>
                     </div>
-                    <h1> {prof.title}</h1>
+                    <h1>{prof.title}</h1>
                     <p className={style.description}>{prof.description}</p>
                     <img src={star} className={style.star}/>
                     <h4 className={style.score}>4.0 </h4>
