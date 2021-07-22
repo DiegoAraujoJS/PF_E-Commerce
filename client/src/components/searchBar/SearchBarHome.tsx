@@ -170,8 +170,8 @@ export default function SearchBar() {
     bottom: '30px',
   }
 
-  const eye = <FontAwesomeIcon style={eyeTest} icon={faEye} className="mt-1" onClick={() => setShowPassword("text")} />
-  const eyeSlash = <FontAwesomeIcon style={eyeTest} icon={faEyeSlash} className="mt-1" onClick={() => setShowPassword("password")} />
+  const eye = <FontAwesomeIcon style={eyeTest} icon={faEye} className="mt-1" onClick={() => setShowPassword("password")} />
+  const eyeSlash = <FontAwesomeIcon style={eyeTest} icon={faEyeSlash} className="mt-1" onClick={() => setShowPassword("text")} />
 
   const [show, setShow] = useState(false);
 
@@ -204,7 +204,7 @@ export default function SearchBar() {
       <Container className="container-fluid p-0">
         <Navbar.Brand className={'ms-3'} href="#home"><Link to={"/home"}><img src={logo} alt='U CLASES Logo' style={{ height: '56px' }}></img></Link></Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-navzzz ">
+        <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto">
             <Link className={'nav-link ms-4 text-decoration-none'} to={"/home"}>Home</Link>
             <Link className={'nav-link ms-4 text-decoration-none'} to={"/calendar"}>Calendar</Link>
