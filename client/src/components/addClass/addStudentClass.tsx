@@ -11,6 +11,7 @@ import 'react-bootstrap-range-slider/dist/react-bootstrap-range-slider.css';
 import RangeSlider from 'react-bootstrap-range-slider';
 import { useState } from 'react';
 import CalendarApp from "../calendar/addClassCalendar/Calendar"
+import { store } from '../../Store/store';
 const materias = [
 	"Física",
 	"Biología",
@@ -57,6 +58,8 @@ enum Week { Lunes, Martes, Miercoles, Jueves, Viernes, Sabado, Domingo }
 const StudentAddClass = () => {
 	const [min, setMinValue] = useState(0);
 	const [max, setMaxValue] = useState(0);
+
+	const [calendarChoice, setCalendarChoice]  = useState(false)
 
 	return (
 		<Container className='shadow p-3 mb-5 bg-white rounded flex'>
@@ -167,16 +170,31 @@ const StudentAddClass = () => {
 											onChange={handleChange}
 											onBlur={handleBlur}
 										/>
-
-
 									</Col>
 								</Row>
 							</Row>
 							<Row>
-								<div style={{border:'1px solid red', width: '800px', height: '500px'}}>
-										<CalendarApp>{'diegoaraujo@gmail.com'}</CalendarApp>
+								
+
+							{!calendarChoice ?
+							<div>
+
+							 <Button type='button' className='text-uppercase' style={{width: '500px'}} onClick={(e => setCalendarChoice(true))}>
+										Elegir disponibilidad horaria
+									</Button> 
+								{console.log(store.getState()['calendar_to_addClassStudent'])}
+							</div> : 
+								<div>
 									
+									<div style={{border:'1px solid red', height:'400px'}}>
+									{console.log('le manda el store?', store.getState()['calendar_to_addClassStudent'])}
+											<CalendarApp calendar_to_addClassStudent = {store.getState()['calendar_to_addClassStudent']}>{'diegoaraujo@gmail.com'}</CalendarApp>
+									</div>
+											<Button type='button' className='text-uppercase' style={{width: '500px'}} onClick={(e => {setCalendarChoice(false)})}>
+												Aceptar
+											</Button>
 								</div>
+								}
 							</Row>
 							<Row>
 								<Col sm={6} md={6}>

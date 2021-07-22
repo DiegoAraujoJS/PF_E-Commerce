@@ -9,6 +9,7 @@ import {
 } from "daypilot-pro-react";
 import "./CalendarStyles.css";
 import axios from "axios";
+import { connect } from "react-redux";
 
 let RoleAdmin = 2
 
@@ -45,22 +46,24 @@ const styles = {
   },
   main: {
     flexGrow: "1",
-    height: '400px'
+    width: '400px'
   },
 };
+const Lunes=[]
 
 class Calendar extends Component {
   constructor(props) {
     super(props);
     var email=this.props.email
     this.state = {
+      horarios: {},
+      horariosDispatch: [],
       allowEventOverlap: false,
       isUser: true,
       token: '',
       viewType: "Week",
-      height: '300px',
+      heightSpec: "Parent100Pct",
       position: 'none',
-      
         dayNames:['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'],
         dayNamesShort:['Su','Mo','Tu','We','Th','Fr','Sa'],
         
@@ -72,12 +75,15 @@ class Calendar extends Component {
       timeRangeSelectedHandling:"disabled"
       ,
       onBeforeHeaderRender: function(args) {
-        console.log(args.header)
+        
         
         args.header.html = args.header.start.toString("dddd");
+
+        
         
     },
       onTimeRangeSelected: async (args) => {
+        
         if (this.state.isUser) {
           const dp = this.calendar;
           const modal = await DayPilot.Modal.prompt(
@@ -94,6 +100,7 @@ class Calendar extends Component {
             moveDisabled: true,
           resizeDisabled: true,
           });
+          var day= new Date(args.start)
           const año=args.start.value.slice(0,-15)
           const mes=args.start.value.slice(5,-12)
           const dia=args.start.value.slice(8,-9)
@@ -107,16 +114,46 @@ class Calendar extends Component {
                 mes: mes,
                 dia: dia
             }
-        } 
-          console.log(email)
-          console.log("Token",this.state.token)
-          await axios.post('http://localhost:3001/api/calendario/add', horario1, {headers: {Authorization: this.state.token}})
+        }
+        
+        const dias = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado']
+        const d = new Date(args.start);
+
+        const dayName = dias[d.getDay()];
+        console.log(args.start)
+        this.state.horarios[dayName] = this.state.horarios[dayName] ? this.state.horarios[dayName] = {
+          ...this.state.horarios[dayName],
+          disponible: [...this.state.horarios[dayName].disponible, [start, end]]
+        } : this.state.horarios[dayName] = {
+          disponible: [[start, end]],
+          fecha: {
+            anio: año,
+            mes:  mes,
+            dia:  dia
+          },
+          email: email
+        }
+        this.state.horariosDispatch = [...Object.values(this.state.horarios)] 
+        console.log(this.state.horariosDispatch)
+        console.log('asdfasdf',this.state.horarios)
+        let horariosDispatchThroughProps = []
+        console.log(this.props.calendar_to_addClassStudent)
+        if (this.props.calendar_to_addClassStudent) {
+          horariosDispatchThroughProps = this.props.calendar_to_addClassStudent
+        }
+        console.log('horariosDispatchThroughProps', horariosDispatchThroughProps)
+
+        let dispatchHorarios = []
+
+        Object.keys(this.props.calendar_to_addClassStudent).length === 0 ? props.dispatchHorarios(this.state.horariosDispatch) : props.dispatchHorarios([...this.props.calendar_to_addClassStudent, ...this.state.horariosDispatch])
+        
+    
   
         }
         },
         onEventDelete:async  function(args) {
             if(this.isUser){
-            console.log(args.e.data.start.value)
+            
             const año=args.e.data.start.value.slice(0,-15)
             const mes=args.e.data.start.value.slice(5,-12)
             const dia=args.e.data.start.value.slice(8,-9)
@@ -191,7 +228,7 @@ class Calendar extends Component {
             e.data.backColor="blue"
             await axios.post('http://localhost:3001/api/calendario/add', disponible1, {headers: {Authorization: this.state.token}})
           }
-          console.log(e.data.backColor)
+          
           dp.events.update(e);
         }
       },
@@ -200,19 +237,15 @@ class Calendar extends Component {
   async componentDidMount() {
 
     let placeholder = document.querySelectorAll('.calendar_default_colheader')
-    const dias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo']
+    const dias = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado' ]
     let i=0;
     for (const x of placeholder){
-      console.log(i)
+      
       x.firstChild.innerHTML = dias[i]
       i += 1
     }
-    console.log(placeholder)
-    const calendar = document.querySelector('.calendar_default_main')
-    
-
     // load event data
-    
+    console.log("thisprop", this.props)
     const token = getCookieValue('token').replaceAll("\"", '')
     const thisUser = await axios.post(`http://localhost:3001/api/verify`, {},{ withCredentials: true, headers: {Authorization: token}})
     this.state.token = token
@@ -224,10 +257,10 @@ class Calendar extends Component {
     }
     console.log(this.state.isUser)
     if(email===undefined && localStorage.getItem('user')!==null)email=JSON.parse(localStorage.getItem('user')).mail
-    const arrayProf = await axios.get(
-      `http://localhost:3001/api/calendario/${email}`
-    );
+    
     var tempo = [];
+    const arrayProf = this.props.calendar_to_addClassStudent ? {data: this.props.calendar_to_addClassStudent} : {data:[]}
+    console.log("ArrayProf", arrayProf)
     if(arrayProf.data.length>0){arrayProf.data.map((prof) => {
       let año = prof.fecha.anio.toString();
       let mes = prof.fecha.mes.toString();
@@ -238,6 +271,8 @@ class Calendar extends Component {
       if (mes.length === 1) {
         mes = "0" + mes;
       }
+      const date = new Date
+      
       if(prof.disponible){prof.disponible.map((disp)=>{
         tempo.push({
           start: año + "-" + mes + "-" + dia + "T" + disp[0],
@@ -248,16 +283,7 @@ class Calendar extends Component {
           resizeDisabled: true,
         })
       })}
-      if(prof.ocupado){prof.ocupado.map((ocup)=>{
-        tempo.push({
-          start: año + "-" + mes + "-" + dia + "T" + ocup[0],
-          end: año + "-" + mes + "-" + dia + "T" + ocup[1],
-          text: "Ocupado",
-          backColor: "red",
-          moveDisabled: true,
-          resizeDisabled: true,  
-        })
-      })}
+      
       return tempo;
     });}
     const persons = tempo;
@@ -274,9 +300,9 @@ class Calendar extends Component {
     const propsEmail={email:this.props.email}
     var { ...config } = this.state;
     return (
-      <div style={styles.wrap}>
+      
         
-        <div style={styles.main}>
+        
           <DayPilotCalendar
             {...config}
             ref={(component) => {
@@ -284,10 +310,19 @@ class Calendar extends Component {
             }}
             children={{}}
           />
-        </div>
-      </div>
+        
+      
     );
   }
 }
 
-export default Calendar;
+const connectDispatchToProps = (dispatch) => {
+  return {
+    dispatchHorarios: (horarios) => dispatch({
+      type: 'CALENDAR_TO_ADDCLASS',
+      payload: horarios
+    })
+  }
+}
+
+export default connect(null, connectDispatchToProps)(Calendar);

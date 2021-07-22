@@ -10,7 +10,8 @@ let initialState = {
     user_mail: '',
     user_name: '',
     user_lastName: '',
-    clasesPorComprar: []
+    clasesPorComprar: [],
+    calendar_to_addClassStudent: {}
 };
 
 const all = (state = initialState, action) => {
@@ -45,6 +46,11 @@ const all = (state = initialState, action) => {
                     user_lastName: action.payload.lastName !== "" && action.payload.lastName,
                     user_city: action.payload.user_city !== "" && action.payload.user_city
                 }
+            }
+        case actionsType.CALENDAR_TO_ADDCLASS:
+            return {
+                ...state,
+                calendar_to_addClassStudent: action.payload
             }
         default:
             return state

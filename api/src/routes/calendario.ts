@@ -1,7 +1,7 @@
 import { Request, Response, Router } from 'express'
 import Profesor from '../models/Profesor'
 import { CalendarioResponse, Horario, Disponible, Ocupado } from '../../../interfaces';
-import nuevosHorarios from './nuevosHorarios';
+import nuevosHorarios from '../utils/nuevosHorarios';
 import validateToken from '../utils/validateToken';
 const router = Router()
 // ejemplo
