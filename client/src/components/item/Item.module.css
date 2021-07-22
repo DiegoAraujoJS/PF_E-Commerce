@@ -38,8 +38,8 @@ display: flex;
     margin-bottom: 0;
 }
 
-.detailsContainer {
-    width: 50%;
+.detailsContainerComprado, .detailsContainer {
+    width: 60%;
 }
 
 .label {
@@ -83,31 +83,39 @@ display: flex;
     padding-bottom: 40px;
 }
 
-@media only screen and (max-width: 1200px) {
-    .card {width: 20%;
-    }
-}
 
-@media only screen and (max-width: 992px) {
-    .card {width: 25%;
-    }
+@media only screen and (max-width: 1200px) {
+    .labelDetail {display: block; width: 100%;}
+    .detail {display: block; width: 100%;}
+    .moneda {display: block; width: 100%;}
+    .precio {display: block; width: 100%;}
+    .precioOriginal {display: block; width: 100%;}
 }
-@media only screen and (max-width: 850px) {
+/* @media only screen and (max-width: 850px) {
     .card {width: 40%;
     }
-}
-
-
-@media only screen and (max-width: 576px) {
-    .card {width: 100%;
-    }
-}
-
+} */
 
 
 .quitarDeCesta {
-    width: 10%;
+    width: 5%;
 }
+
+@media only screen and (max-width: 576px) {
+    .card {width: 100%;}
+    .enlace {flex-wrap: wrap;}
+    .detailsContainer {width: 80%;}
+    .prices {width: 100%;}
+    .moneda {display: inline;}
+    .precio {display: inline; width: unset;}
+    .precioOriginal {display: inline; width: unset;}
+    .title {margin-top: 10px;}
+    .quitarDeCesta {width: 10%;}
+    .enlace {width: 90%;}
+}
+
+
+
 
 .quitarDeCestaButton {
     color: #2962ff;
@@ -130,8 +138,7 @@ display: flex;
 .enlace, .enlace:link, .enlace:visited, .enlace:hover, .enlace:active {
     text-decoration: none;
     color: #000; 
-    width: 85%;
-    margin-right: 5%;
+    width: 95%;
     display: flex;
 }
 

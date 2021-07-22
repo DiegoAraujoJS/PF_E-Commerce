@@ -11,9 +11,11 @@ import calendario from './calendario'
 import allCountries from './allCountries'
 import market from './market'
 import carrito from './carrito'
+import defineAccessGoogle from './defineAccessGoogle'
 const router = Router()
 
 router.use('/verify', verify)
+router.use('/defineAccessGoogle', defineAccessGoogle)
 router.use('/login', login)
 router.use('/usuarios', usuarios)
 router.use('/clases', clases)

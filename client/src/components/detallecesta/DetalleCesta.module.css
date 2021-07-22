@@ -57,7 +57,7 @@
     color: white;
     font-weight: 500;
     padding: 10px;
-    font-size: 1.1rem;
+    font-size: 1rem;
     width: 100%;
     border-radius: 1rem;
     border: 1px solid transparent;
@@ -67,6 +67,12 @@
 .seguirComprando {
     width: 30%;
 }
+
+@media only screen and (max-width: 576px) {
+    .seguirComprando {
+      width: 100%;
+    }
+  }
 
 .payButton:hover, .seguirComprando:hover {
 box-shadow: 1px 1px 12px -1px rgb(0 0 0 / 24%);
@@ -86,6 +92,7 @@ box-shadow: 1px 1px 12px -1px rgb(0 0 0 / 24%);
 .container {
     display: flex;
 }
+
 
 .childContainer {
     width: 100%;
@@ -124,6 +131,23 @@ box-shadow: 1px 1px 12px -1px rgb(0 0 0 / 24%);
     border: 1px solid #E7E8EA;
     padding: 10px 15px;
     vertical-align: top;
+}
+.center {
+    text-align: center;
+}
+.loadingGif {
+    width: 20%;
+}
+@media only screen and (max-width: 992px) {
+    .right, .left {display: block; width: 100%;}
+    .container { display: block;}
+}
+
+@media only screen and (max-width: 576px) {
+    .label, .labelTotal {display: block; width: 100%;}
+    .totalContainer {display: block;}
+    .precioTotal {float: right;} 
+    .loadingGif {width: 50%;}
 }
 
 .title {

@@ -1,6 +1,9 @@
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
+import 'firebase/firebase-storage';
+import { useDispatch } from 'react-redux';
+import { modificarEstadoLogueado } from './Actions/Actions';
 
 const firebaseConfig = {
     apiKey: "AIzaSyDGqKZu8WjUjyjurueAHUhooogWltFdcwM",
@@ -16,18 +19,20 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 const googleProvider = new firebase.auth.GoogleAuthProvider();
-googleProvider.addScope('https://www.googleapis.com/auth/contacts.readonly');
+// googleProvider.addScope('https://www.googleapis.com/auth/contacts.readonly');
+
 
 const firebaseAuth = async (provider) => {
   try {
     const response = await firebase.auth().signInWithPopup(provider);
-    
     return response;
+    
   } catch (error) {
     
     return error;
   }
 }
+
 
 export const createUser = async (email, password) => {
   try {
@@ -49,7 +54,6 @@ export const signIn = async (email, password) => {
 export const signOut = async () => {
   try {
     await firebase.auth().signOut();
-    
     return 'correct logout';
   } catch (error) {
     return error;
@@ -71,16 +75,15 @@ export const deleteUser = async (user) => {
 }
 export const loginWithGoogle = () => firebaseAuth(googleProvider);
 
-// use hook const [user] = useAuthState(auth)
-// use auth.cuurentUser to get the current user
+// use hook const [user] = useAuthState(auth) -- Devuelve estado del usuario logueado
+// use auth.currentUser to get the current user -- Usuario
 export const auth = firebase.auth();
-
 // create firestoreRef = firestore.collection("nameOfCollection")
 // create query =  firestoreRef.orderBy("createdAt").limit(25);
 // use hook const [data] = useCollectionData(query, { idField: "id" });
 export const firestore = firebase.firestore();
 
-  
+export const storage = firebase.storage();
 
   
   

@@ -63,7 +63,7 @@ export default function Item({ cliente, id, imagen, nombre, precioDescuento, pre
               <div className={s.imageContainer}>
                 <img src={imagen} alt={nombre} className={s.cover} />
               </div>
-              <div className={s.detailsContainer}>
+              <div className={s.detailsContainerComprado}>
                 <p className={s.title}>{nombre}</p>
                 <div>
                   <span className={s.labelDetail}>Profesor</span>

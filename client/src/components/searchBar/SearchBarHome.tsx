@@ -17,39 +17,76 @@ import { faEye, faEyeSlash, } from "@fortawesome/free-regular-svg-icons";
 import Register from '../Register/Register';
 import { faBook, faShoppingCart } from "@fortawesome/free-solid-svg-icons";
 import Swal from 'sweetalert2'
+import { bookOutline, cogSharp } from "ionicons/icons";
+import { IonIcon } from '@ionic/react';
+import { useDispatch } from 'react-redux';
+import { auth, signOut } from "../../firebase";
+import { verificacionLogueo } from '../../functions'
+import { useSelector } from "react-redux";
 
 export default function SearchBar() {
   enum Role { USER, PROFESSOR, ADMIN }
+  const [user, setUser] = useState({ mail: "", role: null, name: "", lastName: "", iat: null })
+  const [userEmail, setUserEmail] = useState('');
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('');
   const [wrongPassword, setWrongPassword] = useState(false)
   const [errors, setErrors] = useState({ email: null, password: null })
-  let [user, setUser] = useState<{ name: string, lastName: string, role: number, mail: string } | undefined>({ name: '', lastName: '', role: null, mail: '' })
+
   const [cestaLength, setCestaLength] = useState(0)
 
+  // Esto nos permite conseguir el usuario logueado
   useEffect(() => {
-    async function setRoleOfUser() {
+    async function obtenerUsuarioLogueado() {
+      // Si hay alguien logueado
       if (localStorage.getItem('login')) {
+        // Pero no hay cookies, anulamos el logueado
         if (!document.cookie) {
-          localStorage.removeItem('login')
-          console.log('local storage removed')
+          localStorage.removeItem('login');
         }
-        const token = getCookieValue('token').replaceAll("\"", '')
-        const thisUser = await axios.post(`http://localhost:3001/api/verify`, {}, { withCredentials: true, headers: { Authorization: token } })
-
-        if (thisUser.status === 200) {
-          console.log('status 200')
-          setUser(thisUser.data)
-          const clases = await axios.get(`http://localhost:3001/api/carrito/all/${thisUser.data.mail}`)
-          setCestaLength(clases.data.length)
-        } else {
-          console.log('else')
-          setUser(undefined)
+        // Obtenemos el token de la cookie del navegador
+        const token = getCookieValue('token').replaceAll("\"", '');
+        // Si no hay errores
+        try {
+          // Verificamos el usuario en el servidor
+          const thisUser = await axios.post(`http://localhost:3001/api/verify`, {}, { withCredentials: true, headers: { Authorization: token } })
+          // Si existe el usuario
+          if (thisUser) {
+            // Seteamos el usuario como logueado
+            setUser(thisUser.data)
+            // Buscamos la cesta del usuario
+            const clases = await axios.get(`http://localhost:3001/api/carrito/all/${thisUser.data.mail}`)
+            if (clases) {
+              // Seteamos la cesta del usuario
+              setCestaLength(clases.data.length)
+            }
+            // Si no existe el usuario
+          } else {
+            setUser({ mail: "", role: null, name: "", lastName: "", iat: null })
+            setCestaLength(0)
+          }
+          // Si hay errores
+        } catch {
+          setUser({ mail: "", role: null, name: "", lastName: "", iat: null })
+          setCestaLength(0)
+          console.log('Se produjo un error')
         }
       }
     }
-    setRoleOfUser()
+    obtenerUsuarioLogueado()
   }, [])
+
+  // const dispatch = useDispatch();
+  // dispatch(modificarEstadoLogueado(verificacionLogueo()));
+
+  const logueado = useSelector(state => state['logueado']);
+  useEffect(() => {
+    console.log('', logueado)
+    verificacionLogueo()
+    console.log('DISCO', auth.currentUser)
+  }, [])
+
+  const dispatch = useDispatch();
 
   function validateErrors() {
     if (!email) {
@@ -100,7 +137,7 @@ export default function SearchBar() {
           'Se Inició sesión correctamente!',
           'success'
         )
-      //  window.location.reload();
+        //  window.location.reload();
       }
     } catch (error) {
       setWrongPassword(true)
@@ -114,18 +151,24 @@ export default function SearchBar() {
       return false;
     }
   }
-  async function signOut() {
+
+  async function localsignOut() {
     // auth.signOut();
     try {
-      const logout = await axios.post(`http://localhost:3001/api/login/logout`, {}, { withCredentials: true })
-      deleteAllCookies()
-      localStorage.removeItem('login')
+      if (auth.currentUser) {
+        auth.signOut();
+      } else {
+        const logout = await axios.post(`http://localhost:3001/api/login/logout`, {}, { withCredentials: true })
+        deleteAllCookies()
+        localStorage.removeItem('login')
+      }
+
       Swal.fire(
         'Exito!',
         'Se cerro sesión correctamente!',
         'success'
       )
-     // window.location.reload();
+      // window.location.reload();
     } catch (err) {
       Swal.fire(
         'Error!',
@@ -162,27 +205,24 @@ export default function SearchBar() {
 
 
   return (
-    // <Navbar expand="lg" className={s.navbar}>
-    <Navbar bg="light" expand="lg">
-      <Container className="container-fluid p-0">
-        <Navbar.Brand className={'ms-3'} href="#home"><Link to={"/home"}><img src={logo} alt='U CLASES Logo' style={{ height: '56px' }}></img></Link></Navbar.Brand>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" />
-        <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="mr-auto">
-            <Link className={'nav-link ms-4 text-decoration-none'} to={"/home"}>Home</Link>
-            <Link className={'nav-link ms-4 text-decoration-none'} to={"/calendar"}>Calendar</Link>
-            <Link className={'nav-link ms-4 text-decoration-none'} to={"/perfil"}>Profile</Link>
-            <Link className={'nav-link ms-4 text-decoration-none'} to={"/chat"}>Chat</Link>
-            <Link className={'nav-link ms-4 text-decoration-none'} to={"/clases"}>Class</Link>
+    <Navbar expand="lg" className={s.navbar}>
+      <Container className={s.padding}>
+        <Navbar.Brand className={'ms-3'} href="#home"><Link to={"/home"}><img src={logo} alt='U CLASES Logo' style={{ height: '40px' }}></img></Link></Navbar.Brand>
+        <Navbar.Toggle aria-controls="responsive-navbar-nav" />
+        <Navbar.Collapse id="responsive-navbar-nav"  >
+          <Nav className={`me-auto`}>
+            <Link className={`${s.color} nav-link ms-4 text-decoration-none`} to={"/clases"}>Clases</Link>
+            <Link className={`${s.color} nav-link ms-4 text-decoration-none`} to={"/chat"}>Chatea con la comunidad</Link>
 
-            {loggedOrNot() ?
-              <NavDropdown className={'ms-4 text-decoration-none justify-content-end'} title="Sesión" id="basic-nav-dropdown">
+
+            {/* {loggedOrNot() ?
+              <NavDropdown className={`${s.color} ms-4 text-decoration-none justify-content-end`} title="Sesión" id="basic-nav-dropdown">
                 <NavDropdown.Item onClick={() => signOut()}>
                   Desconectarse
                 </NavDropdown.Item>
               </NavDropdown>
               :
-              <NavDropdown className={'ms-4 text-decoration-none'} title="Cuenta" id="basic-nav-dropdown">
+              <NavDropdown className={`ms-4 text-decoration-none ${s.enlace}`} title="Cuenta" id="basic-nav-dropdown">
                 <Form className={'d-flex flex-column align-items-center'} style={dropBox} onSubmit={handleSubmit}>
                   <Form.Control style={inputSizeLim} className={'d-flex justify-content-center'} type="email" placeholder="Email" onChange={handleChange} />
                   <Form.Control style={inputSizeLim} type={showPassword} placeholder="Contraseña" onChange={handleChange} />
@@ -197,18 +237,58 @@ export default function SearchBar() {
                   </Navbar.Text>
                 </Form>
               </NavDropdown>
-            }
+
+            } */}
             {loggedOrNot() && user.role === Role.PROFESSOR ?
-              <Link className={'nav-link ms-4 text-decoration-none'} to={"/clases/add"}>Agrega tu Propia Clase!</Link>
+              <Link className={`${s.color} nav-link ms-4 text-decoration-none`} to={"/clases/add"}>Agrega tu Propia Clase!</Link>
               :
               null
             }
+
+          </Nav>
+
+          <Nav>
+            <Navbar.Text className={` ${s.color} nav-link ms-4 text-decoration-none ${s.aLaDerecha}`}>
+              <Link to="/cesta" className={s.enlaceCesta}>
+                <IonIcon icon={bookOutline} className={s.iconDumb}></IonIcon>
+                <span>{cestaLength}</span>
+              </Link>
+            </Navbar.Text >
+            {verificacionLogueo() ?
+              <NavDropdown className={`${s.color} ms-4 text-decoration-none justify-content-end`} title={auth.currentUser ? auth.currentUser.email : user.mail} id="basic-nav-dropdown">
+                <NavDropdown.Item onClick={() => auth.currentUser ? signOut() : localsignOut()}>
+                  Desconectarse
+                </NavDropdown.Item>
+              </NavDropdown>
+
+              // <Navbar.Text className={` ${s.color} nav-link ms-4 text-decoration-none ${s.aLaDerecha}`}>
+              //   {user.mail}
+              // </Navbar.Text>
+
+
+              // {/* <Link className={`${s.color} nav-link ms-4 text-decoration-none`} to={"/perfil"}>Profile</Link> */}
+
+
+              :
+              <>
+                <Navbar.Text className={` ${s.color} nav-link ms-4 text-decoration-none`}>
+                  <Link to='/login' className={s.enlaceInicio}>
+                    Inicia sesión
+                  </Link>
+                </Navbar.Text>
+                <Navbar.Text className={` ${s.color} nav-link ms-4 text-decoration-none`}>
+                  Regístrate
+                </Navbar.Text>
+              </>
+            }
+
+
+
           </Nav>
         </Navbar.Collapse>
-        <div> <Link to={"/cesta"}>{book}</Link><
-          span style={{ color: "white", fontWeight: 500, backgroundColor: "red", paddingLeft: "7px", paddingRight: "7px", borderRadius: "50%" }}>
-          {cestaLength}</span>
-        </div>
+
+
+
       </Container>
     </Navbar>
   );

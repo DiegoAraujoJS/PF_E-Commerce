@@ -1,4 +1,5 @@
 import { actionsType } from '../constants/constants';
+import { auth } from '../firebase';
 
 let initialState = {
     searchInput: '',
@@ -7,10 +8,13 @@ let initialState = {
     claim: [],
     class: {},
     clases: [],
+    user: {},
     user_mail: '',
     user_name: '',
     user_lastName: '',
-    clasesPorComprar: []
+    user_photo: '',
+    clasesPorComprar: false,
+    logueado: false
 };
 
 const all = (state = initialState, action) => {
@@ -34,6 +38,16 @@ const all = (state = initialState, action) => {
             return {
                 ...state,
                 clasesPorComprar: action.clasesPorComprar
+            }
+        case actionsType.MODIFICAR_USUARIO_LOGUEADO:
+            return {
+                ...state,
+                user: action.user
+            }
+        case actionsType.MODIFICAR_ESTADO_LOGUEADO:
+            return {
+                ...state,
+                logueado: action.logueado
             }
         case actionsType.SET_USER_DATA:
             console.log(action.payload);

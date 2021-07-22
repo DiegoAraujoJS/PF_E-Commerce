@@ -1,13 +1,11 @@
 :root {
-    --height: calc(100vh - 56px);
+    --height: calc(100vh - 66px);
     --bg-color: white;
 }
 .height{
     height: var(--height);
     display: flex;
     align-items: center;
-    padding-top: 40px;
-    padding-bottom: 40px;
     background-color: var(--bg-color);
 } 
   
@@ -36,4 +34,49 @@
   margin-bottom: 10px;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
+}
+
+.logo {
+  margin-bottom: 16px;
+}
+
+.input {
+  border-radius: 5px !important;
+}
+
+.iconDumb {
+  vertical-align: middle;
+}
+
+.title {
+  margin-bottom: 16px;
+  font-weight: 600;
+}
+
+.errorMessage {
+  color: red;
+  display: block;
+  margin-bottom: 16px;
+  font-weight: 600;
+}
+
+.registroLink {
+  text-decoration: none;
+  margin-left: 5px;
+  font-weight: 600;
+  color: #2962ff
+}
+
+.googleButton {
+  display: flex !important;
+  align-items:center !important;
+  justify-content: center !important;
+  box-shadow: 1px 1px 12px -1px rgb(0 0 0 / 24%);
+  -webkit-box-shadow: 1px 1px 12px -1px rgb(0 0 0 / 24%);
+}
+
+
+.googleLogo {
+  height: 1.2rem;
+  margin-right: 10px;
 }

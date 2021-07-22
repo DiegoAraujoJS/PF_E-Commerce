@@ -141,7 +141,7 @@ const ClassCard: React.FC<Class> = (props) => {
 
                             if (getUser.status) {
                                 const addToCart = await axios.post(`http://localhost:3001/api/carrito/${getUser.data.mail}`, payload)
-                                if(addToCart.status === 200) redirect_blank("./cesta")
+                                if(addToCart.status === 200) window.open("./cesta", '_self')
                                 }
                             }
                             catch(error) {

@@ -42,4 +42,20 @@ const modificarClasesPorComprar = (clasesPorComprar) => {
     }
 }
 
-export { getByIdClaim, getAll, getUserLoged, modificarClasesPorComprar}
+const modificarUsuarioLogueado = (user) => {
+    return {
+        type: 'MODIFICAR_USUARIO_LOGUEADO',
+        user
+    }
+}
+
+const modificarEstadoLogueado = (logueado) => {
+    return {
+        type: 'MODIFICAR_ESTADO_LOGUEADO',
+        logueado
+    }
+}
+
+
+
+export { getByIdClaim, getAll, getUserLoged, modificarClasesPorComprar, modificarUsuarioLogueado, modificarEstadoLogueado}
