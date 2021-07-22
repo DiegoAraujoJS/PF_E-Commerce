@@ -18,8 +18,9 @@ type Props = {
   show: boolean,
 }
 
-const Puntuar = () => {
-
+const Puntuar = ({ show, handleClose, clase, alum }) => {
+  console.log("Clase", clase)
+ 
   // const [mail, setMail] = React.useState('')
   // const [password, setPass] = React.useState('')
   // const [name, setName] = React.useState('')
@@ -28,6 +29,7 @@ const Puntuar = () => {
   // const [state, setState] = React.useState('')
   // const [role, setRole] = React.useState(0
   const [rating, setRating] = useState(0)
+  const [clas, setClas]=useState({})
   let rate= rating
   let coment=""
   switch (rate) {
@@ -57,15 +59,26 @@ const Puntuar = () => {
     setRating(rate)
     // Some logic
   }
+  const fetchClases= async()=>{
+    try{
+        setClas(clase)
+    }
+   catch (err) {
+    console.log(err)
+}
+  }
   async function handleSubmitRegister(values) {
+    console.log("CLASEEEEEEEEE", clas)
+    const id=clase.id
     const clases= await axios.get('http://localhost:3001/api/clases/all')
     console.log(clases)
     let user={
       comentario: values.comentario,
-      id: 1,
+      id: id,
       puntuacion: rating,
-      alumno: "diegoaraujo@gmail.com"
+      alumno: alum
     }
+    console.log("User", user)
     try {
       const registro = await axios.post('http://localhost:3001/api/puntuacion/', user, { withCredentials: true })
       console.log("Registro", registro.data)
@@ -92,13 +105,15 @@ const Puntuar = () => {
     }
   }
   console.log(rating)
-  
+  useEffect(()=>{
+    fetchClases()
+},[])
   return (
     <>
-      <Modal show={true}>
+      <Modal show={show} onHide={handleClose}>
         <Modal.Header>
           <Modal.Title>Llena el formulario para dejar tu opinion de la clase!</Modal.Title>
-          <Button variant="secondary">
+          <Button variant="secondary" onClick={handleClose}>
             X
           </Button>
         </Modal.Header>
@@ -107,6 +122,7 @@ const Puntuar = () => {
             
             initialValues={{
               comentario:"",
+              id: clase.id
  
             }}
   
@@ -119,8 +135,8 @@ const Puntuar = () => {
             {({ handleSubmit, handleChange, values, errors, touched, handleBlur }) => (
               
               <form onSubmit={handleSubmit} className="mt-6 mb-4">
-                <h2 >Clase de matematica</h2>
-                <h3>Profesor: Nose</h3>
+                <h2 >Clase de {clase.materia}</h2>
+                <h3>Profesor: {clase.profesor.name} {clase.profesor.lastName}</h3>
                 <div style={{ display: 'flex', position: 'relative', height: 'fit-content', alignContent: 'space-between', width: '560px', alignItems: 'center' }}>
 										<div style={{ width: '250px', fontSize: '25px' }}>
                      <label htmlFor="inputEmail">Puntuacion</label>
@@ -156,7 +172,7 @@ const Puntuar = () => {
 
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary">
+          <Button variant="secondary"  onClick={handleClose}>
             Close
           </Button>
         </Modal.Footer>

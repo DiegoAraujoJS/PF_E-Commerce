@@ -191,7 +191,7 @@ function App() {
             return <CalendarApp >{match.params.email} </CalendarApp>           
           }           
       } />
-      <Route exact path='/puntuar'><Puntuar /></Route>
+      
       <Route exact path='/chat'><Chat /></Route>
       <Route exact path='/claim/add'><AddClaim /></Route>
       <Route exact path='/home'><Home /></Route>
