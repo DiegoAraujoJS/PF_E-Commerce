@@ -12,14 +12,9 @@ export interface UserChat {
   lastName: string;
 }
 
-function Chat() {
+function Chat(props: React.PropsWithChildren<{mail:string}>) {
   const [userLoged, setUserLoged] = useState<UserChat>();
-  const [userReference, /* setUserReference */] = useState({
-    mail: "admin@admin.com",
-    name: "Admin",
-    lastName: "Admin",
-    city: "Buenos Aires"
-  });
+  const [userReference, /* setUserReference */] = useState(props.mail);
 
   useEffect(() => {
     if (!userLoged) {

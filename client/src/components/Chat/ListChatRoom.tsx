@@ -9,7 +9,7 @@ import profilePicture from "../../images/profile_pic.svg";
 
 interface PropsChat {
   userLoged: UserChat;
-  userReference: UserChat;
+  userReference: string;
 }
 interface ChatData {
   users: Array<UserChat>;
@@ -40,7 +40,11 @@ function ListChatRoom(props: React.PropsWithChildren<PropsChat>) {
       getAllUsers();
     }
     if (chatRoom) {
-      setChatSelected(chatRoom[userSelected]);
+      if (props.userReference) {
+        foundChatUser();
+      } else {
+        setChatSelected(chatRoom[userSelected]);
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [users, chatRoom]);
@@ -51,6 +55,25 @@ function ListChatRoom(props: React.PropsWithChildren<PropsChat>) {
       setUsers(users.data);
     } catch (error) {
       console.log(error);
+    }
+  }
+
+  async function foundChatUser() {
+    let chatFounded = null;
+    chatRoom.map((chat) => {
+      return chat.users.map((user) => {
+        if (user.mail === props.userReference) {
+          return chatFounded = chat;
+        }
+      });
+    });
+
+    if (chatFounded) {
+      setChatSelected(chatFounded);
+    } else {
+      await chatsRoomsRef.add({
+        users: [props.userLoged, users[userSelected]],
+      });
     }
   }
 

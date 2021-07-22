@@ -186,12 +186,16 @@ function App() {
         }
       }
       ></Route>
-<Route path='/calendar/:email' exact render={({ match }) => {
+      <Route path='/calendar/:email' exact render={({ match }) => {
             return <CalendarApp >{match.params.email} </CalendarApp>           
           }           
       } />
-
-      <Route exact path='/chat'><Chat /></Route>
+      {/* <Route exact path='/puntuar'><Puntuar /></Route> */}
+      <Route path='/chat/:mail' exact render={({ match }) => {
+            return <Chat mail={match.params.mail} />
+          }           
+      } />
+      <Route exact path='/chat'><Chat mail={""}/></Route>
       <Route exact path='/claim/add'><AddClaim /></Route>
       <Route exact path='/home'><Home /></Route>
       <Route exact path='/clases'><ClassContainer /></Route>
