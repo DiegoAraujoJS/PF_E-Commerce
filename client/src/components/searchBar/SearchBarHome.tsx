@@ -170,8 +170,8 @@ export default function SearchBar() {
     bottom: '30px',
   }
 
-  const eye = <FontAwesomeIcon style={eyeTest} icon={faEye} className="mt-1" onClick={() => setShowPassword("password")} />
-  const eyeSlash = <FontAwesomeIcon style={eyeTest} icon={faEyeSlash} className="mt-1" onClick={() => setShowPassword("text")} />
+  const eye = <FontAwesomeIcon style={eyeTest} icon={faEye} className="mt-1" onClick={() => setShowPassword("text")} />
+  const eyeSlash = <FontAwesomeIcon style={eyeTest} icon={faEyeSlash} className="mt-1" onClick={() => setShowPassword("password")} />
 
   const [show, setShow] = useState(false);
 
@@ -197,7 +197,7 @@ export default function SearchBar() {
   }
 
   const admin = <FontAwesomeIcon icon={faUserTie} style={{ fontSize: "40px" }} className="" />
-
+  console.log(errors)
   return (
     // <Navbar expand="lg" className={s.navbar}>
     <Navbar bg="light" expand="lg">
@@ -223,7 +223,7 @@ export default function SearchBar() {
                 <Form className={'d-flex flex-column align-items-center justify-content-center'} style={dropBox} onSubmit={handleSubmit}>
                   <Form.Control style={inputSizeLim} className={'d-flex justify-content-center'} type="email" placeholder="Email" onChange={handleChange} />
                   <Form.Control className="mt-2" style={inputSizeLim} type={showPassword} placeholder="Contraseña" onChange={handleChange} />
-                  {showPassword === "password" ? eyeSlash : eye}
+                  {showPassword === "password" ? eye : eyeSlash}
 
                   <Button style={inputSizeLim} name='loginSubmit' variant="primary" type="submit">
                     Entrar
