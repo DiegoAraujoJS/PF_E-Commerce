@@ -11,7 +11,8 @@ import { ClasePorComprar } from '../../../../interfaces';
 import getCookieValue from "../../cookieParser";
 import { string } from 'yup/lib/locale';
 import Swal from 'sweetalert2';
-
+import s from './ClassCard.module.css'
+ 
 const starEmpty = <FontAwesomeIcon icon={faStar} style={{ color: "#ffe516" }} />
 const starCompleta = <FontAwesomeIcon icon={starComplete} style={{ color: "#ffe516" }} />
 const starHalf = <FontAwesomeIcon icon={faStarHalfAlt} style={{ color: "#ffe516" }} />
@@ -48,14 +49,14 @@ const ClassCard: React.FC<Class> = (props) => {
     return (
         <div>
             <Row className='d-flex justify-content-center'>
-                <Col sm={11} md={11}>
-                    <ListGroup className="mb-3">
-                        <ListGroup.Item className="p-0 shadow " style={{ borderRadius: '40px' }} action onClick={handleShow}>
-                            <Card className="shadow p-0" style={{ borderRadius: '30px' }} >
+                <Col sm={11} md={11} >
+                    <ListGroup className={"mb-3 "+ s.contenedor}>
+                        <ListGroup.Item className={"p-0 shadow "} style={{ borderRadius: '40px' , outline:"none"}} action onClick={handleShow}>
+                            <Card className={"shadow p-0"} style={{ borderRadius: '30px' }} >
                                 <Card.Header
                                     style={{ fontSize: "20px", borderTopRightRadius: "30px", borderTopLeftRadius: "30px" }}
                                     className='d-flex justify-content-center font-weight-bold '>{props.nombre}</Card.Header>
-                                <Card.Body style={{ backgroundColor: '#c8c8c8', borderBottomRightRadius: "30px", borderBottomLeftRadius: "30px" }} className="d-lg-flex d-md-flex flex-row align-items-center card-body">
+                                <Card.Body className={"d-lg-flex d-md-flex flex-row align-items-center card-body " } style={{ backgroundColor: '#c8c8c8', borderBottomRightRadius: "30px", borderBottomLeftRadius: "30px" }} >
                                     <Col sm={12} md={8} lg={4} className="d-flex justify-content-center">
                                         <Card.Img style={profileImg} src={props.profesor && props.profesor.foto} />
                                     </Col>
