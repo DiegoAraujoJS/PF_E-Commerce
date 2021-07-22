@@ -20,10 +20,10 @@ const Historial = () => {
         listStyleType: 'none',
     };
     const [show, setShow] = useState(false);
-    const [alum, setAlum] = useState("")
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     const [historia, setHistoria]=useState([])
+    let userMail = ''
     const fetchHistorial = async () => {
         try {
             const token = getCookieValue("token").slice(
@@ -33,22 +33,15 @@ const Historial = () => {
               let userResponse = await axios.post(
                 `http://localhost:3001/api/verify`,
                 {},
-                { withCredentials: true, headers: { Authorization: token } }
+                { headers: { Authorization: token } }
               );
-              await setAlum(userResponse.data.mail)
-           console.log(userResponse)
-            if (true) {
-                const response = await axios.get(`http://localhost:3001/api/clases/all`)
-                console.log("RESPONSE", response)
-                await setHistoria([
-                    ...response.data]
-                )
-                
-            }else
-            {
-             
-
-            }
+            userMail = userResponse.data.mail            
+            const response = await axios.get(`http://localhost:3001/api/clases/all/${userResponse.data.mail}`)
+            console.log("RESPONSE", response)
+            await setHistoria([
+                ...response.data]
+            )
+            
         } catch (err) {
             console.log(err)
         }
@@ -57,7 +50,7 @@ const Historial = () => {
         fetchHistorial()
     },[])
     console.log("Historia", historia)
-    console.log("Email", alum)
+    
     return (
         <div class="container" >
             <h1>Mi historial de cursos</h1>
@@ -73,7 +66,7 @@ const Historial = () => {
                                    {e.profesor? <Card.Img style={profileImg}  src={e.profesor.foto} alt="Error" />: null}
                                    <div style={{marginLeft:"20px"}}>
                                         <div>
-                                            Completado (Hardcodeado como ejemplo)
+                                            {e.status}
                                         </div>
                                         <div>
                                             Materia: {e.materia}
@@ -94,7 +87,7 @@ const Historial = () => {
                                    </div>
                                    <div style={{marginLeft:"35vw"}}>
                                         <Button onClick={() => handleShow()}> Puntuar clase </Button>
-                                        <Puntuar show={show} handleClose={handleClose} clase={e} alum={alum} />
+                                        <Puntuar show={show} handleClose={handleClose} clase={e} alum={userMail} />
                                    </div>
                                 </div>
                             </div>
