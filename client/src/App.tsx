@@ -187,6 +187,7 @@ function App() {
       }
       ></Route>
 <Route path='/calendar/:email' exact render={({ match }) => {
+            console.log('asdfasdfadf', match.params.email)
             return <CalendarApp >{match.params.email} </CalendarApp>           
           }           
       } />

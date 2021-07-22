@@ -10,6 +10,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import 'react-bootstrap-range-slider/dist/react-bootstrap-range-slider.css';
 import RangeSlider from 'react-bootstrap-range-slider';
 import { useState } from 'react';
+import CalendarApp from "../calendar/addClassCalendar/Calendar"
 const materias = [
 	"Física",
 	"Biología",
@@ -172,36 +173,10 @@ const StudentAddClass = () => {
 								</Row>
 							</Row>
 							<Row>
-								<Col sm={12} md={8}>
-									<Form.Label className='text-uppercase'>Desde:</Form.Label>
-									<Field
-										name='desde'
-										type='time'
-										onChange={handleChange}
-										onBlur={handleBlur}
-										value={values.desde}
-										className={`form-control ${errors.desde && touched.desde ? 'is-invalid' : ''
-											}`}
-									/>
-									{errors.desde && touched.desde ? (
-										<div className='invalid-feedback'>{errors.desde}</div>
-									) : null}
-								</Col>
-								<Col sm={12} md={8}>
-									<Form.Label className='text-uppercase'>hasta:</Form.Label>
-									<Field
-										name='hasta'
-										type='time'
-										onChange={handleChange}
-										onBlur={handleBlur}
-										value={values.hasta}
-										className={`form-control ${errors.hasta && touched.hasta ? 'is-invalid' : ''
-											}`}
-									/>
-									{errors.hasta && touched.hasta ? (
-										<div className='invalid-feedback'>{errors.hasta}</div>
-									) : null}
-								</Col>
+								<div style={{border:'1px solid red', width: '800px', height: '500px'}}>
+										<CalendarApp>{'diegoaraujo@gmail.com'}</CalendarApp>
+									
+								</div>
 							</Row>
 							<Row>
 								<Col sm={6} md={6}>
