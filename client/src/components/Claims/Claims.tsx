@@ -2,7 +2,7 @@ import Claim from "./Claim";
 import style from "./Claims.module.css";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import Pagination from "./Pagination";
+import Pagination from "../pagination/Pagination";
 
 export interface ClaimType {
   id: number;

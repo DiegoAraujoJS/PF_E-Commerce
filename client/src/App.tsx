@@ -137,7 +137,6 @@ function App() {
             return <DetailClaim />
           }
           else  {
-            console.log('entre')
             return <Redirect to='/home'/>
           }          
       }
