@@ -7,30 +7,12 @@ const router = Router();
 
 router.get("/", async (req: Request, res: Response) => {
   try {
+    const offset: number = parseInt(req.query.offset.toString());
     const reclamos = await Reclamo.findAll({
-      attributes: ["id", "name", "reclamo"],
+      attributes: ["id", "nombre", "reclamo"],
       order: [["createdAt", "ASC"]],
-      // include: [
-      //   {
-      //     model: User,
-      //     as: "denunciado",
-      //     attributes: ["name", "mail", "lastName"],
-      //   },
-      //   {
-      //     model: User,
-      //     as: "denunciante",
-      //     attributes: ["name", "mail", "lastName"],
-      //   },
-      //   {
-      //     model: User,
-      //     as: "admin",
-      //     attributes: ["name", "mail", "lastName"],
-      //   },
-      //   {
-      //     model: Clase,
-      //     attributes: ["id", "nombre"],
-      //   }
-      // ],
+      limit:5,
+      offset: offset,
     });
 
     return res.send(reclamos);
@@ -47,7 +29,7 @@ router.get("/:id", async (req: Request, res: Response) => {
       where: {
         id: id,
       },
-      attributes: ["id", "name", "reclamo"],
+      attributes: ["id", "nombre", "reclamo"],
       include: [
         {
           model: User,
