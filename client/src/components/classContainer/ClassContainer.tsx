@@ -23,7 +23,6 @@ type Props = {
 const ClassContainer: React.FC<Props> = ({ searchInput, dispatchInput }) => {
     const [classFilter, setClassFilter] = useState([])
     const [nivel, setNivel] = useState("")
-    const [size, setSize] = useState({ name: "", length: 0 })
     const [grado, setGrado] = useState("")
     const [puntuacion, setPuntuacion] = useState({ value: "", check: false })
     const [horario, setHorario] = useState({ desde: "", hasta: "" })
@@ -77,7 +76,7 @@ const ClassContainer: React.FC<Props> = ({ searchInput, dispatchInput }) => {
         else if (e.target.name === "grado") { setGrado(e.target.value) }
     };
 
-    const filterByTime = (array) =>{
+    const filterByTime = (array) => {
         let filtrados = array.filter(clase => {
             if (clase && clase.date.time && clase.date.time.length === 2) {
                 let desde = horario.desde + ":00"
@@ -101,7 +100,7 @@ const ClassContainer: React.FC<Props> = ({ searchInput, dispatchInput }) => {
             if (searchInput && horario.desde && horario.hasta) {
                 searchInput && setClassFilter(filterByTime(searchInput));
                 classProfessor && setClassProfessorFilter(filterByTime(classProfessor));
-                classUser &&  setClassUserFilter(filterByTime(classUser));
+                classUser && setClassUserFilter(filterByTime(classUser));
 
                 setNivel(""); setGrado(""); setPuntuacion({ value: "", check: false }); setCity({ ...city, show: false, });
             }
@@ -119,17 +118,16 @@ const ClassContainer: React.FC<Props> = ({ searchInput, dispatchInput }) => {
                 else return null
             }
             else return null
-        })   
-        setSize({ name: nivel, length: filtrados.length })
-        return filtrados     
+        })
+        return filtrados
     }
-    
+
     useEffect(() => {
         if (searchInput && nivel && typeof nivel === 'string') {
             searchInput && setClassFilter(filterByNivel(searchInput));
             classProfessor && setClassProfessorFilter(filterByNivel(classProfessor));
             classUser && setClassUserFilter(filterByNivel(classUser));
- 
+
             setGrado(""); setPuntuacion({ value: "", check: false }); setHorario({ desde: "", hasta: "" }); setCity({ ...city, show: false, });
         }
         else if (nivel === "") {
@@ -147,8 +145,7 @@ const ClassContainer: React.FC<Props> = ({ searchInput, dispatchInput }) => {
             }
             else return null
         })
-        
-        setSize({ name: "grado", length: filtrados.length });
+
         return filtrados
     }
 
@@ -157,7 +154,7 @@ const ClassContainer: React.FC<Props> = ({ searchInput, dispatchInput }) => {
             searchInput && setClassFilter(filterByGrado(searchInput));
             classProfessor && setClassProfessorFilter(filterByGrado(classProfessor));
             classUser && setClassUserFilter(filterByGrado(classUser));
-            
+
             setNivel(""); setPuntuacion({ value: "", check: false }); setHorario({ desde: "", hasta: "" }); setCity({ ...city, show: false, });
         }
         else if (grado === "") {
@@ -166,7 +163,7 @@ const ClassContainer: React.FC<Props> = ({ searchInput, dispatchInput }) => {
     }, [grado])
 
 
-    const filterByPuntuacion = ( e, array ) => {
+    const filterByPuntuacion = (e, array) => {
         let filtrados: Class[] = array.filter((clase: Class) => {
             if (clase && clase.puntuacion) {
                 if (clase.puntuacion.toString() === e.target.value || (clase.puntuacion >= Number(e.target.value) - 0.50 && clase.puntuacion <= e.target.value)) return clase
@@ -174,15 +171,12 @@ const ClassContainer: React.FC<Props> = ({ searchInput, dispatchInput }) => {
             }
             else return null
         })
-        setSize({ name: "puntuacion", length: filtrados.length })
         return filtrados.sort(function (a, b) {
             if (a.puntuacion < b.puntuacion) { return 1; }
             if (a.puntuacion > b.puntuacion) { return -1; }
             return 0;
         })
     }
-
-
 
     const handlePuntuacion = async (e) => {
         if (e.target.name === "puntuacion") {
@@ -196,7 +190,7 @@ const ClassContainer: React.FC<Props> = ({ searchInput, dispatchInput }) => {
 
                 searchInput && setClassFilter(filterByPuntuacion(e, searchInput));
                 classProfessor && setClassProfessorFilter(filterByPuntuacion(e, classProfessor));
-                classUser && setClassUserFilter(filterByPuntuacion(e, classUser));                
+                classUser && setClassUserFilter(filterByPuntuacion(e, classUser));
 
                 setNivel(""); setGrado(""); setHorario({ desde: "", hasta: "" }); setCity({ ...city, show: false, });
             }
@@ -212,6 +206,7 @@ const ClassContainer: React.FC<Props> = ({ searchInput, dispatchInput }) => {
         }
         fetchData()
     }, [user])
+
 
     const filterByCity = (array) => {
         let filtrados: Class[] = array.filter((clase: Class) => {
@@ -262,19 +257,27 @@ const ClassContainer: React.FC<Props> = ({ searchInput, dispatchInput }) => {
                     <h6 className="font-weight-bold  mt-3">Nivel:</h6>
                     <ListGroup>
                         <ListGroup.Item action style={{ backgroundColor: (nivel === "Primario" ? "#bababa" : "white") }} onClick={() => nivel !== "Primario" ? setNivel("Primario") : setNivel("")} className="d-flex justify-content-between align-items-center category"> Primario
-                            <span style={{ backgroundColor: "lightgreen", color: "green" }} className="badge badge-primary badge-pill">{nivel === "Primario" && size.name === "Primario" && size.length}</span> </ListGroup.Item>
+                            <div className="d-flex justify-content-evenly" style={{ width: "50px" }} > <span style={{ backgroundColor: "lightgreen", color: "green" }} className="badge badge-primary badge-pill">{nivel === "Primario" && classProfessorFilter.length}</span>
+                                <span style={{ backgroundColor: "lightblue", color: "blue" }} className="badge badge-primary badge-pill">{nivel === "Primario" && classUserFilter.length}</span> </div>
+                        </ListGroup.Item>
                         <ListGroup.Item action style={{ backgroundColor: (nivel === "Secundario" ? "#bababa" : "white") }} onClick={() => nivel !== "Secundario" ? setNivel("Secundario") : setNivel("")} className="d-flex justify-content-between align-items-center category"> Secundario
-                            <span style={{ backgroundColor: "lightgreen", color: "green" }} className="badge badge-primary badge-pill">{nivel === "Secundario" && size.name === "Secundario" && size.length}</span> </ListGroup.Item>
+                            <div className="d-flex justify-content-evenly" style={{ width: "50px" }} ><span style={{ backgroundColor: "lightgreen", color: "green" }} className="badge badge-primary badge-pill">{nivel === "Secundario" && classProfessorFilter.length}</span>
+                                <span style={{ backgroundColor: "lightblue", color: "blue" }} className="badge badge-primary badge-pill">{nivel === "Secundario" && classUserFilter.length}</span> </div>
+                        </ListGroup.Item>
                         <ListGroup.Item action style={{ backgroundColor: (nivel === "Terciario" ? "#bababa" : "white") }} onClick={() => nivel !== "Terciario" ? setNivel("Terciario") : setNivel("")} className="d-flex justify-content-between align-items-center category"> Terciario
-                            <span style={{ backgroundColor: "lightgreen", color: "green" }} className="badge badge-primary badge-pill">{nivel === "Terciario" && size.name === "Terciario" && size.length}</span> </ListGroup.Item>
+                            <div className="d-flex justify-content-evenly" style={{ width: "50px" }} > <span style={{ backgroundColor: "lightgreen", color: "green" }} className="badge badge-primary badge-pill">{nivel === "Terciario" && classProfessorFilter.length}</span>
+                                <span style={{ backgroundColor: "lightblue", color: "blue" }} className="badge badge-primary badge-pill">{nivel === "Terciario" && classUserFilter.length}</span> </div>
+                        </ListGroup.Item>
                         <ListGroup.Item action style={{ backgroundColor: (nivel === "Universitario" ? "#bababa" : "white") }} onClick={() => nivel !== "Universitario" ? setNivel("Universitario") : setNivel("")} className="d-flex justify-content-between align-items-center category"> Universitario
-                            <span style={{ backgroundColor: "lightgreen", color: "green" }} className="badge badge-primary badge-pill">{nivel === "Universitario" && size.name === "Universitario" && size.length}</span> </ListGroup.Item>
+                            <div className="d-flex justify-content-evenly" style={{ width: "50px" }} > <span style={{ backgroundColor: "lightgreen", color: "green" }} className="badge badge-primary badge-pill">{nivel === "Universitario" && classProfessorFilter.length}</span>
+                                <span style={{ backgroundColor: "lightblue", color: "blue" }} className="badge badge-primary badge-pill">{nivel === "Universitario" && classUserFilter.length}</span> </div>
+                        </ListGroup.Item>
                     </ListGroup>
                     <Form>
                         <h6 className="font-weight-bold mt-3">Grado:</h6>
                         <Form.Group className="mb-3">
                             <Row>
-                                <Col sm={10} md={10} lg={10}>
+                                <Col sm={9} md={9} lg={9}>
                                     <Form.Control
                                         as='select'
                                         name='grado'
@@ -288,8 +291,11 @@ const ClassContainer: React.FC<Props> = ({ searchInput, dispatchInput }) => {
                                         )}
                                     </Form.Control>
                                 </Col>
-                                <Col sm={2} md={2} lg={2} className="d-flex align-items-center">
-                                    <span style={{ backgroundColor: "lightgreen", color: "green" }} className="badge badge-primary badge-pill">{(grado && size.name === "grado") && size.length}</span>
+                                <Col sm={3} md={3} lg={3} className="d-flex align-items-center mt-2">
+                                    <div className="d-flex justify-content-evenly" style={{ width: "50px" }} >
+                                        <span style={{ backgroundColor: "lightgreen", color: "green" }} className="badge badge-primary badge-pill">{grado && classProfessorFilter.length}</span>
+                                        <span style={{ backgroundColor: "lightblue", color: "blue", marginLeft: "5px" }} className="badge badge-primary badge-pill">{grado && classUserFilter.length}</span>
+                                    </div>
                                 </Col>
                             </Row>
                         </Form.Group>
@@ -300,7 +306,10 @@ const ClassContainer: React.FC<Props> = ({ searchInput, dispatchInput }) => {
                             <ListGroup className="ml-3" >
                                 <h5 className="font-weight-bold w-100 mt-2">Encuentra las clases de tu ciudad:</h5>
                                 <ListGroup.Item action style={{ backgroundColor: (city.show ? "#bababa" : "white") }} onClick={handleCity} className="d-flex justify-content-between align-items-center category">  {city.name}
-                                    <span style={{ backgroundColor: "lightgreen", color: "green" }} className="badge badge-primary badge-pill">{city.show && city.length}</span>
+                                    <div className="d-flex justify-content-evenly" style={{ width: "50px" }} >
+                                        <span style={{ backgroundColor: "lightgreen", color: "green" }} className="badge badge-primary badge-pill">{city.show && classProfessorFilter.length}</span>
+                                        <span style={{ backgroundColor: "lightblue", color: "blue" }} className="badge badge-primary badge-pill">{city.show && classUserFilter.length}</span>
+                                    </div>
                                 </ListGroup.Item>
 
                             </ListGroup>
@@ -312,20 +321,23 @@ const ClassContainer: React.FC<Props> = ({ searchInput, dispatchInput }) => {
                             <h5 className="font-weight-bold">Horarios</h5>
 
                             <Form className="brand d-flex justify-content-evenly p-0">
-                                <Col sm={5} md={5}>
+                                <Col sm={5} md={5} style={{ width: "40%" }}>
                                     <Form.Group className="mb-3">
                                         <h6 className="font-weight-bold">Desde:</h6>
                                         <Form.Control name="desde" value={horario.desde} type="time" onChange={handleChange} />
                                     </Form.Group>
                                 </Col>
-                                <Col sm={5} md={5}>
+                                <Col sm={5} md={5} style={{ width: "40%" }}>
                                     <Form.Group className="">
                                         <h6 className="font-weight-bold">Hasta:</h6>
                                         <Form.Control name="hasta" value={horario.hasta} type="time" onChange={handleChange} />
                                     </Form.Group>
                                 </Col>
                             </Form>
-                            <span style={{ backgroundColor: "lightgreen", color: "green" }} className="badge badge-primary badge-pill">{(horario.desde && horario.hasta && size.name === "horario") && size.length}</span>
+                            <div className="d-flex justify-content-evenly" style={{ width: "100px" }} >
+                                <span style={{ backgroundColor: "lightgreen", color: "green" }} className="badge badge-primary badge-pill">{horario.desde && horario.hasta && classProfessorFilter.length}</span>
+                                <span style={{ backgroundColor: "lightblue", color: "blue" }} className="badge badge-primary badge-pill">{horario.desde && horario.hasta && classUserFilter.length}</span>
+                            </div>
                         </Row>
                     </ListGroup>
 
@@ -338,28 +350,40 @@ const ClassContainer: React.FC<Props> = ({ searchInput, dispatchInput }) => {
                                     <input onChange={handlePuntuacion} type="checkbox" name="puntuacion" value="5" checked={puntuacion.value === "5" && puntuacion.check ? true : false} />
                                     <span className="check"></span>
                                 </Form.Label>
-                                <span style={{ backgroundColor: "lightgreen", color: "green" }} className="badge badge-primary badge-pill">{(puntuacion.value === "5" && size.name === "puntuacion") && size.length}</span>
+                                <div className="d-flex justify-content-evenly" style={{ width: "50px" }} >
+                                    <span style={{ backgroundColor: "lightgreen", color: "green" }} className="badge badge-primary badge-pill">{puntuacion.value === "5" && classProfessorFilter.length}</span>
+                                    <span style={{ backgroundColor: "lightblue", color: "blue" }} className="badge badge-primary badge-pill">{puntuacion.value === "5" && classUserFilter.length}</span>
+                                </div>
                             </ListGroup.Item >
                             <ListGroup.Item className="form-inline d-flex align-items-center justify-content-between py-2">
                                 <Form.Label className="tick">
                                     <span>{star}{star}{star}{star}</span>
                                     <input onChange={handlePuntuacion} type="checkbox" name="puntuacion" value="4" checked={puntuacion.value === "4" && puntuacion.check ? true : false} /> <span className="check"></span>
                                 </Form.Label>
-                                <span style={{ backgroundColor: "lightgreen", color: "green" }} className="badge badge-primary badge-pill">{(puntuacion.value === "4" && size.name === "puntuacion") && size.length}</span>
+                                <div className="d-flex justify-content-evenly" style={{ width: "50px" }} >
+                                    <span style={{ backgroundColor: "lightgreen", color: "green" }} className="badge badge-primary badge-pill">{puntuacion.value === "4" && classProfessorFilter.length}</span>
+                                    <span style={{ backgroundColor: "lightblue", color: "blue" }} className="badge badge-primary badge-pill">{puntuacion.value === "4" && classUserFilter.length}</span>
+                                </div>
                             </ListGroup.Item >
                             <ListGroup.Item className="form-inline d-flex align-items-center justify-content-between py-2">
                                 <Form.Label className="tick">
                                     <span>{star}{star}{star}</span>
                                     <input onChange={handlePuntuacion} type="checkbox" name="puntuacion" value="3" checked={puntuacion.value === "3" && puntuacion.check ? true : false} /> <span className="check"></span>
                                 </Form.Label>
-                                <span style={{ backgroundColor: "lightgreen", color: "green" }} className="badge badge-primary badge-pill">{(puntuacion.value === "3" && size.name === "puntuacion") && size.length}</span>
+                                <div className="d-flex justify-content-evenly" style={{ width: "50px" }} >
+                                    <span style={{ backgroundColor: "lightgreen", color: "green" }} className="badge badge-primary badge-pill">{puntuacion.value === "3" && classProfessorFilter.length}</span>
+                                    <span style={{ backgroundColor: "lightblue", color: "blue" }} className="badge badge-primary badge-pill">{puntuacion.value === "3" && classUserFilter.length}</span>
+                                </div>
                             </ListGroup.Item >
                             <ListGroup.Item className="form-inline d-flex align-items-center justify-content-between py-2">
                                 <Form.Label className="tick">
                                     <span>{star}{star}</span>
                                     <input onChange={handlePuntuacion} type="checkbox" name="puntuacion" value="2" checked={puntuacion.value === "2" && puntuacion.check ? true : false} /> <span className="check"></span>
                                 </Form.Label>
-                                <span style={{ backgroundColor: "lightgreen", color: "green" }} className="badge badge-primary badge-pill">{(puntuacion.value === "2" && size.name === "puntuacion") && size.length}</span>
+                                <div className="d-flex justify-content-evenly" style={{ width: "50px" }} >
+                                    <span style={{ backgroundColor: "lightgreen", color: "green" }} className="badge badge-primary badge-pill">{puntuacion.value === "2" && classProfessorFilter.length}</span>
+                                    <span style={{ backgroundColor: "lightblue", color: "blue" }} className="badge badge-primary badge-pill">{puntuacion.value === "2" && classUserFilter.length}</span>
+                                </div>
                             </ListGroup.Item >
                             <ListGroup.Item className="form-inline d-flex align-items-center justify-content-between py-2">
                                 <Form.Label className="tick">
@@ -368,8 +392,15 @@ const ClassContainer: React.FC<Props> = ({ searchInput, dispatchInput }) => {
                                     <input onChange={handlePuntuacion} type="checkbox" name="puntuacion" value="1" checked={puntuacion.value === "1" && puntuacion.check ? true : false} />
                                     <span className="check"></span>
                                 </Form.Label>
-                                <span style={{ backgroundColor: "lightgreen", color: "green" }} className="badge badge-primary badge-pill">{(puntuacion.value === "1" && size.name === "puntuacion") && size.length}</span>
+                                <div className="d-flex justify-content-evenly" style={{ width: "50px" }} >
+                                    <span style={{ backgroundColor: "lightgreen", color: "green" }} className="badge badge-primary badge-pill">{puntuacion.value === "1" && classProfessorFilter.length}</span>
+                                    <span style={{ backgroundColor: "lightblue", color: "blue" }} className="badge badge-primary badge-pill">{puntuacion.value === "1" && classUserFilter.length}</span>
+                                </div>
                             </ListGroup.Item >
+                            <div className="d-flex justify-content-evenly mt-3" style={{ fontSize:"14px" }} >
+                            <span style={{ backgroundColor: "lightgreen", color: "green" }} className="badge badge-primary badge-pill">* Professor</span>
+                            <span style={{ backgroundColor: "lightblue", color: "blue" }} className="badge badge-primary badge-pill">* Student</span>
+                            </div>
                         </Form>
 
 
@@ -384,7 +415,7 @@ const ClassContainer: React.FC<Props> = ({ searchInput, dispatchInput }) => {
                         className="mb-3"
                     >
                         <Tab eventKey="classProfessor" title="Class by Professor">
-                            <ClassCards clasesFiltradas={classProfessor ? classProfessor : searchInput} />
+                            <ClassCards clasesFiltradas={classProfessorFilter && (nivel || grado || puntuacion.value || (horario.desde && horario.hasta) || city.show) ? classProfessorFilter : classProfessor} />
                         </Tab>
                         <Tab eventKey="classUser"
                             title="Class by Student">
@@ -397,8 +428,8 @@ const ClassContainer: React.FC<Props> = ({ searchInput, dispatchInput }) => {
                                     <Button variant='primary' onClick={() => vaYBusca()}>{searchIcon}</Button>
                                 </Col>
                             </Row>
-                            <div  style={{ overflowX: 'hidden', height: '100vh', width: '90%' }}>
-                            <StudentClassCards clasesFiltradas={classUser ? classUser : searchInput} />
+                            <div style={{ overflowX: 'hidden', height: '100vh', width: '90%' }}>
+                                <StudentClassCards clasesFiltradas={classUserFilter && (nivel || grado || puntuacion.value || (horario.desde && horario.hasta) || city.show) ? classUserFilter : classUser} />
                             </div>
                         </Tab>
                     </Tabs>
