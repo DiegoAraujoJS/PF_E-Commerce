@@ -9,6 +9,8 @@ import Swal from "sweetalert2";
 import { UserProps } from "../../../../interfaces";
 import axios from "axios";
 import { Button } from "react-bootstrap";
+import Chat from "../Chat/Chat";
+import ChatAdmin from '../Chat/ChatAdmin';
 
 interface Claim {
     Denunciante_email: string, Denunciado_email: string, reclamo: string
@@ -39,6 +41,7 @@ function DetailClaim() {
         async function getClaim() {
             const response = await axios.get('http://localhost:3001/api/reclamos/claim/' + id)
             if (response.status === 200) {
+                console.log(response.data);
                 setClaim(response.data)
             }
         }
@@ -90,7 +93,7 @@ function DetailClaim() {
                         </div>
                     </div>
                     <div className={style.chat}>
-                        Chat
+                        {/* <ChatAdmin /> */}
                     </div>
                 </div>
                 <div className={style.denunciado}>

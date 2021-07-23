@@ -2,29 +2,41 @@ import { Model, Column, Table, CreatedAt, UpdatedAt, DataType, HasOne, ForeignKe
 import { EnumType } from 'typescript';
 import Clase from './Clase';
 import Profesor from './Profesor';
-
 import User from './Usuario';
 
 
 
 @Table
 export default class Reclamo extends Model {
-    @ForeignKey(() => User)
-    @Column ({allowNull: false})
-    Denunciante_email!: string;
-
-    @ForeignKey(() => User)
-    @Column ({allowNull: false})
-    Denunciado_email!: string;
-
-    @ForeignKey(() => User)
-    @Column ({allowNull: false})
-    Admin_email!: string;
 
     @Column
     reclamo!: string;
 
-    @BelongsTo(() => User)
-    usuario!: User
+    @ForeignKey(() => User)
+    @Column
+    denunciante_email!: string;
 
+    @BelongsTo(() => User, 'denunciante_email')
+    denunciante!: User;
+
+    @ForeignKey(() => User)
+    @Column
+    denunciado_email!: string;
+
+    @BelongsTo(() => User, 'denunciado_email')
+    denunciado!: User;
+
+    @ForeignKey(() => User)
+    @Column
+    admin_email!: string;
+
+    @BelongsTo(() => User, 'admin_email')
+    admin!: User;
+
+    @ForeignKey(() => Clase)
+    @Column
+    clase_id!: number;
+
+    @BelongsTo(() => Clase, 'clase_id')
+    clase!: Clase;
 }

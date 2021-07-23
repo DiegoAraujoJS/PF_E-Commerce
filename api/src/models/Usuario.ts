@@ -5,6 +5,7 @@ import { UserProps } from '../../../interfaces';
 import Puntuacion from './Puntuacion';
 import { ClasePorComprar } from '../../../interfaces';
 import { Time, Class } from '../../../interfaces'
+import Reclamo from './Reclamo';
 
 
 @Table
@@ -41,16 +42,25 @@ export default class User extends Model implements UserProps {
     suspendido!: boolean;
 
     @HasOne(() => Profesor)
-    profesor!: Profesor
+    profesor!: Profesor;
 
     @HasOne(() => Alumno)
-    alumno!: Alumno
+    alumno!: Alumno;
 
     @Column({ type: DataType.JSON })
-    carrito!: Class[]
+    carrito!: Class[];
 
     @HasMany(() => Puntuacion)
     puntuaciones!: Puntuacion[];
+
+    @HasMany(() => Reclamo, 'denunciante_email')
+    denuncias_hechas!: Reclamo[];
+    
+    @HasMany(() => Reclamo, 'denunciado_email')
+    denuncias_recibidas!: Reclamo[];
+
+    @HasMany(() => Reclamo, 'admin_email')
+    denuncias_administradas!: Reclamo[];
 }
 
 

@@ -25,7 +25,7 @@ interface ChatRoomData {
   setChatSelected: React.Dispatch<React.SetStateAction<ChatData>>;
 }
 
-export default function ChatRoom(props: React.PropsWithChildren<ChatRoomData>) {
+export default function ChatAdmin(props: React.PropsWithChildren<ChatRoomData>) {
   const dummy: any = useRef();
 
   let messagesRef = firestore
