@@ -3,7 +3,7 @@ import style from "./DetailClaim.module.css";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { Button } from "react-bootstrap";
-import ChatAdmin from '../Chat/ChatAdmin';
+import ChatAdmin from "../Chat/ChatAdmin";
 import { ClaimType } from "./Claims";
 
 interface UserClaimDetail {
@@ -71,39 +71,56 @@ function DetailClaim(props) {
   };
 
   return (
-    <div className={style.fondo}>
+    <div className={"container px-3 pt-3"}>
       {claim && (
-        <div className={style.container}>
-          <div className={style.claim}>
-            <div className={style.estudiante}>
+        <div
+          className={
+            "d-flex flex-row justify-content-center p-3 " +
+            "align-items-start w-100 bg-light"
+          }
+        >
+          <div className={"w-50 d-flex flex-column p-3"}>
+            <div className={"text-center mb-2"}>
               <img
-                className={style.imagendenu}
+                className={"img-fluid rounded-circle " + style.imgClaim}
                 src="https://i.imgur.com/MRTAOWM.png"
                 alt="foto perfil estudiante"
               />
-              <h5 className={style.nombreEst}> {claim.denunciante.name}</h5>
+              <h5 className={"w-100 m-0 p-1"}>{claim.denunciante.name}</h5>
               <span>{claim.denunciante.mail}</span>
             </div>
-            <div className={style.description}>
-              <div className={style.data}>
-                <h6 className="pt-3">Nombre: {claim.nombre}</h6>
+
+            <div className={"bg-white rounded-3 shadow my-2 mx-auto"}>
+              <div className={"d-flex flex-row w-100 p-3"}>
+                <h6 className="me-auto">{claim.nombre}</h6>
                 <span>#{claim.id}</span>
               </div>
-              <div className={style.detailClaim}>
-                <p>Descripción: {claim.reclamo}</p>
-              </div>
+              <p className={"px-3 pb-3 m-0"}>
+                Descripción: {claim.reclamo}
+              </p>
             </div>
-            <div className={style.chat}><ChatAdmin admin={claim.admin} user={claim.denunciante}/></div>
+
+            <div className={"rounded-3 shadow my-2 mx-auto"}>
+              <ChatAdmin admin={claim.admin} user={claim.denunciante} />
+            </div>
           </div>
-          <div className={style.denunciado}>
-            <img
-              className={style.imagendenu}
-              src="https://i.imgur.com/wc7cCCs.png"
-              alt="foto denunciado"
-            />
-            <h5 className={style.nombreEst}>Nombre: {claim.denunciado.name}</h5>
-            <span>{claim.denunciado.mail}</span>
-            <div className={style.detail}>Materias dictadas:</div>
+          <div className={"w-50 d-flex flex-column p-3"}>
+            <div className={"text-center my-2"}>
+              <img
+                className={style.imgClaim}
+                src="https://i.imgur.com/wc7cCCs.png"
+                alt="foto denunciado"
+              />
+              <h5 className={"w-100 m-0 p-1"}>
+                {claim.denunciado.name}
+              </h5>
+              <span>{claim.denunciado.mail}</span>
+            </div>
+
+            <div className={"bg-white rounded-3 shadow my-2 mx-auto w-100"}>
+              <div className={"w-100"}>Materias dictadas:</div>
+            </div>
+
             <div className={"d-flex justify-content-evenly " + style.btns}>
               <Button
                 onClick={() => suspender()}

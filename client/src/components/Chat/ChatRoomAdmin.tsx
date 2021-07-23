@@ -58,12 +58,12 @@ export default function ChatRoom(props: React.PropsWithChildren<ChatRoomData>) {
     <>
       <div className="App w-100">
         <section
-          className={"d-flex flex-column justify-content-center bg-light shadow"}
+          className={"d-flex flex-column justify-content-center bg-light rounded-3"}
         >
           <main
             className={
               "d-flex flex-column-reverse justify-content-start" +
-              " p-3 border " +
+              " p-3 border rounded-3 " +
               style.mainAdmin
             }
           >
