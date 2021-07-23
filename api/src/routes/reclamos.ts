@@ -1,41 +1,108 @@
 import { Request, Response, Router } from "express";
 import Reclamo from "../models/Reclamo";
 import User from "../models/Usuario";
+import Clase from "../models/Clase";
 
 const router = Router();
 
 router.get("/", async (req: Request, res: Response) => {
-  const reclamos = await Reclamo.findAll();
+  try {
+    const reclamos = await Reclamo.findAll({
+      attributes: ["id", "name", "reclamo"],
+      order: [["createdAt", "ASC"]],
+      // include: [
+      //   {
+      //     model: User,
+      //     as: "denunciado",
+      //     attributes: ["name", "mail", "lastName"],
+      //   },
+      //   {
+      //     model: User,
+      //     as: "denunciante",
+      //     attributes: ["name", "mail", "lastName"],
+      //   },
+      //   {
+      //     model: User,
+      //     as: "admin",
+      //     attributes: ["name", "mail", "lastName"],
+      //   },
+      //   {
+      //     model: Clase,
+      //     attributes: ["id", "nombre"],
+      //   }
+      // ],
+    });
 
-  let thisRet: object[] = [];
-  for (const reclamo of reclamos) {
-    thisRet = [
-      ...thisRet,
-      {
-        reclamo: reclamo,
-        admin: await User.findByPk(reclamo.admin_email),
-        denunciante: await User.findByPk(reclamo.denunciante_email),
-        denunciado: await User.findByPk(reclamo.denunciado_email),
-      },
-    ];
+    return res.send(reclamos);
+  } catch (error) {
+    console.log(error);
+    return res.status(400).send(error);
   }
-
-  return res.send(thisRet);
 });
 
-router.get("/claim/:id", async (req: Request, res: Response) => {
+router.get("/:id", async (req: Request, res: Response) => {
   const { id } = req.params;
-  const reclamo = {
-    id: 1,
-    denunciante_email: "edwardburgos@gmail.com",
-    denunciado_email: "diegoaraujo@gmail.com",
-    reclamo: "Me estafo dinero",
-  };
+  try {
+    const reclamo = await Reclamo.findOne({
+      where: {
+        id: id,
+      },
+      attributes: ["id", "name", "reclamo"],
+      include: [
+        {
+          model: User,
+          as: "denunciado",
+          attributes: ["name", "mail", "lastName"],
+        },
+        {
+          model: User,
+          as: "denunciante",
+          attributes: ["name", "mail", "lastName"],
+        },
+        {
+          model: User,
+          as: "admin",
+          attributes: ["name", "mail", "lastName"],
+        },
+        {
+          model: Clase,
+          attributes: ["id", "nombre"],
+        },
+      ],
+    });
 
-  const denunciante = await User.findByPk(reclamo.denunciante_email);
-  const denunciado = await User.findByPk(reclamo.denunciado_email);
-  if (Number(id) === reclamo.id)
-    return res.send({ reclamo, denunciante, denunciado });
+    return res.send(reclamo);
+  } catch (error) {
+    console.log(error);
+    return res.status(400).send(error);
+  }
+});
+
+router.post("/", async (req: Request, res: Response) => {
+  try {
+    const reclamo = await Reclamo.create({
+      nombre: req.body.nombre,
+      reclamo: req.body.reclamo,
+    });
+    const denunciante = await User.findByPk(req.body.denunciante);
+    await denunciante.$add("denuncias_hechas", [reclamo]);
+
+    const denunciado = await User.findByPk(req.body.denunciado);
+    await denunciado.$add("denuncias_recibidas", [reclamo]);
+
+    const admin = await User.findByPk(req.body.admin);
+    await admin.$add("denuncias_administradas", [reclamo]);
+
+    const clase = await Clase.findByPk(req.body.clase);
+    await clase.$add("clase", [reclamo]);
+
+    return res.send("se agregó correctatmente");
+  } catch (error) {
+    console.log(error);
+    return res.status(400).send(
+      "Error al agregar el reclamo. Verifique los datos ingresados."
+    );
+  }
 });
 
 router.get("/suspender/:user", async (req: Request, res: Response) => {

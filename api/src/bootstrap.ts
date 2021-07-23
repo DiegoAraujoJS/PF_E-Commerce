@@ -197,6 +197,7 @@ const bootstrap = async () => {
     /* Reclamo 1 */
 
     const Reclamo1 = await Reclamo.create({
+        nombre: "Solicito Reembolso",
         reclamo: "El profesor no se presento a la clase",
     });
     await Benja.$add('denuncias_hechas', [Reclamo1]);
@@ -207,12 +208,25 @@ const bootstrap = async () => {
     /* Reclamo 2 */
 
     const Reclamo2 = await Reclamo.create({
+        nombre: "Ayuda",
         reclamo: "Me cobró 500 pesos en la boleta de pago pero despues me pidio que le pague 300 mas",
     });
     await Javi.$add('denuncias_hechas', [Reclamo2]);
     await Mauro.$add('denuncias_recibidas', [Reclamo2]);
     await Braian.$add('denuncias_administradas', [Reclamo2]);
     await Clase2.$add('clase', [Reclamo2]);
+
+     /* Reclamo 3 */
+
+     const Reclamo3 = await Reclamo.create({
+        nombre: "Alumno Problemático",
+        reclamo: "El profesor no entendia bien el contenido de la materia",
+    });
+    await Edward.$add('denuncias_hechas', [Reclamo3]);
+    await Mauro.$add('denuncias_recibidas', [Reclamo3]);
+    await Diego.$add('denuncias_administradas', [Reclamo3]);
+    await Clase3.$add('clase', [Reclamo3]);
+
   } catch (error) {
     console.log(error);
   }

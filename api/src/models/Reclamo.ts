@@ -12,6 +12,9 @@ export default class Reclamo extends Model {
     @Column
     reclamo!: string;
 
+    @Column
+    nombre!: string;
+
     @ForeignKey(() => User)
     @Column
     denunciante_email!: string;
