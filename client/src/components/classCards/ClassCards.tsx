@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import CSS from 'csstype';
 import ClassCard from '../classCard/ClassCard';
-import { Alert, Button, Col, Container, Dropdown, DropdownButton, Form, InputGroup, ListGroup, ListGroupItem, Pagination, Row } from 'react-bootstrap';
-import { Class } from '../../../../interfaces';
+import { Alert, Button, Col, Form,Pagination, Row } from 'react-bootstrap';
 import axios from 'axios'
 import { connect } from 'react-redux';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
@@ -183,37 +182,37 @@ function ClassCards({ clasesFiltradas, dispatchInput }) {
                 <Col  >
                     <ul style={classListContainer}>
                         {dataFromPaginate && dataFromPaginate.length > 0 ?
-                            dataFromPaginate.map((clase, i) => (
+                            dataFromPaginate?.map((clase, i) => (
                                 <ClassCard
-                                    id={clase.id}
-                                    nombre={clase.nombre}
-                                    descripcion={clase.descripcion}
-                                    esPresencial={clase.esPresencial}
-                                    grado={clase.grado}
-                                    materia={clase.materia}
-                                    nivel={clase.nivel}
-                                    profesor={clase.profesor}
-                                    puntuacion={clase.puntuacion}
-                                    date={clase.date}
-                                    precio={clase.precio}
+                                    id={clase?.id}
+                                    nombre={clase?.nombre}
+                                    descripcion={clase?.descripcion}
+                                    esPresencial={clase?.esPresencial}
+                                    grado={clase?.grado}
+                                    materia={clase?.materia}
+                                    nivel={clase?.nivel}
+                                    profesor={clase?.profesor}
+                                    puntuacion={clase?.puntuacion}
+                                    date={clase?.date}
+                                    precio={clase?.precio}
                                     key={i + 10}
                                 />
                             ))
-                            : classFilter ? classFilter.map((clase, i) => {
+                            : classFilter ? classFilter?.map((clase, i) => {
                                 if (i < 2) {
                                     return (
                                         <ClassCard
-                                            id={clase.id}
-                                            nombre={clase.nombre}
-                                            descripcion={clase.descripcion}
-                                            esPresencial={clase.esPresencial}
-                                            grado={clase.grado}
-                                            materia={clase.materia}
-                                            nivel={clase.nivel}
-                                            profesor={clase.profesor}
-                                            puntuacion={clase.puntuacion}
-                                            date={clase.date}
-                                            precio={clase.precio}
+                                            id={clase?.id}
+                                            nombre={clase?.nombre}
+                                            descripcion={clase?.descripcion}
+                                            esPresencial={clase?.esPresencial}
+                                            grado={clase?.grado}
+                                            materia={clase?.materia}
+                                            nivel={clase?.nivel}
+                                            profesor={clase?.profesor}
+                                            puntuacion={clase?.puntuacion}
+                                            date={clase?.date}
+                                            precio={clase?.precio}
                                             key={i + 20}
                                         />
                                     );

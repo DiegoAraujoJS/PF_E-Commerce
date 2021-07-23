@@ -23,15 +23,16 @@ router.get('/', async (req: Request, res: Response) => {
 })
 
 router.get('/:mail', async (req: Request, res: Response) => {
-    const {mail} = req.params
+    const { mail } = req.params
     console.log(mail)
-    try{
-    const usuario = await Usuario.findByPk(mail)
-    res.send(usuario)
-}
-catch(error){
-    console.log(error)
-}
+    try {
+        const usuario = await Usuario.findByPk(mail)
+        res.send(usuario)
+    }
+    catch (error) {
+        console.log(error)
+    }
 })
+
 
 export default router;

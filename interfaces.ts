@@ -94,6 +94,8 @@ interface Class {
     profesor: Profesor;
     date: {year: number, month: number, day: number, time: Time};
     precio: string;
+    Profesor_mail?: string;
+    User_mail?: string;
 }
 
 interface Profesor extends User {
@@ -112,6 +114,13 @@ interface User {
     city: string;
 }
 
-export type {UserProps, ArrayDePares, Disponible, Ocupado, CalendarioResponse, ProfesorProps, Horario, Time, DisponibleOcupadoTransform, IClase, ClasePorComprar, Class, Profesor, User}
+
+interface Claim {
+    Denunciante_email: string,
+    Denunciado_email: string,
+    reclamo: {nombre:string, detalle:string}
+}
+
+export type {UserProps, ArrayDePares, Disponible, Ocupado, CalendarioResponse, ProfesorProps, Horario, Time, DisponibleOcupadoTransform, IClase, ClasePorComprar, Class, Profesor, User, Claim}
 
 export {Role}
