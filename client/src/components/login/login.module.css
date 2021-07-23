@@ -40,12 +40,20 @@
   margin-bottom: 16px;
 }
 
-.input {
+.input, .inputPassword {
   border-radius: 5px !important;
+}
+
+.inputPassword {
+  padding-right: 2.5rem !important;
 }
 
 .iconDumb {
   vertical-align: middle;
+}
+
+.colorBoton {
+  background-color: #2962ff !important;
 }
 
 .title {
@@ -79,4 +87,25 @@
 .googleLogo {
   height: 1.2rem;
   margin-right: 10px;
+}
+
+
+.botonswal {
+  background-color: #2962ff;
+  color: white;
+  font-weight: 500;
+  padding: 10px;
+  font-size: 1rem;
+  width: 50%;
+  border-radius: 1rem;
+  border: 1px solid transparent;
+}
+
+.botonswal:hover {
+box-shadow: 1px 1px 12px -1px rgb(0 0 0 / 24%);
+-webkit-box-shadow: 1px 1px 12px -1px rgb(0 0 0 / 24%);
+}
+
+.botonswal:disabled {
+  background-color: #99b2f5;
 }

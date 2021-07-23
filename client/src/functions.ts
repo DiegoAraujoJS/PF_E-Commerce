@@ -26,34 +26,40 @@ export async function setRoleOfUser() {
     if (localStorage.getItem('login')) {
       if (!document.cookie) {
         localStorage.removeItem('login')
-        return console.log('No hay ningún usuario logueado')
+        return 'No hay ningún usuario logueado'
       }
       const token = getCookieValue('token').replaceAll("\"", '')
       try {
         const thisUser = await axios.post(`http://localhost:3001/api/verify`, {}, { withCredentials: true, headers: { Authorization: token } })
         if (thisUser) {
-          return ['db', thisUser.data]
+          const usuario = {
+            mail: thisUser.data.mail,
+            completedName: `${thisUser.data.name} ${thisUser.data.lastName}`,
+            image: '',
+            role: thisUser.data.role
+          }
+          return ['db', usuario]
         } else {
-          return console.log('No hay ningún usuario logueado')
+          return 'No hay ningún usuario logueado'
         }
       } catch {
-        return console.log('No hay ningún usuario logueado')
+        return 'No hay ningún usuario logueado'
       }
-      
+
     } else {
       try {
         const usuarioActual = await axios.post(`http://localhost:3001/api/defineAccessGoogle`, firebase.auth().currentUser)
         if (usuarioActual) {
           return ['google', usuarioActual.data]
         } else {
-          return console.log('No hay ningún usuario logueado')
+          return 'No hay ningún usuario logueado'
         }
       } catch {
-        return console.log('No hay ningún usuario logueado')
-      } 
+        return 'No hay ningún usuario logueado'
+      }
     }
   } else {
-    return console.log('No hay ningún usuario logueado')
+    return 'No hay ningún usuario logueado'
   }
 }
 

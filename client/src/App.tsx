@@ -23,36 +23,54 @@ import CondicionesServicio from './components/condicionesservicio/CondicionesSer
 import PoliticaPrivacidad from './components/politicaprivacidad/PoliticaPrivacidad';
 import firebase from 'firebase/app';
 import 'firebase/auth';
+import deleteAllCookies from "./cookieClearer";
 import { setRoleOfUser } from './functions';
 import { auth } from './firebase';
 import { verificacionLogueo } from './functions';
 import { useDispatch } from 'react-redux';
-import { modificarEstadoLogueado, modificarUsuarioLogueado } from './Actions/Actions';
+import { modificarCantidadClasesPorComprar, modificarEstadoLogueado, modificarUsuarioLogueado } from './Actions/Actions';
 import Register from './components/Register/Register'
-
 enum Role { USER, PROFESSOR, ADMIN }
 const moneda = 'USD';
 const cliente = 'edwardburgos@gmail.com';
 
 function App() {
 
-  let usuarioLogueado : any = ['', {}];
-  const dispatch = useDispatch();
+  const [usuarioLogueado, setUsuarioLogueado]: any = useState('')
+  const [cantidadClasesPorComprar, setCantidadClasesPorComprar]: any = useState(0)
+
+  //dispatch(modificarUsuario)
+
   // Cuando se ejecuta la aplicación ejecutamos esto
   useEffect(() => {
     async function inicio() {
-      usuarioLogueado = await setRoleOfUser();                                            // Verificamos usuario logueado
-      firebase.auth().onAuthStateChanged(async () => usuarioLogueado = await setRoleOfUser());  // Verificamos usuario logueado cuando el auth de Firebase cambie
-      console.log('CAMBIO', usuarioLogueado)
-      dispatch(modificarUsuarioLogueado(usuarioLogueado[1]))
+      let usuarioActual = await setRoleOfUser();                                                                               // Verificamos usuario logueado
+      firebase.auth().onAuthStateChanged(() => {
+        async function cambio() { usuarioActual = await setRoleOfUser(); console.log('EL USUARIO LOGUEADO FIREBASE ES', usuarioActual); setUsuarioLogueado(usuarioActual); } cambio();
+      });  // Verificamos usuario logueado cuando el auth de Firebase cambie
+      console.log('EL USUARIO LOGUEADO ES', usuarioActual)
+      setUsuarioLogueado(usuarioActual);
+
     }
     inicio();
   }, [])
 
+  useEffect(() => {
+    async function obtenerClases() {
+      if (Array.isArray(usuarioLogueado)) {
+        const clases = await axios.get(`http://localhost:3001/api/carrito/all/${usuarioLogueado[1].mail}`)
+        setCantidadClasesPorComprar(clases.data.length)
+      } else {
+        setCantidadClasesPorComprar(0)
+      }
+    } 
+    obtenerClases();
+  }, [usuarioLogueado])
 
-  //dispatch(modificarUsuario)
 
-
+  const dispatch = useDispatch();
+  dispatch(modificarUsuarioLogueado(usuarioLogueado))
+  dispatch(modificarCantidadClasesPorComprar(cantidadClasesPorComprar))
 
 
 

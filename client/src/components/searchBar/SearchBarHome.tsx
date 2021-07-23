@@ -24,6 +24,12 @@ import { auth, signOut } from "../../firebase";
 import { verificacionLogueo } from '../../functions'
 import { useSelector } from "react-redux";
 
+import firebase from 'firebase/app';
+import 'firebase/auth';
+import { setRoleOfUser } from '../../functions';
+import { modificarEstadoLogueado, modificarUsuarioLogueado, modificarCantidadClasesPorComprar} from '../../Actions/Actions';
+
+
 export default function SearchBar() {
   enum Role { USER, PROFESSOR, ADMIN }
   const [user, setUser] = useState({ mail: "", role: null, name: "", lastName: "", iat: null })
@@ -35,6 +41,27 @@ export default function SearchBar() {
 
   const [cestaLength, setCestaLength] = useState(0)
 
+
+  const [showRegister, setShowRegister] = useState(false)
+  const handleCloseRegister = () => setShowRegister(false);;
+    const handleShowRegister = () => setShowRegister(true);
+  
+
+  const swalWithBootstrapButtons = Swal.mixin({
+    customClass: {
+      confirmButton: `${s.botonswal}`
+    },
+    buttonsStyling: false
+  })
+  
+  const dispatch = useDispatch();
+
+  /**
+   * 
+const dispatch = useDispatch();
+    dispatch(modificarClasesPorComprar(clasesPorComprar));
+
+   */
   // Esto nos permite conseguir el usuario logueado
   useEffect(() => {
     async function obtenerUsuarioLogueado() {
@@ -80,13 +107,16 @@ export default function SearchBar() {
   // dispatch(modificarEstadoLogueado(verificacionLogueo()));
 
   const logueado = useSelector(state => state['logueado']);
+  const usuario = useSelector(state => state['user']);
+  console.log('USUARIOOOOOOO', usuario)
+
   useEffect(() => {
     console.log('', logueado)
     verificacionLogueo()
     console.log('DISCO', auth.currentUser)
   }, [])
 
-  const dispatch = useDispatch();
+ 
 
   function validateErrors() {
     if (!email) {
@@ -120,6 +150,9 @@ export default function SearchBar() {
 
   }
 
+
+  const cantidadClasesPorComprar = useSelector(state => state['cantidadClasesPorComprar'])
+  
   async function handleSubmit(e) {
     e.preventDefault()
     console.log(e)
@@ -155,15 +188,18 @@ export default function SearchBar() {
   async function localsignOut() {
     // auth.signOut();
     try {
-      if (auth.currentUser) {
-        auth.signOut();
+      if (usuario[0] === 'google') {
+        await firebase.auth().signOut();
       } else {
-        const logout = await axios.post(`http://localhost:3001/api/login/logout`, {}, { withCredentials: true })
+        await axios.post(`http://localhost:3001/api/login/logout`, {}, { withCredentials: true })
         deleteAllCookies()
         localStorage.removeItem('login')
       }
+      await firebase.auth().signOut();
+      dispatch(modificarUsuarioLogueado(''))
+      dispatch(modificarCantidadClasesPorComprar(0))
 
-      Swal.fire(
+      swalWithBootstrapButtons.fire(
         'Exito!',
         'Se cerro sesión correctamente!',
         'success'
@@ -251,12 +287,12 @@ export default function SearchBar() {
             <Navbar.Text className={` ${s.color} nav-link ms-4 text-decoration-none ${s.aLaDerecha}`}>
               <Link to="/cesta" className={s.enlaceCesta}>
                 <IonIcon icon={bookOutline} className={s.iconDumb}></IonIcon>
-                <span>{cestaLength}</span>
+                <span>{cantidadClasesPorComprar}</span>
               </Link>
             </Navbar.Text >
-            {verificacionLogueo() ?
-              <NavDropdown className={`${s.color} ms-4 text-decoration-none justify-content-end`} title={auth.currentUser ? auth.currentUser.email : user.mail} id="basic-nav-dropdown">
-                <NavDropdown.Item onClick={() => auth.currentUser ? signOut() : localsignOut()}>
+            {Array.isArray(usuario) ?
+              <NavDropdown className={`${s.enlace} ms-4 text-decoration-none justify-content-end`} title={usuario[1].mail} id="basic-nav-dropdown">
+                <NavDropdown.Item onClick={() => localsignOut()}>
                   Desconectarse
                 </NavDropdown.Item>
               </NavDropdown>
@@ -276,9 +312,10 @@ export default function SearchBar() {
                     Inicia sesión
                   </Link>
                 </Navbar.Text>
-                <Navbar.Text className={` ${s.color} nav-link ms-4 text-decoration-none`}>
+                <Navbar.Text className={` ${s.color} nav-link ms-4 text-decoration-none`} onClick={() => handleShowRegister()}>
                   Regístrate
                 </Navbar.Text>
+                <Register show={showRegister} handleClose={handleCloseRegister} />
               </>
             }
 

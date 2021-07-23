@@ -11,6 +11,8 @@ import { ClasePorComprar } from '../../../../interfaces';
 import getCookieValue from "../../cookieParser";
 import { string } from 'yup/lib/locale';
 import Swal from 'sweetalert2';
+import { modificarCantidadClasesPorComprar, modificarClasesPorComprar } from '../../Actions/Actions';
+import { useDispatch } from 'react-redux';
 
 const starEmpty = <FontAwesomeIcon icon={faStar} style={{ color: "#ffe516" }} />
 const starCompleta = <FontAwesomeIcon icon={starComplete} style={{ color: "#ffe516" }} />
@@ -33,6 +35,7 @@ const ClassCard: React.FC<Class> = (props) => {
         width: 'fit-content',
     };
 
+    const dispatch = useDispatch();
     const [show, setShow] = useState(false);
 
     const handleClose = () => setShow(false);
@@ -40,10 +43,16 @@ const ClassCard: React.FC<Class> = (props) => {
 
     function redirect_blank(url) {
         var a = document.createElement('a');
-        a.target="_blank";
-        a.href=url;
+        a.target = "_blank";
+        a.href = url;
         a.click();
-      }
+    }
+
+    const swalWithBootstrapButtons = Swal.mixin({
+        confirmButtonColor: '#2962ff',
+        buttonsStyling: true
+    })
+
 
     return (
         <div>
@@ -130,32 +139,65 @@ const ClassCard: React.FC<Class> = (props) => {
                 <Card.Title className="d-flex justify-content-center"> Precio de la clase: &nbsp;<span className="text-success ml-3">{props.precio}</span> </Card.Title>
                 <Modal.Footer className="justify-content-center">
 
-                        <Button variant="primary" onClick={async () => {
+                    <Button variant="primary" onClick={async () => {
 
-                            const payload: Class = {
-                                ...props
-                            }
-                            try{
+                        const payload: Class = {
+                            ...props
+                        }
+                        try {
                             const token = getCookieValue('token').replaceAll("\"", '')
                             const getUser = await axios.post(`http://localhost:3001/api/verify`, {}, { headers: { Authorization: token } })
 
                             if (getUser.status) {
                                 const addToCart = await axios.post(`http://localhost:3001/api/carrito/${getUser.data.mail}`, payload)
-                                if(addToCart.status === 200) window.open("./cesta", '_self')
+                                dispatch(modificarCantidadClasesPorComprar(addToCart.data.carrito.length))
+                                if (addToCart.status === 200) {
+                                    if (addToCart.data === 'Esta clase ya está en tu lista') {
+                                        swalWithBootstrapButtons.fire({
+                                            title: '¿Desea ver su cesta?',
+                                            text: 'Esta clase ya está en tu cesta',
+                                            icon: 'question',
+                                            showCancelButton: true,
+                                            confirmButtonText: 'Ir a la cesta',
+                                            cancelButtonText: 'Seguir buscando clases'
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                                window.open("./cesta", '_self')
+                                            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                                                handleClose();
+                                            }
+                                        })
+                                    } else {
+                                        swalWithBootstrapButtons.fire({
+                                            title: '¿Desea ver su cesta?',
+                                            icon: 'question',
+                                            showCancelButton: true,
+                                            confirmButtonText: 'Ir a la cesta',
+                                            cancelButtonText: 'Seguir buscando clases'
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                                window.open("./cesta", '_self')
+                                            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                                                handleClose();
+                                            }
+                                        })
+                                    }
+
                                 }
                             }
-                            catch(error) {
-                                console.log(error)
-                                Swal.fire(
-                                    'Error!',
-                                    'Debe iniciar seción para agregar una clase!',
-                                    'error'
-                                    )
-                            }
-                        }}>
-                           Agregar clase a mi lista
-                        </Button>
-           
+                        }
+                        catch (error) {
+                            console.log(error)
+                            Swal.fire(
+                                'Error!',
+                                'Debe iniciar sesión para agregar una clase!',
+                                'error'
+                            )
+                        }
+                    }}>
+                        Agregar clase a mi cesta
+                    </Button>
+
                 </Modal.Footer>
             </Modal>
         </div >

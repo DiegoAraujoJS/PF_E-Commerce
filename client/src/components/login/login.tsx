@@ -8,16 +8,18 @@ import CSS from 'csstype';
 import { actionsType } from '../../constants/constants';
 import axios from 'axios';
 import { useHistory } from "react-router-dom";
-import { connect } from 'react-redux'
+import { connect, useDispatch, useSelector } from 'react-redux'
 import getCookieValue from '../../cookieParser';
-import { getUserLoged } from '../../Actions/Actions';
+import { getUserLoged, modificarUsuarioLogueado, modificarCantidadClasesPorComprar } from '../../Actions/Actions';
 import { store } from '../../Store/store';
 import s from './login.module.css';
 import { eyeOutline, eyeOffOutline } from "ionicons/icons";
 import { IonIcon } from '@ionic/react';
 import googleLogo from '../../images/googleLogo.png';
 import Register from '../Register/Register';
-import {auth} from '../../firebase'
+import { auth } from '../../firebase'
+import { setRoleOfUser } from '../../functions';
+import Swal from 'sweetalert2';
 function Login(props) {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('');
@@ -25,13 +27,11 @@ function Login(props) {
     const [wrongPassword, setWrongPassword] = useState(false)
     const [showRegister, setShowRegister] = useState(false)
 
-    
+    const usuario = useSelector(state => state['user'])
     // 
 
     useEffect(() => {
-        if (auth) {
-            console.log(auth.currentUser)
-        }
+        console.log('WHO', usuario)
     }, [showRegister])
 
     const handleClose = () => setShowRegister(false);
@@ -54,18 +54,7 @@ function Login(props) {
 
     }
 
-    async function loginConGoogle(e) {
-        e.preventDefault();
-        try {
-            await loginWithGoogle();
-            console.log(auth.currentUser);
-        } catch {
-            console.log('Se produjo un error durante la autenticación')
-        }
-        // const response = await loginWithGoogle();
-        // console.log(auth.currentUser);
-        //console.log('USUARIO FIREBASE', auth.currentUser)
-    }
+
 
     function validateErrors() {
         if (!email) {
@@ -85,6 +74,99 @@ function Login(props) {
         }
     }
 
+
+    const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+            confirmButton: `${s.botonswal}`
+        },
+        buttonsStyling: false
+    })
+
+    async function loginConGoogle(e) {
+        e.preventDefault();
+        try {
+            await loginWithGoogle();
+            let user = {
+                lastName: 'GOOGLE',
+                mail: auth.currentUser.email,
+                name: auth.currentUser.displayName,
+                role: 0,
+                city: 'GOOGLE',
+            }
+            let userWithPassword = {
+                ...user,
+                password: 'google'
+            }
+            const registro = await axios.post('http://localhost:3001/api/session/register', userWithPassword, { withCredentials: true })
+            if (registro.status === 200) {
+                const login = await axios.post(`http://localhost:3001/api/login`, {
+                    mail: auth.currentUser.email,
+                    password: 'google'
+                }, { withCredentials: true })
+                document.cookie = `token=${JSON.stringify(login.data.token)}`
+                localStorage.setItem('login', 'true')
+                const user = await axios.post(`http://localhost:3001/api/verify`, {}, { headers: { Authorization: getCookieValue('token').replaceAll("\"", '') } })
+                if (user !== null) props.getUserLoged({ mail: user.data.mail, name: user.data.name, lastName: user.data.lastName })
+                console.log(store.getState())
+                swalWithBootstrapButtons.fire(
+                    'Se inicio sesión correctamente',
+                    '',
+                    'success'
+                )
+                history.push('/home');
+                const usuarioActualizado = await setRoleOfUser()
+                dispatch(modificarUsuarioLogueado(usuarioActualizado))
+                const clases = await axios.get(`http://localhost:3001/api/carrito/all/${usuarioActualizado[1].mail}`)
+                dispatch(modificarCantidadClasesPorComprar(clases.data.length));
+            }
+        } catch {
+            console.log('Se produjo un error durante la autenticación')
+        }
+    }
+
+    // async function handleSubmitRegister(values) {
+    //     console.log(values)
+    //     let user: UserProps = {
+    //       lastName: values.lastName,
+    //       mail: values.mail,
+    //       name: values.name,
+    //       role: values.role,
+    //       city: values.city,
+    //     }
+    //     let userWithPassword = {
+    //       ...user,
+    //       password: values.password
+    //     }
+    //     if (values.mail === 'braiansilva@gmail.com') user.role = Role.ADMIN;
+    //     try {
+    //       const registro = await axios.post('http://localhost:3001/api/session/register', userWithPassword, { withCredentials: true })
+
+    //       if (registro.status === 200) {
+    //         swalWithBootstrapButtons.fire(
+    //           'Se registró correctamente',
+    //           'Ahora inicie sesión',
+    //           'success'
+    //         )
+    //         handleClose('argument');
+    //         history.push('/login')
+    //       }
+    //     }
+    //     catch (error) {
+    //       if (error.response && error.response.data.type === ErrorType.ALREADY_EXISTS) {
+    //         alert('El usuario ya existe!')
+    //       } else if (error.response && error.response.data.type === ErrorType.INCOMPLETE_INPUTS) {
+    //         alert('Debe ingresar mail, nombre y apellido')
+    //       }
+    //     }
+    //   }
+
+
+
+
+
+    const dispatch = useDispatch();
+    //   dispatch(modificarUsuarioLogueado(usuarioLogueado))
+
     async function handleSubmit(e) {
         e.preventDefault()
         try {
@@ -95,15 +177,13 @@ function Login(props) {
             document.cookie = `token=${JSON.stringify(login.data.token)}`
             localStorage.setItem('login', 'true')
             const user = await axios.post(`http://localhost:3001/api/verify`, {}, { headers: { Authorization: getCookieValue('token').replaceAll("\"", '') } })
-            console.log(user)
-
-
             if (user !== null) props.getUserLoged({ mail: user.data.mail, name: user.data.name, lastName: user.data.lastName })
-
             console.log(store.getState())
+            const usuarioActualizado = await setRoleOfUser()
+            dispatch(modificarUsuarioLogueado(usuarioActualizado))
+            const clases = await axios.get(`http://localhost:3001/api/carrito/all/${usuarioActualizado[1].mail}`)
+            dispatch(modificarCantidadClasesPorComprar(clases.data.length));
             history.push('/home')
-            window.location.reload();
-
         } catch (error) {
             setWrongPassword(true)
         }
@@ -155,13 +235,13 @@ function Login(props) {
                         <label htmlFor="floatingInput">Correo</label>
                     </div>
                     <div style={test} className="form-floating">
-                        <input style={inputMargin} ref={inputRef} type='password' value={password} name='passValue' onChange={handleChange} placeholder='Contraseña' className={`form-control mb-3 ${s.input}`} />
+                        <input style={inputMargin} ref={inputRef} type='password' value={password} name='passValue' onChange={handleChange} placeholder='Contraseña' className={`form-control mb-3 ${s.inputPassword}`} />
                         <label htmlFor="floatingPassword">Contraseña</label>
                         {/* <i style={eyeTest} ref={eyeRef} className="fa fa-eye-slash" onClick={() => myFunction()}></i> */}
                         <IonIcon style={eyeTest} ref={eyeRef} icon={eyeOutline} className={s.iconDumb} onClick={() => myFunction()}></IonIcon>
                     </div>
 
-                    <input type="submit" value="Iniciar sesión" className="w-100 btn btn-primary mb-3" />
+                    <input type="submit" value="Iniciar sesión" className={`w-100 btn btn-primary mb-3 ${s.colorBoton}`} />
 
                     <div className="">
                         {wrongPassword ? <small className={s.errorMessage}>
@@ -179,7 +259,7 @@ function Login(props) {
                             Regístrate
                         </Link>
                     </p>
-                    
+
                     <Register show={showRegister} handleClose={handleClose} />
 
 

@@ -22,7 +22,7 @@ router.post('/:user', async function (req: Request, res: Response) {
                 res.send(result)
             }
             else {
-                res.send("Esa clase ya esta en tu lista")
+                res.send("Esta clase ya está en tu lista")
             }
         } else {
             usuario.set({

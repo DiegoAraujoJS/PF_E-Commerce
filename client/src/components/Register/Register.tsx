@@ -6,11 +6,15 @@ import { UserProps } from '../../../../interfaces'
 import { Formik } from 'formik';
 import { validationSchemaRegister } from '../../utils/validations';
 import imageParser from '../../utils/imageParser';
-import { Button, Modal, Row, Col } from 'react-bootstrap';
+import { Button, Modal, Row, Col, Form } from 'react-bootstrap';
 import Swal from 'sweetalert2';
+import s from './Register.module.css'
+import { closeOutline, eyeOffOutline } from "ionicons/icons";
+import { IonIcon } from '@ionic/react';
 
 enum ErrorType { INCOMPLETE_INPUTS, ALREADY_EXISTS }
 enum Role { USER, PROFESSOR, ADMIN }
+
 
 type Props = {
   handleClose: (e: any) => any,
@@ -29,7 +33,12 @@ const Register: React.FC<Props> = ({ show, handleClose }) => {
   const [alreadyCreated, /* setAlreadyCreated */] = React.useState(false)
 
   const history = useHistory()
-
+  const swalWithBootstrapButtons = Swal.mixin({
+    customClass: {
+      confirmButton: `${s.botonswal}`
+    },
+    buttonsStyling: false
+  })
   async function handleSubmitRegister(values) {
     console.log(values)
     let user: UserProps = {
@@ -47,12 +56,14 @@ const Register: React.FC<Props> = ({ show, handleClose }) => {
     try {
       const registro = await axios.post('http://localhost:3001/api/session/register', userWithPassword, { withCredentials: true })
 
-      if (registro.status === 200)  {    
-       Swal.fire(
-        'Exito!',
-        'Se cerro sesión correctamente!',
-        'success'
+      if (registro.status === 200) {
+        swalWithBootstrapButtons.fire(
+          'Se registró correctamente',
+          'Ahora inicie sesión',
+          'success'
         )
+        handleClose('argument');
+        history.push('/login')
       }
     }
     catch (error) {
@@ -63,20 +74,20 @@ const Register: React.FC<Props> = ({ show, handleClose }) => {
       }
     }
   }
-  async function googleSubmit() {
+  // async function googleSubmit() {
 
-  }
+  // }
 
   return (
     <>
-      <Modal show={show} onHide={handleClose}>
+      <Modal show={show} onHide={handleClose} centered>
         <Modal.Header>
-          <Modal.Title>Llena el formulario para registrate!</Modal.Title>
+          <Modal.Title>Completa el formulario de registro</Modal.Title>
           <Button variant="secondary" onClick={handleClose}>
-            X
+            <IonIcon icon={closeOutline} className={s.iconDumb}></IonIcon>
           </Button>
         </Modal.Header>
-        <Modal.Body className="pb-0">
+        <Modal.Body>
           <Formik
             validationSchema={validationSchemaRegister}
             initialValues={{
@@ -95,35 +106,32 @@ const Register: React.FC<Props> = ({ show, handleClose }) => {
             }}
           >
             {({ handleSubmit, handleChange, values, errors, touched, handleBlur }) => (
-              <form onSubmit={handleSubmit} className="mt-6 mb-4">
-                <div className="form-row " >
-                  <Col md={12} className="form-group mt-6" >
-                    <label htmlFor="inputEmail">Email</label>
-                    <input
-                      name="mail"
-                      value={values.mail}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      type="text" id="inputEmail"
-                      className={`form-control ${errors.mail && touched.mail ? 'is-invalid' : ''}`}
-                    />
-                    {errors.mail && touched.mail && <div className='invalid-feedback'>{errors.mail}</div>}
-
-                  </Col>
-                  <Col md={12} className="form-group mt-2">
-                    <label htmlFor="inputPassword4">Password</label>
-                    <input
-                      name="password"
-                      value={values.password}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      type="password"
-                      id="inputPassword4"
-                      className={`form-control ${errors.password && touched.password ? 'is-invalid' : ''}`}
-                    />
-                    {errors.password && touched.password && <div className='invalid-feedback'>{errors.password}</div>}
-                  </Col>
-                </div>
+              <form onSubmit={handleSubmit} className="mt-6">
+                <Col md={12} className="form-group" >
+                  <label htmlFor="inputEmail">Email</label>
+                  <input
+                    name="mail"
+                    value={values.mail}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    type="text" id="inputEmail"
+                    className={`form-control ${errors.mail && touched.mail ? 'is-invalid' : ''}`}
+                  />
+                  {errors.mail && touched.mail && <div className='invalid-feedback'>{errors.mail}</div>}
+                </Col>
+                <Col md={12} className="form-group mt-2">
+                  <label htmlFor="inputPassword4">Password</label>
+                  <input
+                    name="password"
+                    value={values.password}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    type="password"
+                    id="inputPassword4"
+                    className={`form-control ${errors.password && touched.password ? 'is-invalid' : ''}`}
+                  />
+                  {errors.password && touched.password && <div className='invalid-feedback'>{errors.password}</div>}
+                </Col>
                 <Col md={12} className="form-group mt-2">
                   <label htmlFor="inputAddress">Nombre</label>
                   <input
@@ -150,22 +158,21 @@ const Register: React.FC<Props> = ({ show, handleClose }) => {
                   />
                   {errors.lastName && touched.lastName && <div className='invalid-feedback'>{errors.lastName}</div>}
                 </Col>
-                <div className="form-row mt-2">
-                  <Col md={12}>
-                    <label htmlFor="inputCity">Ciudad</label>
-                    <input
-                      name="city"
-                      value={values.city}
-                      onChange={handleChange}
-                      onBlur={handleBlur}
-                      type="text"
-                      className={`form-control ${errors.city && touched.city ? 'is-invalid' : ''}`}
-                      id="inputCity"
-                    />
-                    {errors.city && touched.city && <div className='invalid-feedback'>{errors.city}</div>}
-                  </Col>
-                  <div className="form-group col-md-4">
-                    {/* <label htmlFor="inputState">Estado</label>
+                <Col md={12} className="form-group mt-2">
+                  <label htmlFor="inputCity">Ciudad</label>
+                  <input
+                    name="city"
+                    value={values.city}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    type="text"
+                    className={`form-control ${errors.city && touched.city ? 'is-invalid' : ''}`}
+                    id="inputCity"
+                  />
+                  {errors.city && touched.city && <div className='invalid-feedback'>{errors.city}</div>}
+                </Col>
+                {/* <div className="form-group col-md-4">
+                     <label htmlFor="inputState">Estado</label>
                     <select
                       name="state"
                       id="inputState"
@@ -174,49 +181,72 @@ const Register: React.FC<Props> = ({ show, handleClose }) => {
                       <option defaultValue="">Choose...</option>
                       <option>...</option>
                     </select>
-                  </div> */}
+                  </div> 
 
-                  </div>
-                  <Row className=" mt-2" >
-                    <label className="form-check-label" htmlFor="gridCheck">Rol</label><br></br>
-                    <Col md={5} className="d-flex justify-content-evenly align-items-center p-0">
-                      <label className="form-check-label mr-2" htmlFor="gridCheck">User</label><br></br>
-                      <input
+                  </div> */}
+                <Col md={12} className="form-group mt-2">
+                  <Form.Group as={Row} className="mb-3 mt-2">
+                    <Form.Label as="legend" column sm={2}>
+                      Rol
+                    </Form.Label>
+                    <Col sm={10}>
+                      <Form.Check
+                        type="radio"
+                        label="Usuario"
                         name="role"
-                        type="radio" id="gridCheck"
-                        // onChange={() => setRole(Role.PROFESSOR)} 
+                        id="formHorizontalRadios1"
                         onChange={handleChange}
                         value={Role.USER}
                         defaultChecked
                       />
-                      <label className="form-check-label mr-3" htmlFor="gridCheck">Profesor</label><br></br>
-                      <input type="radio"
+                      <Form.Check
+                        type="radio"
+                        label="Profesor"
                         name="role"
+                        id="formHorizontalRadios2"
                         value={Role.PROFESSOR}
                         onChange={handleChange}
-                      ></input>
+                      />
                     </Col>
-                  </Row>
-                </div>
-                <Row  md={12} className=" mt-3 ">
-                  <Col sm={6} md={6} lg={6} className="d-flex justify-content-center">
-                    <button type="submit" id="local" className="btn btn-primary">Regístrate</button>
+                  </Form.Group>
+                </Col>
+                {/* <Row className=" mt-2" >
+                  <label className="form-check-label" htmlFor="gridCheck">Rol</label><br></br>
+                  <Col md={5} className="d-flex justify-content-evenly align-items-center p-0">
+                    <label className="form-check-label mr-2" htmlFor="gridCheck">User</label><br></br>
+                    <input
+                      name="role"
+                      type="radio" id="gridCheck"
+                      // onChange={() => setRole(Role.PROFESSOR)} 
+                      onChange={handleChange}
+                      value={Role.USER}
+                      defaultChecked
+                    />
+                    <label className="form-check-label mr-3" htmlFor="gridCheck">Profesor</label><br></br>
+                    <input type="radio"
+                      name="role"
+                      value={Role.PROFESSOR}
+                      onChange={handleChange}
+                    ></input>
                   </Col>
-                  <Col sm={6} md={6} lg={6}>
+                </Row> */}
+
+                <button type="submit" id="local" className={`btn btn-primary ${s.boton}`}>Regístrate</button>
+
+                {/* <Col sm={6} md={6} lg={6}>
                     <button onClick={googleSubmit} id="google" className="btn btn-primary " >Regístrate con Google</button>
                     {alreadyCreated ? <span style={{ color: 'red' }}>El usuario ya está siendo usado</span> : ''}
-                  </Col>
-                </Row>
+                  </Col> */}
               </form >
             )}
           </Formik>
 
         </Modal.Body>
-        <Modal.Footer>
+        {/* <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-        </Modal.Footer>
+        </Modal.Footer> */}
       </Modal>
     </>
   )

@@ -13,6 +13,12 @@ export default function Item({ cliente, id, imagen, nombre, precioDescuento, pre
   // This allows use to modify Redux state's properties 
   const dispatch = useDispatch();
 
+
+  const swalWithBootstrapButtons = Swal.mixin({
+    confirmButtonColor: '#2962ff',
+    buttonsStyling: true
+  })
+
   // This allows us to read the Redux state's property clasesPorComprar
   const clasesPorComprar = useSelector(state => state['clasesPorComprar']);
   // const clasesPorComprar = useSelector(state => state['claim']);
@@ -21,30 +27,31 @@ export default function Item({ cliente, id, imagen, nombre, precioDescuento, pre
   async function quitardeCesta() {
     // let clasesActualizadas = clasesPorComprar.filter(e => e.id !== id);
     // dispatch(modificarClasesPorComprar(clasesActualizadas));
-    Swal.fire({
-      title: '¿Quieres eliminar de tu lista esta clase?',
+    swalWithBootstrapButtons.fire({
+      title: '¿Quieres eliminar de tu cesta esta clase?',
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'Si, eliminalo!',
-      cancelButtonText: 'No, quédatelo'
+      confirmButtonText: 'Eliminar',
+      cancelButtonText: 'Cancelar'
     }).then((result) => {
       if (result.isConfirmed) {
 
           axios.get(`http://localhost:3001/api/carrito/${cliente}/${id}`)
-            .then(result => {
+            .then(async (result) => {
               if (result.status === 200) {
+                await Swal.fire(
+                  'Eliminado',
+                  'La clase se ha eliminado de tu cesta',
+                  'success',
+                ) 
                 dispatch(modificarClasesPorComprar(result.data));
               }
             })
             .catch(error => alert(error))
 
-          Swal.fire(
-            'Eliminado!',
-            'Tu clase se ha eliminado de tu lista.',
-            'success'
-          )
+            
         } else if (result.dismiss === Swal.DismissReason.cancel) {
-          Swal.fire(
+          swalWithBootstrapButtons.fire(
             'Cancelado',
             'Tu lista sigue intacta',
             'error'

@@ -8,7 +8,8 @@ let initialState = {
     claim: [],
     class: {},
     clases: [],
-    user: {},
+    cantidadClasesPorComprar: 0,
+    user: '',
     user_mail: '',
     user_name: '',
     user_lastName: '',
@@ -43,6 +44,11 @@ const all = (state = initialState, action) => {
             return {
                 ...state,
                 user: action.user
+            }
+        case actionsType.MODIFICAR_CANTIDAD_CLASES_POR_COMPRAR:
+            return {
+                ...state,
+                cantidadClasesPorComprar: action.cantidadClasesPorComprar
             }
         case actionsType.MODIFICAR_ESTADO_LOGUEADO:
             return {

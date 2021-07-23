@@ -17,7 +17,7 @@ const bootstrap = async () => {
         role: Role.ADMIN ,
         city: "Buenos Aires"
     }
-    const Diego = {...d, password:"123456"}
+    const Diego = {...d, password:"123+++465456$#$%&dfgeszdsh*/*/34o74y56"}
 
     const b: UserProps = {
         name: `Braian`,
@@ -26,7 +26,7 @@ const bootstrap = async () => {
         role: Role.ADMIN,
         city: "Buenos Aires"
     }
-    const Braian = {...b, password:"123456"}
+    const Braian = {...b, password:"123+++465456$#$%&dfgeszdsh*/*/34o74y56"}
 
     const e: UserProps = {
         name: 'Edward',
@@ -35,7 +35,7 @@ const bootstrap = async () => {
         role: Role.USER,
         city: "Cordoba"
     }
-    const Edward = {...e, password:"123456"}
+    const Edward = {...e, password:"123+++465456$#$%&dfgeszdsh*/*/34o74y56"}
 
     const j: UserProps = {
         name: 'Javier',
@@ -44,7 +44,7 @@ const bootstrap = async () => {
         role: Role.USER,
         city: "Lima"
     }
-    const Javi = {...j, password:"123456"}
+    const Javi = {...j, password:"123+++465456$#$%&dfgeszdsh*/*/34o74y56"}
 
     const m: UserProps = {
         name: 'Mauro',
@@ -53,7 +53,7 @@ const bootstrap = async () => {
         role: Role.PROFESSOR,
         city: "Lima"
     }
-    const Mauro = {...m, password:"123456"}
+    const Mauro = {...m, password:"123+++465456$#$%&dfgeszdsh*/*/34o74y56"}
 
 
     
