@@ -76,7 +76,7 @@ router.get('/:mail', async (req: Request, res: Response) => {
 
     if (usuario) {
         if (usuario.profesor) {
-            
+            console.log("Usuario", usuario.profesor)
             let obj: ProfesorProps = {
                     User_mail: usuario.mail,
                     name: usuario.name,
@@ -85,7 +85,8 @@ router.get('/:mail', async (req: Request, res: Response) => {
                     foto: usuario.profesor.foto,
                     description: usuario.profesor.description,
                     score: usuario.profesor.score,
-                    puntuacionesHowMany: howMany
+                    puntuacionesHowMany: howMany,
+                    history: usuario.profesor.history
             }
             return res.send(
                 obj

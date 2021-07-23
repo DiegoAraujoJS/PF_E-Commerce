@@ -2,7 +2,7 @@
 import React, { useState,  useEffect } from 'react'
 import axios from 'axios';
 import { useHistory } from "react-router-dom";
-import { UserProps } from '../../../../interfaces'
+
 import { Formik } from 'formik';
 import { validationSchemaRegister } from '../../utils/validations';
 import imageParser from '../../utils/imageParser';
@@ -10,16 +10,12 @@ import { Button, Modal, Row, Col } from 'react-bootstrap';
 import Swal from 'sweetalert2';
 import { Rating } from 'react-simple-star-rating'
 import { reduceEachTrailingCommentRange } from 'typescript';
-enum ErrorType { INCOMPLETE_INPUTS, ALREADY_EXISTS }
-enum Role { USER, PROFESSOR, ADMIN }
 
-type Props = {
-  handleClose: (e: any) => any,
-  show: boolean,
-}
+const Puntuar = ({ show, handleClose, clase, alum, index }) => {
 
-const Puntuar = () => {
-
+ var id=clase.id
+ console.log("CLASE", clase.id)
+ console.log("ID",id)
   // const [mail, setMail] = React.useState('')
   // const [password, setPass] = React.useState('')
   // const [name, setName] = React.useState('')
@@ -28,25 +24,22 @@ const Puntuar = () => {
   // const [state, setState] = React.useState('')
   // const [role, setRole] = React.useState(0
   const [rating, setRating] = useState(0)
+  const [clas, setClas]=useState(clase)
   let rate= rating
   let coment=""
   switch (rate) {
     case 1:
-      coment="Horrible"
+      coment="Muy malo"
       break
-    // Do something for summer
     case 2:
       coment="Malo"
       break
-    //Do something for winter
     case 3:
       coment="Normal"
       break
-    //Do something for spring
     case 4:
       coment="Bueno"
       break
-    //Do something for autumn
     case 5:
       coment="Excelente"
       break
@@ -55,18 +48,21 @@ const Puntuar = () => {
   }
   const handleRating = (rate) => {
     setRating(rate)
-    // Some logic
   }
+  
+  
   async function handleSubmitRegister(values) {
-    const clases= await axios.get('http://localhost:3001/api/clases/all')
-    console.log(clases)
-    let user={
-      comentario: values.comentario,
-      id: 1,
-      puntuacion: rating,
-      alumno: "diegoaraujo@gmail.com"
-    }
+    
     try {
+      console.log(index)
+      const clases= await axios.get('http://localhost:3001/api/clases/all')
+      console.log(clases)
+      let user={
+      comentario: values.comentario,
+      id: id,
+      puntuacion: rating,
+      alumno: alum
+    }
       const registro = await axios.post('http://localhost:3001/api/puntuacion/', user, { withCredentials: true })
       console.log("Registro", registro.data)
       if(registro.data===`${user.alumno} ya comentó esta clase si desea actualice su puntuacion`){
@@ -84,21 +80,21 @@ const Puntuar = () => {
       }
     }
     catch (error) {
-      if (error.response && error.response.data.type === ErrorType.ALREADY_EXISTS) {
+      if (error.response) {
         alert('El usuario ya existe!')
-      } else if (error.response && error.response.data.type === ErrorType.INCOMPLETE_INPUTS) {
+      } else if (error.response) {
         alert('Debe ingresar mail, nombre y apellido')
       }
     }
   }
-  console.log(rating)
-  
+  console.log("Clase e", clas)
+ 
   return (
     <>
-      <Modal show={true}>
+      <Modal show={show} onHide={handleClose}>
         <Modal.Header>
           <Modal.Title>Llena el formulario para dejar tu opinion de la clase!</Modal.Title>
-          <Button variant="secondary">
+          <Button variant="secondary" onClick={handleClose}>
             X
           </Button>
         </Modal.Header>
@@ -107,6 +103,7 @@ const Puntuar = () => {
             
             initialValues={{
               comentario:"",
+              id: clase.id
  
             }}
   
@@ -119,8 +116,8 @@ const Puntuar = () => {
             {({ handleSubmit, handleChange, values, errors, touched, handleBlur }) => (
               
               <form onSubmit={handleSubmit} className="mt-6 mb-4">
-                <h2 >Clase de matematica</h2>
-                <h3>Profesor: Nose</h3>
+                <h2 >Clase de {clase.materia}</h2>
+                <h3>Profesor: {clase.profesor.name} {clase.profesor.lastName}</h3>
                 <div style={{ display: 'flex', position: 'relative', height: 'fit-content', alignContent: 'space-between', width: '560px', alignItems: 'center' }}>
 										<div style={{ width: '250px', fontSize: '25px' }}>
                      <label htmlFor="inputEmail">Puntuacion</label>
@@ -156,7 +153,7 @@ const Puntuar = () => {
 
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary">
+          <Button variant="secondary"  onClick={handleClose}>
             Close
           </Button>
         </Modal.Footer>

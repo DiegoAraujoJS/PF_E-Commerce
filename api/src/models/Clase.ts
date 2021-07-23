@@ -41,6 +41,9 @@ export default class Clase extends Model {
     @Column ({type: DataType.JSON})
     calendar: Horario[];
 
+    @Column ({allowNull: true})
+    status: 'pending' | 'complete' | 'cancelled'
+
     @BelongsTo(() => Profesor)
     profesor!: Profesor;
 

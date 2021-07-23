@@ -68,14 +68,15 @@ router.post('/add', validateToken, async (req: MiddlewareRequest, res: Response)
                 const calendario = profesor.calendario[indice]
 
                 if (calendario) {
-
+                    console.log("PASA POR AQUIIIIIIIIII")
                     const resultado: Horario = nuevosHorarios(calendario, query)
 
                     const nuevoCalendario = profesor.calendario.map((e, i) => i === indice ? resultado : e)
 
                     profesor.set({
                         ...profesor,
-                        calendario: nuevoCalendario
+                        calendario: nuevoCalendario,
+                        history:nuevoCalendario
                     })
                     let calendarioEditado = await profesor.save()
                     
@@ -94,6 +95,15 @@ router.post('/add', validateToken, async (req: MiddlewareRequest, res: Response)
                                 disponible: query.disponible ? query.disponible : null,
                                 ocupado: null
                             }
+                        ],
+                        history:[
+                            ...profesor.history,
+                            {
+                                email: query.email,
+                                fecha: query.fecha,
+                                disponible: query.disponible ? query.disponible : null,
+                                ocupado: null
+                            }
                         ]
                     })
                     let calendarioEditado = await profesor.save()
@@ -105,6 +115,14 @@ router.post('/add', validateToken, async (req: MiddlewareRequest, res: Response)
                 profesor.set({
                     ...profesor,
                     calendario: [
+                        {
+                            email: query.email,
+                            fecha: query.fecha,
+                            disponible: query.disponible ? query.disponible : null,
+                            ocupado: null,
+                        }
+                    ],
+                    history: [
                         {
                             email: query.email,
                             fecha: query.fecha,

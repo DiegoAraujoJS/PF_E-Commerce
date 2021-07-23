@@ -9,6 +9,8 @@ import icon_edit from '../../images/editar.png'
 import { useHistory } from "react-router-dom";
 import star from '../../images/star.png'
 import PerfilAlumno from '../perfilAlumno/perfilAlumno';
+import { Rating, RatingView } from 'react-simple-star-rating'
+
 const Role = {
     USER: 0,
     PROFESSOR: 1,

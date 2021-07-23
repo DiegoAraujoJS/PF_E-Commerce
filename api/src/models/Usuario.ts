@@ -50,6 +50,9 @@ export default class User extends Model implements UserProps {
     @Column({ type: DataType.JSON })
     carrito!: Class[];
 
+    @Column({ type: DataType.JSON})
+    historial!: object[]
+
     @HasMany(() => Puntuacion)
     puntuaciones!: Puntuacion[];
 

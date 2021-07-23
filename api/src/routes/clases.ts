@@ -3,6 +3,8 @@ import Clase from './../models/Clase'
 import Profesor from '../models/Profesor'
 import Puntuacion from '../models/Puntuacion'
 import { Op } from 'sequelize'
+import { Time } from '../../../interfaces'
+import User from '../models/Usuario'
 const router = Router()
 
 
@@ -111,15 +113,59 @@ router.get('/', async (req: Request, res: Response) => {
 
 
 
+router.get('/all/student/:mail', async (req: Request, res: Response) => {
+    console.log(req)
+    const clases = await Clase.findAll({
+         include: [{
+             model: Profesor,
+             required: true
+            }],
+         
+         where: {
+            User_mail: req.params.mail
+         }
+         })
+    return res.send(clases)
+    const response = clases.map(function (clase){
+        const claseTransform = {
+            ...clase,
+        }
+        return claseTransform
+    })
+    
+})
+router.get('/all/profesor/:mail', async (req: Request, res: Response) => {
+    console.log(req)
+    const clases = await Clase.findAll({
+         include: [{
+             model: Profesor,
+             required: true
+            }],
+         
+         where: {
+            Profesor_mail: req.params.mail
+         }
+         })
+    return res.send(clases)
+    const response = clases.map(function (clase){
+        const claseTransform = {
+            ...clase,
+        }
+        return claseTransform
+    })
+    
+})
+
 router.get('/all', async (req: Request, res: Response) => {
     try {
-        const clases = await Clase.findAll({ include: [Profesor, Puntuacion] })
+        const clases = await Clase.findAll({ include: [Profesor] })
         res.send(clases)
     }
     catch (error) {
         res.status(404).send("Ops! hubo un error")
     }
 })
+
 
 
 router.post('/add', async (req: Request, res: Response) => {

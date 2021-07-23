@@ -16,7 +16,8 @@ router.post('/:user', async function (req: Request, res: Response) {
             if (!existe) {
                 usuario.set({
                     ...usuario,
-                    carrito: usuario.carrito[0] ? [...usuario.carrito, clase] : [clase]
+                    carrito: usuario.carrito[0] ? [...usuario.carrito, clase] : [clase],
+                    historial: usuario.carrito[0] ? [...usuario.carrito, clase] : [clase]
                 })
                 const result = await usuario.save()
                 res.send(result)
@@ -27,7 +28,8 @@ router.post('/:user', async function (req: Request, res: Response) {
         } else {
             usuario.set({
                 ...usuario,
-                carrito: [clase]
+                carrito: [clase],
+                historial:[clase]
             })
             const result = await usuario.save()
             res.send(result)

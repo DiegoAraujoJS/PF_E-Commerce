@@ -24,8 +24,10 @@ import CondicionesServicio from './components/condicionesservicio/CondicionesSer
 import PoliticaPrivacidad from './components/politicaprivacidad/PoliticaPrivacidad';
 import AddStudentClass from './components/addClass/addStudentClass';
 import EditPerfilAlum from './components/editPerfilAlum/editPerfilAlum';
-import Puntuar from './components/puntuar/Puntuar';
+import Puntuar from './components/puntuar/Puntuar.jsx';
 
+
+import Historial from './components/historial/Historial';
 enum Role {USER, PROFESSOR, ADMIN}
 
 const moneda = 'USD';
@@ -194,7 +196,7 @@ function App() {
         <Route exact path='/editPerfilAlumno'><EditPerfilAlum/></Route>
       <Route exact path='/chat'><Chat mail={""}/></Route>
       <Route exact path='/addclaim'><AddClaim /></Route>
-      <Route exact path='/puntuar'><Puntuar /></Route>
+      
       <Route path='/chat/:mail' exact render={({ match }) => {
             return <Chat mail={match.params.mail} />
           }           
@@ -206,6 +208,7 @@ function App() {
       {/* <Route path='/cesta' render={({ match }) => {
           <Cesta clasesPorComprar={clasesPorComprar} moneda={moneda} cliente={cliente}/>}}></Route> */}
       <Route path='/cesta' component={Cesta}></Route>
+      <Route path='/historial' component={Historial}></Route>
       <Route path="/pagoexitoso" component={PagoExitoso}></Route>
       <Route path="/detalle/:id" render={({ match }) => <DetalleClase id={match.params.id} />} />
       <Route path="/condicionesdeuso" component={CondicionesUso}></Route>
