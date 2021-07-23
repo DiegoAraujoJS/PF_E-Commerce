@@ -5,7 +5,7 @@ import {
   DayPilot,
   DayPilotDate,
   DayPilotCalendar,
-  DayPilotNavigator,
+  DayPilotNavigator
 } from "daypilot-pro-react";
 import "./CalendarStyles.css";
 import axios from "axios";
@@ -236,6 +236,7 @@ class Calendar extends Component {
       showToolTip: false,
       startDate: date(today, "yy/mm/dd"),
       events: persons,
+      width: "40%"
     });
   }
     
@@ -246,7 +247,9 @@ class Calendar extends Component {
     return (
       <div style={styles.wrap}>
         <div style={styles.left}>
+         
           <DayPilotNavigator
+
             selectMode={"week"}
             showMonths={1}
             skipMonths={1}

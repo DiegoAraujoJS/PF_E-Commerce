@@ -2,7 +2,7 @@
 import React, { useState,  useEffect } from 'react'
 import axios from 'axios';
 import { useHistory } from "react-router-dom";
-import { UserProps } from '../../../../interfaces'
+
 import { Formik } from 'formik';
 import { validationSchemaRegister } from '../../utils/validations';
 import imageParser from '../../utils/imageParser';
@@ -10,17 +10,12 @@ import { Button, Modal, Row, Col } from 'react-bootstrap';
 import Swal from 'sweetalert2';
 import { Rating } from 'react-simple-star-rating'
 import { reduceEachTrailingCommentRange } from 'typescript';
-enum ErrorType { INCOMPLETE_INPUTS, ALREADY_EXISTS }
-enum Role { USER, PROFESSOR, ADMIN }
 
-type Props = {
-  handleClose: (e: any) => any,
-  show: boolean,
-}
+const Puntuar = ({ show, handleClose, clase, alum, index }) => {
 
-const Puntuar = ({ show, handleClose, clase, alum }) => {
-  console.log("Clase", clase)
- 
+ var id=clase.id
+ console.log("CLASE", clase.id)
+ console.log("ID",id)
   // const [mail, setMail] = React.useState('')
   // const [password, setPass] = React.useState('')
   // const [name, setName] = React.useState('')
@@ -29,26 +24,22 @@ const Puntuar = ({ show, handleClose, clase, alum }) => {
   // const [state, setState] = React.useState('')
   // const [role, setRole] = React.useState(0
   const [rating, setRating] = useState(0)
-  const [clas, setClas]=useState({})
+  const [clas, setClas]=useState(clase)
   let rate= rating
   let coment=""
   switch (rate) {
     case 1:
-      coment="Horrible"
+      coment="Muy malo"
       break
-    // Do something for summer
     case 2:
       coment="Malo"
       break
-    //Do something for winter
     case 3:
       coment="Normal"
       break
-    //Do something for spring
     case 4:
       coment="Bueno"
       break
-    //Do something for autumn
     case 5:
       coment="Excelente"
       break
@@ -57,29 +48,21 @@ const Puntuar = ({ show, handleClose, clase, alum }) => {
   }
   const handleRating = (rate) => {
     setRating(rate)
-    // Some logic
   }
-  const fetchClases= async()=>{
-    try{
-        setClas(clase)
-    }
-   catch (err) {
-    console.log(err)
-}
-  }
+  
+  
   async function handleSubmitRegister(values) {
-    console.log("CLASEEEEEEEEE", clas)
-    const id=clase.id
-    const clases= await axios.get('http://localhost:3001/api/clases/all')
-    console.log(clases)
-    let user={
+    
+    try {
+      console.log(index)
+      const clases= await axios.get('http://localhost:3001/api/clases/all')
+      console.log(clases)
+      let user={
       comentario: values.comentario,
       id: id,
       puntuacion: rating,
       alumno: alum
     }
-    console.log("User", user)
-    try {
       const registro = await axios.post('http://localhost:3001/api/puntuacion/', user, { withCredentials: true })
       console.log("Registro", registro.data)
       if(registro.data===`${user.alumno} ya comentó esta clase si desea actualice su puntuacion`){
@@ -97,17 +80,15 @@ const Puntuar = ({ show, handleClose, clase, alum }) => {
       }
     }
     catch (error) {
-      if (error.response && error.response.data.type === ErrorType.ALREADY_EXISTS) {
+      if (error.response) {
         alert('El usuario ya existe!')
-      } else if (error.response && error.response.data.type === ErrorType.INCOMPLETE_INPUTS) {
+      } else if (error.response) {
         alert('Debe ingresar mail, nombre y apellido')
       }
     }
   }
-  console.log(rating)
-  useEffect(()=>{
-    fetchClases()
-},[])
+  console.log("Clase e", clas)
+ 
   return (
     <>
       <Modal show={show} onHide={handleClose}>

@@ -204,7 +204,7 @@ const bootstrap = async () => {
     await Clase.create({
         nombre: 'Historia',
         Profesor_mail: "braiansilva@gmail.com",
-        User_mail: 'edwardburgos@gmail.com',
+        User_mail: 'mauroleonel@gmail.com',
         descripcion: 'En esta clase te enseñaré todo lo que necesitas de Historia',
         materia: 'Historia',
         esPresencial: 'Virtual',
@@ -219,7 +219,7 @@ const bootstrap = async () => {
     await Clase.create({
         nombre: 'Filosofia',
         Profesor_mail: "diegoaraujo@gmail.com",
-        User_mail: 'edwardburgos@gmail.com',
+        User_mail: 'mauroleonel@gmail.com',
         descripcion: 'En esta clase te enseñaré todo lo que necesitas de Filosofia',
         materia: 'Filosofia',
         esPresencial: 'Presencial',

@@ -12,6 +12,7 @@ const Historial = () => {
         width: '160px',
         borderRadius: '50%',
     };
+    var j=0
     const classListContainer = {
         // position: 'relative',
         // overflowY: 'auto',
@@ -23,9 +24,10 @@ const Historial = () => {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     const [historia, setHistoria]=useState([])
-    let userMail = ''
+    const [alum, setAlum]=useState("")
     const fetchHistorial = async () => {
         try {
+            
             const token = getCookieValue("token").slice(
                 1,
                 getCookieValue("token").length - 1
@@ -35,9 +37,8 @@ const Historial = () => {
                 {},
                 { headers: { Authorization: token } }
               );
-            userMail = userResponse.data.mail            
+            await setAlum(userResponse.data.mail)            
             const response = await axios.get(`http://localhost:3001/api/clases/all/${userResponse.data.mail}`)
-            console.log("RESPONSE", response)
             await setHistoria([
                 ...response.data]
             )
@@ -49,15 +50,15 @@ const Historial = () => {
     useEffect(()=>{
         fetchHistorial()
     },[])
-    console.log("Historia", historia)
     
     return (
         <div class="container" >
             <h1>Mi historial de cursos</h1>
             
             <ul style={classListContainer}>
-                {historia  ? historia.map((e)=>{
+                {historia.map((e, i)=>{
                     console.log("ESTO ES E", e)
+                    const clase=e
                     if(!e.profesor){return null}
                     return (
                         <Container style={{background:"silver", borderColor:"red", borderRadius:"20px", marginTop:"20px"}}>
@@ -85,15 +86,15 @@ const Historial = () => {
                                         </div>
 
                                    </div>
-                                   <div style={{marginLeft:"35vw"}}>
+                                   <div  style={{marginLeft:"35vw"}}>
                                         <Button onClick={() => handleShow()}> Puntuar clase </Button>
-                                        <Puntuar show={show} handleClose={handleClose} clase={e} alum={userMail} />
+                                        <Puntuar key={e.id}id={e.id} show={show} handleClose={handleClose} clase={e} alum={alum} index={i} />
                                    </div>
                                 </div>
                             </div>
                         </Container>
                             )
-                }) : null}
+                })}
          
             </ul>
             
