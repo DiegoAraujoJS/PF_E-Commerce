@@ -105,7 +105,7 @@ export default function SearchBar() {
           localStorage.setItem('login', 'true')
 
           const user = await axios.post(`http://localhost:3001/api/verify`, {}, { headers: { Authorization: getCookieValue('token').replaceAll("\"", '') } })
-          console.log(user)
+
           if (user.status === 200) {
             Swal.fire({
               title: 'Exito!',
@@ -197,16 +197,16 @@ export default function SearchBar() {
   }
 
   const admin = <FontAwesomeIcon icon={faUserTie} style={{ fontSize: "40px" }} className="" />
-  console.log(errors)
+
   return (
     // <Navbar expand="lg" className={s.navbar}>
     <Navbar bg="light" expand="lg">
       <Container className="container-fluid p-0">
-        <Navbar.Brand className={'ms-3'} href="#home"><Link to={"/home"}><img src={logo} alt='U CLASES Logo' style={{ height: '56px' }}></img></Link></Navbar.Brand>
+        <Navbar.Brand className={'ms-3'} href="#home"><Link to={"/"}><img src={logo} alt='U CLASES Logo' style={{ height: '56px' }}></img></Link></Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto">
-            <Link className={'nav-link ms-4 text-decoration-none'} to={"/home"}>Home</Link>
+            <Link className={'nav-link ms-4 text-decoration-none'} to={"/"}>Home</Link>
             <Link className={'nav-link ms-4 text-decoration-none'} to={"/calendar"}>Calendar</Link>
             <Link className={'nav-link ms-4 text-decoration-none'} to={"/perfil"}>Profile</Link>
             <Link className={'nav-link ms-4 text-decoration-none'} to={"/chat"}>Chat</Link>

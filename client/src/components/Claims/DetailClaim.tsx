@@ -49,26 +49,69 @@ function DetailClaim(props) {
   }
 
   const suspender = async () => {
-    const response = await axios.get(
-      "http://localhost:3001/api/reclamos/suspender/" + claim.denunciado.mail
-    );
-    if (response.status === 200) {
-      setSuspendido(response.data.suspendido);
-      Swal.fire(
-        "Exito!",
-        "El usuario a sido suspendido correctamente!",
-        "success"
-      );
-    }
+    Swal.fire({
+      title: '¿Esta seguro de prohibir a este usuario?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Si!',
+      cancelButtonText: 'No!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios.get("http://localhost:3001/api/reclamos/suspender/" + claim.denunciado.mail)
+          .then(response => {
+            if (response.status === 200) {
+              setSuspendido(response.data.suspendido);
+            }
+          })
+          .catch(error => alert(error))
+
+        Swal.fire(
+          'Prohibido!',
+          'La cuenta del usuario a sido suspendido correctamente.',
+          'success'
+        )
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        Swal.fire(
+          'Cancelado',
+          'La cuenta del usuario sigue intancta',
+          'error'
+        )
+      }
+    })
   };
+
   const permitir = async () => {
-    const response = await axios.get(
-      "http://localhost:3001/api/reclamos/permitir/" + claim.denunciado.mail
-    );
-    if (response.status === 200) {
-      Swal.fire("Exito!", "La cuenta del usuario esta disponible!", "success");
-    }
+    Swal.fire({
+      title: '¿Esta seguro de eliminar la prohibición a este usuario?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Si!',
+      cancelButtonText: 'No!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios.get("http://localhost:3001/api/reclamos/permitir/" + claim.denunciado.mail)
+          .then(response => {
+            if (response.status === 200) {
+              setSuspendido(response.data.suspendido);
+            }
+          })
+          .catch(error => alert(error))
+
+        Swal.fire(
+          'Exito!',
+          'La prohibición del usuario a sido eliminada correctamente.',
+          'success'
+        )
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        Swal.fire(
+          'Cancelado',
+          'La cuenta del usuario sigue suspendida',
+          'error'
+        )
+      }
+    })
   };
+
 
   return (
     <div className={"container px-3 pt-3"}>

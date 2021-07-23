@@ -19,10 +19,6 @@ export default class Reclamo extends Model {
     @BelongsTo(() => User, 'denunciante_email')
     denunciante!: User;
 
-    // @ForeignKey(() => User)
-    // @Column ({allowNull: false})
-    // Admin_email!: string;
-
     @Column ({allowNull: false, type: DataType.JSON})
     reclamo!: string;
 

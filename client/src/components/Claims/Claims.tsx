@@ -1,4 +1,3 @@
-
 import { connect } from "react-redux";
 import { getAllClaims } from "../../Actions/Actions";
 import Claim from "./Claim";
