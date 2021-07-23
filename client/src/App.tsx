@@ -132,9 +132,9 @@ function App() {
       }
       }></Route> : null}
       
-      <Route exact path='/claim/:id' render={() => {
+      <Route exact path='/claim/:id' render={({ match }) => {
           if (user.role === Role.ADMIN) {
-            return <DetailClaim />
+            return <DetailClaim id={match.params.id}/>
           }
           else  {
             return <Redirect to='/home'/>
