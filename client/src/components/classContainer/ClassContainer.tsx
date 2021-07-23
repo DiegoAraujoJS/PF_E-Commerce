@@ -141,7 +141,7 @@ const ClassContainer: React.FC<Props> = ({ searchInput, dispatchInput }) => {
         async function fetchData() {
             if (user.mail) {
                 const response = await axios.get("http://localhost:3001/api/usuarios/" + user.mail)
-                if (response.status === 200) { setCity({ name: response.data.city, show: false, length: 0 }) }
+                if (response.status === 200) { setCity({ name: response.data.city, show: false }) }
             }
         }
         fetchData()
@@ -186,6 +186,8 @@ const ClassContainer: React.FC<Props> = ({ searchInput, dispatchInput }) => {
                     <h6 className="font-weight-bold  mt-3">Nivel:</h6>
                     <ListGroup>
                         <ListGroup.Item action style={{ backgroundColor: (nivel === "Primario" ? "#bababa" : "white") }} onClick={() => nivel !== "Primario" ? setNivel("Primario") : setNivel("")} className="d-flex justify-content-between align-items-center category"> Primario
+                            <div className="d-flex justify-content-evenly" style={{ width: "50px" }} ><span style={{ backgroundColor: "lightgreen", color: "green" }} className="badge badge-primary badge-pill">{nivel === "Primario" && classProfessorFilter.length}</span>
+                                <span style={{ backgroundColor: "lightblue", color: "blue" }} className="badge badge-primary badge-pill">{nivel === "Primario" && classUserFilter.length}</span> </div>
                         </ListGroup.Item>
                         <ListGroup.Item action style={{ backgroundColor: (nivel === "Secundario" ? "#bababa" : "white") }} onClick={() => nivel !== "Secundario" ? setNivel("Secundario") : setNivel("")} className="d-flex justify-content-between align-items-center category"> Secundario
                             <div className="d-flex justify-content-evenly" style={{ width: "50px" }} ><span style={{ backgroundColor: "lightgreen", color: "green" }} className="badge badge-primary badge-pill">{nivel === "Secundario" && classProfessorFilter.length}</span>
