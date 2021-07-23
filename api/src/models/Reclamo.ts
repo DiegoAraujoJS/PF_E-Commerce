@@ -3,20 +3,21 @@ import { EnumType } from 'typescript';
 import { Claim } from '../../../interfaces';
 import Clase from './Clase';
 import Profesor from './Profesor';
-
 import User from './Usuario';
 
 
 
 @Table
 export default class Reclamo extends Model {
-    @ForeignKey(() => User)
-    @Column ({allowNull: false})
-    Denunciante_email!: string;
+    @Column
+    nombre!: string;
 
     @ForeignKey(() => User)
-    @Column ({allowNull: false})
-    Denunciado_email!: string;
+    @Column
+    denunciante_email!: string;
+
+    @BelongsTo(() => User, 'denunciante_email')
+    denunciante!: User;
 
     // @ForeignKey(() => User)
     // @Column ({allowNull: false})
@@ -25,7 +26,24 @@ export default class Reclamo extends Model {
     @Column ({allowNull: false, type: DataType.JSON})
     reclamo!: string;
 
-    @BelongsTo(() => User)
-    usuario!: User
+    @ForeignKey(() => User)
+    @Column
+    denunciado_email!: string;
 
+    @BelongsTo(() => User, 'denunciado_email')
+    denunciado!: User;
+
+    @ForeignKey(() => User)
+    @Column
+    admin_email!: string;
+
+    @BelongsTo(() => User, 'admin_email')
+    admin!: User;
+
+    @ForeignKey(() => Clase)
+    @Column
+    clase_id!: number;
+
+    @BelongsTo(() => Clase, 'clase_id')
+    clase!: Clase;
 }

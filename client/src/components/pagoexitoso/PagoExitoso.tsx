@@ -7,6 +7,8 @@ import Item from '../item/Item';
 import googleCalendar from '../../images/googlecalendar.svg';
 import loadingGif from '../../images/loadingGif.gif';
 import config from '../../config/config'
+import { Link } from 'react-router-dom';
+
 declare global {
     interface Window {
         gapi: any;
@@ -19,6 +21,7 @@ export default function PagoExitoso() {
     const [productosComprados, setProductosComprados] = useState([]);
     const [eventosPorGuardar, setEventosPorGuardar] = useState([]);
     const [cliente, setCliente] = useState('')
+    const [clientMail, setClientMail] = useState('');
 
     function randomID() {
         var result = '';
@@ -39,7 +42,8 @@ export default function PagoExitoso() {
             let clienteFormateado = cliente.map(e => `${e.slice(0, 1).toUpperCase()}${e.slice(1).toLowerCase()}`)
             let clienteNombre = clienteFormateado.join(' '); 
             let cliente_email = session.data.customer_email;
-            setCliente(clienteNombre)
+            setClientMail(cliente_email);
+            setCliente(clienteNombre);
             let detalleCompra = session.data.line_items.data.map(e => {
                 const profesor = e.price.product.description.split(' ')[2];
                 const dia = e.price.product.description.split(' ')[6];
@@ -168,6 +172,13 @@ export default function PagoExitoso() {
                     <img src={googleCalendar} className={s.googleCalendar} alt='Google Calendar Logo'></img>
                     Agenda tus clases en Google Calendar
                 </button>
+            </div>
+            <div className={s.contenedorBoton}>
+                <Link to={`/chat/${clientMail}`}>
+                    <button className={s.agendar} onClick={() => console.log(clientMail)}>
+                        Chatea con el profesor
+                    </button>
+                </Link> 
             </div>
             <p className={s.subtitle}>Detalle de compra</p>
             <div className={s.detalleContainer}>

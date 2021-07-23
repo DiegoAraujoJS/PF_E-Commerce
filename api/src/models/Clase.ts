@@ -1,7 +1,8 @@
-import { Model, Column, Table, CreatedAt, UpdatedAt, ForeignKey,DataType,  BelongsTo, HasMany, PrimaryKey, Unique} from 'sequelize-typescript';
+import { Model, Column, Table, CreatedAt, UpdatedAt, ForeignKey,DataType,  BelongsTo, HasMany, PrimaryKey, Unique, HasOne} from 'sequelize-typescript';
 import { Horario, Time } from '../../../interfaces';
 import Profesor from './Profesor';
 import Puntuacion from './Puntuacion';
+import Reclamo from './Reclamo';
 import User from './Usuario';
 @Table
 export default class Clase extends Model {
@@ -27,29 +28,32 @@ export default class Clase extends Model {
     precio!: string;
 
     @Column ({allowNull: false, type: DataType.JSON})
-    date!: {year: number, month: number, day: number, time: Time}
+    date!: {year: number, month: number, day: number, time: Time};
 
     @ForeignKey(() => Profesor)
     @Column
-    Profesor_mail!: string
+    Profesor_mail!: string;
 
     @ForeignKey(() => User)
     @Column
-    User_mail!: string
+    User_mail!: string;
 
     @Column ({type: DataType.JSON})
-    calendar: Horario[]
+    calendar: Horario[];
 
     @BelongsTo(() => Profesor)
-    profesor!: Profesor
+    profesor!: Profesor;
 
     @BelongsTo(() => User)
-    student!: User
+    student!: User;
 
     @Column(DataType.FLOAT)
     puntuacion!: number;
 
     @HasMany(() => Puntuacion)
     puntuaciones!: Puntuacion[];
+
+    @HasMany(() => Reclamo, 'clase_id')
+    clase!: Reclamo[];
 
 }

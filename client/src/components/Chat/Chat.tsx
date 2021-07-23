@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import "./Chat.css";
 import axios from "axios";
 import getCookieValue from "../../cookieParser";
 import style from "./Chat.module.css";
@@ -12,14 +11,9 @@ export interface UserChat {
   lastName: string;
 }
 
-function Chat() {
+function Chat(props: React.PropsWithChildren<{mail:string}>) {
   const [userLoged, setUserLoged] = useState<UserChat>();
-  const [userReference, /* setUserReference */] = useState({
-    mail: "admin@admin.com",
-    name: "Admin",
-    lastName: "Admin",
-    city: "Buenos Aires"
-  });
+  const [userReference, /* setUserReference */] = useState(props.mail);
 
   useEffect(() => {
     if (!userLoged) {

@@ -24,6 +24,7 @@ import CondicionesServicio from './components/condicionesservicio/CondicionesSer
 import PoliticaPrivacidad from './components/politicaprivacidad/PoliticaPrivacidad';
 import AddStudentClass from './components/addClass/addStudentClass';
 import EditPerfilAlum from './components/editPerfilAlum/editPerfilAlum';
+import Puntuar from './components/puntuar/Puntuar';
 
 enum Role {USER, PROFESSOR, ADMIN}
 
@@ -133,12 +134,11 @@ function App() {
       }
       }></Route> : null}
       
-      <Route exact path='/claim/:id' render={() => {
+      <Route exact path='/claim/:id' render={({ match }) => {
           if (user.role === Role.ADMIN) {
-            return <DetailClaim />
+            return <DetailClaim id={match.params.id}/>
           }
           else  {
-            console.log('entre')
             return <Redirect to='/home'/>
           }          
       }
@@ -187,13 +187,20 @@ function App() {
         }
       }
       ></Route>
-<Route path='/calendar/:email' exact render={({ match }) => {
+      <Route path='/calendar/:email' exact render={({ match }) => {
             return <CalendarApp >{match.params.email} </CalendarApp>           
           }           
       } />
         <Route exact path='/editPerfilAlumno'><EditPerfilAlum/></Route>
-      <Route exact path='/chat'><Chat /></Route>
+      <Route exact path='/chat'><Chat mail={""}/></Route>
       <Route exact path='/addclaim'><AddClaim /></Route>
+      <Route exact path='/puntuar'><Puntuar /></Route>
+      <Route path='/chat/:mail' exact render={({ match }) => {
+            return <Chat mail={match.params.mail} />
+          }           
+      } />
+      <Route exact path='/chat'><Chat mail={""}/></Route>
+      <Route exact path='/claim/add'><AddClaim /></Route>
       <Route exact path='/home'><Home /></Route>
       <Route exact path='/clases'><ClassContainer /></Route>
       {/* <Route path='/cesta' render={({ match }) => {

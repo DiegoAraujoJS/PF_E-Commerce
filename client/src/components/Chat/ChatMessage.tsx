@@ -6,7 +6,7 @@ export default function ChatMessage(props) {
   const { text, uid, photoURL, createdAt, user } = props.message;
 
   const messageClass = uid === user ? "sent" : "received";
-
+  
   return (
     <>
       {messageClass === "sent" ? (
@@ -27,17 +27,7 @@ export default function ChatMessage(props) {
           </div>
           <div className={"d-flex justify-content-start ms-4"}>
             <small className={"text-secondary"}>
-              {createdAt.toDate().getHours() +
-                ":" +
-                createdAt.toDate().getMinutes() +
-                ":" +
-                createdAt.toDate().getSeconds() +
-                " " +
-                createdAt.toDate().getDay() +
-                "/" +
-                createdAt.toDate().getMonth() +
-                "/" +
-                createdAt.toDate().getFullYear()}
+              
             </small>
           </div>
         </div>
@@ -59,17 +49,7 @@ export default function ChatMessage(props) {
           </div>
           <div className={"d-flex justify-content-end me-4"}>
             <small className={"text-secondary"}>
-              {createdAt.toDate().getHours() +
-                ":" +
-                createdAt.toDate().getMinutes() +
-                ":" +
-                createdAt.toDate().getSeconds() +
-                " " +
-                createdAt.toDate().getDay() +
-                "/" +
-                createdAt.toDate().getMonth() +
-                "/" +
-                createdAt.toDate().getFullYear()}
+            
             </small>
           </div>
         </div>
