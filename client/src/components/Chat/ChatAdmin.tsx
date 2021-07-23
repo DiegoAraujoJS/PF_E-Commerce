@@ -1,136 +1,76 @@
-import React, { useRef, useState } from "react";
-import "./Chat.css";
+import React, { useRef, useState, useEffect } from "react";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { firestore } from "../../firebase";
 import firebase from "firebase/app";
 import { UserChat } from "./Chat";
-import style from "./Chat.module.css";
-import ChatMessage from "./ChatMessage";
-import profilePicture from "../../images/profile_pic.svg";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faPaperPlane,
-  faChevronCircleDown,
-} from "@fortawesome/free-solid-svg-icons";
+import ChatRoomAdmin from "./ChatRoomAdmin";
 
 interface ChatData {
   users: Array<UserChat>;
   id: string;
 }
 
-interface ChatRoomData {
-  userLoged: UserChat;
-  users: Array<UserChat>;
-  id: string;
-  setChatSelected: React.Dispatch<React.SetStateAction<ChatData>>;
+interface ChatAdminProps {
+  admin: UserChat,
+  user: UserChat,
 }
-
-export default function ChatAdmin(props: React.PropsWithChildren<ChatRoomData>) {
+export default function ChatAdmin(props: React.PropsWithChildren<ChatAdminProps>) {
   const dummy: any = useRef();
 
-  let messagesRef = firestore
-    .collection("chatsRooms")
-    .doc(props.id)
-    .collection("messages");
-  const queryMessages = messagesRef.orderBy("createdAt", "desc");
-  const [messages] = useCollectionData(queryMessages, { idField: "id" });
+  let chatsRoomsRef = firestore.collection("chatsRooms");
+  const queryChatsRooms = chatsRoomsRef.where(
+    "users",
+    "array-contains",
+    props.admin
+  );
 
-  const [formValue, setFormValue] = useState("");
+  const [chatRoom] = useCollectionData<ChatData>(queryChatsRooms, {
+    idField: "id",
+  });
 
-  const sendMessage = async (e) => {
-    e.preventDefault();
+  const [chatSelected, setChatSelected] = useState<ChatData>({
+    users: [],
+    id: "",
+  });
 
-    await messagesRef.add({
-      text: formValue,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-      uid: props.userLoged.mail,
-      name: props.userLoged.name,
-      photoURL: profilePicture,
+  useEffect(() => {
+    if (chatRoom) {
+      foundChatUser();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chatRoom]);
+
+  async function foundChatUser() {
+    let chatFounded = null;
+    chatRoom.map((chat) => {
+      return chat.users.map((user) => {
+        if (user.mail === props.user.mail) {
+          return chatFounded = chat;
+        }
+      });
     });
 
-    setFormValue("");
-    dummy!.current.scrollIntoView({ behavior: "smooth" });
-  };
-  function dummyCurrent() {
-    dummy!.current.scrollIntoView({ behavior: "smooth" });
+    if (chatFounded) {
+      setChatSelected(chatFounded);
+    } else {
+      await chatsRoomsRef.add({
+        users: [props.admin, props.user],
+      });
+    }
   }
 
   return (
     <>
-      <div className="App w-100">
-        <nav className={"navbar " + style.background}>
-          <div
-            className={
-              "w-100 d-flex flex-row justify-content-start align-items-center"
-            }
-          >
-            {/* <button
-              className={
-                "text-white fs-6 mx-3 border-0 rounded-1 " +
-                style.background
-              }
-              onClick={() => props.setChatSelected({ users: [], id: "" })}
-            >
-              <FontAwesomeIcon icon={faArrowLeft} size={"1x"}/>
-            </button> */}
-            <img
-              src={profilePicture}
-              className={"rounded-circle mx-3 " + style.imgMessage}
-              alt="profile"
-            />
-            <span className="text-white fs-5 ">
-              {props.users.map((user) =>
-                user.mail !== props.userLoged.mail
-                  ? user.name + " " + user.lastName
-                  : ""
-              )}
-            </span>
-          </div>
-        </nav>
-
-        <section
-          className={"d-flex flex-column justify-content-center bg-light"}
-        >
-          <main
-            className={
-              "d-flex flex-column-reverse justify-content-start p-3 border " +
-              style.main
-            }
-          >
-            <span ref={dummy}></span>
-            <FontAwesomeIcon
-              className={"position-fixed text-secondary "}
-              icon={faChevronCircleDown}
-              size={"2x"}
-              onClick={dummyCurrent}
-            />
-            {messages &&
-              messages.map((msg: any, i) => (
-                <ChatMessage
-                  key={i}
-                  message={{ ...msg, user: props.userLoged.mail }}
-                />
-              ))}
-          </main>
-
-          <form onSubmit={sendMessage} className={"d-flex bg-dark w-100"}>
-            <input
-              value={formValue}
-              onChange={(e) => setFormValue(e.target.value)}
-              placeholder="Envia un mensaje"
-              className={"border rounded-0 w-100 px-3 fs-6 bg-light "}
-            />
-
-            <button
-              type="submit"
-              disabled={!formValue}
-              className={"px-4 py-3 bg-secondary border-0"}
-            >
-              <FontAwesomeIcon icon={faPaperPlane} size={"1x"} />
-            </button>
-          </form>
-        </section>
-      </div>
+      {chatSelected && chatSelected.id ? (
+        <ChatRoomAdmin
+          userLoged={props.admin}
+          users={chatSelected.users}
+          id={chatSelected.id}
+          setChatSelected={setChatSelected}
+        />
+      ) : (
+        "Cargando..."
+      )}
     </>
   );
 }

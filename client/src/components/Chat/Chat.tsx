@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import "./Chat.css";
 import axios from "axios";
 import getCookieValue from "../../cookieParser";
 import style from "./Chat.module.css";

@@ -57,43 +57,14 @@ export default function ChatRoom(props: React.PropsWithChildren<ChatRoomData>) {
   return (
     <>
       <div className="App w-100">
-        <nav className={"navbar " + style.background}>
-          <div
-            className={
-              "w-100 d-flex flex-row justify-content-start align-items-center"
-            }
-          >
-            {/* <button
-              className={
-                "text-white fs-6 mx-3 border-0 rounded-1 " +
-                style.background
-              }
-              onClick={() => props.setChatSelected({ users: [], id: "" })}
-            >
-              <FontAwesomeIcon icon={faArrowLeft} size={"1x"}/>
-            </button> */}
-            <img
-              src={profilePicture}
-              className={"rounded-circle mx-3 " + style.imgMessage}
-              alt="profile"
-            />
-            <span className="text-white fs-5 ">
-              {props.users.map((user) =>
-                user.mail !== props.userLoged.mail
-                  ? user.name + " " + user.lastName
-                  : ""
-              )}
-            </span>
-          </div>
-        </nav>
-
         <section
-          className={"d-flex flex-column justify-content-center bg-light"}
+          className={"d-flex flex-column justify-content-center bg-light shadow"}
         >
           <main
             className={
-              "d-flex flex-column-reverse justify-content-start p-3 border " +
-              style.main
+              "d-flex flex-column-reverse justify-content-start" +
+              " p-3 border " +
+              style.mainAdmin
             }
           >
             <span ref={dummy}></span>
@@ -117,7 +88,7 @@ export default function ChatRoom(props: React.PropsWithChildren<ChatRoomData>) {
               value={formValue}
               onChange={(e) => setFormValue(e.target.value)}
               placeholder="Envia un mensaje"
-              className={"border rounded-0 w-100 px-3 fs-6 bg-light "}
+              className={"border rounded-0 w-100 px-3 fs-6 bg-light"}
             />
 
             <button

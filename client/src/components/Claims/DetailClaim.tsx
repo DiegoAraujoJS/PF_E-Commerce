@@ -1,12 +1,9 @@
 import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router";
-import { getByIdClaim } from "../../Actions/Actions";
 import style from "./DetailClaim.module.css";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { Button } from "react-bootstrap";
-import ChatAdmin from "../Chat/ChatAdmin";
+import ChatAdmin from '../Chat/ChatAdmin';
 import { ClaimType } from "./Claims";
 
 interface UserClaimDetail {
@@ -18,6 +15,7 @@ interface UserClaimDetail {
 interface ClaimDetailType extends ClaimType {
   denunciante: UserClaimDetail;
   denunciado: UserClaimDetail;
+  admin: UserClaimDetail;
   reclamo: string;
   clase: {
     id: number;
@@ -84,7 +82,6 @@ function DetailClaim(props) {
                 alt="foto perfil estudiante"
               />
               <h5 className={style.nombreEst}> {claim.denunciante.name}</h5>
-              <p>Estudiante</p>
               <span>{claim.denunciante.mail}</span>
             </div>
             <div className={style.description}>
@@ -94,10 +91,9 @@ function DetailClaim(props) {
               </div>
               <div className={style.detailClaim}>
                 <p>Descripción: {claim.reclamo}</p>
-                {/* <p className="pb-3">detalle{claim.reclamo}</p> */}
               </div>
             </div>
-            <div className={style.chat}>{}</div>
+            <div className={style.chat}><ChatAdmin admin={claim.admin} user={claim.denunciante}/></div>
           </div>
           <div className={style.denunciado}>
             <img
@@ -106,6 +102,7 @@ function DetailClaim(props) {
               alt="foto denunciado"
             />
             <h5 className={style.nombreEst}>Nombre: {claim.denunciado.name}</h5>
+            <span>{claim.denunciado.mail}</span>
             <div className={style.detail}>Materias dictadas:</div>
             <div className={"d-flex justify-content-evenly " + style.btns}>
               <Button

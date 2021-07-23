@@ -63,3 +63,27 @@
 .listChats::-webkit-scrollbar-thumb {
   background: var(--color_1);
 }
+
+.mainAdmin {
+  height: 400px;
+  overflow-y: scroll;
+  background-size: 53px 53px;
+  background-image: radial-gradient(
+    transparent 28px,
+    var(--color_1_opaccity) 28px,
+    var(--color_1_opaccity) 32px,
+    transparent 32px
+  );
+}
+
+.mainAdmin::-webkit-scrollbar {
+  width: 0.25rem;
+}
+
+.mainAdmin::-webkit-scrollbar-track {
+  background: lightgray;
+}
+
+.mainAdmin::-webkit-scrollbar-thumb {
+  background: var(--color_1);
+}
