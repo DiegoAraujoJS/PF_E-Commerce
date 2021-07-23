@@ -12,7 +12,7 @@ import Chat from './components/Chat/Chat'
 import Home from './components/home/Home'
 import Register from './components/Register/Register'
 import axios from 'axios';
-import EditProfile from './components/editProfile/editProfile'
+import EditProfile from './components/editPerfilProf/editProfile'
 import AddClass from './components/addClass/addClass';
 import SearchBarHome from './components/searchBar/SearchBarHome';
 import getCookieValue from './cookieParser';
@@ -23,7 +23,8 @@ import CondicionesUso from './components/condicionesuso/CondicionesUso';
 import CondicionesServicio from './components/condicionesservicio/CondicionesServicio';
 import PoliticaPrivacidad from './components/politicaprivacidad/PoliticaPrivacidad';
 import AddStudentClass from './components/addClass/addStudentClass';
-import Puntuar from "./components/puntuar/Puntuar"
+import EditPerfilAlum from './components/editPerfilAlum/editPerfilAlum';
+
 enum Role {USER, PROFESSOR, ADMIN}
 
 const moneda = 'USD';
@@ -163,7 +164,7 @@ function App() {
       }
       ></Route>
       <Route path='/perfil/:email' exact render={({ match }) => {
-            return <Profile >{match.params.email} </Profile>           
+            return <Profile user={user.lastName}>{match.params.email} </Profile>           
           }           
       } />
 
@@ -190,7 +191,7 @@ function App() {
             return <CalendarApp >{match.params.email} </CalendarApp>           
           }           
       } />
-      <Route exact path='/puntuar'><Puntuar /></Route>
+        <Route exact path='/editPerfilAlumno'><EditPerfilAlum/></Route>
       <Route exact path='/chat'><Chat /></Route>
       <Route exact path='/claim/add'><AddClaim /></Route>
       <Route exact path='/home'><Home /></Route>

@@ -13,6 +13,7 @@ export interface Class {
 export interface Profesor extends User {
     ciudad: string;
     foto: string;
+    title:string;
     descripcion: string;
     createdAt: string;
     updatedAt: string;
