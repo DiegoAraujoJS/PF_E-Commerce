@@ -6,7 +6,7 @@ import axios from 'axios'
 import { connect } from 'react-redux';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
+import noData from "../../images/no-data.svg";
 
 
 
@@ -224,10 +224,9 @@ function ClassCards({ clasesFiltradas, dispatchInput }) {
                                     <h3>Realice una busqueda</h3>
                                 </Alert>
                         }
-                        {classFilter && classFilter.length === 0 ?
-                            <Alert variant="info" className="text-center">
-                                <h3>No hay clases disponibles</h3>
-                            </Alert> : null}
+                        {classFilter && classFilter.length === 0 ?                         
+                              <img src={noData} alt="no data" style={{width:"80%", height:"80%"}}/>
+                        :null}
                     </ul>
                 </Col>
             </Row>

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Alert, Button, Col, Row } from 'react-bootstrap';
 import StudentClassCard from '../classCard/StudentClassCard';
 import { connect } from 'react-redux';
-
+import noData from "../../images/no-data.svg";
 
 function StudentClassCards({ clasesFiltradas, dispatchInput }) {
     // const [search, setSearch] = React.useState('')
@@ -52,10 +52,9 @@ function StudentClassCards({ clasesFiltradas, dispatchInput }) {
                                 <h3>Realice una busqueda</h3>
                             </Alert>
                         }
-                        {classFilter && classFilter.length === 0 ?
-                            <Alert variant="info" className="text-center">
-                                <h3>No hay clases disponibles</h3>
-                            </Alert> : null}
+                        {classFilter && classFilter.length === 0 ?                         
+                              <img src={noData} alt="no data" style={{width:"80%", height:"80%"}}/>
+                        :null}
                     </ul>
                 </Col>
             </Row>
