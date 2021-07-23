@@ -16,7 +16,7 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 const googleProvider = new firebase.auth.GoogleAuthProvider();
-googleProvider.addScope('https://www.googleapis.com/auth/contacts.readonly');
+// googleProvider.addScope('https://www.googleapis.com/auth/contacts.readonly');
 
 const firebaseAuth = async (provider) => {
   try {

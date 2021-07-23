@@ -17,6 +17,7 @@ import { faEye, faEyeSlash, } from "@fortawesome/free-regular-svg-icons";
 import Register from '../Register/Register';
 import { faBook, faShoppingCart, faUserTie } from "@fortawesome/free-solid-svg-icons";
 import Swal from 'sweetalert2'
+import { auth } from "../../firebase";
 
 export default function SearchBar() {
   enum Role { USER, PROFESSOR, ADMIN }
@@ -131,7 +132,7 @@ export default function SearchBar() {
     }
   }
   async function signOut() {
-    // auth.signOut();
+    auth.signOut();
     try {
       const logout = await axios.post(`http://localhost:3001/api/login/logout`, {}, { withCredentials: true })
       deleteAllCookies()
