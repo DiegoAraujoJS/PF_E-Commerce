@@ -8,14 +8,16 @@ const router = Router();
 router.get("/", async (req: Request, res: Response) => {
   try {
     const offset: number = parseInt(req.query.offset.toString());
+    const limit: number = parseInt(req.query.limit.toString());
+    console.log(offset, limit);
     const reclamos = await Reclamo.findAll({
       attributes: ["id", "nombre", "reclamo"],
       order: [["createdAt", "ASC"]],
-      limit:5,
+      limit: limit,
       offset: offset,
     });
-
-    return res.send(reclamos);
+    const contador = await Reclamo.count();
+    return res.send({rows: reclamos, count: contador});
   } catch (error) {
     console.log(error);
     return res.status(400).send(error);
