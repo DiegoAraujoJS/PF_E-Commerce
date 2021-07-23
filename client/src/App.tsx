@@ -145,7 +145,7 @@ function App() {
       }>
       </Route>
 
-      <Route exact path='/claim/id/add' render={() => {
+      {/* <Route exact path='/addclaim/' render={() => {
           if (user.role === Role.ADMIN) {
             return <AddClaim />
           }
@@ -153,7 +153,7 @@ function App() {
             return < Redirect to="/home" />
           }        
       }
-      }></Route>
+      }></Route> */}
 
     <Route exact path='/perfil' render={() => {
       console.log(user)      
@@ -193,7 +193,7 @@ function App() {
       } />
         <Route exact path='/editPerfilAlumno'><EditPerfilAlum/></Route>
       <Route exact path='/chat'><Chat /></Route>
-      <Route exact path='/claim/add'><AddClaim /></Route>
+      <Route exact path='/addclaim'><AddClaim /></Route>
       <Route exact path='/home'><Home /></Route>
       <Route exact path='/clases'><ClassContainer /></Route>
       {/* <Route path='/cesta' render={({ match }) => {
