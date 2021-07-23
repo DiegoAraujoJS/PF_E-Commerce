@@ -20,9 +20,16 @@ const Historial = () => {
         paddingLeft: '0px',
         listStyleType: 'none',
     };
-    const [show, setShow] = useState(false);
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
+    const [show, setShow] = useState([false]);
+    const handleClose = (i) => {
+        console.log("INDEX", i)
+        if(show.length=i){setShow([false])}
+        if(show.length<=i)setShow([...show, false])};
+    const handleShow = (i) => {
+        console.log("INDEX2", i)
+        console.log("SHOWINDEX", show)
+        if(show.length=i){setShow([true])}
+        if(show.length<=i)setShow([...show, true])};
     const [historia, setHistoria]=useState([])
     const [alum, setAlum]=useState("")
     const fetchHistorial = async () => {
@@ -37,8 +44,11 @@ const Historial = () => {
                 {},
                 { headers: { Authorization: token } }
               );
+              console.log("Iserresponse", userResponse)
+              let role="student"
+            if(userResponse.data.role===1)role="profesor"
             await setAlum(userResponse.data.mail)            
-            const response = await axios.get(`http://localhost:3001/api/clases/all/${userResponse.data.mail}`)
+            const response = await axios.get(`http://localhost:3001/api/clases/all/student/${userResponse.data.mail}`)
             await setHistoria([
                 ...response.data]
             )
@@ -50,14 +60,14 @@ const Historial = () => {
     useEffect(()=>{
         fetchHistorial()
     },[])
-    
+    console.log("Show", show)
     return (
         <div class="container" >
             <h1>Mi historial de cursos</h1>
             
             <ul style={classListContainer}>
                 {historia.map((e, i)=>{
-                    console.log("ESTO ES E", e)
+                    
                     const clase=e
                     if(!e.profesor){return null}
                     return (
@@ -87,8 +97,8 @@ const Historial = () => {
 
                                    </div>
                                    <div  style={{marginLeft:"35vw"}}>
-                                        <Button onClick={() => handleShow()}> Puntuar clase </Button>
-                                        <Puntuar key={e.id}id={e.id} show={show} handleClose={handleClose} clase={e} alum={alum} index={i} />
+                                        <Button onClick={() => handleShow(i)}> Puntuar clase </Button>
+                                        <Puntuar key={i}id={e.id} show={show[i]} handleClose={() => handleClose(i)} clase={e} alum={alum} index={i} />
                                    </div>
                                 </div>
                             </div>

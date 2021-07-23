@@ -113,7 +113,8 @@ router.get('/', async (req: Request, res: Response) => {
 
 
 
-router.get('/all/:mail', async (req: Request, res: Response) => {
+router.get('/all/student/:mail', async (req: Request, res: Response) => {
+    console.log(req)
     const clases = await Clase.findAll({
          include: [{
              model: Profesor,
@@ -121,7 +122,28 @@ router.get('/all/:mail', async (req: Request, res: Response) => {
             }],
          
          where: {
-             User_mail: req.params.mail
+            User_mail: req.params.mail
+         }
+         })
+    return res.send(clases)
+    const response = clases.map(function (clase){
+        const claseTransform = {
+            ...clase,
+        }
+        return claseTransform
+    })
+    
+})
+router.get('/all/profesor/:mail', async (req: Request, res: Response) => {
+    console.log(req)
+    const clases = await Clase.findAll({
+         include: [{
+             model: Profesor,
+             required: true
+            }],
+         
+         where: {
+            Profesor_mail: req.params.mail
          }
          })
     return res.send(clases)
