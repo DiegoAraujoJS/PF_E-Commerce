@@ -172,11 +172,12 @@ router.post('/', async (req: Request, res: Response) => {
 })
 
 // Actualizar un alumno
-router.put('/', async (req: Request, res: Response) => {
+router.patch('/', async (req: Request, res: Response) => {
     try {
         const { ciudad, foto, descripcion } = req.body;
         let mail = req.body.User_usuario;
         mail = mail.toString();
+        console.log("AVER EL BODYYYYY",req.body)
         if (mail) {
             let usuario = await User.findOne({
                 include: [{
