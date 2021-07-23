@@ -6,7 +6,7 @@ let initialState = {
     professor: [],
     claim: [],
     class: {},
-    clases: [],
+    claims: [],
     user_mail: '',
     user_name: '',
     user_lastName: '',
@@ -25,10 +25,10 @@ const all = (state = initialState, action) => {
                 ...state,
                 searchInput: action.payload
             }
-        case actionsType.GET_ALL_CLASS:
+        case actionsType.GET_ALL_CLAIMS:
             return {
                 ...state,
-                clases: action.payload
+                claims: action.payload
             }
         case actionsType.MODIFICAR_CLASES_POR_COMPRAR:
             return {

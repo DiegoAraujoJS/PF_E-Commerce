@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Container, Row, Col, ListGroup, Form, Button } from 'react-bootstrap'
+import { Row, Col, ListGroup, Form, Tab, Tabs, Button } from 'react-bootstrap'
 import ClassCards from '../classCards/ClassCards'
 import "./ClassConteiner.css"
 import axios from 'axios'
@@ -7,19 +7,20 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
 import { Class } from '../../../../interfaces';
 import getCookieValue from '../../cookieParser';
-import { getAll } from '../../Actions/Actions'
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
+
 import { connect } from 'react-redux'
+import StudentClassCards from '../classCards/StudentClassCards'
 
 
 const star = <FontAwesomeIcon icon={faStar} style={{ color: "#ffc107" }} />
 
 type Props = {
-    clases: Class[],
-    getAll: () => any,
-    searchInput: Class[]
+    searchInput: Class[],
+    dispatchInput: (data) => any,
 }
 
-const ClassContainer: React.FC<Props> = ({ searchInput }) => {
+const ClassContainer: React.FC<Props> = ({ searchInput, dispatchInput }) => {
     const [classFilter, setClassFilter] = useState([])
     const [nivel, setNivel] = useState("")
     const [size, setSize] = useState({ name: "", length: 0 })
@@ -28,8 +29,22 @@ const ClassContainer: React.FC<Props> = ({ searchInput }) => {
     const [horario, setHorario] = useState({ desde: "", hasta: "" })
     const grados = ["Primer grado", "Segundo grado", "Tercer grado", "Cuarto grado", "Quinto grado", "Sexto grado"]
     const [city, setCity] = useState({ name: "", show: false, length: 0, })
-
     let [user, setUser] = useState<{ name: string, lastName: string, role: number, mail: string } | undefined>({ name: '', lastName: '', role: null, mail: '' })
+
+    const [classProfessor, setClassProfessor] = useState([])
+    const [classUser, setClassUser] = useState([])
+
+    useEffect(() => {
+        if (Array.isArray(searchInput)) {
+            let classP = searchInput?.filter(c => c.Profesor_mail !== null)
+            if (classP) setClassProfessor(classP)
+            let classU = searchInput?.filter(c => c.User_mail !== null)
+            if (classU) setClassUser(classU)
+        }
+    }, [searchInput])
+
+    console.log(classProfessor)
+    console.log(classUser)
 
     useEffect(() => {
         async function setRoleOfUser() {
@@ -48,10 +63,6 @@ const ClassContainer: React.FC<Props> = ({ searchInput }) => {
             }
         }
         setRoleOfUser()
-    }, [])
-
-    useEffect(() => {
-        getAll()
     }, [])
 
     const handleChange = (e) => {
@@ -190,6 +201,23 @@ const ClassContainer: React.FC<Props> = ({ searchInput }) => {
             }
         }
     }
+    const [key, setKey] = useState('classProfessor');
+
+    const [search, setSearch] = React.useState('')
+
+
+
+
+    const handleChangeSearch = (e) => {
+        setSearch(e.target.value)
+    };
+    async function vaYBusca() {
+        const response: any = await axios.get(`http://localhost:3001/api/clases?busqueda=${search}`)
+        dispatchInput(response.data)
+    }
+
+    const searchIcon = <FontAwesomeIcon icon={faSearch} className="ml-2 ml-2" />
+
 
     return (
         <div className="container-fluid pt-5" style={{ backgroundColor: '#ededed', height: "100%" }}>
@@ -314,7 +342,31 @@ const ClassContainer: React.FC<Props> = ({ searchInput }) => {
 
                 </Col>
                 <Col sm={12} md={7} lg={9}>
-                    <ClassCards clasesFiltradas={classFilter ? classFilter : searchInput} />
+                    <Tabs
+                        id="controlled-tab-example"
+                        activeKey={key}
+                        onSelect={(k) => setKey(k)}
+                        className="mb-3"
+                    >
+                        <Tab eventKey="classProfessor" title="Class by Professor">
+                            <ClassCards clasesFiltradas={classProfessor ? classProfessor : searchInput} />
+                        </Tab>
+                        <Tab eventKey="classUser"
+                            title="Class by Student">
+
+                            <Row className="d-flex justify-content-center mb-3">
+                                <Col className="p-0" sm={5} md={5} >
+                                    <Form.Control type="text" placeholder="Buscar clase..." value={search} onChange={handleChangeSearch} />
+                                </Col >
+                                <Col className="p-0" sm={1} md={1}>
+                                    <Button variant='primary' onClick={() => vaYBusca()}>{searchIcon}</Button>
+                                </Col>
+                            </Row>
+                            <div  style={{ overflowX: 'hidden', height: '100vh', width: '90%' }}>
+                            <StudentClassCards clasesFiltradas={classUser ? classUser : searchInput} />
+                            </div>
+                        </Tab>
+                    </Tabs>
                 </Col>
             </Row>
         </div >
@@ -325,13 +377,14 @@ const mapStateToProps = (state) => {
     console.log(state)
     return {
         searchInput: state.searchInput,
-        clases: state.clases
     }
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        getAll: () => dispatch(getAll())
+        dispatchInput: function (payload) {
+            dispatch({ type: 'SEARCH_INPUT', payload })
+        }
     }
 }
 

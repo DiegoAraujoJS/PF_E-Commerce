@@ -1,7 +1,7 @@
 import CSS from 'csstype';
 import { Class } from '../../../../interfaces';
 import { Button, Card, Col, ListGroup, Modal, Row, } from 'react-bootstrap'
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCalendarAlt, faClock, faEnvelope, faStar } from '@fortawesome/free-regular-svg-icons';
 import { faMapMarkerAlt, faStar as starComplete, faStarHalfAlt } from '@fortawesome/free-solid-svg-icons';
@@ -27,12 +27,7 @@ const ClassCard: React.FC<Class> = (props) => {
         width: '160px',
         borderRadius: '50%',
     };
-    const descLimit: CSS.Properties = {
-    };
-    const cityPos: CSS.Properties = {
-        height: 'fit-content',
-        width: 'fit-content',
-    };
+
 
     const [show, setShow] = useState(false);
 
@@ -65,7 +60,7 @@ const ClassCard: React.FC<Class> = (props) => {
                                         <Card.Text className="m-0"> <strong> Tipo: </strong>{props && props.esPresencial} </Card.Text>
                                         <Card.Text className="m-0"> {mark} &nbsp; {props.profesor && props.profesor.city} </Card.Text>
                                         <Card.Text className="m-0"> <strong> Materia: </strong> {props && props.materia} </Card.Text>
-                                        <Card.Text style={descLimit} className="fst-italic">
+                                        <Card.Text className="fst-italic">
                                             {props && props.descripcion}
                                         </Card.Text>
                                     </Col>
@@ -102,9 +97,9 @@ const ClassCard: React.FC<Class> = (props) => {
                                 </Card.Text>
                                 <Card.Text className="d-flex "><strong>Tipo:&nbsp;</strong> {props && props.esPresencial}   </Card.Text>
                                 <Card.Text className="d-flex "><strong>Descripción:&nbsp;</strong> {props.descripcion}</Card.Text>
-                                <Card.Text className="d-flex ">{calendar}&nbsp;<strong>Fecha:&nbsp;</strong> {props.date.day + "/"}{props.date.month + "/2021"} </Card.Text>
-                                <Card.Text className="d-flex  mb-3">{clock}&nbsp;<strong>Horario de inicio:&nbsp;</strong> {props.date.time[0].substring(0, 5)} {(props.date.time[0].substring(0, 2) > "12") ? "P.M" : "A.M"}</Card.Text>
-                                <Card.Text className="d-flex  mb-3">{clock}&nbsp;<strong>Horario de finalización:&nbsp;</strong> {props.date.time[1].substring(0, 5)} {(props.date.time[1].substring(0, 2) > "12") ? "P.M" : "A.M"}</Card.Text>
+                                <Card.Text className="d-flex ">{calendar}&nbsp;<strong>Fecha:&nbsp;</strong> {props.date?.day + "/"}{props.date?.month + "/2021"} </Card.Text>
+                                <Card.Text className="d-flex  mb-3">{clock}&nbsp;<strong>Horario de inicio:&nbsp;</strong> {props.date?.time[0].substring(0, 5)} {(props.date?.time[0].substring(0, 2) > "12") ? "P.M" : "A.M"}</Card.Text>
+                                <Card.Text className="d-flex  mb-3">{clock}&nbsp;<strong>Horario de finalización:&nbsp;</strong> {props.date?.time[1].substring(0, 5)} {(props.date?.time[1].substring(0, 2) > "12") ? "P.M" : "A.M"}</Card.Text>
                             </Col>
                         </Row>
                     </Card>
@@ -167,13 +162,6 @@ const ClassCard: React.FC<Class> = (props) => {
 
 const puntuacion = (num) => {
     return (<>{
-        //     num === 5 ? <div><span className="fas fa-star">🌟</span> <span className="fas fa-star">🌟</span> <span className="fas fa-star">🌟</span> <span className="fas fa-star">🌟</span> <span className="fas fa-star">🌟</span></div>
-        //         : num === 4 ? <div> <span className="fas fa-star">🌟</span> <span className="fas fa-star">🌟</span> <span className="fas fa-star">🌟</span> <span className="fas fa-star">🌟</span> </div>
-        //             : num === 3 ? <div> <span className="fas fa-star">🌟</span> <span className="fas fa-star">🌟</span> <span className="fas fa-star">🌟</span> </div>
-        //                 : num === 2 ? <div> <span className="fas fa-star">🌟</span> <span className="fas fa-star">🌟</span> </div>
-        //                     : num === 1 ? <span className="fas fa-star">🌟</span>
-        //                         : <h4>No tiene puntuacion</h4>
-
         num === 5 ? <p>{starCompleta}{starCompleta}{starCompleta}{starCompleta}{starCompleta}</p>
             : (num < 5 && num >= 4.5) ? <p>{starCompleta}{starCompleta}{starCompleta}{starCompleta}{starHalf}</p>
                 : num === 4 || (num < 4.5 && num >= 4) ? <p>{starCompleta}{starCompleta}{starCompleta}{starCompleta}{starEmpty}</p>
