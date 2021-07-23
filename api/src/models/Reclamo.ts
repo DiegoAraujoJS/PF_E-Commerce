@@ -26,6 +26,7 @@ export default class Reclamo extends Model {
     @Column ({allowNull: false, type: DataType.JSON})
     reclamo!: string;
 
+<<<<<<< HEAD
     @ForeignKey(() => User)
     @Column
     denunciado_email!: string;
@@ -39,6 +40,14 @@ export default class Reclamo extends Model {
 
     @BelongsTo(() => User, 'admin_email')
     admin!: User;
+=======
+    // @ForeignKey(() => User)
+    // @Column ({allowNull: false})
+    // Admin_email!: string;
+
+    @Column ({allowNull: false, type: DataType.JSON})
+    reclamo!: string;
+>>>>>>> front-clases
 
     @ForeignKey(() => Clase)
     @Column

@@ -71,7 +71,7 @@ function Login(props) {
             if (user !== null) props.getUserLoged({mail: user.data.mail, name: user.data.name, lastName: user.data.lastName})
 
             console.log(store.getState())
-            history.push('/home')
+            history.push('/')
             window.location.reload();
             
         } catch (error) {

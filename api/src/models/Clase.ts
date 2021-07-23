@@ -30,6 +30,9 @@ export default class Clase extends Model {
     @Column ({allowNull: false, type: DataType.JSON})
     date!: {year: number, month: number, day: number, time: Time};
 
+    @Column
+    status! : string;
+
     @ForeignKey(() => Profesor)
     @Column
     Profesor_mail!: string;
