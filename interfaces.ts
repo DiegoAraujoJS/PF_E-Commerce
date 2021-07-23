@@ -96,6 +96,12 @@ interface Class {
     precio: string;
     Profesor_mail?: string;
     User_mail?: string;
+    student?: {
+        city: string,
+        name:string,
+        mail: string,
+        lastName: string,
+    };
 }
 
 interface Profesor extends User {

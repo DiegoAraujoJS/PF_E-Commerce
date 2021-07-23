@@ -7,11 +7,12 @@ import getCookieValue from '../../cookieParser'
 import { Link } from 'react-router-dom';
 import { faCalendarAlt, faClock, faEnvelope, faStar } from '@fortawesome/free-regular-svg-icons';
 import { Class } from '../../../../interfaces';
-
+import CalendarApp from "../calendar/addClassCalendar/Calendar"
 const calendar = <FontAwesomeIcon icon={faCalendarAlt} className="mt-1" style={{ color: "#0067ff" }} />
 const clock = <FontAwesomeIcon icon={faClock} className="mt-1" style={{ color: "#0067ff" }} />
 
 function StudentClassDetail(props) {
+    console.log(props)
     function redirect_blank(url) {
         var a = document.createElement('a');
         a.target="_blank";
@@ -57,17 +58,18 @@ function StudentClassDetail(props) {
                             <Card.Title >Horario:</Card.Title>
 
                         </Card.Header>
+                        <div style={{height:'400px'}}>
 
-                        
+                            <CalendarApp > {'diegoaraujo@gmail.com'} </CalendarApp>
+                        </div>
+                        <Card.Header className='d-flex justify-content-center '>
+                            <Card.Title >Alumno:</Card.Title>
+
+                        </Card.Header>
                         <Card.Body className='d-flex flex-column pt-0 align-items-center '>                            
-                            <Card.Title className="mt-3">{email} Mail: {props.profesor && props.profesor.User_mail}</Card.Title>
-                            <Card.Text>{mark} <strong> Ciudad:</strong> {props.profesor && props.profesor.city} </Card.Text>
-                            <Card.Text> ¿Quieres saber mas sobre el profesor?<br></br>
-                                Visita su perfil: <Link target="_blank" to={`./perfil/${props.profesor && props.profesor.User_mail}`} >
-                                    <Button variant="info" >
-                                        Ir al perfil
-                                    </Button></Link>
-                            </Card.Text>
+                            <Card.Title className="mt-3">{email} Mail: {props.student && props.student.mail}</Card.Title>
+                            <Card.Text>{mark} <strong> Ciudad:</strong> {props.student && props.student.city} </Card.Text>
+                            
                         </Card.Body>
                     </Card>
                 </Modal.Body>

@@ -247,10 +247,7 @@ const ClassContainer: React.FC<Props> = ({ searchInput, dispatchInput }) => {
     const handleChangeSearch = (e) => {
         setSearch(e.target.value)
     };
-    async function vaYBusca() {
-        const response: any = await axios.get(`http://localhost:3001/api/clases?busqueda=${search}`)
-        dispatchInput(response.data)
-    }
+    
     const searchIcon = <FontAwesomeIcon icon={faSearch} className="ml-2 ml-2" />
 
 
@@ -388,18 +385,7 @@ const ClassContainer: React.FC<Props> = ({ searchInput, dispatchInput }) => {
                         </Tab>
                         <Tab eventKey="classUser"
                             title="Class by Student">
-
-                            <Row className="d-flex justify-content-center mb-3">
-                                <Col className="p-0" sm={5} md={5} >
-                                    <Form.Control type="text" placeholder="Buscar clase..." value={search} onChange={handleChangeSearch} />
-                                </Col >
-                                <Col className="p-0" sm={1} md={1}>
-                                    <Button variant='primary' onClick={() => vaYBusca()}>{searchIcon}</Button>
-                                </Col>
-                            </Row>
-                            <div  style={{ overflowX: 'hidden', height: '100vh', width: '90%' }}>
-                            <StudentClassCards clasesFiltradas={classUser ? classUser : searchInput} />
-                            </div>
+                                <StudentClassCards clasesFiltradas={classUser ? classUser : searchInput} />
                         </Tab>
                     </Tabs>
                 </Col>
