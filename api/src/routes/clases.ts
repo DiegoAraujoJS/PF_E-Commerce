@@ -3,6 +3,7 @@ import Clase from './../models/Clase'
 import Profesor from '../models/Profesor'
 import Puntuacion from '../models/Puntuacion'
 import { Op } from 'sequelize'
+import User from '../models/Usuario'
 const router = Router()
 
 
@@ -22,7 +23,66 @@ router.get('/', async (req: Request, res: Response) => {
             for (let x of palabrasSeparadas) {
                 try {
                     const c = await Clase.findAll({
-                        include: [{ model: Profesor }],
+                        include: [{ model: Profesor }, {model: User}],
+                        where: {
+                            [Op.or]: [{
+                                materia: {
+                                    [Op.iLike]: `%${x.normalize("NFD").replace(/\p{Diacritic}/gu, "")}%`.replace("\'", '')
+                                }
+                            },
+                            {
+                                nivel: {
+                                    [Op.iLike]: `%${x}%`.replace("\'", '')
+                                }
+                            },
+                            {
+                                grado: {
+                                    [Op.iLike]: `%${x}%`.replace("\'", '')
+                                }
+                            },
+                            ]
+                        }
+                    })
+                    clases.push(...c)
+                    
+                }
+
+                catch (err) {
+                    console.log(err)
+                }
+            }
+            return res.send(clases)
+        }
+
+        
+        else {
+            
+            const allClasses = await Clase.findAll({include: [{model: User}, {model: Profesor}]})
+            return res.send(allClasses)
+        }
+
+    } catch (err) {
+        res.send(err)
+    }
+})
+
+router.get('/students', async (req: Request, res: Response) => {
+    const { busqueda } = req.query
+    if (!busqueda) return res.status(400).send('Debes ingresar un input como \'busqueda\'')
+
+    try {
+        let clases: any[] = []
+        let profesores: any[] = []
+        if (busqueda) {
+            let palabrasSeparadas = (busqueda as string).split(" ");
+            palabrasSeparadas = palabrasSeparadas.filter(x => x !== 'grado')
+            palabrasSeparadas = palabrasSeparadas.filter(x => x !== 'año')
+            palabrasSeparadas = palabrasSeparadas.filter(x => x !== 'anio')
+
+            for (let x of palabrasSeparadas) {
+                try {
+                    const c = await Clase.findAll({
+                        include: [{ model: Profesor }, {model: User}],
                         where: {
                             [Op.or]: [{
                                 materia: {

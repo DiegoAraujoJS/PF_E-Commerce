@@ -385,6 +385,7 @@ const ClassContainer: React.FC<Props> = ({ searchInput, dispatchInput }) => {
                         </Tab>
                         <Tab eventKey="classUser"
                             title="Class by Student">
+                                {console.log('clases filtradas', classUser)}
                                 <StudentClassCards clasesFiltradas={classUser ? classUser : searchInput} />
                         </Tab>
                     </Tabs>

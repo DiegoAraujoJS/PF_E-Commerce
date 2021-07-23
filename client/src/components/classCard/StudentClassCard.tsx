@@ -45,7 +45,7 @@ const StudentClassCard: React.FC<Class> = (props) => {
                                     <Col sm={12} md={4} lg={8} className="d-flex flex-column align-items-start ml-2 ">
                                         
                                         <Card.Text className="m-0"> <strong> Tipo: </strong>{props && props.esPresencial} </Card.Text>
-                                        <Card.Text className="m-0"> {mark} &nbsp; {props.profesor && props.profesor.city} </Card.Text>
+                                        <Card.Text className="m-0"> {mark} &nbsp; {props.student && props.student.city} </Card.Text>
                                         <Card.Text className="m-0"> <strong> Materia: </strong> {props && props.materia} </Card.Text>
                                         <Card.Text className="fst-italic">
                                             {props && props.descripcion}

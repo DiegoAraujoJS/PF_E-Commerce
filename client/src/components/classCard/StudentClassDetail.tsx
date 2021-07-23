@@ -60,7 +60,7 @@ function StudentClassDetail(props) {
                         </Card.Header>
                         <div style={{height:'400px'}}>
 
-                            <CalendarApp > {'diegoaraujo@gmail.com'} </CalendarApp>
+                            <CalendarApp > {props.student.mail} </CalendarApp>
                         </div>
                         <Card.Header className='d-flex justify-content-center '>
                             <Card.Title >Alumno:</Card.Title>

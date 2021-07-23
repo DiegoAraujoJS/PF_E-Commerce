@@ -28,11 +28,7 @@ function StudentClassCards({ clasesFiltradas, dispatchInput }) {
 
     // const searchIcon = <FontAwesomeIcon icon={faSearch} className="ml-2 ml-2" />
     
-    async function vaYBusca() {
-        const response: any = await axios.get(`http://localhost:3001/api/clases/students?busqueda=${search}`)
-        console.log(response.data)
-        dispatchInput(response.data)
-    }
+    
     const searchIcon = <FontAwesomeIcon icon={faSearch}  className="ml-2 ml-2" />
 
     return (
@@ -41,9 +37,7 @@ function StudentClassCards({ clasesFiltradas, dispatchInput }) {
                                 <Col className="p-0" sm={5} md={5} >
                                     <Form.Control type="text" placeholder="Buscar clase..." value={search} onChange={handleChange} />
                                 </Col >
-                                <Col className="p-0" sm={1} md={1}>
-                                    <Button variant='primary' onClick={() => vaYBusca()}>{searchIcon}</Button>
-                                </Col>
+                                
                             </Row>
             <Row className="d-flex justify-content-center">
                 <Col className="p-0" sm={11} md={11}>
@@ -63,6 +57,7 @@ function StudentClassCards({ clasesFiltradas, dispatchInput }) {
                                     date={clase?.date}
                                     precio={clase?.precio}
                                     key={i + 20}
+                                    student={clase?.student}
                                 />
                             );
                         })

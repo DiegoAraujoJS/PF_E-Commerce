@@ -9,7 +9,7 @@ import Swal from 'sweetalert2'
 import 'bootstrap/dist/css/bootstrap.css';
 import 'react-bootstrap-range-slider/dist/react-bootstrap-range-slider.css';
 import RangeSlider from 'react-bootstrap-range-slider';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import CalendarApp from "../calendar/addClassCalendar/Calendar"
 import { store } from '../../Store/store';
 const materias = [
@@ -60,7 +60,15 @@ const StudentAddClass = () => {
 	const [max, setMaxValue] = useState(0);
 
 	const [calendarChoice, setCalendarChoice]  = useState(false)
-
+	let [user, setUser] = useState<{name: string, lastName: string, role: number, mail: string} | undefined>({name: '', lastName: '', role: null, mail: ''})
+	useEffect(() => {
+		async function fetchUser(){
+			const token = getCookieValue('token').replaceAll("\"", '')
+			const user = await axios.post('http://localhost:3001/api/verify', {}, { headers: { Authorization: token } })
+			setUser(user.data)
+		}
+		
+	}, [user])
 	return (
 		<Container className='shadow p-3 mb-5 bg-white rounded flex'>
 			<h1>Agrega tu propia Clase!</h1>
@@ -84,10 +92,11 @@ const StudentAddClass = () => {
 
 				onSubmit={async (values, { resetForm }) => {
 					console.log('entre')
-					const token = getCookieValue('token').replaceAll("\"", '')
-
-					const user = await axios.post('http://localhost:3001/api/verify', {}, { headers: { Authorization: token } })
+					
 					try {
+						const fetchUser = await axios.get(`http://localhost:3001/api/usuarios/${user.mail}`)
+						
+						console.log('city', fetchUser)
 						const actual = new Date()
 						actual.setDate(actual.getDate() + (values.dia + 7 - actual.getDay()) % 7)
 						const dia = actual.getDate() // por ejemplo, es 19 si hoy es jueves 15 y values.dia es 'lunes'
@@ -97,7 +106,7 @@ const StudentAddClass = () => {
 
 						for (let i = 0; i < 1; i++) {
 							const publication: IClase = {
-								User_mail: user.data.mail,
+								User_mail: user.mail,
 								descripcion: values.descripcion,
 								ciudad: '',
 								materia: values.materia,
@@ -106,7 +115,7 @@ const StudentAddClass = () => {
 								nivel: values.nivel,
 								nombre: values.nombre,
 								precio: values.precio
-							}
+							}	
 							let response = await axios.post('http://localhost:3001/api/studentClass/add', publication)
 							actual.setDate(actual.getDate() + 7)
 							console.log(response)
@@ -188,7 +197,7 @@ const StudentAddClass = () => {
 									
 									<div style={{border:'1px solid red', height:'400px'}}>
 									{console.log('le manda el store?', store.getState()['calendar_to_addClassStudent'])}
-											<CalendarApp calendar_to_addClassStudent = {store.getState()['calendar_to_addClassStudent']}>{'diegoaraujo@gmail.com'}</CalendarApp>
+											<CalendarApp calendar_to_addClassStudent = {store.getState()['calendar_to_addClassStudent']}>{user.mail}</CalendarApp>
 									</div>
 											<Button type='button' className='text-uppercase' style={{width: '500px'}} onClick={(e => {setCalendarChoice(false)})}>
 												Aceptar
@@ -332,12 +341,3 @@ const StudentAddClass = () => {
 
 
 export default StudentAddClass
-
-
-// dia ==> lunes
-// hora desde ==> 08
-// hora hasta ==> 12
-// durante ==> n semanas
-
-
-

@@ -20,19 +20,17 @@ router.get('/', async (req: Request, res:Response) => {
 
 router.post('/add', async (req: Request, res: Response) => {
     const publication: IClase = req.body
-
     try {
-        const usuario = await User.findByPk(publication.User_mail)
 
         const crearClase = await Clase.create({
             ...publication,        
             materia: req.body.materia.normalize("NFD").replace(/\p{Diacritic}/gu, ""),
-            city: usuario.city
+            city: req.body.ciudad
         })
         res.send(crearClase)
     }
     catch (error) {
-        res.status(404).send(new Error('Mail no valido'))
+        res.status(400).send(new Error('Mail no valido'))
     }
 })
 
