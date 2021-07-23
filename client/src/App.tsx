@@ -87,7 +87,7 @@ function App() {
         if (!document.cookie){
           localStorage.removeItem('login')
           console.log('local storage removed')
-          return <Redirect to='/home'/>
+          return <Redirect to='/'/>
         }
         const token = getCookieValue('token').replaceAll("\"", '')
         const thisUser = await axios.post(`http://localhost:3001/api/verify`, {},{ withCredentials: true, headers: {Authorization: token}})
@@ -117,7 +117,7 @@ function App() {
           if (user.role === Role.ADMIN || user.role === Role.PROFESSOR) {
             return <AddClass/>
           } else {
-            <Redirect to='/home'/>
+            <Redirect to='/'/>
           }
       }
       }></Route> : null}
@@ -127,7 +127,7 @@ function App() {
           if (user.role === Role.ADMIN) {
             return <Claims/>
           } else {
-            <Redirect to='/home'/>
+            <Redirect to='/'/>
           }
       }
       }></Route> : null}
@@ -138,7 +138,7 @@ function App() {
           }
           else  {
             console.log('entre')
-            return <Redirect to='/home'/>
+            return <Redirect to='/'/>
           }          
       }
       }>
@@ -149,7 +149,7 @@ function App() {
             return <AddClaim />
           }
           else {
-            return < Redirect to="/home" />
+            return < Redirect to="/" />
           }        
       }
       }></Route> */}
@@ -169,7 +169,7 @@ function App() {
 
       {/* <Route exact path='/registro' render={() => {
           if (user.role === Role.USER || user.role === Role.PROFESSOR) {
-            return < Redirect to="/home" />
+            return < Redirect to="/" />
           }
           else {
             return <Register />
@@ -193,7 +193,7 @@ function App() {
       <Route exact path='/puntuar'><Puntuar /></Route>
       <Route exact path='/chat'><Chat /></Route>
       <Route exact path='/addclaim'><AddClaim /></Route>
-      <Route exact path='/home'><Home /></Route>
+      <Route exact path='/'><Home /></Route>
       <Route exact path='/clases'><ClassContainer /></Route>
       {/* <Route path='/cesta' render={({ match }) => {
           <Cesta clasesPorComprar={clasesPorComprar} moneda={moneda} cliente={cliente}/>}}></Route> */}
