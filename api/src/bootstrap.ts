@@ -243,7 +243,7 @@ const bootstrap = async () => {
             date: { year: 2021, month: 8, day: 7, time: ['08:00:00', '12:00:00'] },
             precio: "$2000"
         })
-        
+
 
         //////////////////////
         // Agregar Reclamos //
@@ -282,6 +282,14 @@ const bootstrap = async () => {
         await Diego.$add('denuncias_administradas', [Reclamo3]);
         await Clase3.$add('clase', [Reclamo3]);
 
+        await Reclamo.create({
+            denunciante_email: "benjaminspiecker@gmail.com",
+            denunciado_email: "edwardburgos@gmail.com",
+            admin_email: "braiansilva@gmail.com",
+            nombre: "La clase es un fraude",
+            reclamo: "El profesor no se presento a la clase",
+            clase_id: 1,
+        })
 
     } catch (error) {
         console.log(error);

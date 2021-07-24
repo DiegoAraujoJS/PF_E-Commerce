@@ -103,9 +103,7 @@ console.log(fechaa.setDate(fechaa.getDate() + (i + 7 - fechaa.getDay()) % 7)) */
 								date: { day: actual.getDate(), month: actual.getMonth() + 1, year: actual.getFullYear(), time: [desde, hasta] },
 								nivel: values.nivel,																						
 								nombre: values.nombre,
-								precio: values.precio,
-								
-								
+								precio: values.precio,	
 							}
 							console.log("HOrak")
 							let response = await axios.post('http://localhost:3001/api/market/publish', publication, { headers: { Authorization: token } })

@@ -212,7 +212,7 @@ function AddClaim() {
                                 <Button
                                     onClick={(e) => getProfessorFn(e)}
                                 >
-                                    +
+                                    Show Professor
                                 </Button>
                             </Col>
                         </Form.Group>
@@ -249,7 +249,7 @@ function AddClaim() {
                                 <Button
                                     onClick={(e) => getClassFn(e)}
                                 >
-                                    +
+                                    Show Class
                                 </Button>
                             </Col>
                         </Form.Group>

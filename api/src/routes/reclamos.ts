@@ -115,4 +115,17 @@ router.get("/permitir/:user", async (req: Request, res: Response) => {
   }
 });
 
+router.get("/cancelar/:id", async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  try {
+    const clase = await Clase.findOne({where: { id }});
+    clase.set({ ...clase, status: "cancelled" });
+    const result = await clase.save();
+    res.send(result);
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 export default router;
