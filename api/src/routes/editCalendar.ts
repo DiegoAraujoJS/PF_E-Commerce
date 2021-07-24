@@ -1,6 +1,5 @@
 const editCalendar = (arrayHorarios: Array<string[]>, query?:any) => {
     console.log("Punto 11")
-    console.log(arrayHorarios)
     let completarHorario = arrayHorarios.map(h => {
 
         console.log("Punto 12")

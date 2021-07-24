@@ -114,7 +114,6 @@ router.get('/', async (req: Request, res: Response) => {
 
 
 router.get('/all/student/:mail', async (req: Request, res: Response) => {
-    console.log(req)
     const clases = await Clase.findAll({
          include: [{
              model: Profesor,
@@ -135,7 +134,6 @@ router.get('/all/student/:mail', async (req: Request, res: Response) => {
     
 })
 router.get('/all/profesor/:mail', async (req: Request, res: Response) => {
-    console.log(req)
     const clases = await Clase.findAll({
          include: [{
              model: Profesor,

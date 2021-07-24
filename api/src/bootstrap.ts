@@ -189,8 +189,9 @@ const bootstrap = async () => {
             precio: "$2000",
         });
 
-        await Clase.create({
+        const Clase4 =await Clase.create({
             nombre: 'Historia',
+            Profesor_mail: "braiansilva@gmail.com",
             User_mail: 'mauroleonel@gmail.com',
             descripcion: 'En esta clase te enseñaré todo lo que necesitas de Historia',
             materia: 'Historia',
@@ -203,8 +204,9 @@ const bootstrap = async () => {
             precio: "$2000"
         })
 
-        await Clase.create({
+        const Clase5 = await Clase.create({
             nombre: 'Filosofia',
+            Profesor_mail: "diegoaraujo@gmail.com",
             User_mail: 'mauroleonel@gmail.com',
             descripcion: 'En esta clase te enseñaré todo lo que necesitas de Filosofia',
             materia: 'Filosofia',
@@ -217,7 +219,7 @@ const bootstrap = async () => {
             precio: "$2000",
         })
 
-        await Clase.create({
+        const Clase6 = await Clase.create({
             nombre: 'Inglés para jóvenes',
             Profesor_mail: "edwardburgos@gmail.com",
             descripcion: 'En esta clase te enseñaré todo lo que necesitas para tener un nivel intermedio de Inglés',
@@ -231,7 +233,7 @@ const bootstrap = async () => {
             precio: "$2000"
         })
 
-        await Clase.create({
+        const Clase7 = await Clase.create({
             nombre: 'Sumas y Restas',
             Profesor_mail: "edwardburgos@gmail.com",
             descripcion: 'Aprende a sumar y restar para ser el mejor de tu clase',
@@ -283,12 +285,12 @@ const bootstrap = async () => {
         await Clase3.$add('clase', [Reclamo3]);
 
         await Reclamo.create({
-            denunciante_email: "benjaminspiecker@gmail.com",
-            denunciado_email: "edwardburgos@gmail.com",
+            denunciante_email: "mauroleonel@gmail.com",
+            denunciado_email: "diegoaraujo@gmail.com",
             admin_email: "braiansilva@gmail.com",
             nombre: "La clase es un fraude",
             reclamo: "El profesor no se presento a la clase",
-            clase_id: 1,
+            clase_id: 5,
         })
 
     } catch (error) {

@@ -27,7 +27,8 @@ export default function Cesta() {
             const user = await axios.post(`http://localhost:3001/api/verify`, {}, { headers: { Authorization: token } })
             if (user) {
                 const clases = await axios.get(`http://localhost:3001/api/carrito/all/${user.data.mail}`)
-                if (clases) {
+                
+                if (clases.status === 200 && clases.data.length) {
                     const clasesPorComprarFormateadas: ClasePorComprar[] = clases?.data.map(e => {
                         let dia = e.date?.day;
                         let mes = e.date?.month;

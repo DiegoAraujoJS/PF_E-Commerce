@@ -177,7 +177,6 @@ router.patch('/', async (req: Request, res: Response) => {
         const { ciudad, foto, descripcion } = req.body;
         let mail = req.body.User_usuario;
         mail = mail.toString();
-        console.log("AVER EL BODYYYYY",req.body)
         if (mail) {
             let usuario = await User.findOne({
                 include: [{
