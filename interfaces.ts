@@ -117,9 +117,12 @@ interface User {
 
 
 interface Claim {
-    Denunciante_email: string,
-    Denunciado_email: string,
-    reclamo: {nombre:string, detalle:string}
+    denunciante_email: string,
+    denunciado_email: string,
+    nombre: string,
+    reclamo: string,
+    admin_email?: string,
+    clase_id?: number,
 }
 
 export type {UserProps, ArrayDePares, Disponible, Ocupado, CalendarioResponse, ProfesorProps, Horario, Time, DisponibleOcupadoTransform, IClase, ClasePorComprar, Class, Profesor, User, Claim}

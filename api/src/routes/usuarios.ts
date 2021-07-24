@@ -1,6 +1,7 @@
 import { create } from 'domain';
 import { Request, Response, Router } from 'express'
-import { UserProps } from '../../../interfaces';
+import { Op } from 'sequelize';
+import { Role, UserProps } from '../../../interfaces';
 import Usuario from './../models/Usuario'
 const router = Router()
 
@@ -13,12 +14,25 @@ function validateEmail(email: string) {
 // Devolver usuarios
 router.get('/', async (req: Request, res: Response) => {
     try {
-        const usuarios = await Usuario.findAll({
-            attributes: ['mail', 'name', 'lastName']
-        })
+        const usuarios = await Usuario.findAll()
         res.send(usuarios)
     } catch (error) {
         res.send(error);
+    }
+})
+
+router.get('/admin', async (req: Request, res: Response) => {
+    try {
+        const admins = await Usuario.findAll({
+            where: {
+            role:  Role.ADMIN  
+            }
+        })
+        console.log(admins)
+        res.send(admins)
+    }
+    catch (error) {
+        console.log(error)
     }
 })
 
@@ -33,6 +47,7 @@ router.get('/:mail', async (req: Request, res: Response) => {
         console.log(error)
     }
 })
+
 
 
 export default router;

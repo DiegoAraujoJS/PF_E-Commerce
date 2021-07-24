@@ -332,7 +332,6 @@ const ClassContainer: React.FC<Props> = ({ searchInput, dispatchInput }) => {
                             </div>
                         </Form>
 
-
                     </ListGroup>
 
                 </Col>

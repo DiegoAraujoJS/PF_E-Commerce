@@ -152,9 +152,10 @@ router.get('/all/profesor/:mail', async (req: Request, res: Response) => {
             ...clase,
         }
         return claseTransform
-    })
-    
+    })    
 })
+
+
 
 router.get('/all', async (req: Request, res: Response) => {
     try {
@@ -165,7 +166,6 @@ router.get('/all', async (req: Request, res: Response) => {
         res.status(404).send("Ops! hubo un error")
     }
 })
-
 
 
 router.post('/add', async (req: Request, res: Response) => {
@@ -219,6 +219,19 @@ router.post('/delete', async (req: Request, res: Response) => {
         res.send(error)
     }
 })
+
+router.get('/:id', async (req: Request, res: Response) => {
+    try {
+        const {id} = req.params
+        const clases = await Clase.findOne({ where: {id: id} })
+        res.send(clases)
+    }
+    catch (error) {
+        res.status(404).send("Ops! hubo un error")
+    }
+})
+
+
 
 export default router
 

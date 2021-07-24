@@ -48,6 +48,41 @@ function DetailClaim(props) {
     }
   }
 
+  const [cancelacion, setCancelación] = useState("")
+
+  const closeClass = async () => {
+    Swal.fire({
+      title: '¿Esta seguro de cerrar esta clase?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Si!',
+      cancelButtonText: 'No!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios.get("http://localhost:3001/api/reclamos/cancelar/" + claim.clase.id)
+          .then(response => {
+            if (response.status === 200) {
+              setCancelación(response.data.status);
+            }
+          })
+          .catch(error => alert(error))
+
+        Swal.fire(
+          'Cancelado!',
+          'La clase fue cancelada correctamente.',
+          'success'
+        )
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        Swal.fire(
+          'Cancelado',
+          'La clase sigue activa',
+          'error'
+        )
+      }
+    })
+  }; 
+
+
   const suspender = async () => {
     Swal.fire({
       title: '¿Esta seguro de prohibir a este usuario?',
@@ -112,7 +147,6 @@ function DetailClaim(props) {
     })
   };
 
-
   return (
     <div className={"container px-3 pt-3"}>
       {claim && (
@@ -141,6 +175,11 @@ function DetailClaim(props) {
               <p className={"px-3 pb-3 m-0"}>
                 Descripción: {claim.reclamo}
               </p>
+              {claim.clase ?  <p className={"px-3 pb-3 m-0"}>
+                Clase: {claim.clase.nombre}<br></br>
+                Id de la clase: {claim.clase.id}
+              </p>
+              : null}
             </div>
 
             <div className={"rounded-3 shadow my-2 mx-auto"}>
@@ -178,6 +217,15 @@ function DetailClaim(props) {
                 className="ml-2"
               >
                 DESHACER PROHIBICIÓN
+              </Button>
+            </div>
+            <div className={"d-flex justify-content-evenly " + style.btns}>
+              <Button
+                onClick={() => closeClass()}
+                disabled={cancelacion === "cancelled" ? true : false}
+                className="mr-2"
+              >
+                CANCELAR CLASE
               </Button>
             </div>
           </div>
