@@ -104,7 +104,6 @@ const bootstrap = async () => {
             name: "Edward",
             lastName: "Burgos",
             User_mail: "edwardburgos@gmail.com",
-
             city: "Lima",
             foto: "https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=547&q=80",
             description: "Profesor apasionado por enseñar",
@@ -190,6 +189,62 @@ const bootstrap = async () => {
             precio: "$2000",
         });
 
+        await Clase.create({
+            nombre: 'Historia',
+            User_mail: 'mauroleonel@gmail.com',
+            descripcion: 'En esta clase te enseñaré todo lo que necesitas de Historia',
+            materia: 'Historia',
+            esPresencial: 'Virtual',
+            status: 'complete',
+            grado: "Sexto grado",
+            nivel: 'Secundario',
+            puntuacion: 4.20,
+            date: { year: 2021, month: 8, day: 7, time: ['12:00:00', '17:00:00'] },
+            precio: "$2000"
+        })
+
+        await Clase.create({
+            nombre: 'Filosofia',
+            User_mail: 'mauroleonel@gmail.com',
+            descripcion: 'En esta clase te enseñaré todo lo que necesitas de Filosofia',
+            materia: 'Filosofia',
+            esPresencial: 'Presencial',
+            status: 'pending',
+            grado: "Sexto grado",
+            nivel: 'Terciario',
+            puntuacion: 4,
+            date: { year: 2021, month: 8, day: 7, time: ['08:00:00', '10:00:00'] },
+            precio: "$2000",
+        })
+
+        await Clase.create({
+            nombre: 'Inglés para jóvenes',
+            Profesor_mail: "edwardburgos@gmail.com",
+            descripcion: 'En esta clase te enseñaré todo lo que necesitas para tener un nivel intermedio de Inglés',
+            materia: 'Ingles',
+            esPresencial: 'Presencial',
+            status: 'pending',
+            grado: "Sexto grado",
+            nivel: 'Secundario',
+            puntuacion: 1,
+            date: { year: 2021, month: 8, day: 7, time: ['15:00:00', '19:00:00'] },
+            precio: "$2000"
+        })
+
+        await Clase.create({
+            nombre: 'Sumas y Restas',
+            Profesor_mail: "edwardburgos@gmail.com",
+            descripcion: 'Aprende a sumar y restar para ser el mejor de tu clase',
+            materia: 'Matematica',
+            esPresencial: 'Virtual',
+            grado: "Primer grado",
+            nivel: 'Primario',
+            puntuacion: 5,
+            date: { year: 2021, month: 8, day: 7, time: ['08:00:00', '12:00:00'] },
+            precio: "$2000"
+        })
+        
+
         //////////////////////
         // Agregar Reclamos //
         //////////////////////
@@ -227,71 +282,7 @@ const bootstrap = async () => {
         await Diego.$add('denuncias_administradas', [Reclamo3]);
         await Clase3.$add('clase', [Reclamo3]);
 
-        await Clase.create({
-            nombre: 'Historia',
-            Profesor_mail: "braiansilva@gmail.com",
-            User_mail: 'mauroleonel@gmail.com',
-            descripcion: 'En esta clase te enseñaré todo lo que necesitas de Historia',
-            materia: 'Historia',
-            esPresencial: 'Virtual',
-            status: 'complete',
-            grado: "Sexto grado",
-            nivel: 'Secundario',
-            puntuacion: 4.20,
-            date: { year: 2021, month: 8, day: 7, time: ['12:00:00', '17:00:00'] },
-            precio: "$2000"
-        })
 
-        await Clase.create({
-            nombre: 'Filosofia',
-            Profesor_mail: "diegoaraujo@gmail.com",
-            User_mail: 'mauroleonel@gmail.com',
-            descripcion: 'En esta clase te enseñaré todo lo que necesitas de Filosofia',
-            materia: 'Filosofia',
-            esPresencial: 'Presencial',
-            status: 'pending',
-            grado: "Sexto grado",
-            nivel: 'Terciario',
-            puntuacion: 4,
-            date: { year: 2021, month: 8, day: 7, time: ['08:00:00', '10:00:00'] },
-            precio: "$2000",
-        })
-
-
-        await Clase.create({
-            nombre: 'Inglés para jóvenes',
-            Profesor_mail: "edwardburgos@gmail.com",
-            descripcion: 'En esta clase te enseñaré todo lo que necesitas para tener un nivel intermedio de Inglés',
-            materia: 'Ingles',
-            esPresencial: 'Presencial',
-            status: 'pending',
-            grado: "Sexto grado",
-            nivel: 'Secundario',
-            puntuacion: 1,
-            date: { year: 2021, month: 8, day: 7, time: ['15:00:00', '19:00:00'] },
-            precio: "$2000"
-        })
-
-        await Clase.create({
-            nombre: 'Sumas y Restas',
-            Profesor_mail: "edwardburgos@gmail.com",
-            descripcion: 'Aprende a sumar y restar para ser el mejor de tu clase',
-            materia: 'Matematica',
-            esPresencial: 'Virtual',
-            grado: "Primer grado",
-            nivel: 'Primario',
-            puntuacion: 5,
-            date: { year: 2021, month: 8, day: 7, time: ['08:00:00', '12:00:00'] },
-            precio: "$2000"
-        })
-        await Clase.create({
-            nombre: 'Aprende a comunicar',
-            Profesor_mail: "edwardburgos@gmail.com",
-            descripcion: 'Aprende a comunicarte asertivamente con tu entorno',
-            materia: 'Comunicacion',
-            esPresencial: 'Virtual',
-
-        })
     } catch (error) {
         console.log(error);
     }

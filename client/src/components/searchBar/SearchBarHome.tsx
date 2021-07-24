@@ -211,6 +211,7 @@ export default function SearchBar() {
             <Link className={'nav-link ms-4 text-decoration-none'} to={"/perfil"}>Profile</Link>
             <Link className={'nav-link ms-4 text-decoration-none'} to={"/chat"}>Chat</Link>
             <Link className={'nav-link ms-4 text-decoration-none'} to={"/clases"}>Class</Link>
+            <Link className={'nav-link ms-4 text-decoration-none'} to={"/addclaim"}>New Claim</Link>
 
             {loggedOrNot() ?
               <NavDropdown className={'ms-4 text-decoration-none justify-content-end'} title="Sesión" id="basic-nav-dropdown">

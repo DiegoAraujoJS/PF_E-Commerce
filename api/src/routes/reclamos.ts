@@ -69,16 +69,16 @@ router.post("/", async (req: Request, res: Response) => {
       reclamo: req.body.reclamo,
     });
     const denunciante = await User.findByPk(req.body.denunciante);
-    await denunciante.$add("denuncias_hechas", [reclamo]);
+    await denunciante?.$add("denuncias_hechas", [reclamo]);
 
     const denunciado = await User.findByPk(req.body.denunciado);
-    await denunciado.$add("denuncias_recibidas", [reclamo]);
+    await denunciado?.$add("denuncias_recibidas", [reclamo]);
 
     const admin = await User.findByPk(req.body.admin);
-    await admin.$add("denuncias_administradas", [reclamo]);
+    await admin?.$add("denuncias_administradas", [reclamo]);
 
     const clase = await Clase.findByPk(req.body.clase);
-    await clase.$add("clase", [reclamo]);
+    await clase?.$add("clase", [reclamo]);
 
     return res.send("se agregó correctatmente");
   } catch (error) {
