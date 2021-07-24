@@ -1,5 +1,5 @@
 import { ProfesorProps, UserProps } from "../../interfaces";
-import Alumno from "./models/Alumno";
+
 import Clase from "./models/Clase";
 import axios from "axios";
 import Profesor from "./models/Profesor";

@@ -2,7 +2,7 @@ import { Model, Column, Table, CreatedAt, UpdatedAt, DataType, HasOne, ForeignKe
 import Clase from './Clase';
 
 import User from './Usuario';
-import Alumno from './Alumno';    
+
 
 
 @Table

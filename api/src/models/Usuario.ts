@@ -1,5 +1,5 @@
 import { Model, Column, Table, CreatedAt, UpdatedAt, DataType, Unique, PrimaryKey, ForeignKey, HasOne, HasMany } from 'sequelize-typescript';
-import Alumno from './Alumno';
+
 import Profesor from './Profesor';
 import { UserProps } from '../../../interfaces';
 import Puntuacion from './Puntuacion';
@@ -44,8 +44,7 @@ export default class User extends Model implements UserProps {
     @HasOne(() => Profesor)
     profesor!: Profesor;
 
-    @HasOne(() => Alumno)
-    alumno!: Alumno;
+    
 
     @Column({ type: DataType.JSON })
     carrito!: Class[];
