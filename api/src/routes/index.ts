@@ -13,6 +13,7 @@ import market from './market'
 import carrito from './carrito'
 import studentClasses from './studentClass'
 import puntuacion from './puntuacion'
+import nodemailer from './nodemailer'
 const router = Router()
 
 router.use('/verify', verify)
@@ -29,5 +30,6 @@ router.use('/market', market)
 router.use('/carrito', carrito)
 router.use('/studentClass', studentClasses)
 router.use('/puntuacion', puntuacion)
+router.use('/nodemailer', nodemailer)
 
 export default router

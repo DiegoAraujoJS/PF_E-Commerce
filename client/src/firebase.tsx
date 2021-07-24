@@ -79,8 +79,3 @@ export const auth = firebase.auth();
 // create query =  firestoreRef.orderBy("createdAt").limit(25);
 // use hook const [data] = useCollectionData(query, { idField: "id" });
 export const firestore = firebase.firestore();
-
-  
-
-  
-  
