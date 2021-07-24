@@ -1,6 +1,6 @@
-import { IUser } from "../../../interfaces";
+ 
 
-export function isUser (arg: any): arg is IUser {
+export function isUser (arg: any){
     if (typeof arg !== 'object') return false
     const keys = ['name', 'lastName', 'User_mail', 'country', 'state', 'city']
     let areOfType: boolean;

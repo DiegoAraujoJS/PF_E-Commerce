@@ -44,7 +44,11 @@ export default class User extends Model implements UserProps {
     @HasOne(() => Profesor)
     profesor!: Profesor;
 
-    
+    @Column  ({type: DataType.TEXT})
+    description!: string;
+
+    @Column  ({type: DataType.TEXT})
+    foto!: string;
 
     @Column({ type: DataType.JSON })
     carrito!: Class[];

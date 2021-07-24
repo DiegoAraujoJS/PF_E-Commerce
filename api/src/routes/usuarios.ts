@@ -115,7 +115,29 @@ router.put('/', async (req: Request, res: Response) => {
         return res.send(error)
     }
 })
-
+router.patch('/', async (req: Request, res: Response) => {
+    const { ciudad, foto, description } = req.body;
+    const mail = req.body.usuario;
+    console.log("ACA ESTA EL BODYT XDDDDD",req.body)
+    if (mail) {
+        let usuario: any = await User.findOne({
+            where: {
+                mail: mail.toString()
+            },
+        });
+        if (usuario) {
+                await usuario.update({city:ciudad, foto:foto, description:description},{
+                    where:{
+                        User_mail:mail
+                    }
+                })
+  
+        } else {
+            return res.send(`No existe una cuenta con el correo ${mail}`)
+        }
+    }
+    return res.send('Indique un correo');
+})
 // Eliminar alumno por mail    
 router.delete('/:mail', async (req: Request, res: Response) => {
     if (!validateEmail( req.params.mail)) return res.send('Send a valid mail');
