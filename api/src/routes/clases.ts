@@ -97,7 +97,9 @@ router.get('/all/student/:mail', async (req: Request, res: Response) => {
             User_mail: req.params.mail
          }
          })
-    return res.send(clases)
+    const usersOfProfessors = await Promise.all(clases.map(cl => User.findByPk(cl.Profesor_mail)))
+
+    return res.send(clases.map((cl, i) => ClaseToIClase(cl, usersOfProfessors[i])))
 })
 
 router.get('/all/profesor/:mail', async (req: Request, res: Response) => {

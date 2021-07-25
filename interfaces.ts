@@ -63,6 +63,7 @@ interface IClase{
     nivel: string;
     materia: string;
     descripcion: string;
+    status?: 'pending' | 'complete' | 'cancelled'
     date?: {year: number, month: number, day: number, time: Time}
     profesor?: IProfesor
     student?: IUser;

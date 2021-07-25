@@ -13,6 +13,7 @@ function ClaseToIClase(clase: Clase, userProfesor?: IUser): IClase {
         date: clase.date,
         id: clase.id,
         esPresencial: clase.esPresencial,
+        status: clase.status,
         profesor: clase.profesor ? {
             User_mail: userProfesor.User_mail,
             city: userProfesor.city,
