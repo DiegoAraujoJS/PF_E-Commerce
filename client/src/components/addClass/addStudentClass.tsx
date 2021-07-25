@@ -3,7 +3,7 @@ import { validationSchemaNewClass } from '../../utils/validations';
 import { Form, Row, Col, Container, Button } from 'react-bootstrap';
 import axios from 'axios'
 // import MarketFlow from '../../../../api/src/MarketFlow'
-import { IClase, IPublish } from '../../../../interfaces';
+import { IClase } from '../../../../interfaces';
 import getCookieValue from '../../cookieParser';
 import Swal from 'sweetalert2'
 import 'bootstrap/dist/css/bootstrap.css';
@@ -69,8 +69,8 @@ const StudentAddClass = () => {
 			const user = await axios.post('http://localhost:3001/api/verify', {}, { headers: { Authorization: token } })
 			setUser(user.data)
 		}
-		
-	}, [user])
+		fetchUser()
+	}, [])
 	
 	return (
 		<Container className='shadow p-3 mb-5 bg-white rounded flex'>
@@ -106,41 +106,41 @@ const StudentAddClass = () => {
 						let sunday = new Date()
 						sunday.setDate(sunday.getDate() - days.indexOf(redux_state[0].day) % 7)
 
-						const payload: IPublish = {
-							publication: {
-								agenda: {
-									forHowLong: values.forHowLong,
-									sundayStartsOn: {
-										day: sunday.getDate(),
-										month: sunday.getMonth() + 1,
-										year: sunday.getFullYear()
-									},
-									week: redux_state
-								},
-								clase: {
-									ciudad: '',
-									descripcion: values.descripcion,
-									grado: values.grado, 
-									materia: values.materia,
-									nivel: values.nivel,
-									nombre: values.nombre,
-									precio: values.precio,
-									Profesor_mail: user.role === 1 ? user.mail : null,
-									User_mail: user.role === 0 ? user.mail : null,
-								},
-							},
-							token: getCookieValue('token').replaceAll("\"", '')
-						}
-						const response = await axios.post(`http://localhost:3001/api/publish`, payload) 
+						// const payload: IPublish = {
+						// 	publication: {
+						// 		agenda: {
+						// 			forHowLong: values.forHowLong,
+						// 			sundayStartsOn: {
+						// 				day: sunday.getDate(),
+						// 				month: sunday.getMonth() + 1,
+						// 				year: sunday.getFullYear()
+						// 			},
+						// 			week: redux_state
+						// 		},
+						// 		clase: {
+						// 			ciudad: '',
+						// 			descripcion: values.descripcion,
+						// 			grado: values.grado, 
+						// 			materia: values.materia,
+						// 			nivel: values.nivel,
+						// 			nombre: values.nombre,
+						// 			precio: values.precio,
+						// 			Profesor_mail: user.role === 1 ? user.mail : null,
+						// 			User_mail: user.role === 0 ? user.mail : null,
+						// 		},
+						// 	},
+						// 	token: getCookieValue('token').replaceAll("\"", '')
+						// }
+						// const response = await axios.post(`http://localhost:3001/api/publish`, payload) 
 						
 		
-						if (response.status === 200) {
-							Swal.fire(
-								'Exito!',
-								'Tu clase se creo correctamente!',
-								'success'
-							)
-						}
+						// if (response.status === 200) {
+						// 	Swal.fire(
+						// 		'Exito!',
+						// 		'Tu clase se creo correctamente!',
+						// 		'success'
+						// 	)
+						// }
 						
 					}
 					catch (err) {

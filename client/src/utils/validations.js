@@ -20,15 +20,6 @@ export const validationSchemaNewClass = yup.object().shape({
     precio: yup
         .number()
         .required('Este campo es obligatorio'),
-    dia: yup
-        .string()
-        .test('dia', 'Necesita elegir el dia de la clase', (value) => value),
-    desde: yup
-        .string()
-        .test('desde', 'Necesita elegir un comienzo a la clase', (value) => value),
-    hasta: yup
-        .string()
-        .test('hasta', 'Necesita elegir un comienzo a la clase', (value) => value),
 
 });
 

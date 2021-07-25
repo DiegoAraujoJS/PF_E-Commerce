@@ -1,7 +1,7 @@
-import { Class } from "../../../../interfaces";
+import { IClase } from "../../../../interfaces";
 
 export const filterByTime = (array, horario) => {
-    let filtrados: Class[] = array.filter((clase: Class) => {
+    let filtrados: IClase[] = array.filter((clase: IClase) => {
         if (clase && clase.date.time && clase.date.time.length === 2) {
             let desde = horario.desde + ":00"
             let hasta = horario.hasta + ":00"
@@ -21,7 +21,7 @@ export const filterByTime = (array, horario) => {
 };
 
 export const filterByLevel = (array, nivel) => {
-    let filtrados: Class[] = array.filter((clase: Class) => {
+    let filtrados: IClase[] = array.filter((clase: IClase) => {
         if (clase && clase.nivel) {
             if (clase.nivel === nivel) return clase
             else return null
@@ -32,7 +32,7 @@ export const filterByLevel = (array, nivel) => {
 };
 
 export const filterByGrade = (array, grado) => {
-    let filtrados: Class[] = array.filter((clase: Class) => {
+    let filtrados: IClase[] = array.filter((clase: IClase) => {
         if (clase && clase.grado) {
             if (clase.grado === grado) return clase
             else return null
@@ -44,29 +44,28 @@ export const filterByGrade = (array, grado) => {
 }
 
 export const filterByScore = (e, array) => {
-    let filtrados: Class[] = array.filter((clase: Class) => {
-        if (clase && clase.puntuacion) {
-            if (clase.puntuacion.toString() === e.target.value || (clase.puntuacion >= Number(e.target.value) - 0.50 && clase.puntuacion <= e.target.value)) return clase
+    let filtrados: IClase[] = array.filter((clase: IClase) => {
+        if (clase && clase.profesor.score) {
+            if (clase.profesor.score.toString() === e.target.value || (clase.profesor.score >= Number(e.target.value) - 0.50 && clase.profesor.score <= e.target.value)) return clase
             else return null
         }
         else return null
     })
     return filtrados.sort(function (a, b) {
-        if (a.puntuacion < b.puntuacion) { return 1; }
-        if (a.puntuacion > b.puntuacion) { return -1; }
+        if (a.profesor.score < b.profesor.score) { return 1; }
+        if (a.profesor.score > b.profesor.score) { return -1; }
         return 0;
     })
 }
 
 
 export const filterByCity = (array, city) => {
-    let filtrados: Class[] = array.filter((clase: Class) => {
+    let filtrados:  IClase[] = array.filter((clase: IClase) => {
         if (clase && clase.profesor.city) {
             if (clase.profesor.city === city.name) return clase
             else return null
         }
         else return null
     })
-
     return filtrados
 }

@@ -12,12 +12,13 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { connect } from 'react-redux'
 import StudentClassCards from '../classCards/StudentClassCards'
 import { filterByCity, filterByGrade, filterByLevel, filterByScore, filterByTime } from './FiltersFunctions'
+import { IClase } from '../../../../interfaces'
 
 
 const star = <FontAwesomeIcon icon={faStar} style={{ color: "#ffc107" }} />
 
 type Props = {
-    searchInput: Class[],
+    searchInput: IClase[],
     dispatchInput: (data) => any,
 }
 
@@ -28,7 +29,7 @@ const ClassContainer: React.FC<Props> = ({ searchInput, dispatchInput }) => {
     const [puntuacion, setPuntuacion] = useState({ value: "", check: false })
     const [horario, setHorario] = useState({ desde: "", hasta: "" })
     const grados = ["Primer grado", "Segundo grado", "Tercer grado", "Cuarto grado", "Quinto grado", "Sexto grado"]
-    const [city, setCity] = useState({ name: "", show: false, length: 0, })
+    const [city, setCity] = useState({ name: "", show: false })
     let [user, setUser] = useState<{ name: string, lastName: string, role: number, mail: string } | undefined>({ name: '', lastName: '', role: null, mail: '' })
 
     const [classProfessor, setClassProfessor] = useState([])
@@ -331,7 +332,6 @@ const ClassContainer: React.FC<Props> = ({ searchInput, dispatchInput }) => {
                             <span style={{ backgroundColor: "lightblue", color: "blue" }} className="badge badge-primary badge-pill">* Student</span>
                             </div>
                         </Form>
-
                     </ListGroup>
 
                 </Col>

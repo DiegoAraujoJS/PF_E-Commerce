@@ -6,7 +6,7 @@ import axios from 'axios'
 import getCookieValue from '../../cookieParser'
 import { Link } from 'react-router-dom';
 import { faCalendarAlt, faClock, faEnvelope, faStar } from '@fortawesome/free-regular-svg-icons';
-import { Class } from '../../../../interfaces';
+import { IClase } from '../../../../interfaces';
 import CalendarApp from "../calendar/addClassCalendar/Calendar"
 const calendar = <FontAwesomeIcon icon={faCalendarAlt} className="mt-1" style={{ color: "#0067ff" }} />
 const clock = <FontAwesomeIcon icon={faClock} className="mt-1" style={{ color: "#0067ff" }} />
@@ -78,7 +78,7 @@ function StudentClassDetail(props) {
 
                         <Button variant="primary" onClick={async () => {
 
-                            const payload: Class = {
+                            const payload: IClase = {
                                 ...props
                             }
                             try{

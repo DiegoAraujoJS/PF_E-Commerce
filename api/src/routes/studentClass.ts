@@ -2,7 +2,6 @@ import Router, { Request, Response } from 'express'
 import { ClasePorComprar, IClase } from '../../../interfaces';
 import User from '../models/Usuario';
 
-import { Time, Class, Profesor } from '../../../interfaces'
 import Clase from '../models/Clase';
 
 

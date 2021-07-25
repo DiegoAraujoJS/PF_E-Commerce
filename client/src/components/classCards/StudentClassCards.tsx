@@ -4,7 +4,7 @@ import StudentClassCard from '../classCard/StudentClassCard';
 import { connect } from 'react-redux';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
-import axios from 'axios'
+import noData from "../../images/no-data.svg";
 
 function StudentClassCards({ clasesFiltradas, dispatchInput }) {
     // const [search, setSearch] = React.useState('')
@@ -33,12 +33,7 @@ function StudentClassCards({ clasesFiltradas, dispatchInput }) {
 
     return (
         <div>
-            <Row className="d-flex justify-content-center mb-3">
-                                <Col className="p-0" sm={5} md={5} >
-                                    <Form.Control type="text" placeholder="Buscar clase..." value={search} onChange={handleChange} />
-                                </Col >
-                                
-                            </Row>
+
             <Row className="d-flex justify-content-center">
                 <Col className="p-0" sm={11} md={11}>
                     <ul>
@@ -53,7 +48,7 @@ function StudentClassCards({ clasesFiltradas, dispatchInput }) {
                                     materia={clase?.materia}
                                     nivel={clase?.nivel}
                                     profesor={clase?.profesor}
-                                    puntuacion={clase?.puntuacion}
+                                    
                                     date={clase?.date}
                                     precio={clase?.precio}
                                     key={i + 20}

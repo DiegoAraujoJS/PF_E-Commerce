@@ -107,8 +107,10 @@ interface Week {
 
 type IDate = {year: number, month: number, day: number}
 
+type IPublish = {clase: IClase, agenda: {week: Week[], sundayStartsOn: IDate, forHowLong: number}}
+
 type ArrayOfIUserResponse = IUserResponse[]
 
-export type {ArrayDePares, Disponible, Ocupado, CalendarioResponse, Horario, Time, DisponibleOcupadoTransform, IClase, ClasePorComprar, IProfesor, IUser, IUserResponse, ArrayOfIUserResponse, Claim, Week, IDate}
+export type {ArrayDePares, Disponible, Ocupado, CalendarioResponse, Horario, Time, DisponibleOcupadoTransform, IClase, ClasePorComprar, IProfesor, IUser, IUserResponse, ArrayOfIUserResponse, Claim, Week, IDate, IPublish}
 
 export {Role}

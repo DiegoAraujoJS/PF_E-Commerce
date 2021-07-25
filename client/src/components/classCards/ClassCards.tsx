@@ -192,7 +192,7 @@ function ClassCards({ clasesFiltradas, dispatchInput }) {
                                     materia={clase?.materia}
                                     nivel={clase?.nivel}
                                     profesor={clase?.profesor}
-                                    puntuacion={clase?.puntuacion}
+                                    
                                     date={clase?.date}
                                     precio={clase?.precio}
                                     key={i + 10}
@@ -210,7 +210,7 @@ function ClassCards({ clasesFiltradas, dispatchInput }) {
                                             materia={clase?.materia}
                                             nivel={clase?.nivel}
                                             profesor={clase?.profesor}
-                                            puntuacion={clase?.puntuacion}
+                                            
                                             date={clase?.date}
                                             precio={clase?.precio}
                                             key={i + 20}

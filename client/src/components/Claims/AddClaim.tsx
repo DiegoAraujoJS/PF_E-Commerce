@@ -70,7 +70,7 @@ function AddClaim() {
         }
     }
 
-    const [admins, setAdmins] = useState([])
+    const [adminsArray, setAdminsArray] = useState([])
     const [classData, setClassData] = useState({
         nombre: "",
         grado: "",
@@ -117,7 +117,7 @@ function AddClaim() {
         const getAdmin = async () => {
             const response = await axios.get(`http://localhost:3001/api/usuarios/admin`)
             if (response.status === 200) {
-                setAdmins(response.data)
+                setAdminsArray(response.data)
             }
         }
         getAdmin()
@@ -176,7 +176,7 @@ function AddClaim() {
         }
     };
 
-    console.log(professorData)
+    console.log(adminsArray)
     console.log(user)
     return (
         <Container>
@@ -289,9 +289,9 @@ function AddClaim() {
                             onChange={handleChange}
                         >
                             <option>{"..."}</option>
-                            {admins.map(a => {
+                            {/* {adminsArray && adminsArray.length ? adminsArray?.map(a => {
                                 return <option>{a.mail}</option>
-                            })}
+                            }) : <h3>No hay admins</h3>} */}
                         </Form.Control>
                     </Row>
                     <Row className="d-flex justify-content-center mt-4">
