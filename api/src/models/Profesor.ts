@@ -21,7 +21,10 @@ export default class Profesor extends Model{
 
     @Column  ({type: DataType.STRING})
     title!: string;
-       
+    
+    
+    @Column  ({type: DataType.TEXT})
+    foto!: string;   
     @Column  ({type: DataType.TEXT})
     description!: string;
 
