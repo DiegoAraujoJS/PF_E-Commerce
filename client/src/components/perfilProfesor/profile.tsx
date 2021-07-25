@@ -60,8 +60,9 @@ function Profile(email,{user}) {
         </div>
         <h1>{prof.title}</h1>
         <p className={style.description}>{prof.description}</p>
-        <img src={star} className={style.star}/>
-        <h4 className={style.score}>4.0 </h4>
+        {prof.howMany>=0? <RatingView ratingValue={prof.score} /* RatingView Props */ /> :"Este profesor no tiene suficientes reviews"}
+
+        
         <div className={style.scrolldown}></div>
     </div>
 
