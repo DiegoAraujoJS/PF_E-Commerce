@@ -58,7 +58,6 @@ const PerfilAlumno = ({email}) => {
     useEffect(() => {
         fetchAlumno()
         getUserLoged()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     return (
         <div>

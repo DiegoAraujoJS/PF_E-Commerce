@@ -2,6 +2,8 @@ import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
 
+
+
 const firebaseConfig = {
     apiKey: "AIzaSyDGqKZu8WjUjyjurueAHUhooogWltFdcwM",
     authDomain: "auth-4d665.firebaseapp.com",
@@ -79,8 +81,3 @@ export const auth = firebase.auth();
 // create query =  firestoreRef.orderBy("createdAt").limit(25);
 // use hook const [data] = useCollectionData(query, { idField: "id" });
 export const firestore = firebase.firestore();
-
-  
-
-  
-  

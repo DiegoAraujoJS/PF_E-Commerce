@@ -56,7 +56,7 @@ const EditPerfilAlum = () => {
 
             const token = getCookieValue('token').replaceAll("\"", '')
             const thisUser = await axios.post(`http://localhost:3001/api/verify`, {},{ withCredentials: true, headers: {Authorization: token}})
-            let editar = await axios.patch("http://localhost:3001/api/alumnos/", {
+            let editar = await axios.patch("http://localhost:3001/api/usuarios/", {
                 foto: img,
                 usuario: thisUser.data.mail,
                 description: data.description,
@@ -85,10 +85,9 @@ const EditPerfilAlum = () => {
                         <div className="d-flex flex-column align-items-center text-center  p-3 py-5"><img className={styles.imgEdit} src={img} /><span className="font-weight-bold">Vista Previa</span><span className="text-black-50"></span><span> </span></div>
                     </div>
                     <div className="row mt-3">
-                    <div className="col-md-12"><label className="labels">Pon una descripción para los que entren vean tu perfil</label><textarea className="form-control" onChange={(e) => inputsHandler(e)} id="description" /></div>
+                    <div className="col-md-12"><label className="labels">Pon una descripción para los que entren vean en tu perfil</label><textarea className="form-control" onChange={(e) => inputsHandler(e)} id="description" /></div>
                         {/*  <div className="col-md-12"><label className="labels">Contacto Telefonico</label><input type="text" className="form-control" placeholder="numero de celular" /></div>
                         <div className="col-md-12"><label className="labels">Dirección</label><input type="text" className="form-control" placeholder="escribir direccion" /></div> */}
-                        <div className="col-md-12"><label className="labels">Si tenes una educacion o especialidad ponela acá:</label><input type="text" className="form-control" placeholder="educacion" onChange={(e) => inputsHandler(e)} id="education" /></div>
                     </div>
                     <div className="row mt-3">
                         <div className="col-md-6"><label className="labels">País</label><input type="text" className="form-control" placeholder="pais" id="ciudad" onChange={(e) => inputsHandler(e)}/></div>

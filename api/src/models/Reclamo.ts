@@ -5,13 +5,8 @@ import Clase from './Clase';
 import Profesor from './Profesor';
 import User from './Usuario';
 
-
-
 @Table
 export default class Reclamo extends Model {
-    @Column
-    nombre!: string;
-
     @ForeignKey(() => User)
     @Column
     denunciante_email!: string;
@@ -29,12 +24,9 @@ export default class Reclamo extends Model {
     @BelongsTo(() => User, 'denunciado_email')
     denunciado!: User;
 
-    @ForeignKey(() => User)
-    @Column
-    admin_email!: string;
-
-    @BelongsTo(() => User, 'admin_email')
-    admin!: User;
+    // @ForeignKey(() => User)
+    // @Column ({allowNull: false})
+    // Admin_email!: string;
 
     @ForeignKey(() => Clase)
     @Column

@@ -2,7 +2,7 @@
 import React, { useState } from 'react'
 import axios from 'axios';
 import { useHistory } from "react-router-dom";
-import { UserProps } from '../../../../interfaces'
+import { IUser } from '../../../../interfaces'
 import { Formik } from 'formik';
 import { validationSchemaRegister } from '../../utils/validations';
 import imageParser from '../../utils/imageParser';
@@ -32,12 +32,14 @@ const Register: React.FC<Props> = ({ show, handleClose }) => {
 
   async function handleSubmitRegister(values) {
     console.log(values)
-    let user: UserProps = {
+    let user: IUser = {
       lastName: values.lastName,
-      mail: values.mail,
+      User_mail: values.mail,
       name: values.name,
       role: values.role,
       city: values.city,
+      country: values.country,
+      state: values.state
     }
     let userWithPassword = {
       ...user,

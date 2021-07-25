@@ -1,20 +1,23 @@
 import React, { useState, useEffect } from 'react'
-import { Alert, Button, Col, Row } from 'react-bootstrap';
+import { Alert, Button, Col, Row, Form } from 'react-bootstrap';
 import StudentClassCard from '../classCard/StudentClassCard';
 import { connect } from 'react-redux';
-import noData from "../../images/no-data.svg";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios'
 
 function StudentClassCards({ clasesFiltradas, dispatchInput }) {
     // const [search, setSearch] = React.useState('')
     const [classFilter, setClassFilter] = useState([])
+    const [search, setSearch] = React.useState('')
 
 
     useEffect(() => {
         setClassFilter(clasesFiltradas)
     }, [clasesFiltradas])
-
-
-
+    const handleChange = (e) => {
+        setSearch(e.target.value)
+    };
     // const handleChange = (e) => {
     //     setSearch(e.target.value)
     // };
@@ -24,9 +27,18 @@ function StudentClassCards({ clasesFiltradas, dispatchInput }) {
     // }
 
     // const searchIcon = <FontAwesomeIcon icon={faSearch} className="ml-2 ml-2" />
+    
+    
+    const searchIcon = <FontAwesomeIcon icon={faSearch}  className="ml-2 ml-2" />
 
     return (
         <div>
+            <Row className="d-flex justify-content-center mb-3">
+                                <Col className="p-0" sm={5} md={5} >
+                                    <Form.Control type="text" placeholder="Buscar clase..." value={search} onChange={handleChange} />
+                                </Col >
+                                
+                            </Row>
             <Row className="d-flex justify-content-center">
                 <Col className="p-0" sm={11} md={11}>
                     <ul>
@@ -45,6 +57,7 @@ function StudentClassCards({ clasesFiltradas, dispatchInput }) {
                                     date={clase?.date}
                                     precio={clase?.precio}
                                     key={i + 20}
+                                    student={clase?.student}
                                 />
                             );
                         })

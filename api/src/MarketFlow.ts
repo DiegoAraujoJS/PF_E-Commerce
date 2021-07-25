@@ -1,54 +1,34 @@
-import axios from "axios";
-import { Disponible, Horario, IClase, Ocupado, Time } from "../../interfaces";
+import { Disponible, IDate, IClase, Ocupado, Time, Week } from "../../interfaces";
+import mail from "./utils/actions/mailer";
 import Clase from "./models/Clase";
-import Profesor from "./models/Profesor";
-
+import User from "./models/Usuario";
+import weeklyToMonthlyCalendar from "./utils/calendarFunctions/weeklyToMonthlyCalendar";
+import setNewCalendar from "./utils/calendarFunctions/setNewCalendar";
 class MarketFlow {
     listeners: {id: number, cb: () => void}[];
 
-    suscribe(publication: IClase): void {
-        let professor = publication.Profesor_mail
-        const editCalendar = () => {
-            let publicationDate = {anio: publication.date.year, mes: publication.date.month, dia: publication.date.day}
-            let editPayload: Ocupado = {email: professor, fecha: publicationDate , ocupado: [publication.date.time]}
-            axios.put(`http://localhost:3001/api/calendario/edit`, editPayload)
-            // .then (profesor => send mail to profesor)
-        }
-        // const sendMail = () => {
-        //     http post mail/send
-        // }
-        
-        // this.listeners?.push({id: publication.id, cb: editCalendar})
-    }
-
     buy (publication: IClase): void {
-        this.listeners?.find(listener => listener.id === publication.id).cb()
+        let listener = this.listeners?.find(listener => listener.id === publication.id)
+        if (listener) listener.cb()
     }
 
-    async publish (publication: IClase, token: string): Promise<any> {  
+    async publishDemand (publication: {clase: IClase, agenda: {week: Week[], sundayStartsOn: IDate, forHowLong: number}}, token: string): Promise<any> {  
         
-        const payload: Disponible = {
-            email: publication.Profesor_mail,
-            disponible: [publication.date.time], 
-            fecha: {
-                anio: publication.date.year,
-                dia: publication.date.day,
-                mes: publication.date.month,
-            }, 
-        }
-        const professor = await Profesor.findByPk(publication.Profesor_mail)
-        
-        this.suscribe(publication)
-        return Clase.create({
-            ...publication, 
-            materia: publication.materia.normalize("NFD").replace(/\p{Diacritic}/gu, ""), 
-            ciudad: professor && professor.city,
-            status: 'pending'
-        })
+        const calendarPayload = publication.agenda
+        const [publisher, publisherRole] = publication.clase.Profesor_mail ? [await User.findByPk(publication.clase.Profesor_mail), 'profesor'] : [await User.findByPk(publication.clase.User_mail), 'alumno']
+
+        return Clase.create({...publication.clase, materia: publication.clase.materia.normalize("NFD").replace(/\p{Diacritic}/gu, ""), ciudad: publisher.city})
         .then(() => {
-            axios.post('http://localhost:3001/api/calendario/add', payload, {headers: {Authorization: token}})
+            let promises = []
+            const monthlyCalendar = weeklyToMonthlyCalendar(calendarPayload.week, calendarPayload.forHowLong, calendarPayload.sundayStartsOn, publisher.User_mail)
+            for (const available of monthlyCalendar) {
+                promises.push( setNewCalendar(available))
+            }
+            return Promise.all(promises)
         })
-        .then(e => publication)
+        .then((r) => mail(publisher.User_mail, `Felicitaciones ${publisher.name}! Tu clase de ${publication.clase.materia} ya está publicada`,
+        `Gracias por confiar en E Clases Online. Su clase online está muy cerca. Ahora tienes que esperar a que un ${publisherRole} quiera tomar tu clase`))
+        .catch(err => console.log(err))
     }
 }
 const market = new MarketFlow()
