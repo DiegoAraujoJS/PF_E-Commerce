@@ -130,7 +130,7 @@ router.post('/', async (req: Request, res: Response) => {
 })
 
 router.patch('/', async (req: Request, res: Response) => {
-    const { ciudad, foto, description,education } = req.body;
+    const { ciudad, foto, description,title } = req.body;
     const mail = req.body.usuario;
     
     if (mail) {

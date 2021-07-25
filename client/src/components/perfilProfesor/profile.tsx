@@ -100,10 +100,6 @@ function Profile(email,{user}) {
                     ...response.data
                 })
                 console.log("LO QUE NECESITOO",userProfile)
-            }else
-            {
-             
-
             }
         } catch (err) {
             console.log(err)
@@ -121,10 +117,6 @@ function Profile(email,{user}) {
                     ...response.data
                 })
                 console.log(prof.title)
-            }else
-            {
-             
-
             }
         } catch (err) {
             console.log(err)
@@ -141,8 +133,6 @@ function Profile(email,{user}) {
           { withCredentials: true, headers: { Authorization: token } }
         );
         setUserLoged(userResponse.data);
-        console.log("ESTE ES EL RESPONSE",userResponse.data)
-
       };
       const handleClick = (e) => {
         e.preventDefault();
@@ -157,7 +147,7 @@ function Profile(email,{user}) {
         fetchProfs()
         getUserLoged()
         fetchUser()
-        
+        console.log("PROF.TITLE",prof.title)
  
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);

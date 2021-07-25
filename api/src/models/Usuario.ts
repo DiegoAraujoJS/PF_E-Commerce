@@ -27,7 +27,7 @@ export default class User extends Model implements IUser {
     @Column 
     role!: number;
 
-    @Column  
+    @Column  ({type: DataType.TEXT})
     foto!: string;
 
     @Column ({allowNull: false})
