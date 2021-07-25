@@ -1,6 +1,6 @@
 import { create } from 'domain';
 import { Request, Response, Router } from 'express'
-import { IUser, IProfesor } from '../../../interfaces';
+import { IUser, IProfesor, Role } from '../../../interfaces';
 import User from './../models/Usuario'
 import { Op } from 'sequelize'
 import { isUser } from '../utils/isInterface';
@@ -21,7 +21,16 @@ router.get('/', async (req: Request, res: Response) => {
     }
 })
 
-
+router.get('/admin', async (req: Request, res: Response) => {
+    try {
+        const admins = await User.findAll({
+            where: { role : Role.ADMIN }
+        })
+        res.send(admins)
+    } catch (error) {
+        res.send(error);
+    }
+})
 
 router.get('/all', async (req: Request, res: Response) => {
     try {

@@ -51,16 +51,20 @@ function AddClaim() {
 
     const getProfessor = async () => {
         if (professor) {
-            const response = await axios.get('http://localhost:3001/api/profesores/' + professor)
-            if (response.status === 200) {
-                setProfessorData({
-                    User_mail: response.data.User_mail,
-                    name: response.data.name,
-                    lastName: response.data.lastName,
-                    city: response.data.city,
-                    foto: response.data.foto,
-                })
-            } else {
+            try {
+                const response = await axios.get('http://localhost:3001/api/profesores/' + professor)
+
+                if (response.status === 200) {
+                    setProfessorData({
+                        User_mail: response.data.User_mail,
+                        name: response.data.name,
+                        lastName: response.data.lastName,
+                        city: response.data.city,
+                        foto: response.data.foto,
+                    })
+                }
+            }
+            catch (error) {
                 Swal.fire(
                     "Error!",
                     "El profesor no existe.",
@@ -83,18 +87,29 @@ function AddClaim() {
 
     const getClass = async () => {
         if (class_id) {
-            const response = await axios.get(`http://localhost:3001/api/clases/${class_id}`)
-            if (response.status === 200) {
-                setClassData({
-                    nombre: response.data.nombre,
-                    grado: response.data.grado,
-                    nivel: response.data.nivel,
-                    materia: response.data.materia,
-                    descripcion: response.data.descripcion,
-                    esPresencial: response.data.esPresencial,
-                    Profesor_mail: response.data.Profesor_mail,
-                })
-            } else {
+            try {
+                const response = await axios.get(`http://localhost:3001/api/clases/${class_id}`)
+                console.log(response)
+                if (response.status === 200) {
+                    setClassData({
+                        nombre: response.data.nombre,
+                        grado: response.data.grado,
+                        nivel: response.data.nivel,
+                        materia: response.data.materia,
+                        descripcion: response.data.descripcion,
+                        esPresencial: response.data.esPresencial,
+                        Profesor_mail: response.data.Profesor_mail,
+                    })
+                }
+                else {
+                    Swal.fire(
+                        "Error!",
+                        "No existe clase con ese id.",
+                        "error"
+                    )
+                }
+            }
+            catch (error) {
                 Swal.fire(
                     "Error!",
                     "No existe clase con ese id.",
@@ -115,7 +130,8 @@ function AddClaim() {
 
     useEffect(() => {
         const getAdmin = async () => {
-            const response = await axios.get(`http://localhost:3001/api/usuarios/admin`)
+            const response = await axios.get("http://localhost:3001/api/usuarios/admin")
+            console.log(response)
             if (response.status === 200) {
                 setAdminsArray(response.data)
             }
@@ -136,7 +152,13 @@ function AddClaim() {
                         "error"
                     )
                 }
-
+                if (!class_id){ 
+                    return Swal.fire(
+                    "Error!",
+                    "Debe ingresar un id de clase.",
+                    "error"
+                )
+                }
                 if (classData.Profesor_mail === professorData.User_mail) {
                     let newClaim = {
                         denunciante: user.mail,
@@ -146,7 +168,7 @@ function AddClaim() {
                         reclamo: claim.detalle,
                         clase: class_id,
                     }
-
+                    console.log(newClaim)
                     const responseClaim = await axios.post('http://localhost:3001/api/reclamos', newClaim)
                     if (responseClaim.status === 200) {
                         console.log(responseClaim.data)
@@ -176,8 +198,7 @@ function AddClaim() {
         }
     };
 
-    console.log(adminsArray)
-    console.log(user)
+
     return (
         <Container>
             <Row>
@@ -214,7 +235,7 @@ function AddClaim() {
                                 <Button
                                     onClick={(e) => getProfessorFn(e)}
                                 >
-                                    Show Professor
+                                    Check Professor
                                 </Button>
                             </Col>
                         </Form.Group>
@@ -251,7 +272,7 @@ function AddClaim() {
                                 <Button
                                     onClick={(e) => getClassFn(e)}
                                 >
-                                    Show Class
+                                    Check Class
                                 </Button>
                             </Col>
                         </Form.Group>
@@ -282,16 +303,16 @@ function AddClaim() {
                         }
                     </Row>
                     <Row className="mt-3">
-                        <Form.Label>Elije un admin:</Form.Label>
+                        <Form.Label>Elije un admin para este reclamo:</Form.Label>
                         <Form.Control
                             as="select"
                             name="admin"
                             onChange={handleChange}
                         >
-                            <option>{"..."}</option>
-                            {/* {adminsArray && adminsArray.length ? adminsArray?.map(a => {
-                                return <option>{a.mail}</option>
-                            }) : <h3>No hay admins</h3>} */}
+                            <option>Elije un admin...</option>
+                            {adminsArray && adminsArray.length ? adminsArray?.map(a => {
+                                return <option>{a.User_mail}</option>
+                            }) : <option>No hay admins</option>}
                         </Form.Control>
                     </Row>
                     <Row className="d-flex justify-content-center mt-4">

@@ -23,7 +23,7 @@ router.get('/', async (req: Request, res: Response) => {
             for (let x of palabrasSeparadas) {
                 try {
                     const c = await Clase.findAll({
-                        include: [{ model: Profesor }, {model: User}],
+                        include: [{ model: Profesor }, { model: User }],
                         where: {
                             [Op.or]: [{
                                 materia: {
@@ -45,14 +45,14 @@ router.get('/', async (req: Request, res: Response) => {
                     })
                     clases.push(...c)
                     const p = await User.findAll({
-                        include: [{model: Profesor, required: true}],
+                        include: [{ model: Profesor, required: true }],
                         where: {
                             city: {
                                 [Op.iLike]: `%${x}%`.replace("\'", '')
                             }
                         }
                     })
-                    
+
                     profesores.push(...p)
                 }
 
@@ -63,20 +63,20 @@ router.get('/', async (req: Request, res: Response) => {
         }
 
         if (clases.length > 0 && profesores.length > 0) {
-            const clasesResult = clases.flat().filter(c => profesores.map(p => p.User_mail).flat().includes(c.Profesor_mail)) 
+            const clasesResult = clases.flat().filter(c => profesores.map(p => p.User_mail).flat().includes(c.Profesor_mail))
 
-            return res.send(clasesResult.map((clase: Clase) => ClaseToIClase(clase, profesores.find(p => p.User_mail===clase.Profesor_mail))))
+            return res.send(clasesResult.map((clase: Clase) => ClaseToIClase(clase, profesores.find(p => p.User_mail === clase.Profesor_mail))))
         }
         else if (clases.length > 0) {
             return res.send(clases.map((clase: Clase) => ClaseToIClase(clase)))
         }
         else {
-            const allClasses = await Clase.findAll({include: [{model: Profesor}, {model: User}]})
+            const allClasses = await Clase.findAll({ include: [{ model: Profesor }, { model: User }] })
             const allProfessorClassesUsers = await Promise.all(allClasses.filter(cl => cl.Profesor_mail !== null).map(async (cl: Clase) => [cl.Profesor_mail, await User.findByPk(cl.Profesor_mail)]))
 
-            const allNotProfessorClasses = allClasses.filter(cl => !allProfessorClassesUsers.some( (tuple: [string, User]) => cl.Profesor_mail === tuple[0]))
+            const allNotProfessorClasses = allClasses.filter(cl => !allProfessorClassesUsers.some((tuple: [string, User]) => cl.Profesor_mail === tuple[0]))
 
-            return res.send([...allNotProfessorClasses.map(cl => ClaseToIClase(cl)), ...allProfessorClassesUsers.map((tuple: [string, User]) => ClaseToIClase(allClasses.find(cl => cl.Profesor_mail===tuple[0]), tuple[1])) ] )
+            return res.send([...allNotProfessorClasses.map(cl => ClaseToIClase(cl)), ...allProfessorClassesUsers.map((tuple: [string, User]) => ClaseToIClase(allClasses.find(cl => cl.Profesor_mail === tuple[0]), tuple[1]))])
         }
 
     } catch (err) {
@@ -88,30 +88,30 @@ router.get('/', async (req: Request, res: Response) => {
 
 router.get('/all/student/:mail', async (req: Request, res: Response) => {
     const clases = await Clase.findAll({
-         include: [{
-             model: Profesor,
-             required: true
-            }],
-         
-         where: {
+        include: [{
+            model: Profesor,
+            required: true
+        }],
+
+        where: {
             User_mail: req.params.mail
-         }
-         })
+        }
+    })
     return res.send(clases)
 })
 
 router.get('/all/profesor/:mail', async (req: Request, res: Response) => {
     const clases = await Clase.findAll({
-         include: [{
-             model: Profesor,
-             required: true
-            }],
-         
-         where: {
+        include: [{
+            model: Profesor,
+            required: true
+        }],
+
+        where: {
             Profesor_mail: req.params.mail
-         }
-         })
-    return res.send(clases)    
+        }
+    })
+    return res.send(clases)
 })
 
 
@@ -158,12 +158,17 @@ router.put('/edit', async (req: Request, res: Response) => {
 
         await clase.set(claseEditada);
         const claseCambiada = await clase.save();
-        res.send(claseCambiada)
+        if (claseCambiada) {
+            res.send(claseCambiada)
+        }
+        else {
+            res.status(404).send("No se encontraron clases")
+        }
     }
     catch (error) {
-        res.send(error)
-    }
-})
+            res.send(error)
+        }
+    })
 
 
 router.post('/delete', async (req: Request, res: Response) => {
@@ -181,9 +186,14 @@ router.post('/delete', async (req: Request, res: Response) => {
 
 router.get('/:id', async (req: Request, res: Response) => {
     try {
-        const {id} = req.params
-        const clases = await Clase.findOne({ where: {id: id} })
-        res.send(clases)
+        const { id } = req.params
+        const clases = await Clase.findOne({ where: { id: id } })
+        if (clases) {
+            res.send(clases)
+        }
+        else {
+            res.status(404).send("No se encontraron clases")
+        }
     }
     catch (error) {
         res.status(404).send("Ops! hubo un error")
