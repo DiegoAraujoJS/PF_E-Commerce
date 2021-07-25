@@ -6,6 +6,7 @@ import getCookieValue from '../../cookieParser';
 import { useHistory } from "react-router-dom";
 const EditProfile = () => {
     const history = useHistory()
+    const [prech, setPrech] = useState<any>({})
     const [img, setImg] = useState<any>('')
     const [data, setData] = useState<any>({
         foto: "",
@@ -20,19 +21,6 @@ const EditProfile = () => {
     });
     const Changes = async (e) => {
         try {
-            if(!data.foto){
-                return alert("Por favor elija una foto para su perfil") 
-             }
-             if(!data.ciudad){
-                 return alert("Por favor elija una ciudad para su perfil")
-             }
-             if(!data.description){
-                return alert("Por favor escriba una descripción para sus alumnos")
-             }
-             if(!data.estado && !data.ciudad){
-                 return alert("Por favor elija una ciudad para su perfil")
-             }
-
             const token = getCookieValue('token').replaceAll("\"", '')
             const thisUser = await axios.post(`http://localhost:3001/api/verify`, {},{ withCredentials: true, headers: {Authorization: token}})
             let editar = await axios.patch("http://localhost:3001/api/profesores/", {
@@ -73,6 +61,28 @@ const EditProfile = () => {
         setData(newdata)
         console.log(newdata)
     }
+    const fetchProfs = async () => {
+        try {
+            
+            const token = getCookieValue('token').replaceAll("\"", '')
+            const thisUser = await axios.post(`http://localhost:3001/api/verify`, {},{ withCredentials: true, headers: {Authorization: token}})
+            const response = await axios.get(`http://localhost:3001/api/profesores/${thisUser.data.mail}`)
+                
+            setPrech({
+             ...response.data
+                })
+        console.log("todo lo que hayt que agregar",prech)
+
+    }catch(err){
+        console.log(err);
+    }
+}
+
+    useEffect(() => {
+        fetchProfs()
+        setImg(prech.foto)
+    }, []);
+
     return (
         <div className={styles.body} >
             <div className={styles.Container}>
