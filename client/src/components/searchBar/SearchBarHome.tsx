@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container, Navbar, Col } from "react-bootstrap";
+import { Container, Navbar, Col, Alert } from "react-bootstrap";
 import { Nav } from "react-bootstrap";
 import { Form } from 'react-bootstrap'
 // import { FormControl } from 'react-bootstrap'
@@ -15,7 +15,7 @@ import s from './SearchBar.module.css'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash, } from "@fortawesome/free-regular-svg-icons";
 import Register from '../Register/Register';
-import { faBook, faShoppingCart, faUserTie } from "@fortawesome/free-solid-svg-icons";
+import { faBook, faShoppingCart, faUserTie, faUser } from "@fortawesome/free-solid-svg-icons";
 import Swal from 'sweetalert2'
 
 export default function SearchBar() {
@@ -196,27 +196,37 @@ export default function SearchBar() {
   }
 
   const admin = <FontAwesomeIcon icon={faUserTie} style={{ fontSize: "40px" }} className="" />
+  const userIcon = <FontAwesomeIcon icon={faUser} style={{ fontSize: "25px" }} className="mt-1" />
+
   return (
     // <Navbar expand="lg" className={s.navbar}>
     <Navbar bg="light" expand="lg">
-      <Container className="container-fluid p-0">
+      <div className="container-fluid form">
         <Navbar.Brand className={'ms-3'} href="#home"><Link to={"/"}><img src={logo} alt='U CLASES Logo' style={{ height: '56px' }}></img></Link></Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto">
             <Link className={'nav-link ms-4 text-decoration-none'} to={"/"}>Home</Link>
             <Link className={'nav-link ms-4 text-decoration-none'} to={"/calendar"}>Calendar</Link>
-            <Link className={'nav-link ms-4 text-decoration-none'} to={"/perfil"}>Profile</Link>
-            <Link className={'nav-link ms-4 text-decoration-none'} to={"/chat"}>Chat</Link>
             <Link className={'nav-link ms-4 text-decoration-none'} to={"/clases"}>Class</Link>
-            <Link className={'nav-link ms-4 text-decoration-none'} to={"/addclaim"}>New Claim</Link>
 
             {loggedOrNot() ?
-              <NavDropdown className={'ms-4 text-decoration-none justify-content-end'} title="Sesión" id="basic-nav-dropdown">
-                <NavDropdown.Item onClick={() => signOut()}>
-                  Desconectarse
-                </NavDropdown.Item>
-              </NavDropdown>
+              <div className="ms-4 d-flex">
+                <span className="ml-4">{userIcon}</span><NavDropdown className={'text-decoration-none justify-content-end ms-1'} title="Sesión" id="basic-nav-dropdown">
+                  <NavDropdown.Item>
+                    <Link className={'nav-link ms-4 text-decoration-none'} to={"/perfil"}>Profile</Link>
+                  </NavDropdown.Item>
+                  <NavDropdown.Item>
+                    <Link className={'nav-link ms-4 text-decoration-none'} to={"/chat"}>Chat</Link>
+                  </NavDropdown.Item>
+                  <NavDropdown.Item>
+                  <Link className={'nav-link ms-4 text-decoration-none'} to={"/addclaim"}>New Claim</Link>
+                  </NavDropdown.Item>
+                  <NavDropdown.Item className="d-flex justify-content-center" onClick={() => signOut()}>
+                    Desconectarse
+                  </NavDropdown.Item>
+                </NavDropdown>
+              </div>
               :
               <NavDropdown className={'ms-4 text-decoration-none'} title="Cuenta" id="basic-nav-dropdown">
                 <Form className={'d-flex flex-column align-items-center justify-content-center'} style={dropBox} onSubmit={handleSubmit}>
@@ -237,24 +247,28 @@ export default function SearchBar() {
               </NavDropdown>
             }
             {loggedOrNot() && user.role === Role.PROFESSOR ?
-              <Link className={'nav-link ms-4 text-decoration-none'} to={"/clases/add"}>Agrega tu Propia Clase!</Link>
+              <Link className={'nav-link ms-4 text-decoration-none'} to={"/clases/add"}>
+                <Alert variant="info" className="p-1 m-0 d-flex justify-content-center" style={{width:"200px"}}>
+                Agrega tu Propia Clase!
+                </Alert>
+                </Link>
               :
               null
             }
           </Nav>
         </Navbar.Collapse>
-        {loggedOrNot() && user.role === Role.ADMIN ? <div className="d-flex">         
+        {loggedOrNot() && user.role === Role.ADMIN ? <div className="d-flex">
           <Link className={'nav-link ms-4 text-decoration-none'} to={"/claim"}>Reclamos</Link>
           {admin}
           <h5 className="m-0">Admin</h5>
         </div>
-          : 
+          :
           < div >
-          <Link to={"/cesta"}> {book} </Link>
-          {cestaLength > 0 ? <Link style={{ textDecoration: "none", }} to={"/cesta"}><span style={bookCSS}> {cestaLength}</span> </Link> : null}
-        </div>
+            <Link to={"/cesta"}> {book} </Link>
+            {cestaLength > 0 ? <Link style={{ textDecoration: "none", }} to={"/cesta"}><span style={bookCSS}> {cestaLength}</span> </Link> : null}
+          </div>
         }
-      </Container>
+      </div>
     </Navbar >
   );
 }
