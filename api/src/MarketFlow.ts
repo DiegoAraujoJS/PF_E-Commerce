@@ -4,6 +4,7 @@ import Clase from "./models/Clase";
 import User from "./models/Usuario";
 import weeklyToMonthlyCalendar from "./utils/calendarFunctions/weeklyToMonthlyCalendar";
 import setNewCalendar from "./utils/calendarFunctions/setNewCalendar";
+import Profesor from "./models/Profesor";
 class MarketFlow {
     listeners: {id: number, cb: () => void}[];
 
@@ -18,16 +19,16 @@ class MarketFlow {
         const [publisher, publisherRole] = publication.clase.Profesor_mail ? [await User.findByPk(publication.clase.Profesor_mail), 'profesor'] : [await User.findByPk(publication.clase.User_mail), 'alumno']
 
         return Clase.create({...publication.clase, materia: publication.clase.materia.normalize("NFD").replace(/\p{Diacritic}/gu, ""), ciudad: publisher.city})
-        .then(() => {
-            let promises = []
+        .then(async () => {
+            // console.log('calendarpayload week', calendarPayload.week, 'for how long', calendarPayload.forHowLong, 'sunday starts on', calendarPayload.sundayStartsOn, 'publisher', publisher.User_mail)
             const monthlyCalendar = weeklyToMonthlyCalendar(calendarPayload.week, calendarPayload.forHowLong, calendarPayload.sundayStartsOn, publisher.User_mail)
+            // console.log('monthly calendar', monthlyCalendar)
             for (const available of monthlyCalendar) {
-                promises.push( setNewCalendar(available))
+                await setNewCalendar(available)
             }
-            return Promise.all(promises)
         })
-        .then((r) => mail(publisher.User_mail, `Felicitaciones ${publisher.name}! Tu clase de ${publication.clase.materia} ya está publicada`,
-        `Gracias por confiar en E Clases Online. Su clase online está muy cerca. Ahora tienes que esperar a que un ${publisherRole} quiera tomar tu clase`))
+        .then((r) => {mail(publisher.User_mail, `Felicitaciones ${publisher.name}! Tu clase de ${publication.clase.materia} ya está publicada`,
+        `Gracias por confiar en E Clases Online. Su clase online está muy cerca. Ahora tienes que esperar a que un ${publisherRole} quiera tomar tu clase`)})
         .catch(err => console.log(err))
     }
 }

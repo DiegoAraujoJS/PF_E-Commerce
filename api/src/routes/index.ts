@@ -11,7 +11,6 @@ import market from './market'
 import carrito from './carrito'
 import puntuacion from './puntuacion'
 import calendarFunctions from './calendarFunctions'
-import playground from '../utils/playground'
 const router = Router()
 
 router.use('/verify', verify)
@@ -27,6 +26,5 @@ router.use('/market', market)
 router.use('/carrito', carrito)
 router.use('/puntuacion', puntuacion)
 router.use('calendarFunctions', calendarFunctions)
-router.use('/playground', playground)
 
 export default router

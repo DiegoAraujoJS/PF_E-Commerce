@@ -2,6 +2,10 @@
 import { Disponible, Week } from "../../../../interfaces";
 
 function weeklyToMonthlyCalendar(week: Week[], forHowLong: number, sundayStartsOn: {year: number, month: number, day: number}, email: string): Disponible[]{
+    console.log("week", week, "forHowLong", forHowLong, "sundayStartsOn",sundayStartsOn,"email",email )
+  
+  
+  
     const datesOfDays = []
     const days = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado' ]
 
@@ -64,5 +68,13 @@ function weeklyToMonthlyCalendar(week: Week[], forHowLong: number, sundayStartsO
 
     return [...payload, ...howMany]
 }
+
+const week: Week[] = [{day: 'Lunes', disponible: [['12:00:00', '14:00:00']]}]
+const sundayStartsOn: {year: number, month: number, day: number} = {year: 2021, month: 7, day: 25}
+const forHowLong = 5
+const email = 'mauroleonel@gmail.com'
+
+console.log(weeklyToMonthlyCalendar(week, forHowLong, sundayStartsOn, email))
+
 
 export default weeklyToMonthlyCalendar
