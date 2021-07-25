@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import style from './profile.module.css'
 import axios from "axios"
 import Calendar from "../calendar/Calendar"
-import { ProfesorProps} from '../../../../interfaces';
+import { IProfesor} from '../../../../interfaces';
 import getCookieValue from '../../cookieParser';
 import ChatRoom from '../Chat/ChatRoom';
 import icon_edit from '../../images/editar.png'
@@ -27,7 +27,7 @@ function Profile(email,{user}) {
         email: email && email.children ? email.children[0] : null
     }
     
-    const [prof, setProf] = useState<any>({
+    const [prof, setProf] = useState<IProfesor>({
         User_mail: "",
         name: "",
         lastName: "",
@@ -35,7 +35,9 @@ function Profile(email,{user}) {
         title:"",
         foto: "",
         description: "", 
-        score: 0
+        score: 0,
+        country: "",
+        state: ""
 
     })
   const ShowData = () => {
@@ -111,8 +113,9 @@ function Profile(email,{user}) {
         try {
            
             if (propEmail) {
+                
                 const response = await axios.get(`http://localhost:3001/api/profesores/${propEmail.email}`)
-                console.log("RESPONSE", response)
+                
                 await setProf({
                     ...response.data
                 })

@@ -1,22 +1,22 @@
 import { Model, Column, Table, CreatedAt, UpdatedAt, DataType, Unique, PrimaryKey, ForeignKey, HasOne, HasMany } from 'sequelize-typescript';
-import Alumno from './Alumno';
+
 import Profesor from './Profesor';
-import { UserProps } from '../../../interfaces';
+import { IUser, Horario, IClase } from '../../../interfaces';
 import Puntuacion from './Puntuacion';
 import { ClasePorComprar } from '../../../interfaces';
-import { Time, Class } from '../../../interfaces'
+import { Time } from '../../../interfaces'
 import Reclamo from './Reclamo';
 
 
 @Table
-export default class User extends Model implements UserProps {
+export default class User extends Model implements IUser {
     @Column({ allowNull: false })
     name!: string;
 
     @PrimaryKey
     @Unique
     @Column({ allowNull: false })
-    mail!: string;
+    User_mail!: string;
 
     @Column({ allowNull: false })
     lastName!: string;
@@ -24,8 +24,20 @@ export default class User extends Model implements UserProps {
     @Column
     password!: string;
 
-    @Column
+    @Column 
     role!: number;
+
+    @Column  
+    foto!: string;
+
+    @Column ({allowNull: false})
+    country: string;
+
+    @Column ({allowNull: false})
+    state:string;
+
+    @Column ({allowNull: false})
+    city: string;
 
     @CreatedAt
     @Column
@@ -36,22 +48,19 @@ export default class User extends Model implements UserProps {
     updatedAt!: Date;
 
     @Column
-    city!: string;
-
-    @Column
     suspendido!: boolean;
 
     @HasOne(() => Profesor)
     profesor!: Profesor;
 
-    @HasOne(() => Alumno)
-    alumno!: Alumno;
-
     @Column({ type: DataType.JSON })
-    carrito!: Class[];
+    carrito!: IClase[];
 
     @Column({ type: DataType.JSON})
     historial!: object[]
+
+    @Column ({type: DataType.JSON})
+    calendario!: Horario[];
 
     @HasMany(() => Puntuacion)
     puntuaciones!: Puntuacion[];
@@ -65,58 +74,3 @@ export default class User extends Model implements UserProps {
     @HasMany(() => Reclamo, 'admin_email')
     denuncias_administradas!: Reclamo[];
 }
-
-
-// const Usuario = (sequelize) => sequelize.define('Usuario', {
-//     nombre: {
-//         type: DataType.STRING,
-//         allowNull: false
-//     },
-//     email: {
-//         type: DataType.STRING,
-//         allowNull: false,
-//         unique: true,
-//         validate: {
-//             isEmail: true, 
-//         }
-//     },
-//     telefono: {
-//         type: DataType.STRING,
-//         unique: true
-//     },
-//     rol: {
-//         type: DataType.ENUM('Administrador', 'Profesor', 'Alumno'),
-//         allowNull: false
-//     },
-//     idGoogle: {
-//         type: DataType.STRING,
-//         unique: true
-//     },
-//     tipoCuenta: {
-//         type: DataType.ENUM('Propia', 'Google'),
-//         allowNull: false
-//     }
-// })
-
-
-
-// ciudad: {
-//     type: DataType.STRING
-// },
-
-// @Table
-// export default class User extends Model<User> {
-//     @Column
-//     nombre!: string;
-
-//     @Column
-//     mail: 
-
-//     @CreatedAt
-//     @Column
-//     createdAt!: Date;
-
-//     @UpdatedAt
-//     @Column
-//     updatedAt!: Date;
-// }

@@ -5,7 +5,7 @@ import "./ClassConteiner.css"
 import axios from 'axios'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStar } from '@fortawesome/free-solid-svg-icons';
-import { Class } from '../../../../interfaces';
+
 import getCookieValue from '../../cookieParser';
 import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
@@ -28,7 +28,7 @@ const ClassContainer: React.FC<Props> = ({ searchInput, dispatchInput }) => {
     const [puntuacion, setPuntuacion] = useState({ value: "", check: false })
     const [horario, setHorario] = useState({ desde: "", hasta: "" })
     const grados = ["Primer grado", "Segundo grado", "Tercer grado", "Cuarto grado", "Quinto grado", "Sexto grado"]
-    const [city, setCity] = useState({ name: "", show: false})
+    const [city, setCity] = useState({ name: "", show: false, length: 0, })
     let [user, setUser] = useState<{ name: string, lastName: string, role: number, mail: string } | undefined>({ name: '', lastName: '', role: null, mail: '' })
 
     const [classProfessor, setClassProfessor] = useState([])

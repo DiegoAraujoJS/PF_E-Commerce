@@ -8,11 +8,12 @@ router.post('/', async (req: Request, res: Response) => {
     try {
         const { id, alumno, puntuacion, comentario } = req.body;
         const clase = await Clase.findByPk(id, {
-            include: [Profesor, Puntuacion]
+            include: [{model: Profesor}, {model: Puntuacion}]
         })
-        
+        console.log(clase)
         if (clase) {
             const profesor = clase.Profesor_mail;
+            
             if (clase.puntuaciones.length > 0) {
                 const puntuacionAlumnoClase = await Puntuacion.findOne({
                     where: {
@@ -39,28 +40,28 @@ router.post('/', async (req: Request, res: Response) => {
             })
             
             let puntuacionClase = parseFloat((puntuaciones.map(elemento => elemento.puntuacion).reduce(function (a, b) { return a + b; }) / puntuaciones.length).toFixed(2))
-            console.log(puntuacionClase)
-            
+
             const claseActualizada = await clase.update({ puntuacion: puntuacionClase })
             const classs = await clase.save()
             
-            let clasesProfesor = await Clase.findAll({
+            let classes = await Clase.findAll({
                 where: { Profesor_mail: profesor },
-                attributes: ['puntuacion'],
                 include: Puntuacion
             })
             
+            let puntuacionProfesor = parseFloat((classes.map(elemento => elemento.puntuacion).reduce(function (a, b) { return a + b; }) / classes.length).toFixed(2))
 
-            let puntuacionProfesor = parseFloat((clasesProfesor.map(elemento => elemento.puntuacion).reduce(function (a, b) { return a + b; }) / clasesProfesor.length).toFixed(2))
-
+            let howMany = 0
+            classes.forEach( c => {
+                howMany += c.puntuaciones.length
+            })
 
             let profesorPorActualizar = await Profesor.findByPk(profesor);
             if (profesorPorActualizar) {
-                await profesorPorActualizar.update({ score: puntuacionProfesor })
+                await profesorPorActualizar.update({ score: puntuacionProfesor, howMany })
                 await profesorPorActualizar.save()
             }
             return res.send(profesorPorActualizar)
-            
         }
         return res.send(`No se encontró ninguna clase con el id ${id}`)
     } catch (error) {

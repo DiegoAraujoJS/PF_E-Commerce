@@ -3,13 +3,17 @@ import { validationSchemaNewClass } from '../../utils/validations';
 import { Form, Row, Col, Container, Button } from 'react-bootstrap';
 import axios from 'axios'
 // import MarketFlow from '../../../../api/src/MarketFlow'
-import { IClase } from '../../../../interfaces';
+import { IClase, IPublish } from '../../../../interfaces';
 import getCookieValue from '../../cookieParser';
 import Swal from 'sweetalert2'
 import 'bootstrap/dist/css/bootstrap.css';
 import 'react-bootstrap-range-slider/dist/react-bootstrap-range-slider.css';
 import RangeSlider from 'react-bootstrap-range-slider';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import CalendarApp from "../calendar/addClassCalendar/Calendar"
+import { store } from '../../Store/store';
+import { Disponible } from '../../../../interfaces';
+import { Week } from '../../../../interfaces';
 const materias = [
 	"Física",
 	"Biología",
@@ -51,18 +55,29 @@ const grados = [
 
 
 
-enum Week { Lunes, Martes, Miercoles, Jueves, Viernes, Sabado, Domingo }
+
 
 const StudentAddClass = () => {
 	const [min, setMinValue] = useState(0);
 	const [max, setMaxValue] = useState(0);
 
+	const [calendarChoice, setCalendarChoice]  = useState(false)
+	let [user, setUser] = useState<{name: string, lastName: string, role: number, mail: string} | undefined>({name: '', lastName: '', role: null, mail: ''})
+	useEffect(() => {
+		async function fetchUser(){
+			const token = getCookieValue('token').replaceAll("\"", '')
+			const user = await axios.post('http://localhost:3001/api/verify', {}, { headers: { Authorization: token } })
+			setUser(user.data)
+		}
+		
+	}, [user])
+	
 	return (
 		<Container className='shadow p-3 mb-5 bg-white rounded flex'>
 			<h1>Agrega tu propia Clase!</h1>
 			<Formik
 
-				validationSchema={validationSchemaNewClass}
+				
 				initialValues={{
 					nombre: "",
 
@@ -72,49 +87,61 @@ const StudentAddClass = () => {
 					nivel: "",
 					precio: "",
 
-					dia: Week.Miercoles,
+					dia: 0,
 					desde: "",
 					hasta: "",
+					forHowLong: 0
 
 				}}
 
 				onSubmit={async (values, { resetForm }) => {
 					console.log('entre')
-					const token = getCookieValue('token').replaceAll("\"", '')
-
-					const user = await axios.post('http://localhost:3001/api/verify', {}, { headers: { Authorization: token } })
+					
 					try {
-						const actual = new Date()
-						actual.setDate(actual.getDate() + (values.dia + 7 - actual.getDay()) % 7)
-						const dia = actual.getDate() // por ejemplo, es 19 si hoy es jueves 15 y values.dia es 'lunes'
-						console.log([values.desde, values.hasta])
+						const redux_state = store.getState()['calendar_to_addClassStudent']
+						
 						let desde: `${number}:${number}:00` | any = values.desde + ':00'
 						let hasta: `${number}:${number}:00` | any = values.hasta + ':00'
+						const days = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado' ]
+						let sunday = new Date()
+						sunday.setDate(sunday.getDate() - days.indexOf(redux_state[0].day) % 7)
 
-						for (let i = 0; i < 1; i++) {
-							const publication: IClase = {
-								User_mail: user.data.mail,
-								descripcion: values.descripcion,
-								ciudad: '',
-								materia: values.materia,
-								grado: values.grado,
-								date: { day: actual.getDate(), month: actual.getMonth() + 1, year: actual.getFullYear(), time: [desde, hasta] },
-								nivel: values.nivel,
-								nombre: values.nombre,
-								precio: values.precio
-							}
-							let response = await axios.post('http://localhost:3001/api/studentClass/add', publication)
-							actual.setDate(actual.getDate() + 7)
-							console.log(response)
-
-							if (response.status === 200) {
-								Swal.fire(
-									'Exito!',
-									'Tu clase se creo correctamente!',
-									'success'
-								)
-							}
+						const payload: IPublish = {
+							publication: {
+								agenda: {
+									forHowLong: values.forHowLong,
+									sundayStartsOn: {
+										day: sunday.getDate(),
+										month: sunday.getMonth() + 1,
+										year: sunday.getFullYear()
+									},
+									week: redux_state
+								},
+								clase: {
+									ciudad: '',
+									descripcion: values.descripcion,
+									grado: values.grado, 
+									materia: values.materia,
+									nivel: values.nivel,
+									nombre: values.nombre,
+									precio: values.precio,
+									Profesor_mail: user.role === 1 ? user.mail : null,
+									User_mail: user.role === 0 ? user.mail : null,
+								},
+							},
+							token: getCookieValue('token').replaceAll("\"", '')
 						}
+						const response = await axios.post(`http://localhost:3001/api/publish`, payload) 
+						
+		
+						if (response.status === 200) {
+							Swal.fire(
+								'Exito!',
+								'Tu clase se creo correctamente!',
+								'success'
+							)
+						}
+						
 					}
 					catch (err) {
 						Swal.fire(
@@ -166,42 +193,31 @@ const StudentAddClass = () => {
 											onChange={handleChange}
 											onBlur={handleBlur}
 										/>
-
-
 									</Col>
 								</Row>
 							</Row>
 							<Row>
-								<Col sm={12} md={8}>
-									<Form.Label className='text-uppercase'>Desde:</Form.Label>
-									<Field
-										name='desde'
-										type='time'
-										onChange={handleChange}
-										onBlur={handleBlur}
-										value={values.desde}
-										className={`form-control ${errors.desde && touched.desde ? 'is-invalid' : ''
-											}`}
-									/>
-									{errors.desde && touched.desde ? (
-										<div className='invalid-feedback'>{errors.desde}</div>
-									) : null}
-								</Col>
-								<Col sm={12} md={8}>
-									<Form.Label className='text-uppercase'>hasta:</Form.Label>
-									<Field
-										name='hasta'
-										type='time'
-										onChange={handleChange}
-										onBlur={handleBlur}
-										value={values.hasta}
-										className={`form-control ${errors.hasta && touched.hasta ? 'is-invalid' : ''
-											}`}
-									/>
-									{errors.hasta && touched.hasta ? (
-										<div className='invalid-feedback'>{errors.hasta}</div>
-									) : null}
-								</Col>
+								
+
+							{!calendarChoice ?
+							<div>
+
+							 <Button type='button' className='text-uppercase' style={{width: '500px'}} onClick={(e => setCalendarChoice(true))}>
+										Elegir disponibilidad horaria
+									</Button> 
+								{console.log(store.getState()['calendar_to_addClassStudent'])}
+							</div> : 
+								<div>
+									
+									<div style={{border:'1px solid red', height:'400px'}}>
+									{console.log('le manda el store?', store.getState()['calendar_to_addClassStudent'])}
+											<CalendarApp calendar_to_addClassStudent = {store.getState()['calendar_to_addClassStudent']}>{user.mail}</CalendarApp>
+									</div>
+											<Button type='button' className='text-uppercase' style={{width: '500px'}} onClick={(e => {setCalendarChoice(false)})}>
+												Aceptar
+											</Button>
+								</div>
+								}
 							</Row>
 							<Row>
 								<Col sm={6} md={6}>
@@ -339,12 +355,3 @@ const StudentAddClass = () => {
 
 
 export default StudentAddClass
-
-
-// dia ==> lunes
-// hora desde ==> 08
-// hora hasta ==> 12
-// durante ==> n semanas
-
-
-

@@ -1,9 +1,20 @@
-interface UserProps {
+interface IUser {
     name: string;
     lastName: string;
-    mail: string;
-    role: number;
+    User_mail: string;
+    role?: number;
+    country: string;
+    state: string;
     city: string;
+    foto?: string;
+    password?: string;
+    profesor?: {
+        description: string;
+        score: number;
+        howMany: number;
+        title: string;
+    };
+
 }
 // En el file Calendar.js hay un Role admin no importado seteado en 2. Considerarlo si cambia Role
 enum Role {USER, PROFESSOR, ADMIN}
@@ -20,17 +31,6 @@ interface ClasePorComprar {
     horaInicio: `${number}${number}:${number}${number} ${'PM' | 'AM'}`;
     horaFin: `${number}${number}:${number}${number} ${'PM' | 'AM'}`;
     profesor: string;
-}
-
-interface Horario {
-    email: string;
-    fecha: {
-        anio: any,
-        mes: any,
-        dia: any
-    };
-    disponible: ArrayDePares;
-    ocupado: ArrayDePares | null;
 }
 
 interface Disponible{
@@ -51,20 +51,9 @@ interface Ocupado {
     };
     ocupado: ArrayDePares;
 }
+type Horario = Disponible & Ocupado
 
 type CalendarioResponse = Horario[]
-
-interface ProfesorProps {
-    lastName: string
-    city: string
-    description: string
-    foto: string
-    name: string;
-    User_mail: string;
-    score?: number; 
-    puntuacionesHowMany?: number;
-    history?: object
-}
 
 
 interface IClase{
@@ -74,45 +63,31 @@ interface IClase{
     nivel: string;
     materia: string;
     descripcion: string;
-    ciudad: string;
-    date: {year: number, month: number, day: number, time: Time}
-    Profesor_mail?: string,
-    User_mail?: string,
-    precio: number|string,
+    date?: {year: number, month: number, day: number, time: Time}
+    profesor?: IProfesor
+    student?: IUser;
+    precio: number|string;
+    Profesor_mail?: string;
+    User_mail?: string;
+    esPresencial: string;
 }
 type DisponibleOcupadoTransform = {disponible: Disponible, ocupado: Ocupado}
 
 
-interface Class {
-    id?: number;
-    nombre: string;
-    descripcion: string;
-    puntuacion: number;
-    materia: string;
-    grado: string;
-    nivel: string;
-    esPresencial: boolean;
-    profesor: Profesor;
-    date: {year: number, month: number, day: number, time: Time};
-    precio: string;
-    Profesor_mail?: string;
-    User_mail?: string;
-}
-
-interface Profesor extends User {
-    ciudad: string;
-    foto: string;
-    descripcion: string;
-    createdAt: string;
-    updatedAt: string;
-}
-
-interface User {
-    name: string;
-    lastName: string;
-    User_mail: string;
+interface IProfesor extends IUser {
+    description?: string;
+    title?: string;
     score: number;
-    city: string;
+    howMany?: number;
+    
+}
+
+interface IUserResponse extends IUser {
+    updatedAt: string;
+    createdAt: string;
+    role: null | number;
+    foto: null | string;
+    carrito: null | [];
 }
 
 
@@ -125,6 +100,15 @@ interface Claim {
     clase_id?: number,
 }
 
-export type {UserProps, ArrayDePares, Disponible, Ocupado, CalendarioResponse, ProfesorProps, Horario, Time, DisponibleOcupadoTransform, IClase, ClasePorComprar, Class, Profesor, User, Claim}
+interface Week {
+    day: 'Lunes' | 'Martes' | 'Miércoles' | 'Jueves' | 'Viernes' | 'Sábado' | 'Domingo';
+    disponible: ArrayDePares;
+}
+
+type IDate = {year: number, month: number, day: number}
+
+type ArrayOfIUserResponse = IUserResponse[]
+
+export type {ArrayDePares, Disponible, Ocupado, CalendarioResponse, Horario, Time, DisponibleOcupadoTransform, IClase, ClasePorComprar, IProfesor, IUser, IUserResponse, ArrayOfIUserResponse, Claim, Week, IDate}
 
 export {Role}

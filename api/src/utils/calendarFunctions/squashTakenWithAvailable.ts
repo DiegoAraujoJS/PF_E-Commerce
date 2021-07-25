@@ -34,6 +34,7 @@ const squashTakenWithAvailable = (available: [number, number][], taken: [number,
     if (min >= A && min >= B) return [min, max]
     
     if (min <= A && max >= B) return [[min, A], [B, max]]
+      
 
   })
   let flattenedNewTakenTransform;

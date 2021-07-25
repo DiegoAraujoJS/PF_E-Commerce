@@ -1,34 +1,10 @@
 import { Request, Response, Router } from 'express'
 import Profesor from '../models/Profesor'
 import { CalendarioResponse, Horario, Disponible, Ocupado } from '../../../interfaces';
-import nuevosHorarios from './nuevosHorarios';
+import nuevosHorarios from '../utils/calendarFunctions/nuevosHorarios';
 import validateToken from '../utils/validateToken';
+import setNewCalendar from '../utils/calendarFunctions/setNewCalendar';
 const router = Router()
-// ejemplo
-let queryBack: CalendarioResponse = [
-    {
-        email: "edwardburgos@gmail.com",
-        fecha: {
-            anio: 2021,
-            mes: 8,
-            dia: 3
-        },
-        disponible: [['12:45:00', '16:29:00']],
-        ocupado: [['16:29:00', '16:29:00']]
-
-    },
-    {
-        email: "edwardburgos@gmail.com",
-        fecha: {
-            anio: 2021,
-            mes: 8,
-            dia: 4
-        },
-        disponible: [['16:29:00', '16:29:00']],
-        ocupado: [['16:29:00', '16:29:00']]
-
-    }
-]
 
 interface MiddlewareRequest extends Request {
     data: {mail: string, role: number};
@@ -40,105 +16,11 @@ router.post('/add', validateToken, async (req: MiddlewareRequest, res: Response)
     if (req.data.role !== 2 && req.body.email != req.data.mail) {
         return res.status(400).send('You are not authorized.')
     }
-    let query_disponible_1
-    let query_disponible_2
-    if ( query.disponible) {
-        query_disponible_1 = query.disponible[0][0].substring(0, 2) + query.disponible[0][0].substring(3, 5) + query.disponible[0][0].substring(6, 8)
-        query_disponible_2 = query.disponible[0][1].substring(0, 2) + query.disponible[0][1].substring(3, 5) + query.disponible[0][1].substring(6, 8)
-
-        if(query.disponible && query_disponible_1 < "0" && query_disponible_1 > "240000"  || query_disponible_2 < "0" && query_disponible_2 > "240000" || query_disponible_2 < query_disponible_1) return res.send("El horario disponible es incorrecto")
-    }
-
-
     try {
-        if ( query.disponible && query.disponible[0][0].substring(0,2) < "00" || query.disponible[0][1].substring(0,2) > "24") return res.send("El horario disponible es incorrecto")
-        
-        let profesor = await Profesor.findOne({
-            where: {
-                User_mail: query.email
-            }
-           
-        })
-
-        if (profesor) {
-            
-            if (profesor.calendario) {
-                const indice = profesor.calendario.findIndex(element => element.fecha.anio === query.fecha.anio && element.fecha.mes === query.fecha.mes && element.fecha.dia === query.fecha.dia)
-
-                const calendario = profesor.calendario[indice]
-
-                if (calendario) {
-                    console.log("PASA POR AQUIIIIIIIIII")
-                    const resultado: Horario = nuevosHorarios(calendario, query)
-
-                    const nuevoCalendario = profesor.calendario.map((e, i) => i === indice ? resultado : e)
-
-                    profesor.set({
-                        ...profesor,
-                        calendario: nuevoCalendario,
-                        history:nuevoCalendario
-                    })
-                    let calendarioEditado = await profesor.save()
-                    
-                    res.send(calendarioEditado)
-
-                }
-                else {
-                    
-                    profesor.set({
-                        ...profesor,
-                        calendario: [
-                            ...profesor.calendario,
-                            {
-                                email: query.email,
-                                fecha: query.fecha,
-                                disponible: query.disponible ? query.disponible : null,
-                                ocupado: null
-                            }
-                        ],
-                        history:[
-                            ...profesor.history,
-                            {
-                                email: query.email,
-                                fecha: query.fecha,
-                                disponible: query.disponible ? query.disponible : null,
-                                ocupado: null
-                            }
-                        ]
-                    })
-                    let calendarioEditado = await profesor.save()
-                    return res.send(calendarioEditado)
-                }
-            }
-            else {
-                
-                profesor.set({
-                    ...profesor,
-                    calendario: [
-                        {
-                            email: query.email,
-                            fecha: query.fecha,
-                            disponible: query.disponible ? query.disponible : null,
-                            ocupado: null,
-                        }
-                    ],
-                    history: [
-                        {
-                            email: query.email,
-                            fecha: query.fecha,
-                            disponible: query.disponible ? query.disponible : null,
-                            ocupado: null,
-                        }
-                    ]
-                })
-                let calendarioEditado = await profesor.save()
-                return res.send(calendarioEditado)
-            }
-        }
-    }
-    catch (error) {
-        
-        return res.send(error)
+        const newCalendar = await setNewCalendar(query)
+        return res.send(newCalendar)
+    } catch(err) {
+        res.status(400).send(err)
     }
 });
 
@@ -253,9 +135,4 @@ router.put('/delete', validateToken, async (req:MiddlewareRequest, res:Response)
         return res.status(400).send(err)
     }
 })
-
-router.post('/addTemp', async (req: MiddlewareRequest, res: Response) => {
-    
-})
-
 export default router

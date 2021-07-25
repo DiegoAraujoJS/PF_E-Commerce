@@ -1,4 +1,4 @@
-import { Disponible, Ocupado, Horario, CalendarioResponse } from "../../../../interfaces"
+import { Disponible, Ocupado, Horario, CalendarioResponse, IUser } from "../../../../interfaces"
 export const horario1:Disponible = {
     disponible: [['12:00:00', '14:00:00']],
     email: 'edwardburgos@gmail.com',
@@ -257,3 +257,23 @@ export const expectedFifthTest: CalendarioResponse = [...expectedFourthTest, {..
 export const expectedSixthTest: CalendarioResponse = [...expectedFifthTest, expectedSixth]
 export const expectedSeventhTest: CalendarioResponse = [...expectedSixthTest, expectedSeventh]
 
+
+
+
+
+
+
+export const firstUserTest: {
+    firstPost: IUser;
+
+} = {
+    firstPost: {
+        User_mail: 'juanperez@gmail.com',
+        city: 'Córdoba',
+        country: 'Argentina',
+        lastName: 'Pérez',
+        name: 'Juan',
+        state: 'Córdoba',
+        password: '123456'
+    }
+}

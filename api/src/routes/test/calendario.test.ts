@@ -1,7 +1,7 @@
 import axios from 'axios'
 import Profesor from '../../models/Profesor'
 import {sequelize} from '../../db'
-import {CalendarioResponse, Disponible, Horario, Ocupado, ProfesorProps} from '../../../../interfaces'
+import {CalendarioResponse, Disponible, Horario, Ocupado, IProfesor} from '../../../../interfaces'
 import {
     horario1,
     horario2,
@@ -130,5 +130,7 @@ describe ('guarda y modifica el calendario del profesor correctamente', () => {
     
 })
 
-
+describe('manipula el calendario de disponibilidad correctamente', () => {
+    
+})
 

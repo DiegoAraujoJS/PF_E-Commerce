@@ -105,7 +105,6 @@ export default function SearchBar() {
           localStorage.setItem('login', 'true')
 
           const user = await axios.post(`http://localhost:3001/api/verify`, {}, { headers: { Authorization: getCookieValue('token').replaceAll("\"", '') } })
-
           if (user.status === 200) {
             Swal.fire({
               title: 'Exito!',
@@ -197,7 +196,6 @@ export default function SearchBar() {
   }
 
   const admin = <FontAwesomeIcon icon={faUserTie} style={{ fontSize: "40px" }} className="" />
-
   return (
     // <Navbar expand="lg" className={s.navbar}>
     <Navbar bg="light" expand="lg">

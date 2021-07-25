@@ -1,14 +1,12 @@
 import Router, { Request, Response } from 'express'
-import { ClasePorComprar } from '../../../interfaces';
+import { ClasePorComprar, IClase } from '../../../interfaces';
 import User from '../models/Usuario';
-
-import { Time, Class, Profesor } from '../../../interfaces'
 
 const router = Router()
 
 router.post('/:user', async function (req: Request, res: Response) {
     const { user } = req.params
-    const clase: Class = req.body
+    const clase: IClase = req.body
     try {
         const usuario = await User.findByPk(user)
         if (usuario.carrito) {
@@ -63,7 +61,7 @@ router.get('/:user/:id', async function (req: Request, res: Response) {
     try {
         const usuario = await User.findByPk(user)
 
-        const clases: Class[] = usuario.carrito.filter(e => e.id.toString() !== id)
+        const clases: IClase[] = usuario.carrito.filter(e => e.id.toString() !== id)
         usuario.set({
             ...usuario,
             carrito: clases

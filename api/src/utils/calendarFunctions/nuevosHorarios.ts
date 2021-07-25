@@ -1,9 +1,7 @@
-import editCalendar from "./editCalendar"
-import flatInline from "../utils/flatInline"
-import flat from '../utils/flat'
-import { Horario, Disponible, Ocupado, DisponibleOcupadoTransform } from "../../../interfaces"
-import {parseToIntTuples, parseToStringTuples} from "../utils/parseString"
-import squashTakenWithAvailable from '../utils/squashTakenWithAvailable'
+import flatInline from "./flatInline"
+import { Horario, Disponible, Ocupado, DisponibleOcupadoTransform } from "../../../../interfaces"
+import {parseToIntTuples, parseToStringTuples} from "../parseString"
+import squashTakenWithAvailable from './squashTakenWithAvailable'
 const nuevosHorarios = (horariosActuales: Horario, queryDisponible?: Disponible, queryOcupado?: Ocupado): Horario => {
 
     let newHorario: Horario = {

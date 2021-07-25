@@ -3,14 +3,13 @@ import Clase from './../models/Clase'
 import Profesor from '../models/Profesor'
 import Puntuacion from '../models/Puntuacion'
 import { Op } from 'sequelize'
-import { Time } from '../../../interfaces'
+import { IUser, Time } from '../../../interfaces'
 import User from '../models/Usuario'
+import ClaseToIClase from '../utils/transformations/ClaseToIClase'
 const router = Router()
-
 
 router.get('/', async (req: Request, res: Response) => {
     const { busqueda } = req.query
-    if (!busqueda) return res.status(400).send('Debes ingresar un input como \'busqueda\'')
 
     try {
         let clases: any[] = []
@@ -24,7 +23,7 @@ router.get('/', async (req: Request, res: Response) => {
             for (let x of palabrasSeparadas) {
                 try {
                     const c = await Clase.findAll({
-                        include: [{ model: Profesor }],
+                        include: [{ model: Profesor }, {model: User}],
                         where: {
                             [Op.or]: [{
                                 materia: {
@@ -45,14 +44,15 @@ router.get('/', async (req: Request, res: Response) => {
                         }
                     })
                     clases.push(...c)
-                    const p = await Profesor.findAll({
-                        include: [{ model: Clase }],
+                    const p = await User.findAll({
+                        include: [{model: Profesor, required: true}],
                         where: {
                             city: {
                                 [Op.iLike]: `%${x}%`.replace("\'", '')
                             }
                         }
                     })
+                    
                     profesores.push(...p)
                 }
 
@@ -63,47 +63,20 @@ router.get('/', async (req: Request, res: Response) => {
         }
 
         if (clases.length > 0 && profesores.length > 0) {
-            var clasesResult = [];
+            const clasesResult = clases.flat().filter(c => profesores.map(p => p.User_mail).flat().includes(c.Profesor_mail)) 
 
-            for (var i = 0; i < clases.flat().length; i++) {
-                for (var j = 0; j < profesores.flat().length; j++) {
-                    if (clases.flat()[i].Profesor_mail === profesores.flat()[j].User_mail) {
-                        clasesResult.push(clases[i])
-                    }
-                }
-            }
-
-            let hash = {};
-            let result = clasesResult.filter(o => hash[o.id] ? false : hash[o.id] = true)          
-
-            return res.send(result)
+            return res.send(clasesResult.map((clase: Clase) => ClaseToIClase(clase, profesores.find(p => p.User_mail===clase.Profesor_mail))))
         }
         else if (clases.length > 0) {
-            let hash = {};
-            let result = clases.filter(o => hash[o.id] ? false : hash[o.id] = true)    
-            return res.send(result)
+            return res.send(clases.map((clase: Clase) => ClaseToIClase(clase)))
         }
         else {
-            let resultClases = profesores.map(e => {
-                return e.clases.map(c => {
-                    return c = {
-                        ...c.dataValues, profesor: {
-                            score: e.score,
-                            User_mail: e.User_mail,
-                            name: e.name,
-                            lastName: e.lasName,
-                            city: e.city,
-                            foto: e.foto,
-                            description: e.description
-                        }
-                    }
-                })
+            const allClasses = await Clase.findAll({include: [{model: Profesor}, {model: User}]})
+            const allProfessorClassesUsers = await Promise.all(allClasses.filter(cl => cl.Profesor_mail !== null).map(async (cl: Clase) => [cl.Profesor_mail, await User.findByPk(cl.Profesor_mail)]))
 
-            })
-            let clases = resultClases.flat()
-            let hash = {};
-            let result = clases.filter(o => hash[o.id] ? false : hash[o.id] = true)    
-            return res.send(result)
+            const allNotProfessorClasses = allClasses.filter(cl => !allProfessorClassesUsers.some( (tuple: [string, User]) => cl.Profesor_mail === tuple[0]))
+
+            return res.send([...allNotProfessorClasses.map(cl => ClaseToIClase(cl)), ...allProfessorClassesUsers.map((tuple: [string, User]) => ClaseToIClase(allClasses.find(cl => cl.Profesor_mail===tuple[0]), tuple[1])) ] )
         }
 
     } catch (err) {
@@ -125,14 +98,8 @@ router.get('/all/student/:mail', async (req: Request, res: Response) => {
          }
          })
     return res.send(clases)
-    const response = clases.map(function (clase){
-        const claseTransform = {
-            ...clase,
-        }
-        return claseTransform
-    })
-    
 })
+
 router.get('/all/profesor/:mail', async (req: Request, res: Response) => {
     const clases = await Clase.findAll({
          include: [{
@@ -144,13 +111,7 @@ router.get('/all/profesor/:mail', async (req: Request, res: Response) => {
             Profesor_mail: req.params.mail
          }
          })
-    return res.send(clases)
-    const response = clases.map(function (clase){
-        const claseTransform = {
-            ...clase,
-        }
-        return claseTransform
-    })    
+    return res.send(clases)    
 })
 
 

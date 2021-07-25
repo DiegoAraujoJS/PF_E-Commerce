@@ -1,5 +1,5 @@
 import CSS from 'csstype';
-import { Class } from '../../../../interfaces';
+import { IClase } from '../../../../interfaces';
 import { Button, Card, Col, ListGroup, Modal, Row, } from 'react-bootstrap'
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
@@ -16,7 +16,7 @@ const clock = <FontAwesomeIcon icon={faClock} className="mt-1" style={{ color: "
 const calendar = <FontAwesomeIcon icon={faCalendarAlt} className="mt-1" style={{ color: "#0067ff" }} />
 const email = <FontAwesomeIcon icon={faEnvelope} className="mt-1" style={{ color: "#0067ff" }} />
 
-const ClassCard: React.FC<Class> = (props) => {
+const ClassCard: React.FC<IClase> = (props) => {
     const profileImg: CSS.Properties = {
         height: '160px',
         width: '160px',
@@ -44,7 +44,7 @@ const ClassCard: React.FC<Class> = (props) => {
                                         <Card.Img style={profileImg} src={props.profesor && props.profesor.foto} />
                                     </Col>
                                     <Col sm={12} md={4} lg={8} className="d-flex flex-column align-items-start ml-2 ">
-                                        <Card.Title className="d-sm-flex justify-content-center m-0">{puntuacion(props.puntuacion)}</Card.Title>
+                                        <Card.Title className="d-sm-flex justify-content-center m-0">{puntuacion(props.profesor.score)}</Card.Title>
                                         <Card.Text className="m-0"> <strong> Tipo: </strong>{props && props.esPresencial} </Card.Text>
                                         <Card.Text className="m-0"> {mark} &nbsp; {props.profesor && props.profesor.city} </Card.Text>
                                         <Card.Text className="m-0"> <strong> Materia: </strong> {props && props.materia} </Card.Text>
@@ -58,7 +58,7 @@ const ClassCard: React.FC<Class> = (props) => {
                     </ListGroup>
                 </Col>
             </Row>
-            <ClassDetail hijo = {{show, handleClose, email, mark, puntuacion}} puntuacion={props.puntuacion} {...props} />
+            <ClassDetail hijo = {{show, handleClose, email, mark, puntuacion}} puntuacion={props.profesor.score} {...props} />
             
         </div >
     )

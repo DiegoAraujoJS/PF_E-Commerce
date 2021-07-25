@@ -176,6 +176,8 @@ function AddClaim() {
         }
     };
 
+    console.log(professorData)
+    console.log(user)
     return (
         <Container>
             <Row>
