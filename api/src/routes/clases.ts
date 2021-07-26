@@ -24,7 +24,7 @@ router.get('/', async (req: Request, res: Response) => {
             for (let x of palabrasSeparadas) {
                 try {
                     const c = await Clase.findAll({
-                        include: [{ model: Profesor }, {model: User}],
+                        include: [{ model: Profesor, required: true}, {model: User}],
                         where: {
                             [Op.or]: [{
                                 materia: {
@@ -50,10 +50,10 @@ router.get('/', async (req: Request, res: Response) => {
                         where: {
                             city: {
                                 [Op.iLike]: `%${x}%`.replace("\'", '')
-                            }
+                            },
+                            
                         }
                     })
-                    
                     profesores.push(...p)
                 }
 
@@ -61,37 +61,85 @@ router.get('/', async (req: Request, res: Response) => {
                     console.log(err)
                 }
             }
-        }
-        if (clases.length > 0 && profesores.length > 0) {
-            
-            const obj = profesores.flat().reduce((acum, cl) => {
-                acum[cl.User_mail] = true
-                return acum
-            }, {})
-            
-            const intersection = clases.flat().filter(prof => obj[prof.Profesor_mail])
+            if (clases.length){
+                const transformedClases = await Promise.all(clases.flat().map(async (cl) => BuildClaseToIClase(cl)))
+                return res.send(transformedClases)
+    
+            } else if (profesores.length && !clases.length) {
+    
+                const clases = await Promise.all(profesores.map(async (prof) => await Clase.findAll({where: {Profesor_mail: prof.User_mail}, include:[{model: Profesor}, {model: User}]})))
+    
+                const transformedClases = await Promise.all(clases.flat().map(async (cl) => BuildClaseToIClase(cl)))
+    
+                return res.send(transformedClases)
+            }
+        }   else {
 
-            const newTransformedIntersection = await Promise.all(intersection.map(async (cl) => BuildClaseToIClase(cl)))
-
-            return res.send (newTransformedIntersection)
+                const allClasses = await Clase.findAll({include:[{model:Profesor, required: true}]})
+                const allIClasses = await Promise.all(allClasses.map(async (cl) => await BuildClaseToIClase(cl)))
+                return res.send(allIClasses)
         }
-        
-        else if (clases.length > 0) {
-            const payload = (clases.flat().map((cl) => ClaseToIClase(cl)))
-            return res.send(payload)
-        }
-
-        else {
-            const allClasses = await Clase.findAll({include: [{model: Profesor}, {model: User}]})
-            const allClassesWithIClaseInterface = await Promise.all(allClasses.map(async (cl) => await BuildClaseToIClase(cl)))
-            return res.send(allClassesWithIClaseInterface)
-        }
-
     } catch (err) {
         res.send(err)
     }
 })
 
+router.get('/student', async (req:Request, res:Response)=> {
+    const { busqueda } = req.query
+
+    try {
+        let clases: Clase[] = []
+        let profesores: any[] = []
+        if (busqueda) {
+            let palabrasSeparadas = (busqueda as string).split(" ");
+            palabrasSeparadas = palabrasSeparadas.filter(x => x !== 'grado')
+            palabrasSeparadas = palabrasSeparadas.filter(x => x !== 'año')
+            palabrasSeparadas = palabrasSeparadas.filter(x => x !== 'anio')
+
+            for (let x of palabrasSeparadas) {
+                try {
+                    const c = await Clase.findAll({
+                        include: [{ model: User, required: true}],
+                        where: {
+                            [Op.or]: [{
+                                materia: {
+                                    [Op.iLike]: `%${x.normalize("NFD").replace(/\p{Diacritic}/gu, "")}%`.replace("\'", '')
+                                }
+                            },
+                            {
+                                nivel: {
+                                    [Op.iLike]: `%${x}%`.replace("\'", '')
+                                }
+                            },
+                            {
+                                grado: {
+                                    [Op.iLike]: `%${x}%`.replace("\'", '')
+                                }
+                            },
+                            ]
+                        }
+                    })
+                    clases.push(...c)
+                    
+                }
+
+                catch (err) {
+                    console.log(err)
+                }
+            }
+        }
+        const transformedClasses = clases.filter(cl => !cl.Profesor_mail).map(cl => ClaseToIClase(cl))
+        return res.send(transformedClasses)        
+    } catch (err) {
+        res.send(err)
+    }
+})
+
+router.get('/all', async (req:Request, res:Response) => {
+    const allClasses = await Clase.findAll({include: [{model: Profesor}, {model: User}]})
+    const allClassesWithIClaseInterface = await Promise.all(allClasses.map(async (cl) => await BuildClaseToIClase(cl)))
+    return res.send(allClassesWithIClaseInterface)
+})
 
 
 router.get('/all/student/:mail', async (req: Request, res: Response) => {

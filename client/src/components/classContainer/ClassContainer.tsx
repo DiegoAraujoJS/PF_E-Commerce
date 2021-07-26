@@ -36,14 +36,11 @@ const ClassContainer: React.FC<Props> = ({ searchInput, dispatchInput }) => {
     const [classProfessorFilter, setClassProfessorFilter] = useState([])
     const [classUser, setClassUser] = useState([])
     const [classUserFilter, setClassUserFilter] = useState([])
+    
+    const [classList, setClassList] = useState([]) 
 
     useEffect(() => {
-        if (Array.isArray(searchInput)) {
-            let classP = searchInput?.filter(c => c.Profesor_mail !== null)
-            if (classP) setClassProfessor(classP)
-            let classU = searchInput?.filter(c => c.User_mail !== null)
-            if (classU) setClassUser(classU)
-        }
+        setClassProfessor(searchInput)        
     }, [searchInput])
 
     useEffect(() => {
@@ -172,9 +169,9 @@ const ClassContainer: React.FC<Props> = ({ searchInput, dispatchInput }) => {
     const handleChangeSearch = (e) => {
         setSearch(e.target.value)
     };
-    async function vaYBusca() {
-        const response: any = await axios.get(`http://localhost:3001/api/clases?busqueda=${search}`)
-        dispatchInput(response.data)
+    async function vaYBuscaUser() {
+        const response: any = await axios.get(`http://localhost:3001/api/clases/student?busqueda=${search}`)
+        setClassUser(response.data)
     }
     const searchIcon = <FontAwesomeIcon icon={faSearch} className="ml-2 ml-2" />
 
@@ -342,24 +339,24 @@ const ClassContainer: React.FC<Props> = ({ searchInput, dispatchInput }) => {
                         onSelect={(k) => setKey(k)}
                         className="mb-3"
                     >
-                        <Tab eventKey="classProfessor" title="Class by Professor">
+                        <Tab eventKey="classProfessor" title="Busca clases">
                             <ClassCards clasesFiltradas={classProfessorFilter && (nivel || grado || puntuacion.value || (horario.desde && horario.hasta) || city.show) ? classProfessorFilter : classProfessor} />
                         </Tab>
-                        <Tab eventKey="classUser"
-                            title="Class by Student">
+                        {user.role===1||user.role===2 ?  <Tab eventKey="classUser"
+                                title="Buscar solicitudes de clases">
 
                             <Row className="d-flex justify-content-center mb-3">
                                 <Col className="p-0" sm={5} md={5} >
                                     <Form.Control type="text" placeholder="Buscar clase..." value={search} onChange={handleChangeSearch} />
                                 </Col >
                                 <Col className="p-0" sm={1} md={1}>
-                                    <Button variant='primary' onClick={() => vaYBusca()}>{searchIcon}</Button>
+                                    <Button variant='primary' onClick={() => vaYBuscaUser()}>{searchIcon}</Button>
                                 </Col>
                             </Row>
                             <div style={{ overflowX: 'hidden', height: '100vh', width: '90%' }}>
                                 <StudentClassCards clasesFiltradas={classUserFilter && (nivel || grado || puntuacion.value || (horario.desde && horario.hasta) || city.show) ? classUserFilter : classUser} />
                             </div>
-                        </Tab>
+                        </Tab> : null}
                     </Tabs>
                 </Col>
             </Row>

@@ -56,9 +56,7 @@ function StudentClassCards({ clasesFiltradas, dispatchInput }) {
                                 />
                             );
                         })
-                            : <Alert variant="secondary" className="text-center">
-                                <h3>Realice una busqueda</h3>
-                            </Alert>
+                            :   <img src={noData} alt="no data" style={{width:"80%", height:"80%"}}/>
                         }
                         {classFilter && classFilter.length === 0 ?                         
                               <img src={noData} alt="no data" style={{width:"80%", height:"80%"}}/>
