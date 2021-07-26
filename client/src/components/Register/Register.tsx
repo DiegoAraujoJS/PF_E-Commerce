@@ -35,6 +35,7 @@ const Register: React.FC<Props> = ({ show, handleClose }) => {
   const [cities, setCities] = React.useState([])
 
   const [chosenCountry, setChosenCountry] = React.useState({})
+  const [isWrongPassword, setWrongPassword] = React.useState(false)
 
   const history = useHistory()
 
@@ -55,12 +56,12 @@ const Register: React.FC<Props> = ({ show, handleClose }) => {
     }
     if (values.mail === 'braiansilva@gmail.com') user.role = Role.ADMIN;
     try {
-      const registro = await axios.post('http://localhost:3001/api/session/register', userWithPassword, { withCredentials: true })
+      const registro = await axios.post('http://localhost:3001/api/usuarios/register', userWithPassword, { withCredentials: true })
 
       if (registro.status === 200) {
         Swal.fire(
           'Exito!',
-          'Se cerro sesión correctamente!',
+          'Se registro correctamente!',
           'success'
         )
       }
@@ -92,11 +93,9 @@ const Register: React.FC<Props> = ({ show, handleClose }) => {
 
   async function handleCountryChange(e) {
       setChosenCountry(e.target.value)
-    
       const response_2 = await axios.post('http://localhost:3001/api/allCountries/states', {country: e.target.value})
       if(response_2.status === 200){
-        setStates(response_2.data)
-      
+        setStates(response_2.data) 
     }
   }
 
@@ -109,18 +108,6 @@ const Register: React.FC<Props> = ({ show, handleClose }) => {
       
     }
   }
-
-  // function handlePaisChange(e) {
-  //   setStates(estados)
-  // }
-  // function handleEstadoChange(e) {
-  //   setCities(ciudades)
-  // }
-
-//   [ {
-//     "name": "Bangladesh",
-//     "unicodeFlag": "🇧🇩"
-// } ]
 
   return (
     <>
@@ -143,14 +130,19 @@ const Register: React.FC<Props> = ({ show, handleClose }) => {
               country: "",
               city: "",
               state: "",
+              confirmar: "",
             }}
             onSubmit={(values) => {
-
-              handleSubmitRegister(values)
+              console.log(values)
+              if (values.password === values.confirmar){
+                handleSubmitRegister(values)
+              } else {
+                setWrongPassword(true)
+              }
 
             }}
           >
-            {({ handleSubmit, handleChange, values, errors, touched, handleBlur }) => (
+            {({ handleSubmit, handleChange ,values, errors, touched, handleBlur }) => (
               <form onSubmit={handleSubmit} className="mt-6 mb-4">
                 <div className="form-row " >
                   <Col md={12} className="form-group mt-6" >
@@ -167,7 +159,7 @@ const Register: React.FC<Props> = ({ show, handleClose }) => {
 
                   </Col>
                   <Col md={12} className="form-group mt-2">
-                    <label htmlFor="inputPassword4">Password</label>
+                    <label htmlFor="inputPassword4">Contraseña</label>
                     <input
                       name="password"
                       value={values.password}
@@ -178,6 +170,20 @@ const Register: React.FC<Props> = ({ show, handleClose }) => {
                       className={`form-control ${errors.password && touched.password ? 'is-invalid' : ''}`}
                     />
                     {errors.password && touched.password && <div className='invalid-feedback'>{errors.password}</div>}
+                  </Col>
+
+                  <Col md={12} className="form-group mt-2">
+                    <label htmlFor="inputPassword4">Confirmar Contraseña</label>
+                    <input
+                      name="confirmar"
+                      value={values.confirmar}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      type="password"
+                      id="inputPassword4"
+                      className={`form-control ${errors.confirmar && touched.confirmar ? 'is-invalid' : ''}`}
+                    />
+                    {errors.confirmar && touched.confirmar && <div className='invalid-feedback'>{errors.confirmar}</div>}
                   </Col>
                 </div>
                 <Col md={12} className="form-group mt-2">
@@ -206,7 +212,7 @@ const Register: React.FC<Props> = ({ show, handleClose }) => {
                   />
                   {errors.lastName && touched.lastName && <div className='invalid-feedback'>{errors.lastName}</div>}
                 </Col>
-                <Col md={12}>
+                <Col md={12} className="form-group mt-2">
                 {/* {
             "name": "Bangladesh",
             "
@@ -214,7 +220,8 @@ const Register: React.FC<Props> = ({ show, handleClose }) => {
                     <label >Pais</label>
                     <select
                       name="country"
-                      onChange={handleCountryChange}
+                      onChange={(e) => {handleChange(e) ; handleCountryChange(e)}}              
+                      className="form-control"
                     >
                      { countries.length && countries.map( c => {
 
@@ -225,23 +232,26 @@ const Register: React.FC<Props> = ({ show, handleClose }) => {
                     </select>
                   </Col>
 
-                  <Col md={12}>
-                    <label >Estado</label>
+                  <Col md={12} className="form-group mt-2">
+                    <label >Estado/Provincia</label>
                     <select
                       name="state"
-                      onChange={handleStateChange}
+                      onChange={(e) => {handleChange(e) ; handleStateChange(e)}}
                       disabled={!countries.length}
+                      className="form-control"
                     >
                       { states.length && states.map( c => <option value={c.name} >{c.name}</option> ) }
                     </select>
                   </Col>
                   
-                  <Col md={12}>
+                  <Col md={12} className="form-group mt-2">
                     <label >Ciudad</label>
                     <select
-                      name="city"                  
-                      onBlur={handleBlur} 
+                      onChange={handleChange}
+                      name="city"  
                       disabled={!states.length}
+                      className="form-control"
+                      value={values.city}
                     >
                       { cities.length && cities.map( c => <option value={c}>{c}</option> ) }
                     </select>
