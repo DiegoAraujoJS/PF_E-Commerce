@@ -49,6 +49,7 @@ const Historial = () => {
             if(userResponse.data.role===1)role="profesor"
             await setAlum(userResponse.data.mail)            
             const response = await axios.get(`http://localhost:3001/api/clases/all/student/${userResponse.data.mail}`)
+            console.log("RESPONSEEEE", response)
             await setHistoria([
                 ...response.data]
             )
@@ -67,7 +68,7 @@ const Historial = () => {
             
             <ul style={classListContainer}>
                 {historia.map((e, i)=>{
-                    
+                    console.log("ESTO ES E", e)
                     const clase=e
                     if(!e.profesor){return null}
                     return (
@@ -76,9 +77,14 @@ const Historial = () => {
                                 <div className="d-flex justify-content-start">
                                    {e.profesor? <Card.Img style={profileImg}  src={e.profesor.foto} alt="Error" />: null}
                                    <div style={{marginLeft:"20px"}}>
-                                        <div>
-                                            {e.status}
-                                        </div>
+                                        {e.status==="complete"?<div style={{backgroundColor: "#1ECD97", borderRadius: "20px", fontFamily:"Montserrat", fontSize:"18px", padding:"3px", boxSizing:"border-box", display:"flex", justifyContent:"center"}}>
+                                            Clase completada
+                                        </div> : (e.status==="pending"?<div style={{backgroundColor: "#F4A62E", borderRadius: "20px", fontFamily:"Montserrat", fontSize:"18px", padding:"3px", boxSizing:"border-box", display:"flex", justifyContent:"center"}}>
+                                            Pendiente
+                                        </div>:<div style={{backgroundColor: "#FB797E", borderRadius: "20px", fontFamily:"Montserrat", fontSize:"18px", padding:"3px", boxSizing:"border-box", display:"flex", justifyContent:"center"}}>
+                                            Cancelado
+                                        </div>)
+                                        }
                                         <div>
                                             Materia: {e.materia}
                                         </div>
@@ -94,12 +100,19 @@ const Historial = () => {
                                         <div>
                                             Precio: {e.precio}
                                         </div>
+                                        {e.profesor.User_mail===alum?<div>
+                                                                        Alumno: {e.student.name} {e.student.lastName}
+                                                                    </div>:
+                                                                    <div>
+                                                                        Profesor: {e.profesor.name} {e.profesor.lastName}
+                                                                    </div>}
 
                                    </div>
+                                   {e.status==="complete"?
                                    <div  style={{marginLeft:"35vw"}}>
                                         <Button onClick={() => handleShow(i)}> Puntuar clase </Button>
-                                        <Puntuar key={i}id={e.id} show={show[i]} handleClose={() => handleClose(i)} clase={e} alum={alum} index={i} />
-                                   </div>
+                                        <Puntuar key={i}id={i} show={show[i]} handleClose={() => handleClose(i)} clase={e} alum={alum} index={i} />
+                                   </div>: null}
                                 </div>
                             </div>
                         </Container>

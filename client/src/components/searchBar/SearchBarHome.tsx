@@ -217,6 +217,9 @@ export default function SearchBar() {
                     <Link className={'nav-link ms-4 text-decoration-none'} to={"/perfil"}>Profile</Link>
                   </NavDropdown.Item>
                   <NavDropdown.Item>
+                    <Link className={'nav-link ms-4 text-decoration-none'} to={"/historial"}>History</Link>
+                  </NavDropdown.Item>
+                  <NavDropdown.Item>
                     <Link className={'nav-link ms-4 text-decoration-none'} to={"/chat"}>Chat</Link>
                   </NavDropdown.Item>
                   <NavDropdown.Item>

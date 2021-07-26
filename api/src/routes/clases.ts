@@ -91,10 +91,13 @@ router.get('/all/student/:mail', async (req: Request, res: Response) => {
          include: [{
              model: Profesor,
              required: true
-            }],
-         
+            },{model: User, required: false}],
+            
          where: {
-            User_mail: req.params.mail
+            [Op.or]: [
+                { User_mail: req.params.mail },
+                { Profesor_mail: req.params.mail }
+              ]
          }
          })
     const usersOfProfessors = await Promise.all(clases.map(cl => User.findByPk(cl.Profesor_mail)))

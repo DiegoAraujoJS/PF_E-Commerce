@@ -236,6 +236,20 @@ const bootstrap = async () => {
             date: { year: 2021, month: 8, day: 7, time: ["08:00:00", "12:00:00"] },
             precio: "$2000",
         });
+        const Clase8 = await Clase.create({
+            nombre: "Sumas y Restas",
+            Profesor_mail: "mauroleonel@gmail.com",
+            User_mail: "braiansilva@gmail.com",
+            descripcion: "Aprende a sumar y restar para ser el mejor de tu clase",
+            materia: "Matematica",
+            esPresencial: "Virtual",
+            grado: "Primer grado",
+            nivel: "Primario",
+            puntuacion: 5,
+            date: { year: 2021, month: 8, day: 7, time: ["08:00:00", "12:00:00"] },
+            precio: "$2000",
+            status:"cancelled"
+        });
 
         const Clase4 =await Clase.create({
             nombre: 'Historia',
