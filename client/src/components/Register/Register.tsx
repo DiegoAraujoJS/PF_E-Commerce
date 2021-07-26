@@ -113,7 +113,7 @@ const Register: React.FC<Props> = ({ show, handleClose }) => {
       setStates([ {
         "name": "Selecciona un estado / provincia",
         "unicodeFlag": ""
-    }, ...response_2.data.data])
+    }, ...response_2.data])
     }
   }
 
