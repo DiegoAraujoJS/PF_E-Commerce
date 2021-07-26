@@ -5,6 +5,7 @@ import axios from 'axios';
 import getCookieValue from '../../cookieParser';
 import { useHistory } from "react-router-dom";
 const EditProfile = () => {
+
     const history = useHistory()
     const [prech, setPrech] = useState<any>({})
     const [img, setImg] = useState<any>('')
@@ -71,17 +72,24 @@ const EditProfile = () => {
             setPrech({
              ...response.data
                 })
+                setImg(prech.foto)
         console.log("todo lo que hayt que agregar",prech)
 
     }catch(err){
         console.log(err);
     }
-}
+};
+
 
     useEffect(() => {
         fetchProfs()
-        setImg(prech.foto)
     }, []);
+
+    useEffect(() => {
+        setImg(prech.foto)
+    }, [prech]);
+
+
 
     return (
         <div className={styles.body} >
