@@ -54,7 +54,7 @@ const Register: React.FC<Props> = ({ show, handleClose }) => {
       ...user,
       password: values.password
     }
-    if (values.mail === 'braiansilva@gmail.com') user.role = Role.ADMIN;
+    
     try {
       const registro = await axios.post('http://localhost:3001/api/usuarios/register', userWithPassword, { withCredentials: true })
 

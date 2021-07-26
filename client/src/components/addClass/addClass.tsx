@@ -9,7 +9,7 @@ import Swal from 'sweetalert2'
 import { store } from '../../Store/store';
 import CalendarApp from '../calendar/addClassCalendar/Calendar'
 import { useState, useEffect } from 'react'
-
+import {useHistory} from 'react-router-dom'
 const materias = [
 	"Física",
 	"Biología",
@@ -54,6 +54,7 @@ const grados = [
 enum Week { Lunes, Martes, Miercoles, Jueves, Viernes, Sabado, Domingo }
 
 const AddClass = () => {
+	const history = useHistory()
 	const [calendarChoice, setCalendarChoice] = useState(false)
 	let [user, setUser] = useState<{ name: string, lastName: string, role: number, mail: string } | undefined>({ name: '', lastName: '', role: null, mail: '' })
 	useEffect(() => {
@@ -136,7 +137,8 @@ const AddClass = () => {
 								'Tu clase se creo correctamente!',
 								'success'
 							)
-						}	
+							history.push(`/historial`)	
+						}
 						else{
 						Swal.fire(
 							'Error!',
@@ -144,6 +146,7 @@ const AddClass = () => {
 							'error'
 						)
 					}
+					
 				}}
 			>
 				{({ handleSubmit, handleChange, values, errors, handleBlur, touched }) => (
@@ -304,7 +307,7 @@ const AddClass = () => {
 										onBlur={handleBlur}
 										value={values.week}
 										min="0"
-										max="10"
+										
 										className={`form-control ${errors.week && touched.week ? 'is-invalid' : ''
 											}`}
 									/>
@@ -322,6 +325,8 @@ const AddClass = () => {
 										onChange={handleChange}
 										onBlur={handleBlur}
 										value={values.precio}
+										min="0"
+										
 										className={`form-control ${errors.precio && touched.precio ? 'is-invalid' : ''
 											}`}
 									/>
