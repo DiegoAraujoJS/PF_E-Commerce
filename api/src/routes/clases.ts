@@ -3,7 +3,7 @@ import Clase from './../models/Clase'
 import Profesor from '../models/Profesor'
 import Puntuacion from '../models/Puntuacion'
 import { Op } from 'sequelize'
-import { IUser, Time } from '../../../interfaces'
+import { IUser, Time, IClase } from '../../../interfaces'
 import User from '../models/Usuario'
 import ClaseToIClase from '../utils/transformations/ClaseToIClase'
 import BuildClaseToIClase from '../utils/transformations/BuildClaseToIClase'
@@ -62,15 +62,23 @@ router.get('/', async (req: Request, res: Response) => {
                 }
             }
         }
-
         if (clases.length > 0 && profesores.length > 0) {
-            const clasesResult = clases.flat().filter(c => profesores.map(p => p.User_mail).flat().includes(c.Profesor_mail)) 
+            
+            const obj = profesores.flat().reduce((acum, cl) => {
+                acum[cl.User_mail] = true
+                return acum
+            }, {})
+            
+            const intersection = clases.flat().filter(prof => obj[prof.Profesor_mail])
 
-            return res.send(clasesResult.map((clase: Clase) => ClaseToIClase(clase, profesores.find(p => p.User_mail===clase.Profesor_mail))))
+            return res.send (intersection)
         }
+        
         else if (clases.length > 0) {
-            return res.send(clases.map((clase: Clase) => ClaseToIClase(clase)))
+            const payload = (clases.flat().map((cl) => ClaseToIClase(cl)))
+            return res.send(payload)
         }
+
         else {
             const allClasses = await Clase.findAll({include: [{model: Profesor}, {model: User}]})
             const allClassesWithIClaseInterface = await Promise.all(allClasses.map(async (cl) => await BuildClaseToIClase(cl)))
