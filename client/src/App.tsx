@@ -127,7 +127,6 @@ function App() {
           }           
       } />
         <Route exact path='/editPerfilAlumno'><EditPerfilAlum/></Route>
-      <Route exact path='/chat'><Chat mail={""}/></Route>
       <Route exact path='/addclaim'><AddClaim /></Route>
       
       <Route path='/chat/:mail' exact render={({ match }) => {
