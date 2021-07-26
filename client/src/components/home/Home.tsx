@@ -63,7 +63,7 @@ const Home = ({ dispatchInput }) => {
         <div style={containerHome}>
             {/* <SearchBarHome /> */}
             <div style={searchCenter}>
-                <input style={searchBar} type='text' name='searchInput' value={searchInput} onChange={handleChange}/>
+                <input style={searchBar} type='text' name='searchInput' value={searchInput} onChange={handleChange} required/>
                 <Button variant='primary' onClick={() => vaYBusca()}>Buscar</Button>
             </div>
             <img src={students} alt='students' style={bgImg}/>
