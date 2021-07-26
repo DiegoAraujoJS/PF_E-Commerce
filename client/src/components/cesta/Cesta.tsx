@@ -28,8 +28,8 @@ export default function Cesta() {
             if (user) {
                 const clases = await axios.get(`http://localhost:3001/api/carrito/all/${user.data.mail}`)
                 
-                if (clases.status === 200 && clases.data.length) {
-                    const clasesPorComprarFormateadas: ClasePorComprar[] = clases?.data.map(e => {
+                if (clases.status === 200 && Array.isArray(clases.data) && clases.data.length) {
+                    const clasesPorComprarFormateadas: any = clases.data.map(e => {
                         let dia = e.date?.day;
                         let mes = e.date?.month;
                         let horaInicio = e.date?.time[0].split(':');
