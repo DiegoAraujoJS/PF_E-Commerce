@@ -89,13 +89,18 @@ router.get('/all/student/:mail', async (req: Request, res: Response) => {
          include: [{
              model: Profesor,
              required: true
-            }],
-         
+            },{model: User, required: false}],
+            
          where: {
-            User_mail: req.params.mail
+            [Op.or]: [
+                { User_mail: req.params.mail },
+                { Profesor_mail: req.params.mail }
+              ]
          }
          })
-    return res.send(clases)
+    const usersOfProfessors = await Promise.all(clases.map(cl => User.findByPk(cl.Profesor_mail)))
+
+    return res.send(clases.map((cl, i) => ClaseToIClase(cl, usersOfProfessors[i])))
 })
 
 router.get('/all/profesor/:mail', async (req: Request, res: Response) => {
