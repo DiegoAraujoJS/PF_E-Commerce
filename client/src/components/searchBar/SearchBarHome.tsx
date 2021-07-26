@@ -18,6 +18,11 @@ import Register from '../Register/Register';
 import { faBook, faShoppingCart, faUserTie, faUser } from "@fortawesome/free-solid-svg-icons";
 import Swal from 'sweetalert2'
 import { auth } from "../../firebase";
+import { useHistory } from "react-router-dom";
+import ModalGoogle from '../modalgoogle/ModalGoogle';
+import googleLogo from '../../images/googleLogo.png';
+import { loginWithGoogle } from '../../firebase';
+
 
 export default function SearchBar() {
   enum Role { USER, PROFESSOR, ADMIN }
@@ -27,7 +32,7 @@ export default function SearchBar() {
   const [errors, setErrors] = useState({ email: null, password: null })
   let [user, setUser] = useState<{ name: string, lastName: string, role: number, mail: string } | undefined>({ name: '', lastName: '', role: null, mail: '' })
   const [cestaLength, setCestaLength] = useState(0)
-
+  const history = useHistory();
   useEffect(() => {
     async function setRoleOfUser() {
       if (localStorage.getItem('login')) {
@@ -113,7 +118,7 @@ export default function SearchBar() {
               icon: 'success',
               willClose: () => window.location.reload()
             })
-
+            history.push('/')
           }
         }
       }
@@ -142,7 +147,7 @@ export default function SearchBar() {
         icon: 'success',
         willClose: () => window.location.reload()
       })
-
+      history.push('/')
     } catch (err) {
       Swal.fire({
         title: 'Error!',
@@ -151,6 +156,7 @@ export default function SearchBar() {
         willClose: () => window.location.reload()
       })
     }
+    
   }
 
   const dropBox: CSS.Properties = {
@@ -163,6 +169,42 @@ export default function SearchBar() {
   }
 
   const [showPassword, setShowPassword] = useState("password")
+
+  // Estados para maejar el modal de Google
+  const [showGoogle, setShowGoogle] = useState(false);
+  const handleCloseGoogle = () => setShowGoogle(false);
+  const handleShowGoogle = () => setShowGoogle(true);
+
+  // Función para iniciar sesión con Google
+  async function loginConGoogle(e) {
+      e.preventDefault();
+      try {
+          await loginWithGoogle();
+          const usuarioExistente = await axios.get(`http://localhost:3001/api/login/${auth.currentUser.email}`)
+          console.log('HABER', usuarioExistente.data)
+          if (usuarioExistente.data) {
+              try {
+                  const login = await axios.post(`http://localhost:3001/api/login`, {
+                    mail: auth.currentUser.email,
+                    password: 'google'
+                  }, { withCredentials: true })
+                  console.log(login)
+                  document.cookie = `token=${JSON.stringify(login.data.token)}`
+                  localStorage.setItem('login', 'true')
+                  const user = await axios.post(`http://localhost:3001/api/verify`, {}, { headers: { Authorization: getCookieValue('token').replaceAll("\"", '') } })
+                  console.log(user)
+                  history.push('/')
+                  window.location.reload();
+                } catch (error) {
+                  console.log('LISTO')
+                }
+          } else {
+              handleShowGoogle();
+          }
+      } catch {
+          console.log('Se produjo un error durante la autenticación')
+      }
+  }
 
   const eyeTest: CSS.Properties = {
     position: 'relative',
@@ -238,13 +280,20 @@ export default function SearchBar() {
                   <Button style={inputSizeLim} name='loginSubmit' variant="primary" type="submit">
                     Entrar
                   </Button>
-                  <Navbar.Text className="mt-5">
+                  {wrongPassword ? <div className="badge bg-danger mt-2" >
+                    El usuario o la contraseña son incorrectos</div> : null}
+                  <Navbar.Text className="mt-3">
                     ¿No tienes cuenta? <Button onClick={() => handleShow()}> Registrarse </Button>
                     <Register show={show} handleClose={handleClose} />
                   </Navbar.Text>
-                  {wrongPassword ? <div className="badge bg-danger" >
-                    El usuario o la contraseña son incorrectos</div> : null}
+                  
+                  
+                    <div className={`btn ${s.googleButton}`} onClick={loginConGoogle}>
+                        <img src={googleLogo} className={s.googleLogo} alt='Google Logo'></img>
+                        <span>Inicia sesión con Google</span>
+                    </div>
                 </Form>
+                <ModalGoogle show={showGoogle} handleClose={handleCloseGoogle} />
               </NavDropdown>
             }
             {loggedOrNot() && user.role === Role.PROFESSOR ?

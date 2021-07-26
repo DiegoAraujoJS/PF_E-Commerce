@@ -123,19 +123,16 @@ function Login(props) {
         try {
             await loginWithGoogle();
             const usuarioExistente = await axios.get(`http://localhost:3001/api/login/${auth.currentUser.email}`)
-            console.log('HABER', usuarioExistente.data)
             if (usuarioExistente.data) {
                 try {
                     const login = await axios.post(`http://localhost:3001/api/login`, {
                       mail: auth.currentUser.email,
                       password: 'google'
                     }, { withCredentials: true })
-                    console.log(login)
                     document.cookie = `token=${JSON.stringify(login.data.token)}`
                     localStorage.setItem('login', 'true')
                     const user = await axios.post(`http://localhost:3001/api/verify`, {}, { headers: { Authorization: getCookieValue('token').replaceAll("\"", '') } })
-                    console.log(user)
-                    history.push('/home')
+                    history.push('/')
                     window.location.reload();
                   } catch (error) {
                     console.log('LISTO')
@@ -143,33 +140,6 @@ function Login(props) {
             } else {
                 handleShowGoogle();
             }
-            
-            // let userWithPassword = {
-            //     ...user,
-            //     password: 'google'
-            // }
-            // const registro = await axios.post('http://localhost:3001/api/session/register', userWithPassword, { withCredentials: true })
-            // if (registro.status === 200) {
-            //     const login = await axios.post(`http://localhost:3001/api/login`, {
-            //         mail: auth.currentUser.email,
-            //         password: 'google'
-            //     }, { withCredentials: true })
-            //     document.cookie = `token=${JSON.stringify(login.data.token)}`
-            //     localStorage.setItem('login', 'true')
-            //     const user = await axios.post(`http://localhost:3001/api/verify`, {}, { headers: { Authorization: getCookieValue('token').replaceAll("\"", '') } })
-            //     if (user !== null) props.getUserLoged({ mail: user.data.mail, name: user.data.name, lastName: user.data.lastName })
-            //     console.log(store.getState())
-            //     swalWithBootstrapButtons.fire(
-            //         'Se inicio sesión correctamente',
-            //         '',
-            //         'success'
-            //     )
-            //     history.push('/home');
-            //     const usuarioActualizado = await setRoleOfUser()
-            //     dispatch(modificarUsuarioLogueado(usuarioActualizado))
-            //     const clases = await axios.get(`http://localhost:3001/api/carrito/all/${usuarioActualizado[1].mail}`)
-            //     dispatch(modificarCantidadClasesPorComprar(clases.data.length));
-            // }
         } catch {
             console.log('Se produjo un error durante la autenticación')
         }
