@@ -87,17 +87,17 @@ router.get('/:mail', async (req: Request, res: Response) => {
 
 // Guardar un alumno
 router.post('/register', async (req: Request, res: Response) => {
-    if (!isUser(req.body)) return res.status(401).send('request body does not respect interface IUser')
+    if (!isUser(req.body)) return res.status(401).send({type: ErrorType.INCOMPLETE_INPUTS, message: 'request body does not respect interface IUser'})
     if (!validateEmail( req.body.User_mail)) return res.status(402).send('Send a valid mail');
-    if (!req.body.password) return res.status(403).send('You must send a password property within the body')
+    if (!req.body.password) return res.status(403).send({type: ErrorType.INCOMPLETE_INPUTS, message: 'You must send a password property within the body'})
     try {
         const findUser = await User.findByPk(req.body.User_mail)
-        if (findUser) res.send(`Ya existe un alumno asociado a la cuenta ${req.body.User_mail} así que debería actualizarlo`);             
+        if (findUser) res.status(400).send({type: ErrorType.ALREADY_EXISTS, message:`Ya existe un alumno asociado a la cuenta ${req.body.User_mail} así que debería actualizarlo`});             
         const user = await User.create({...req.body, password: hashPassword(req.body.password)})
         return res.send(user)
         
     } catch (error) {
-        return res.send(error)
+        return res.status(400).send(error)
     }
 })
 
