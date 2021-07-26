@@ -106,15 +106,7 @@ class Calendar extends Component {
           const dia=args.start.value.slice(8,-9)
           const start=args.start.value.slice(11)
           const end=args.end.value.slice(11)
-          const horario1={
-            disponible: [[start,  end]],
-            email: email,
-            fecha: {
-                anio: año,
-                mes: mes,
-                dia: dia
-            }
-        }
+          
         
         const dias = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado']
         const d = new Date(args.start);
@@ -131,24 +123,19 @@ class Calendar extends Component {
             mes:  mes,
             dia:  dia
           },
-          email: email
+          email: email,
+          day: dayName
         }
         this.state.horariosDispatch = [...Object.values(this.state.horarios)] 
-        console.log(this.state.horariosDispatch)
-        console.log('asdfasdf',this.state.horarios)
+        
         let horariosDispatchThroughProps = []
-        console.log(this.props.calendar_to_addClassStudent)
+        
         if (this.props.calendar_to_addClassStudent) {
           horariosDispatchThroughProps = this.props.calendar_to_addClassStudent
         }
-        console.log('horariosDispatchThroughProps', horariosDispatchThroughProps)
-
-        let dispatchHorarios = []
 
         Object.keys(this.props.calendar_to_addClassStudent).length === 0 ? props.dispatchHorarios(this.state.horariosDispatch) : props.dispatchHorarios([...this.props.calendar_to_addClassStudent, ...this.state.horariosDispatch])
-        
-    
-  
+
         }
         },
         onEventDelete:async  function(args) {

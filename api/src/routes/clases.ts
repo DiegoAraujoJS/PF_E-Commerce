@@ -6,6 +6,7 @@ import { Op } from 'sequelize'
 import { IUser, Time } from '../../../interfaces'
 import User from '../models/Usuario'
 import ClaseToIClase from '../utils/transformations/ClaseToIClase'
+import BuildClaseToIClase from '../utils/transformations/BuildClaseToIClase'
 const router = Router()
 
 router.get('/', async (req: Request, res: Response) => {
@@ -72,11 +73,8 @@ router.get('/', async (req: Request, res: Response) => {
         }
         else {
             const allClasses = await Clase.findAll({include: [{model: Profesor}, {model: User}]})
-            const allProfessorClassesUsers = await Promise.all(allClasses.filter(cl => cl.Profesor_mail !== null).map(async (cl: Clase) => [cl.Profesor_mail, await User.findByPk(cl.Profesor_mail)]))
-
-            const allNotProfessorClasses = allClasses.filter(cl => !allProfessorClassesUsers.some( (tuple: [string, User]) => cl.Profesor_mail === tuple[0]))
-
-            return res.send([...allNotProfessorClasses.map(cl => ClaseToIClase(cl)), ...allProfessorClassesUsers.map((tuple: [string, User]) => ClaseToIClase(allClasses.find(cl => cl.Profesor_mail===tuple[0]), tuple[1])) ] )
+            const allClassesWithIClaseInterface = await Promise.all(allClasses.map(async (cl) => await BuildClaseToIClase(cl)))
+            return res.send(allClassesWithIClaseInterface)
         }
 
     } catch (err) {
@@ -187,6 +185,21 @@ router.get('/:id', async (req: Request, res: Response) => {
     }
     catch (error) {
         res.status(404).send("Ops! hubo un error")
+    }
+})
+
+router.get('/student/:mail', async (req: Request, res: Response) => {
+    try {
+        const mail = req.params.mail
+        const clases = await Clase.findAll({where: {
+            User_mail: mail
+        }, include: [{model: User}, {model: Profesor}]
+        })
+        const payload = await Promise.all(clases.map(async (cl) => await BuildClaseToIClase(cl)))
+        return res.send(payload)
+    }
+    catch(err) {
+        return res.status(400).send(err)
     }
 })
 

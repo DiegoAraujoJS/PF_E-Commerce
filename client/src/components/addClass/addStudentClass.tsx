@@ -13,7 +13,7 @@ import { useState, useEffect } from 'react';
 import CalendarApp from "../calendar/addClassCalendar/Calendar"
 import { store } from '../../Store/store';
 import { Disponible } from '../../../../interfaces';
-import { Week } from '../../../../interfaces';
+import { IPublish } from '../../../../interfaces';
 const materias = [
 	"Física",
 	"Biología",
@@ -86,10 +86,9 @@ const StudentAddClass = () => {
 					grado: "",
 					nivel: "",
 					precio: "",
-
+					medio: "",
 					dia: 0,
-					desde: "",
-					hasta: "",
+					
 					forHowLong: 0
 
 				}}
@@ -98,49 +97,51 @@ const StudentAddClass = () => {
 					console.log('entre')
 					
 					try {
-						const redux_state = store.getState()['calendar_to_addClassStudent']
-						
-						let desde: `${number}:${number}:00` | any = values.desde + ':00'
-						let hasta: `${number}:${number}:00` | any = values.hasta + ':00'
-						const days = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado' ]
-						let sunday = new Date()
-						sunday.setDate(sunday.getDate() - days.indexOf(redux_state[0].day) % 7)
+						console.log('entre')
+					const token = getCookieValue('token').replaceAll("\"", '')
 
-						// const payload: IPublish = {
-						// 	publication: {
-						// 		agenda: {
-						// 			forHowLong: values.forHowLong,
-						// 			sundayStartsOn: {
-						// 				day: sunday.getDate(),
-						// 				month: sunday.getMonth() + 1,
-						// 				year: sunday.getFullYear()
-						// 			},
-						// 			week: redux_state
-						// 		},
-						// 		clase: {
-						// 			ciudad: '',
-						// 			descripcion: values.descripcion,
-						// 			grado: values.grado, 
-						// 			materia: values.materia,
-						// 			nivel: values.nivel,
-						// 			nombre: values.nombre,
-						// 			precio: values.precio,
-						// 			Profesor_mail: user.role === 1 ? user.mail : null,
-						// 			User_mail: user.role === 0 ? user.mail : null,
-						// 		},
-						// 	},
-						// 	token: getCookieValue('token').replaceAll("\"", '')
-						// }
-						// const response = await axios.post(`http://localhost:3001/api/publish`, payload) 
+					const user = await axios.post('http://localhost:3001/api/verify', {}, { headers: { Authorization: token } })
+
+					const redux_state = store.getState()['calendar_to_addClassStudent']
+					console.log(redux_state)
+
+										
+						const publication: IClase = {
+							User_mail: user.data.mail,
+							descripcion: values.descripcion,
+							materia: values.materia,
+							grado: values.grado,
+							nivel: values.nivel,
+							nombre: values.nombre,
+							precio: values.precio,
+							esPresencial: values.medio
+						}
+						let sunday = new Date()
+						sunday.setDate(sunday.getDate() - sunday.getDay() % 7)
+						// {clase: IClase, agenda: {week: Week[], sundayStartsOn: IDate, forHowLong: number}}
+						const [sundayYear, sundayMonth, sundayDay] = [sunday.getFullYear(), sunday.getMonth() + 1, sunday.getDate()]
+						const body: IPublish = {
+							clase: publication,
+							agenda: {
+								week: redux_state,
+								sundayStartsOn: {
+									year: Number(sundayYear),
+									month: Number(sundayMonth),
+									day: Number(sundayDay)
+								},
+								forHowLong: Number(values.forHowLong)
+							}
+						}
 						
-		
-						// if (response.status === 200) {
-						// 	Swal.fire(
-						// 		'Exito!',
-						// 		'Tu clase se creo correctamente!',
-						// 		'success'
-						// 	)
-						// }
+						let response = await axios.post('http://localhost:3001/api/market/publish', body, { headers: { Authorization: token } })
+
+						if (response.status === 200) {
+							Swal.fire(
+								'Exito!',
+								'Tu clase se creo correctamente!',
+								'success'
+							)
+						}
 						
 					}
 					catch (err) {
@@ -300,6 +301,25 @@ const StudentAddClass = () => {
 									</Form.Control>
 									{errors.nivel && touched.nivel ? (
 										<div className='invalid-feedback'>{errors.nivel}</div>
+									) : null}
+								</Col>
+							</Row>
+							<Row>
+								<Col sm={12} md={4}>
+									<Form.Label className='text-uppercase'>Duración por semanas</Form.Label>
+									<Field
+										name='forHowLong'
+										type='number'
+										onChange={handleChange}
+										onBlur={handleBlur}
+										value={values.forHowLong}
+										min="0"
+										max="10"
+										className={`form-control ${errors.forHowLong && touched.forHowLong ? 'is-invalid' : ''
+											}`}
+									/>
+									{errors.forHowLong && touched.forHowLong ? (
+										<div className='invalid-feedback'>{errors.forHowLong}</div>
 									) : null}
 								</Col>
 							</Row>

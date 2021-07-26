@@ -109,10 +109,8 @@ const AddClass = () => {
 							precio: values.precio,
 							esPresencial: values.medio
 						}
-						const days = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado']
 						let sunday = new Date()
-						sunday.setDate(sunday.getDate() - days.indexOf(redux_state[0].day) % 7)
-
+						sunday.setDate(sunday.getDate() - sunday.getDay() % 7)
 						// {clase: IClase, agenda: {week: Week[], sundayStartsOn: IDate, forHowLong: number}}
 						const [sundayYear, sundayMonth, sundayDay] = [sunday.getFullYear(), sunday.getMonth() + 1, sunday.getDate()]
 						const body: IPublish = {
@@ -128,9 +126,9 @@ const AddClass = () => {
 							}
 						}
 						console.log(body)
+						let response = await axios.post('http://localhost:3001/api/market/publish', body, { headers: { Authorization: token } })
 
-						// let response = await axios.post('http://localhost:3001/api/market/publish', body, { headers: { Authorization: token } })
-						// console.log(response)
+						console.log(response)
 
 						// if (response.status === 200) {
 						// 	Swal.fire(

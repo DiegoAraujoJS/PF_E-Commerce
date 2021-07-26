@@ -1,6 +1,5 @@
 import { IClase, IProfesor, IUser } from "../../../../interfaces";
 import Clase from "../../models/Clase";
-import User from '../../models/Usuario'
 function ClaseToIClase(clase: Clase, userProfesor?: IUser): IClase {
     
     const obj: IClase = {
