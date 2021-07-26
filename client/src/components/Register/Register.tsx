@@ -95,7 +95,11 @@ const Register: React.FC<Props> = ({ show, handleClose }) => {
       const response_1 = await axios.get('http://localhost:3001/api/allCountries/countries')
 
       if (response_1.status === 200) {
-        setCountries(response_1.data.data)
+        setCountries([ {
+          "name": "Selecciona un país",
+          "unicodeFlag": ""
+      }
+      , ...response_1.data.data])
       }
 
     }
@@ -106,7 +110,10 @@ const Register: React.FC<Props> = ({ show, handleClose }) => {
     setChosenCountry(e.target.value)
     const response_2 = await axios.post('http://localhost:3001/api/allCountries/states', { country: e.target.value })
     if (response_2.status === 200) {
-      setStates(response_2.data)
+      setStates([ {
+        "name": "Selecciona un estado / provincia",
+        "unicodeFlag": ""
+    }, ...response_2.data.data])
     }
   }
 
@@ -114,8 +121,11 @@ const Register: React.FC<Props> = ({ show, handleClose }) => {
     console.log('country', chosenCountry)
     const response_3 = await axios.post('http://localhost:3001/api/allCountries/cities', { country: chosenCountry, state: e.target.value })
     console.log(response_3.data)
-    if (response_3.status === 200) {
-      setCities(response_3.data)
+    if (response_3.status === 200) { 
+        setCities([ {
+          "name": "Selecciona una ciudad",
+          "unicodeFlag": ""
+      }, ...response_3.data])
 
     }
   }
@@ -228,7 +238,7 @@ const Register: React.FC<Props> = ({ show, handleClose }) => {
             "name": "Bangladesh",
             "
         } */}
-                  <label >Pais</label>
+                  <label >País</label>
                   <select
                     name="country"
                     onChange={(e) => { handleChange(e); handleCountryChange(e) }}
@@ -254,8 +264,9 @@ const Register: React.FC<Props> = ({ show, handleClose }) => {
                     {states.length && states.map(c => <option value={c.name} >{c.name}</option>)}
                   </select>
                 </Col>
-
-                <Col md={12} className="form-group mt-2">
+               {
+                 cities.length ? 
+                 <Col md={12} className="form-group mt-2">
                   <label >Ciudad</label>
                   <select
                     onChange={handleChange}
@@ -267,6 +278,10 @@ const Register: React.FC<Props> = ({ show, handleClose }) => {
                     {cities.length && cities.map(c => <option value={c}>{c}</option>)}
                   </select>
                 </Col>
+                 :
+                 null
+               }
+                
 
                 <Col md={12} className="form-group mt-2">
                   <Form.Group as={Row} className="mb-3 mt-2">
