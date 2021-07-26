@@ -24,7 +24,7 @@
 import React, { useState } from 'react'
 import axios from 'axios';
 import { useHistory } from "react-router-dom";
-import { UserProps } from '../../../../interfaces'
+import { IUser } from '../../../../interfaces'
 import { Formik } from 'formik';
 import { validationSchemaGoogle, validationSchemaRegister } from '../../utils/validations';
 import imageParser from '../../utils/imageParser';
@@ -68,12 +68,14 @@ const ModalGoogle: React.FC<Props> = ({ show, handleClose }) => {
       nombre = nombreCompleto.slice(0, 1);
       apellido = nombreCompleto.slice(1);
     }
-    let user: UserProps = {
+    let user: IUser = {
       lastName: apellido,
-      mail: auth.currentUser.email,
+      User_mail: auth.currentUser.email,
       name: nombre,
       role: values.role,
       city: values.city,
+      state: '',
+      country: ''
     }
     let userWithPassword = {
       ...user,
