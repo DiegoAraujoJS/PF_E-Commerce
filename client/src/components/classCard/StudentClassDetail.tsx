@@ -12,7 +12,8 @@ const calendar = <FontAwesomeIcon icon={faCalendarAlt} className="mt-1" style={{
 const clock = <FontAwesomeIcon icon={faClock} className="mt-1" style={{ color: "#0067ff" }} />
 
 function StudentClassDetail(props) {
-    console.log(props)
+    console.log(props.student)
+    console.log("HOLA")
     function redirect_blank(url) {
         var a = document.createElement('a');
         a.target="_blank";
@@ -60,14 +61,14 @@ function StudentClassDetail(props) {
                         </Card.Header>
                         <div style={{height:'400px'}}>
 
-                            <CalendarApp > {props.student.mail} </CalendarApp>
+                           {props.student ? <CalendarApp > {props.student.User_mail} </CalendarApp>:null}
                         </div>
                         <Card.Header className='d-flex justify-content-center '>
                             <Card.Title >Alumno:</Card.Title>
 
                         </Card.Header>
                         <Card.Body className='d-flex flex-column pt-0 align-items-center '>                            
-                            <Card.Title className="mt-3">{email} Mail: {props.student && props.student.mail}</Card.Title>
+                            <Card.Title className="mt-3">{email} Mail: {props.student && props.student.User_mail}</Card.Title>
                             <Card.Text>{mark} <strong> Ciudad:</strong> {props.student && props.student.city} </Card.Text>
                             
                         </Card.Body>

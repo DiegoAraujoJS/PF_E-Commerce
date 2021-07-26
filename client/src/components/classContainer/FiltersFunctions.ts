@@ -20,7 +20,8 @@ export const filterByTime = (array, horario) => {
     return filtrados
 };
 
-export const filterByLevel = (array, nivel) => {
+export const filterByLevel = (array: IClase[], nivel: string) => {
+    console.log(typeof array)
     let filtrados: IClase[] = array.filter((clase: IClase) => {
         if (clase && clase.nivel) {
             if (clase.nivel === nivel) return clase

@@ -18,7 +18,7 @@ import { IClase } from '../../../../interfaces'
 const star = <FontAwesomeIcon icon={faStar} style={{ color: "#ffc107" }} />
 
 type Props = {
-    searchInput: IClase[],
+    searchInput?: IClase[],
     dispatchInput: (data) => any,
 }
 
@@ -36,14 +36,16 @@ const ClassContainer: React.FC<Props> = ({ searchInput, dispatchInput }) => {
     const [classProfessorFilter, setClassProfessorFilter] = useState([])
     const [classUser, setClassUser] = useState([])
     const [classUserFilter, setClassUserFilter] = useState([])
+    
+    const [classList, setClassList] = useState<IClase[]>([]) 
 
     useEffect(() => {
-        if (Array.isArray(searchInput)) {
-            let classP = searchInput?.filter(c => c.Profesor_mail !== null)
-            if (classP) setClassProfessor(classP)
-            let classU = searchInput?.filter(c => c.User_mail !== null)
-            if (classU) setClassUser(classU)
-        }
+        if (searchInput) setClassList(classList)
+        let classP = classList?.filter(c => c.Profesor_mail !== null)
+        if (classP) setClassProfessor(classP)
+        let classU = classList?.filter(c => c.User_mail !== null)
+        if (classU) setClassUser(classU)
+        
     }, [searchInput])
 
     useEffect(() => {
@@ -77,8 +79,8 @@ const ClassContainer: React.FC<Props> = ({ searchInput, dispatchInput }) => {
     
     useEffect(() => {
         if (horario) {
-            if (searchInput && horario.desde && horario.hasta) {
-                searchInput && setClassFilter(filterByTime(searchInput, horario));
+            if (classList && horario.desde && horario.hasta) {
+                classList && setClassFilter(filterByTime(classList, horario));
                 classProfessor && setClassProfessorFilter(filterByTime(classProfessor, horario));
                 classUser && setClassUserFilter(filterByTime(classUser, horario));
 
@@ -86,13 +88,13 @@ const ClassContainer: React.FC<Props> = ({ searchInput, dispatchInput }) => {
             }
         }
         else if (horario.desde === "" && horario.hasta === "") {
-            setClassFilter(searchInput)
+            setClassFilter(classList)
         }
     }, [horario])
 
     useEffect(() => {
-        if (searchInput && nivel && typeof nivel === 'string') {
-            searchInput && setClassFilter(filterByLevel(searchInput, nivel));
+        if (classList && nivel && typeof nivel === 'string') {
+            classList && setClassFilter(filterByLevel(classList, nivel));
             classProfessor && setClassProfessorFilter(filterByLevel(classProfessor, nivel));
             classUser && setClassUserFilter(filterByLevel(classUser, nivel));
 
@@ -100,21 +102,21 @@ const ClassContainer: React.FC<Props> = ({ searchInput, dispatchInput }) => {
         }
         else if (nivel === "") {
             setPuntuacion({ value: "", check: false })
-            setClassFilter(searchInput)
+            setClassFilter(classList)
         }
     }, [nivel])
 
 
     useEffect(() => {
-        if (searchInput && grado && typeof grado === 'string') {
-            searchInput && setClassFilter(filterByGrade(searchInput, grado));
+        if (classList && grado && typeof grado === 'string') {
+            classList && setClassFilter(filterByGrade(classList, grado));
             classProfessor && setClassProfessorFilter(filterByGrade(classProfessor, grado));
             classUser && setClassUserFilter(filterByGrade(classUser, grado));
 
             setNivel(""); setPuntuacion({ value: "", check: false }); setHorario({ desde: "", hasta: "" }); setCity({ ...city, show: false, });
         }
         else if (grado === "") {
-            setClassFilter(searchInput)
+            setClassFilter(classList)
         }
     }, [grado])
 
@@ -124,12 +126,12 @@ const ClassContainer: React.FC<Props> = ({ searchInput, dispatchInput }) => {
             let puntuacion = e.target.value
             if (e.target.checked === false) {
                 setPuntuacion({ value: "", check: false })
-                setClassFilter(searchInput)
+                setClassFilter(classList)
             }
             else {
                 setPuntuacion({ value: puntuacion, check: true })
 
-                searchInput && setClassFilter(filterByScore(e, searchInput));
+                classList && setClassFilter(filterByScore(e, classList));
                 classProfessor && setClassProfessorFilter(filterByScore(e, classProfessor));
                 classUser && setClassUserFilter(filterByScore(e, classUser));
 
@@ -152,7 +154,7 @@ const ClassContainer: React.FC<Props> = ({ searchInput, dispatchInput }) => {
     const handleCity = () => {
         if (user.mail && city.name) {
             if (city.show === false) {
-                searchInput && setClassFilter(filterByCity(searchInput, city));
+                classList && setClassFilter(filterByCity(classList, city));
                 classProfessor && setClassProfessorFilter(filterByCity(classProfessor, city));
                 classUser && setClassUserFilter(filterByCity(classUser, city));
 
@@ -161,7 +163,7 @@ const ClassContainer: React.FC<Props> = ({ searchInput, dispatchInput }) => {
             }
             else {
                 setCity({ ...city, show: false, })
-                setClassFilter(searchInput)
+                setClassFilter(classList)
             }
         }
     }
@@ -369,7 +371,7 @@ const ClassContainer: React.FC<Props> = ({ searchInput, dispatchInput }) => {
 
 const mapStateToProps = (state) => {
     return {
-        searchInput: state.searchInput,
+        classList: state.classList,
     }
 }
 
