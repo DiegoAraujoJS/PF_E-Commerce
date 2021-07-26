@@ -142,7 +142,13 @@ const StudentAddClass = () => {
 								'success'
 							)
 						}
-						
+						else {
+							Swal.fire(
+								'Error!',
+								'El mail no es de un profesor registrado!',
+								'error'
+							)
+						}						
 					}
 					catch (err) {
 						Swal.fire(

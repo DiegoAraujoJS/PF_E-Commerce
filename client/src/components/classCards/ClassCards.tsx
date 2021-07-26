@@ -73,7 +73,7 @@ function ClassCards({ clasesFiltradas, dispatchInput }) {
 
         setPage({
             ...page,
-            totalPages: (classFilter.length > 0) ? Math.ceil(classFilter.length / displayRecipes) : 0,
+            totalPages: classFilter.length,
             dataStartingIndex: 1,
             pageData: paginatedDataObject,
             clickedOnNumber: 1

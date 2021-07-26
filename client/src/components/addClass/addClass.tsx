@@ -130,22 +130,20 @@ const AddClass = () => {
 
 						console.log(response)
 
-						// if (response.status === 200) {
-						// 	Swal.fire(
-						// 		'Exito!',
-						// 		'Tu clase se creo correctamente!',
-						// 		'success'
-						// 	)
-						// }
-					
-
-					// catch (err) {
-					// 	Swal.fire(
-					// 		'Error!',
-					// 		'El mail no es de un profesor registrado!',
-					// 		'error'
-					// 	)
-					// }
+						if (response.status === 200) {
+							Swal.fire(
+								'Exito!',
+								'Tu clase se creo correctamente!',
+								'success'
+							)
+						}	
+						else{
+						Swal.fire(
+							'Error!',
+							'El mail no es de un profesor registrado!',
+							'error'
+						)
+					}
 				}}
 			>
 				{({ handleSubmit, handleChange, values, errors, handleBlur, touched }) => (

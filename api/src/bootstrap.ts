@@ -16,7 +16,7 @@ const bootstrap = async () => {
             name: `Diego`,
             lastName: 'Araujo',
             User_mail: "diegoaraujo@gmail.com",
-            role: Role.ADMIN ,
+            role: Role.PROFESSOR,
             
                 country: "Argentina",
                 state: "Buenos Aires",
@@ -44,7 +44,7 @@ const bootstrap = async () => {
             name: 'Edward',
             lastName: 'Burgos',
             User_mail: "edwardburgos@gmail.com",
-            role: Role.USER,
+            role: Role.PROFESSOR,
             
                 country: "Argentina",
                 state: "Buenos Aires",
@@ -58,7 +58,7 @@ const bootstrap = async () => {
             name: 'Javier',
             lastName: 'Carro',
             User_mail: "javiercarro@gmail.com",
-            role: Role.USER,
+            role: Role.PROFESSOR,
             
                 country: "Argentina",
                 state: "Buenos Aires",
@@ -182,16 +182,16 @@ const bootstrap = async () => {
             state: 'Buenos Aires'
         };
 
-        for (const prof of [
-            DiegoProfe,
-            BraianProfe,
-            EdwardProfe,
-            MauroProfe,
-            JaviProfe,
-            BenjaProfe,
-        ]) {
-            await Profesor.create(prof);
-        }
+        // for (const prof of [
+        //     DiegoProfe,
+        //     BraianProfe,
+        //     EdwardProfe,
+        //     MauroProfe,
+        //     JaviProfe,
+        //     BenjaProfe,
+        // ]) {
+        //     await Profesor.create(prof);
+        // }
 
         ////////////////////
         // Agregar Clases //
@@ -209,6 +209,7 @@ const bootstrap = async () => {
             puntuacion: 1,
             date: { year: 2021, month: 8, day: 7, time: ["15:00:00", "19:00:00"] },
             precio: "$2000",
+            
         });
 
         const Clase2 = await Clase.create({
@@ -253,7 +254,7 @@ const bootstrap = async () => {
 
         const Clase4 =await Clase.create({
             nombre: 'Historia',
-            Profesor_mail: "braiansilva@gmail.com",
+            Profesor_mail: "edwardburgos@gmail.com",
             User_mail: 'mauroleonel@gmail.com',
             descripcion: 'En esta clase te enseñaré todo lo que necesitas de Historia',
             materia: 'Historia',
@@ -309,17 +310,17 @@ const bootstrap = async () => {
         })
 
 
-        //////////////////////
-        // Agregar Reclamos //
-        //////////////////////
+        // //////////////////////
+        // // Agregar Reclamos //
+        // //////////////////////
         
 
-        /* Reclamo 1 */
+        // /* Reclamo 1 */
 
-        const Reclamo1 = await Reclamo.create({
-            nombre: "Solicito Reembolso",
-            reclamo: "El profesor no se presento a la clase",
-        });
+        // const Reclamo1 = await Reclamo.create({
+        //     nombre: "Solicito Reembolso",
+        //     reclamo: "El profesor no se presento a la clase",
+        // });
     } catch(err) {
         console.log(err)
     }

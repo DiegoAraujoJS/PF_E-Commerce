@@ -71,7 +71,9 @@ router.get('/', async (req: Request, res: Response) => {
             
             const intersection = clases.flat().filter(prof => obj[prof.Profesor_mail])
 
-            return res.send (intersection)
+            const newTransformedIntersection = await Promise.all(intersection.map(async (cl) => BuildClaseToIClase(cl)))
+
+            return res.send (newTransformedIntersection)
         }
         
         else if (clases.length > 0) {

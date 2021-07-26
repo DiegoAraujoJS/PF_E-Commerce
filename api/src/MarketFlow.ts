@@ -49,7 +49,7 @@ class MarketFlow {
                 await setNewCalendar(available)
             }
         })
-        .then(() => this.suscribe(publication.clase, publisher))
+        // .then(() => this.suscribe(publication.clase, publisher))
         .then((r) => {mail(publisher.User_mail, `Felicitaciones ${publisher.name}! Tu clase de ${publication.clase.materia} ya está publicada`,
         `Gracias por confiar en E Clases Online. Su clase online está muy cerca. Ahora tienes que esperar a que un ${publisherRole} quiera tomar tu clase`)})
         .catch(err => console.log(err))

@@ -1,11 +1,12 @@
 import { create } from 'domain';
 import { Request, Response, Router } from 'express'
-import { IUser, IProfesor } from '../../../interfaces';
+import { IUser, IProfesor, Role } from '../../../interfaces';
 import User from './../models/Usuario'
-import { Op } from 'sequelize'
+import { Op, where } from 'sequelize'
 import { isUser } from '../utils/isInterface';
 import { hashPassword } from '../utils/auth';
 import validateEmail from '../utils/validateEmail';
+import Profesor from '../models/Profesor';
 const router = Router()
 enum ErrorType { INCOMPLETE_INPUTS, ALREADY_EXISTS }
 // Validar email
@@ -94,9 +95,18 @@ router.post('/register', async (req: Request, res: Response) => {
         const findUser = await User.findByPk(req.body.User_mail)
         if (findUser) res.status(400).send({type: ErrorType.ALREADY_EXISTS, message:`Ya existe un alumno asociado a la cuenta ${req.body.User_mail} así que debería actualizarlo`});             
         const user = await User.create({...req.body, password: hashPassword(req.body.password)})
+        if (user.role === Role.PROFESSOR) {
+            const profesor = await Profesor.create({ User_mail: user.User_mail, ...user,
+            where: {
+                User_mail: user.User_mail
+            } 
+            })
+            
+    }
+
         return res.send(user)
-        
     } catch (error) {
+        console.log(error)
         return res.status(400).send(error)
     }
 })
