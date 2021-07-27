@@ -6,6 +6,8 @@ import { useHistory } from "react-router-dom";
 import SearchBarHome from '../searchBar/SearchBarHome';
 import students from '../../images/students.jpg';
 import axios from 'axios'
+import ControlledCarousel from './Carousel';
+
 // import { auth } from '../../firebase';
 // import { store } from '../../Store/store';
 const Home = ({ dispatchInput }) => {
@@ -66,7 +68,20 @@ const Home = ({ dispatchInput }) => {
                 <input style={searchBar} type='text' name='searchInput' value={searchInput} onChange={handleChange} required/>
                 <Button variant='primary' onClick={() => vaYBusca()}>Buscar</Button>
             </div>
+            
             <img src={students} alt='students' style={bgImg}/>
+            <div style={{
+                position: 'absolute',
+                bottom: '0px',
+                width: '100%',
+                height: '53%',
+                margin: '0 auto',
+                
+                
+            }}>
+                <ControlledCarousel/>
+            </div>
+
         </div>
     )
 }
