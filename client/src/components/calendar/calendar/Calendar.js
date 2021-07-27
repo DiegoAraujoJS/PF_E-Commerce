@@ -261,7 +261,7 @@ class Calendar extends Component {
               });
             }}
           />
-          {this.state.isUser? <Clasesregulares {...propsEmail}/>:null}
+          {/* {this.state.isUser? <Clasesregulares {...propsEmail}/>:null} */}
         </div>
         <div style={styles.main}>
           <DayPilotCalendar
