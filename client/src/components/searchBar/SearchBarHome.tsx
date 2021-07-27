@@ -274,7 +274,7 @@ export default function SearchBar() {
                 </NavDropdown>
               </div>
               :
-              <NavDropdown className={'ms-4 text-decoration-none'} title="Cuenta" id="basic-nav-dropdown">
+              <NavDropdown className={'ms-4 text-decoration-none'} title="Cuenta" style={{width:"300px"}} id="basic-nav-dropdown">
                 <Form className={'d-flex flex-column align-items-center justify-content-center'} style={dropBox} onSubmit={handleSubmit}>
                   <Form.Control style={inputSizeLim} className={'d-flex justify-content-center'} type="email" placeholder="Email" onChange={handleChange} />
                   <Form.Control className="mt-2" style={inputSizeLim} type={showPassword} placeholder="Contraseña" onChange={handleChange} />

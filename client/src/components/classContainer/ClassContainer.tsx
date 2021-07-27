@@ -11,7 +11,7 @@ import { faSearch } from '@fortawesome/free-solid-svg-icons';
 
 import { connect } from 'react-redux'
 import StudentClassCards from '../classCards/StudentClassCards'
-import { filterByCity, filterByGrade, filterByLevel, filterByScore, filterByTime } from './FiltersFunctions'
+import { filterByCity, filterByGrade, filterByLevel, filterByScore, filterByTime, intersection } from './FiltersFunctions'
 import { IClase } from '../../../../interfaces'
 
 
@@ -32,16 +32,36 @@ const ClassContainer: React.FC<Props> = ({ searchInput, dispatchInput }) => {
     const [city, setCity] = useState({ name: "", show: false })
     let [user, setUser] = useState<{ name: string, lastName: string, role: number, mail: string } | undefined>({ name: '', lastName: '', role: null, mail: '' })
 
-    const [classProfessor, setClassProfessor] = useState([])
+    const [classProfessor, setClassProfessor] = useState<IClase[]>([])
     const [classProfessorFilter, setClassProfessorFilter] = useState([])
-    const [classUser, setClassUser] = useState([])
+    const [classUser, setClassUser] = useState<IClase[]>([])
     const [classUserFilter, setClassUserFilter] = useState([])
-    
-    const [classList, setClassList] = useState([]) 
+
+    const [classList, setClassList] = useState([])
+
 
     useEffect(() => {
-        setClassProfessor(searchInput)        
+
+        const filterCesta = async () => {
+            if (user && user.mail && searchInput) {
+                let cesta = await axios.get(`http://localhost:3001/api/carrito/all/${user.mail}`)
+
+                if (cesta.status === 200 && cesta.data.length) {
+                    let result = intersection(searchInput, cesta.data)
+                    setClassProfessor(result)
+                }
+                else {
+                    setClassProfessor(searchInput)
+                }
+            }           
+            else {
+                setClassProfessor(searchInput)
+            }
+        }
+
+        filterCesta()
     }, [searchInput])
+
 
     useEffect(() => {
         async function setRoleOfUser() {
@@ -71,7 +91,7 @@ const ClassContainer: React.FC<Props> = ({ searchInput, dispatchInput }) => {
         }
         else if (e.target.name === "grado") { setGrado(e.target.value) }
     };
-    
+
     useEffect(() => {
         if (horario) {
             if (searchInput && horario.desde && horario.hasta) {
@@ -169,10 +189,30 @@ const ClassContainer: React.FC<Props> = ({ searchInput, dispatchInput }) => {
     const handleChangeSearch = (e) => {
         setSearch(e.target.value)
     };
+
     async function vaYBuscaUser() {
         const response: any = await axios.get(`http://localhost:3001/api/clases/student?busqueda=${search}`)
-        setClassUser(response.data)
+
+        if (response.status === 200) {
+            if (user && user.mail && response.data) {
+                let cesta = await axios.get(`http://localhost:3001/api/carrito/all/${user.mail}`)
+
+                if (cesta.status === 200 && cesta.data.length) {
+
+                    let result = intersection(response.data, cesta.data)
+
+                    setClassUser(result)
+                }
+                else {
+                    setClassUser(response.data)
+                }
+            }            
+            else {
+                setClassUser(response.data)
+            }
+        }
     }
+    
     const searchIcon = <FontAwesomeIcon icon={faSearch} className="ml-2 ml-2" />
 
 
@@ -324,9 +364,9 @@ const ClassContainer: React.FC<Props> = ({ searchInput, dispatchInput }) => {
                                     <span style={{ backgroundColor: "lightblue", color: "blue" }} className="badge badge-primary badge-pill">{puntuacion.value === "1" && classUserFilter.length}</span>
                                 </div>
                             </ListGroup.Item >
-                            <div className="d-flex justify-content-evenly mt-3" style={{ fontSize:"14px" }} >
-                            <span style={{ backgroundColor: "lightgreen", color: "green" }} className="badge badge-primary badge-pill">* Professor</span>
-                            <span style={{ backgroundColor: "lightblue", color: "blue" }} className="badge badge-primary badge-pill">* Student</span>
+                            <div className="d-flex justify-content-evenly mt-3" style={{ fontSize: "14px" }} >
+                                <span style={{ backgroundColor: "lightgreen", color: "green" }} className="badge badge-primary badge-pill">* Professor</span>
+                                <span style={{ backgroundColor: "lightblue", color: "blue" }} className="badge badge-primary badge-pill">* Student</span>
                             </div>
                         </Form>
                     </ListGroup>
@@ -342,8 +382,8 @@ const ClassContainer: React.FC<Props> = ({ searchInput, dispatchInput }) => {
                         <Tab eventKey="classProfessor" title="Busca clases">
                             <ClassCards clasesFiltradas={classProfessorFilter && (nivel || grado || puntuacion.value || (horario.desde && horario.hasta) || city.show) ? classProfessorFilter : classProfessor} />
                         </Tab>
-                        {user.role===1||user.role===2 ?  <Tab eventKey="classUser"
-                                title="Buscar solicitudes de clases">
+                        {user.role === 1 || user.role === 2 ? <Tab eventKey="classUser"
+                            title="Buscar solicitudes de clases">
 
                             <Row className="d-flex justify-content-center mb-3">
                                 <Col className="p-0" sm={5} md={5} >
@@ -354,7 +394,7 @@ const ClassContainer: React.FC<Props> = ({ searchInput, dispatchInput }) => {
                                 </Col>
                             </Row>
                             <div style={{ overflowX: 'hidden', height: '100vh', width: '90%' }}>
-                                <StudentClassCards clasesFiltradas={classUserFilter && (nivel || grado || puntuacion.value || (horario.desde && horario.hasta) || city.show) ? classUserFilter : classUser} />
+                                <StudentClassCards clasesFiltradas={classUserFilter && (nivel || grado || puntuacion.value || (horario.desde && horario.hasta) || city.show) ? classUserFilter : classUser } />
                             </div>
                         </Tab> : null}
                     </Tabs>
