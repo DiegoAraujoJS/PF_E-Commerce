@@ -25,7 +25,7 @@ import PoliticaPrivacidad from './components/politicaprivacidad/PoliticaPrivacid
 import AddStudentClass from './components/addClass/addStudentClass';
 import EditPerfilAlum from './components/editPerfilAlum/editPerfilAlum';
 import Puntuar from './components/puntuar/Puntuar.jsx';
-
+import AboutCards from './components/aboutCards/AboutCards';
 
 import Historial from './components/historial/Historial';
 enum Role {USER, PROFESSOR, ADMIN}
@@ -138,7 +138,7 @@ function App() {
       <Route exact path='/claim/add'><AddClaim /></Route>
       <Route exact path='/'><Home /></Route>
       <Route exact path='/clases'><ClassContainer /></Route>
-      
+      <Route path='/about' component={AboutCards}></Route>
       <Route path='/cesta' component={Cesta}></Route>
       <Route path='/historial' component={Historial}></Route>
       <Route path="/pagoexitoso" component={PagoExitoso}></Route>

@@ -131,7 +131,7 @@ router.patch('/', async (req: Request, res: Response) => {
     if (mail) {
         let usuario: any = await User.findOne({
             where: {
-                mail: mail.toString()
+                User_mail: mail.toString()
             },
         });
         if (usuario) {

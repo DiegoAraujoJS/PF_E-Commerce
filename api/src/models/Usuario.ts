@@ -46,6 +46,9 @@ export default class User extends Model implements IUser {
     @UpdatedAt
     @Column
     updatedAt!: Date;
+    
+    @Column  ({type: DataType.TEXT})
+    description!: string;
 
     @Column
     suspendido!: boolean;

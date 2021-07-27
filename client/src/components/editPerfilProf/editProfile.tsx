@@ -20,6 +20,13 @@ const EditProfile = () => {
         lastName:""
 
     });
+    const [countries, setCountries] = React.useState([])
+    const [states, setStates] = React.useState([])
+    const [cities, setCities] = React.useState([])
+    const [countryS, setCountryS] = useState<any>({})
+    const [stateS, setStateS] = useState<any>({})
+    const [cityS, setCityS] = useState<any>({})
+  
     const Changes = async (e) => {
         try {
             const token = getCookieValue('token').replaceAll("\"", '')
@@ -28,9 +35,9 @@ const EditProfile = () => {
                 foto: img,
                 usuario: thisUser.data.mail,
                 description: data.description,
-                city:data.ciudad,
+                city:countryS,
                 title:data.education,
-                state:data.estado
+                state:stateS
             })
             alert("Cambios Realizados")
         } catch (err) {
@@ -81,11 +88,38 @@ const EditProfile = () => {
     }
 };
 
+const handleChange = (e) => {
 
+}
     useEffect(() => {
         fetchProfs()
+        
+    const getCountries = async () => {
+        const response_1 = await axios.get('http://localhost:3001/api/allCountries/countries')
+  
+        if(response_1.status === 200){
+          setCountries(response_1.data.data)
+        }
+  
+      }
+      if (!countries.length) getCountries()
     }, []);
-
+    async function handleCountryChange(e) {
+        setCountryS(e.target.value)
+        const response_2 = await axios.post('http://localhost:3001/api/allCountries/states', {country: e.target.value})
+        if(response_2.status === 200){
+          setStates(response_2.data) 
+      }
+    }
+    async function handleStateChange(e) {
+        setStateS(e.target.value)
+        const response_3 = await axios.post('http://localhost:3001/api/allCountries/cities', {country: countryS, state: e.target.value})
+        console.log(response_3.data)
+        if(response_3.status === 200){
+          setCities(response_3.data)
+        
+      }
+    }
     useEffect(() => {
         setImg(prech.foto)
     }, [prech]);
@@ -113,8 +147,26 @@ const EditProfile = () => {
                             <div className="col-md-12"><label className="labels">Si tenes una educacion o especialidad ponela acá:</label><input type="text" className="form-control" placeholder="educacion" onChange={(e) => inputsHandler(e)} id="education" /></div>
                         </div>
                         <div className="row mt-3">
-                            <div className="col-md-6"><label className="labels">País</label><input type="text" className="form-control" placeholder="pais" id="ciudad" onChange={(e) => inputsHandler(e)}/></div>
-                            <div className="col-md-6"><label className="labels">Estado</label><input type="text" className="form-control" placeholder="estado" id="estado" onChange={(e) => inputsHandler(e)}/></div>
+                            <div className="col-md-6"><label className="labels">País</label> <select
+                      name="country"
+                      onChange={(e) => {handleChange(e) ; handleCountryChange(e)}}              
+                      className="form-control"
+                    >
+                     { countries.length && countries.map( c => {
+
+                      return <option value={c.name}>{c.name} {c.unicodeFlag}</option> 
+                    }
+                    )}
+
+                    </select></div>
+                            <div className="col-md-6"><label className="labels">Estado</label>  <select
+                      name="state"
+                      onChange={(e) => {handleStateChange(e)}}
+                      disabled={!countries.length}
+                      className="form-control"
+                    >
+                      { states.length && states.map( c => <option value={c.name} >{c.name}</option> ) }
+                    </select></div>
                         </div>
                         <div className="mt-5 text-center"><button className="btn btn-primary profile-button" type="button" onClick={(e) => Changes(e)}>Guardar Perfil</button></div>
                     </div>
