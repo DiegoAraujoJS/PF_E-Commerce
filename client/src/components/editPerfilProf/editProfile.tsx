@@ -14,8 +14,8 @@ const EditProfile = () => {
     usuario: "",
     ciudad: "",
     estado: "",
-    education: prech.title,
-    description: prech.description,
+    education: "",
+    description: "",
     name: "",
     lastName: "",
   });
@@ -23,6 +23,7 @@ const EditProfile = () => {
   const [states, setStates] = React.useState([]);
   const [countryS, setCountryS] = useState<any>({});
   const [stateS, setStateS] = useState<any>({});
+
   const Changes = async (e) => {
     try {
       const token = getCookieValue("token").replaceAll('"', "");
@@ -57,21 +58,7 @@ const EditProfile = () => {
     setData(newdata);
     console.log(newdata);
   };
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const imageHandler = (e) => {
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (reader.readyState === 2) {
-        setImg(reader.result);
-      }
-    };
-    reader.readAsDataURL(e.target.files[0]);
-    const newdata = { ...data };
-    newdata[e.target.id] = e.target.value;
-    setData(newdata);
-    console.log(newdata);
-  };
-
+  
   const Upload = async ({ file }) => {
     // Referencia al espacio en el bucket donde estará el archivo
     let storageRef = storage.ref().child("images/" + file.name);
@@ -89,8 +76,8 @@ const EditProfile = () => {
     const newdata = { ...data };
     newdata[e.target.id] = e.target.value;
     setData(newdata);
-    console.log(newdata);
   };
+
   const fetchProfs = async () => {
     try {
       const token = getCookieValue("token").replaceAll('"', "");
@@ -106,10 +93,12 @@ const EditProfile = () => {
         setPrech({
           ...response.data,
         });
+        setData({
+          ...response.data,
+        })
         console.log("prechargue", prech);
       }
       setImg(prech.foto);
-      // console.log("todo lo que hayt que agregar",prech)
     } catch (err) {
       console.log(err);
     }
@@ -129,6 +118,7 @@ const EditProfile = () => {
     if (!countries.length) getCountries();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
   async function handleCountryChange(e) {
     setCountryS(e.target.value);
     const response_2 = await axios.post(
@@ -139,6 +129,7 @@ const EditProfile = () => {
       setStates(response_2.data);
     }
   }
+
   async function handleStateChange(e) {
     setStateS(e.target.value);
     const response_3 = await axios.post(
@@ -147,6 +138,7 @@ const EditProfile = () => {
     );
     console.log(response_3.data);
   }
+
   useEffect(() => {
     setImg(prech.foto);
   }, [prech]);
@@ -185,7 +177,7 @@ const EditProfile = () => {
                   className="form-control"
                   onChange={(e) => inputsHandler(e)}
                   id="description"
-                  value={data.description}
+                  value={  data.description }
                 />
               </div>
               {/*  <div className="col-md-12"><label className="labels">Contacto Telefonico</label><input type="text" className="form-control" placeholder="numero de celular" /></div>
