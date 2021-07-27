@@ -18,6 +18,7 @@ const EditProfile = () => {
     description: prech.description,
     name: "",
     lastName: "",
+    title: "",
   });
   const [countries, setCountries] = React.useState([]);
   const [states, setStates] = React.useState([]);
@@ -103,7 +104,7 @@ const EditProfile = () => {
         `http://localhost:3001/api/profesores/${thisUser.data.mail}`
       );
       if (response.status === 200) {
-        setPrech({
+        setData({
           ...response.data,
         });
         console.log("prechargue", prech);
@@ -170,7 +171,7 @@ const EditProfile = () => {
                 className="form-control"
               />
               <div className="d-flex flex-column align-items-center text-center  p-3 py-5">
-                <img className={styles.imgEdit} src={img} alt="profile" />
+                <img className={styles.imgEdit} src={data.foto} alt="profile" />
                 <span className="font-weight-bold">Vista Previa</span>
                 <span className="text-black-50"></span>
                 <span> </span>
@@ -200,6 +201,7 @@ const EditProfile = () => {
                   placeholder="educacion"
                   onChange={(e) => inputsHandler(e)}
                   id="education"
+                  value={data.title}
                 />
               </div>
             </div>
