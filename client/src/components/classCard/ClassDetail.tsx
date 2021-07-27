@@ -1,5 +1,5 @@
 import { Modal, Card, Row, Col,  } from "react-bootstrap"
-import { Button } from "react-bootstrap"
+import { Button, Form} from "react-bootstrap"
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Swal from "sweetalert2"
 import axios from 'axios'
@@ -8,11 +8,16 @@ import { Link } from 'react-router-dom';
 import { faCalendarAlt, faClock, faEnvelope, faStar } from '@fortawesome/free-regular-svg-icons';
 import { IClase } from '../../../../interfaces';
 import CalendarApp from "../calendar/addClassCalendar/Calendar"
+import RangeSlider from 'react-bootstrap-range-slider';
+import { useState } from "react"
 const calendar = <FontAwesomeIcon icon={faCalendarAlt} className="mt-1" style={{ color: "#0067ff" }} />
 const clock = <FontAwesomeIcon icon={faClock} className="mt-1" style={{ color: "#0067ff" }} />
 
 export default function ClassDetail (props) {
+
     const {show, handleClose, email, mark, puntuacion } = props.hijo
+
+    const [price, setPrice] = useState(0)
 
     function redirect_blank(url) {
         var a = document.createElement('a');
@@ -70,7 +75,7 @@ return (
                            {props.profesor ? <CalendarApp email={props.profesor.User_mail}> {props.profesor.User_mail} </CalendarApp>:null}
                         </div>
                         <Card.Header className='d-flex justify-content-center '>
-                            <Card.Title >Pofesor:</Card.Title>
+                            <Card.Title >Profesor:</Card.Title>
                         </Card.Header>
                         <Card.Title className='d-flex flex-column align-items-center mt-3'>  {props.profesor && props.profesor.name + " "}{props.profesor && props.profesor.lastName}</Card.Title>
                         <Card.Body className='d-flex flex-column pt-0 align-items-center '>
@@ -84,10 +89,24 @@ return (
                                         Ir al perfil
                                     </Button></Link>
                             </Card.Text>
+                            <div style={{ width: '325px' }}>
+											<Form.Label className='text-uppercase'>MIN</Form.Label>
+											<RangeSlider
+												value={price}
+												onChange={changeEvent => setPrice(changeEvent.target.value)}
+												step={0.5}
+												max={50}
+												
+												
+											/>
+											<Form.Label className='text-uppercase'>MAX</Form.Label>
+											
+										</div>
                         </Card.Body>
                     </Card>
                 </Modal.Body>
                 <Card.Title className="d-flex justify-content-center"> Precio de la clase: &nbsp;<span className="text-success ml-3">{props.precio}</span> </Card.Title>
+                
                 <Modal.Footer className="justify-content-center">
 
                         <Button variant="primary" onClick={async () => {

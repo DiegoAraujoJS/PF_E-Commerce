@@ -42,13 +42,7 @@ class MarketFlow {
         const [publisher, publisherRole] = publication.clase.Profesor_mail ? [await User.findByPk(publication.clase.Profesor_mail), 'profesor'] : [await User.findByPk(publication.clase.User_mail), 'alumno']
 
         return Clase.create({...publication.clase, materia: publication.clase.materia.normalize("NFD").replace(/\p{Diacritic}/gu, ""), ciudad: publisher.city})
-        .then(async () => {
-            
-            const monthlyCalendar = weeklyToMonthlyCalendar(calendarPayload.week, calendarPayload.forHowLong, calendarPayload.sundayStartsOn, publisher.User_mail)
-            for (const available of monthlyCalendar) {
-                await setNewCalendar(available)
-            }
-        })
+        
         // .then(() => this.suscribe(publication.clase, publisher))
         .then((r) => {mail(publisher.User_mail, `Felicitaciones ${publisher.name}! Tu clase de ${publication.clase.materia} ya está publicada`,
         `Gracias por confiar en E Clases Online. Su clase online está muy cerca. Ahora tienes que esperar a que un ${publisherRole} quiera tomar tu clase`)})

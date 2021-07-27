@@ -43,7 +43,7 @@ const ClassContainer: React.FC<Props> = ({ searchInput, dispatchInput }) => {
     useEffect(() => {
 
         const filterCesta = async () => {
-            if (user && user.mail && searchInput) {
+            if (user && user.mail && Array.isArray(searchInput)) {
                 let cesta = await axios.get(`http://localhost:3001/api/carrito/all/${user.mail}`)
 
                 if (cesta.status === 200 && cesta.data.length) {
@@ -194,7 +194,7 @@ const ClassContainer: React.FC<Props> = ({ searchInput, dispatchInput }) => {
         const response: any = await axios.get(`http://localhost:3001/api/clases/student?busqueda=${search}`)
 
         if (response.status === 200) {
-            if (user && user.mail && response.data) {
+            if (user && user.mail && Array.isArray(searchInput)) {
                 let cesta = await axios.get(`http://localhost:3001/api/carrito/all/${user.mail}`)
 
                 if (cesta.status === 200 && cesta.data.length) {
