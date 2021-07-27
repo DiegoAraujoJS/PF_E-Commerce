@@ -112,6 +112,28 @@
   scroll-snap-align: start;
   scroll-behavior: smooth;
 }
+
+.agregaDisponibilidad {
+  background-color: #2962ff;
+  color: white;
+  font-weight: 500;
+  padding: 10px;
+  font-size: 1.1rem;
+  width: 100%;
+  border-radius: 1rem;
+  border: 1px solid transparent;
+}
+
+
+.agregaDisponibilidad:hover {
+box-shadow: 1px 1px 12px -1px rgb(0 0 0 / 24%);
+-webkit-box-shadow: 1px 1px 12px -1px rgb(0 0 0 / 24%);
+}
+
+.agregaDisponibilidad:disabled {
+  background-color: #99b2f5;
+}
+
 /* .profile {
   border-radius: 50%;
 }

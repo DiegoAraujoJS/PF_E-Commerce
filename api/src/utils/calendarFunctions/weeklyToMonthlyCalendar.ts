@@ -69,12 +69,4 @@ function weeklyToMonthlyCalendar(week: Week[], forHowLong: number, sundayStartsO
     return [...payload, ...howMany]
 }
 
-const week: Week[] = [{day: 'Lunes', disponible: [['12:00:00', '14:00:00']]}]
-const sundayStartsOn: {year: number, month: number, day: number} = {year: 2021, month: 7, day: 25}
-const forHowLong = 5
-const email = 'mauroleonel@gmail.com'
-
-console.log(weeklyToMonthlyCalendar(week, forHowLong, sundayStartsOn, email))
-
-
 export default weeklyToMonthlyCalendar

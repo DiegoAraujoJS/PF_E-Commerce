@@ -4,6 +4,8 @@ import { CalendarioResponse, Horario, Disponible, Ocupado } from '../../../inter
 import nuevosHorarios from '../utils/calendarFunctions/nuevosHorarios';
 import validateToken from '../utils/validateToken';
 import setNewCalendar from '../utils/calendarFunctions/setNewCalendar';
+import User from '../models/Usuario';
+import weeklyToMonthlyCalendar from '../utils/calendarFunctions/weeklyToMonthlyCalendar';
 const router = Router()
 
 interface MiddlewareRequest extends Request {
@@ -16,14 +18,115 @@ router.post('/add', validateToken, async (req: MiddlewareRequest, res: Response)
     if (req.data.role !== 2 && req.body.email != req.data.mail) {
         return res.status(400).send('You are not authorized.')
     }
+    let query_disponible_1
+    let query_disponible_2
+    if ( query.disponible) {
+        query_disponible_1 = query.disponible[0][0].substring(0, 2) + query.disponible[0][0].substring(3, 5) + query.disponible[0][0].substring(6, 8)
+        query_disponible_2 = query.disponible[0][1].substring(0, 2) + query.disponible[0][1].substring(3, 5) + query.disponible[0][1].substring(6, 8)
+
+        if(query.disponible && query_disponible_1 < "0" && query_disponible_1 > "240000"  || query_disponible_2 < "0" && query_disponible_2 > "240000" || query_disponible_2 < query_disponible_1) return res.send("El horario disponible es incorrecto")
+    }
+
+
     try {
-        const newCalendar = await setNewCalendar(query)
-        return res.send(newCalendar)
-    } catch(err) {
-        res.status(400).send(err)
+        if ( query.disponible && query.disponible[0][0].substring(0,2) < "00" || query.disponible[0][1].substring(0,2) > "24") return res.send("El horario disponible es incorrecto")
+        
+        let profesor = await Profesor.findOne({
+            where: {
+                User_mail: query.email
+            }
+           
+        })
+
+        if (profesor) {
+            
+            if (profesor.calendario) {
+                const indice = profesor.calendario.findIndex(element => element.fecha.anio === query.fecha.anio && element.fecha.mes === query.fecha.mes && element.fecha.dia === query.fecha.dia)
+
+                const calendario = profesor.calendario[indice]
+
+                if (calendario) {
+
+                    const resultado: Horario = nuevosHorarios(calendario, query)
+
+                    const nuevoCalendario = profesor.calendario.map((e, i) => i === indice ? resultado : e)
+
+                    profesor.set({
+                        ...profesor,
+                        calendario: nuevoCalendario
+                    })
+                    let calendarioEditado = await profesor.save()
+                    
+                    res.send(calendarioEditado)
+
+                }
+                else {
+                    
+                    profesor.set({
+                        ...profesor,
+                        calendario: [
+                            ...profesor.calendario,
+                            {
+                                email: query.email,
+                                fecha: query.fecha,
+                                disponible: query.disponible ? query.disponible : null,
+                                ocupado: null
+                            }
+                        ]
+                    })
+                    let calendarioEditado = await profesor.save()
+                    return res.send(calendarioEditado)
+                }
+            }
+            else {
+                
+                profesor.set({
+                    ...profesor,
+                    calendario: [
+                        {
+                            email: query.email,
+                            fecha: query.fecha,
+                            disponible: query.disponible ? query.disponible : null,
+                            ocupado: null,
+                        }
+                    ]
+                })
+                let calendarioEditado = await profesor.save()
+                return res.send(calendarioEditado)
+            }
+        }
+    }
+    catch (error) {
+        
+        return res.send(error)
     }
 });
 
+
+router.get('/:usuario', async (req: Request, res: Response) => {
+    const { usuario } = req.params
+
+    try {
+        if (usuario) {
+            const user = await User.findByPk(usuario)
+            const profesor = await Profesor.findOne({
+                where: {
+                    User_mail: usuario
+                }
+            })
+            if (profesor) {
+                if (profesor.calendario) {
+                    res.send(profesor.calendario)
+                }
+            } else if (!profesor && usuario){
+                return res.send(user.calendario)
+            }
+        }
+    }
+    catch (error) {
+        res.send(error)
+    }
+});
 
 router.get('/:usuario', async (req: Request, res: Response) => {
     const { usuario } = req.params
@@ -135,4 +238,21 @@ router.put('/delete', validateToken, async (req:MiddlewareRequest, res:Response)
         return res.status(400).send(err)
     }
 })
+
+router.post('/calendarAdd', async (req:Request, res:Response) => {
+    const publication = req.body
+    const calendarPayload = publication.agenda
+    const User_mail = req.body.User_mail
+    const monthlyCalendar = weeklyToMonthlyCalendar(calendarPayload.week, calendarPayload.forHowLong, calendarPayload.sundayStartsOn, User_mail)
+    try {
+
+        for (const available of monthlyCalendar) {
+            await setNewCalendar(available)
+        }
+        return res.send('success')
+    } catch(err) {
+        return res.status(400).send('fail')
+    }
+})
+
 export default router

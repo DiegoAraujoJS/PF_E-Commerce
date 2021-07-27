@@ -25,8 +25,7 @@ import PoliticaPrivacidad from './components/politicaprivacidad/PoliticaPrivacid
 import AddStudentClass from './components/addClass/addStudentClass';
 import EditPerfilAlum from './components/editPerfilAlum/editPerfilAlum';
 import Puntuar from './components/puntuar/Puntuar.jsx';
-
-
+import AddCalendar from './components/addClass/AddCalendar'
 import Historial from './components/historial/Historial';
 enum Role {USER, PROFESSOR, ADMIN}
 
@@ -146,6 +145,7 @@ function App() {
       <Route path="/condicionesdelservicio" component={CondicionesServicio}></Route>
       <Route path="/politicadeprivacidad" component={PoliticaPrivacidad}></Route>
       <Route exact path="/clases/estudianteAdd"> <AddStudentClass/></Route>
+      <Route exact path="/calendarAdd"><AddCalendar/></Route>
     </BrowserRouter>
 
   );
