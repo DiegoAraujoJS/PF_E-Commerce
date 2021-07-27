@@ -182,6 +182,7 @@ class Calendar extends Component {
   async componentDidMount() {
 
     // load event data
+    console.log("thisprop", this.props)
     
     const token = getCookieValue('token').replaceAll("\"", '')
     const thisUser = await axios.post(`http://localhost:3001/api/verify`, {},{ withCredentials: true, headers: {Authorization: token}})

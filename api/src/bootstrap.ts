@@ -95,13 +95,27 @@ const bootstrap = async () => {
         }
         const Benja = {...ben, password:"123456"}
 
+        const ped: IUser = {
+            name: 'Pedro',
+            lastName: 'Pérez',
+            User_mail: "pedro@gmail.com", 
+            role: Role.USER,
+                country: "Argentina",
+                state: "Buenos Aires",
+                city: "Ciudad Autónoma de Buenos aires",
+                foto: "https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=547&q=80",
+            
+        }
+        const Pedro = {...ped, password:"123456"}
+
         for (const user of [
             Edward,
             Braian,
             Diego,
             Javi,
             Mauro,
-            Benja
+            Benja,
+            Pedro
         ]) {
             await axios.post(`htttp://localhost:3001/api/usuarios/register`, user)
         }

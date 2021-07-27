@@ -7,7 +7,7 @@ import getCookieValue from '../../cookieParser'
 import { Link } from 'react-router-dom';
 import { faCalendarAlt, faClock, faEnvelope, faStar } from '@fortawesome/free-regular-svg-icons';
 import { IClase } from '../../../../interfaces';
-
+import CalendarApp from "../calendar/addClassCalendar/Calendar"
 const calendar = <FontAwesomeIcon icon={faCalendarAlt} className="mt-1" style={{ color: "#0067ff" }} />
 const clock = <FontAwesomeIcon icon={faClock} className="mt-1" style={{ color: "#0067ff" }} />
 
@@ -50,14 +50,25 @@ return (
                                 </Card.Text>
                                 <Card.Text className="d-flex "><strong>Tipo:&nbsp;</strong> {props && props.esPresencial}   </Card.Text>
                                 <Card.Text className="d-flex "><strong>Descripción:&nbsp;</strong> {props.descripcion}</Card.Text>
-                                <Card.Text className="d-flex ">{calendar}&nbsp;<strong>Fecha:&nbsp;</strong> {props.date?.day + "/"}{props.date?.month + "/2021"} </Card.Text>
+
+
+                                {/* <Card.Text className="d-flex ">{calendar}&nbsp;<strong>Fecha:&nbsp;</strong> {props.date?.day + "/"}{props.date?.month + "/2021"} </Card.Text>
                                 <Card.Text className="d-flex  mb-3">{clock}&nbsp;<strong>Horario de inicio:&nbsp;</strong> {props.date?.time[0].substring(0, 5)} {(props.date?.time[0].substring(0, 2) > "12") ? "P.M" : "A.M"}</Card.Text>
-                                <Card.Text className="d-flex  mb-3">{clock}&nbsp;<strong>Horario de finalización:&nbsp;</strong> {props.date?.time[1].substring(0, 5)} {(props.date?.time[1].substring(0, 2) > "12") ? "P.M" : "A.M"}</Card.Text>
+                                <Card.Text className="d-flex  mb-3">{clock}&nbsp;<strong>Horario de finalización:&nbsp;</strong> {props.date?.time[1].substring(0, 5)} {(props.date?.time[1].substring(0, 2) > "12") ? "P.M" : "A.M"}</Card.Text> */}
                             </Col>
                         </Row>
                     </Card>
                     <hr className="m-0"></hr>
                     <Card border="light">
+                    <Card.Header className='d-flex justify-content-center '>
+                        {/* AQUÍ SE MONTARÁ EL CALENDARIO */}
+                            <Card.Title >Horario:</Card.Title>
+
+                        </Card.Header>
+                        <div style={{height:'400px'}}>
+
+                           {props.profesor ? <CalendarApp email={props.profesor.User_mail}> {props.profesor.User_mail} </CalendarApp>:null}
+                        </div>
                         <Card.Header className='d-flex justify-content-center '>
                             <Card.Title >Pofesor:</Card.Title>
                         </Card.Header>

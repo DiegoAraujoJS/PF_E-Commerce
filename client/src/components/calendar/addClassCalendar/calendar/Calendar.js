@@ -11,45 +11,9 @@ import "./CalendarStyles.css";
 import axios from "axios";
 import { connect } from "react-redux";
 
-let RoleAdmin = 2
-
 const today = new Date();
 const date = (fecha, formato) => {};
-const profesorEjemplo = [
-  {
-    start: "2021-07-07T10:30:00",
-    end: "2021-07-07T13:00:00",
-    text: "Nose",
-    id: 1,
-  },
-  {
-    start: "2021-07-08T10:30:00",
-    end: "2021-07-08T13:00:00",
-    text: "Miercoles",
-    id: 2,
-  },
-  {
-    start: "2021-07-09T10:30:00",
-    end: "2021-07-09T13:00:00",
-    text: "Martes",
-    id: 3,
-  },
-];
 
-const styles = {
-  wrap: {
-    display: "flex",
-    border: '1px solid blue'
-  },
-  left: {
-    marginRight: "10px",
-  },
-  main: {
-    flexGrow: "1",
-    width: '400px'
-  },
-};
-const Lunes=[]
 
 class Calendar extends Component {
   constructor(props) {
@@ -244,10 +208,31 @@ class Calendar extends Component {
     }
     console.log(this.state.isUser)
     if(email===undefined && localStorage.getItem('user')!==null)email=JSON.parse(localStorage.getItem('user')).mail
-    
+    console.log("Email", email)
     var tempo = [];
-    const arrayProf = this.props.calendar_to_addClassStudent ? {data: this.props.calendar_to_addClassStudent} : {data:[]}
+    const log = await axios.get(`http://localhost:3001/api/calendario/${email}`)
+
+
+    // if (this.props.calendar_to_addClassStudent !== {}) if (this.props.calendar_to_addClassStudent.length) console.log ('las dos props son', [...this.props.calendar_to_addClassStudent, ...log.data])
+    let calendarArray = this.props.calendar_to_addClassStudent
+    if (calendarArray === undefined || calendarArray === null) calendarArray = {}
+
+
+    let arrayProf = Object.keys(calendarArray).length ? {data: [...calendarArray, ...log.data]} : {data: log.data}
+
+  //   if (this.props.calendar_to_addClassStudent !== Object.keys(this.props.cal)){ if (this.props.calendar_to_addClassStudent.length){
+  //      arrayProf = {data:[...this.props.calendar_to_addClassStudent, ...log.data]}
+  //   } else {
+  //     arrayProf = {data: log.data}
+  //   }
+  // } else {
+  //   arrayProf = {data: log.data}
+  // }
+
+
     console.log("ArrayProf", arrayProf)
+
+
     if(arrayProf.data.length>0){arrayProf.data.map((prof) => {
       let año = prof.fecha.anio.toString();
       let mes = prof.fecha.mes.toString();

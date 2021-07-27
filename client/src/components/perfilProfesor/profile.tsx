@@ -6,10 +6,10 @@ import { IProfesor} from '../../../../interfaces';
 import getCookieValue from '../../cookieParser';
 import ChatRoom from '../Chat/ChatRoom';
 import icon_edit from '../../images/editar.png'
-import { useHistory } from "react-router-dom";
+import { useHistory, Link} from "react-router-dom";
 import star from '../../images/star.png'
 import PerfilAlumno from '../perfilAlumno/perfilAlumno';
-import { Rating, RatingView } from 'react-simple-star-rating'
+import { Rating, RatingView } from 'react-simple-star-rating';
 
 const Role = {
     USER: 0,
@@ -71,6 +71,7 @@ function Profile(email,{user}) {
 <section className={style.sectionTwo}>
     <h4 className={style.h4Prof}>Aca podrás ver sus horarios disponibles:</h4>
     <br />
+    <Link to="/calendarAdd"><button className={style.agregaDisponibilidad}>Agrega un nueva disponibilidad horaria</button></Link>
     <div className={style.calendarContainer}>
         <Calendar {...propEmail} />
     </div>
