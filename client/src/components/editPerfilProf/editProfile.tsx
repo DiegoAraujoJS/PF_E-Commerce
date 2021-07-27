@@ -97,7 +97,6 @@ const EditProfile = () => {
              ...response.data
                 })
                 setImg(prech.foto)
-        // console.log("todo lo que hayt que agregar",prech)
 
         }catch(err){
             console.log(err);

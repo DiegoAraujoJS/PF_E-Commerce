@@ -40,10 +40,12 @@ const styles = {
     display: "flex",
   },
   left: {
-    marginRight: "10px",
+    marginRight: "20px",
+    marginLeft: "20px",
   },
   main: {
     flexGrow: "1",
+    marginRight: "20px",
   },
 };
 

@@ -64,7 +64,7 @@
 
 .container {
   scroll-snap-type: y mandatory;
-  overflow-y: scroll;
+  overflow-y: visible;
   height: 100vh;
   scroll-behavior: smooth;
   font-family: "Poppins", sans-serif;

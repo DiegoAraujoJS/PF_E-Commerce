@@ -64,7 +64,7 @@
 
 .container {
   scroll-snap-type: y mandatory;
-  overflow-y: scroll;
+  overflow-y: visible;
   height: 100vh;
   scroll-behavior: smooth;
   font-family: "Poppins", sans-serif;
@@ -96,7 +96,7 @@
   scroll-behavior: smooth;
 }
 .sectionTwo {
-  background-color: #c0c0c0;
+  background-color: #c8c8c8;
   height: 100vh;
   justify-content: center;
   scroll-snap-align: start;
