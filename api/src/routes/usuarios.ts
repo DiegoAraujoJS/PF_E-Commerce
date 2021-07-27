@@ -128,24 +128,29 @@ router.patch('/', async (req: Request, res: Response) => {
     const { ciudad, foto, description } = req.body;
     const mail = req.body.usuario;
     console.log("ACA ESTA EL BODYT XDDDDD",req.body)
-    if (mail) {
-        let usuario: any = await User.findOne({
-            where: {
-                mail: mail.toString()
-            },
-        });
-        if (usuario) {
-                await usuario.update({city:ciudad, foto:foto, description:description},{
-                    where:{
-                        User_mail:mail
-                    }
-                })
-  
-        } else {
-            return res.send(`No existe una cuenta con el correo ${mail}`)
+    try {
+        if (mail) {
+            let usuario: any = await User.findOne({
+                where: {
+                    User_mail: mail.toString()
+                },
+            });
+            if (usuario) {
+                    await usuario.update({city:ciudad, foto:foto, description:description},{
+                        where:{
+                            User_mail: mail.toString()
+                        }
+                    })
+      
+            } else {
+                return res.send(`No existe una cuenta con el correo ${mail}`)
+            }
         }
+        return res.send('Indique un correo');
+    } catch (error) {
+        res.status(400).send(error);
     }
-    return res.send('Indique un correo');
+    
 })
 // Eliminar alumno por mail    
 router.delete('/:mail', async (req: Request, res: Response) => {

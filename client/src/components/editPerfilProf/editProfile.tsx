@@ -5,7 +5,6 @@ import axios from 'axios';
 import getCookieValue from '../../cookieParser';
 import { useHistory } from "react-router-dom";
 import { storage } from '../../firebase';
-// import 'firebase/storage';
 
 const EditProfile = () => {
 
@@ -27,6 +26,7 @@ const EditProfile = () => {
         try {
             const token = getCookieValue('token').replaceAll("\"", '')
             const thisUser = await axios.post(`http://localhost:3001/api/verify`, {},{ withCredentials: true, headers: {Authorization: token}})
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             let editar = await axios.patch("http://localhost:3001/api/profesores/", {
                 foto: img,
                 usuario: thisUser.data.mail,
@@ -52,6 +52,7 @@ const EditProfile = () => {
         console.log(newdata)
 
     }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const imageHandler = (e) => {
         const reader = new FileReader();
         reader.onload = () => {
@@ -98,14 +99,15 @@ const EditProfile = () => {
                 setImg(prech.foto)
         // console.log("todo lo que hayt que agregar",prech)
 
-    }catch(err){
-        console.log(err);
-    }
-};
+        }catch(err){
+            console.log(err);
+        }
+    };
 
 
     useEffect(() => {
         fetchProfs()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     useEffect(() => {
@@ -127,7 +129,7 @@ const EditProfile = () => {
                             <span className={styles.span_imagen}>Selecciona una imagen para tu perfil</span>
                             <input type='file' onChange={(e) => imageFirebaseHandler(e)} id='foto' />
                             <div className="d-flex flex-column align-items-center text-center  p-3 py-5">
-                                <img className={styles.imgEdit} src={img} />
+                                <img className={styles.imgEdit} src={img} alt='profile' />
                                 <span className="font-weight-bold">Vista Previa</span>
                                 <span className="text-black-50"></span>
                                 <span> </span>
