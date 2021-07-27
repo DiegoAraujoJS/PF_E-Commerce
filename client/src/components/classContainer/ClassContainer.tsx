@@ -40,14 +40,12 @@ const ClassContainer: React.FC<Props> = ({ searchInput, dispatchInput }) => {
     const [classList, setClassList] = useState([])
 
 
-
     useEffect(() => {
 
         const filterCesta = async () => {
-            if (user && user.mail && Array.isArray(searchInput)) {
+            if (user && user.mail && searchInput) {
                 let cesta = await axios.get(`http://localhost:3001/api/carrito/all/${user.mail}`)
-                console.log(searchInput)
-                console.log( cesta.data)
+
                 if (cesta.status === 200 && cesta.data.length) {
                     let result = intersection(searchInput, cesta.data)
                     setClassProfessor(result)
@@ -55,8 +53,12 @@ const ClassContainer: React.FC<Props> = ({ searchInput, dispatchInput }) => {
                 else {
                     setClassProfessor(searchInput)
                 }
+            }           
+            else {
+                setClassProfessor(searchInput)
             }
         }
+
         filterCesta()
     }, [searchInput])
 
@@ -190,27 +192,30 @@ const ClassContainer: React.FC<Props> = ({ searchInput, dispatchInput }) => {
 
     async function vaYBuscaUser() {
         const response: any = await axios.get(`http://localhost:3001/api/clases/student?busqueda=${search}`)
+
         if (response.status === 200) {
-            if (user && user.mail && Array.isArray(searchInput)) {
+            if (user && user.mail && response.data) {
                 let cesta = await axios.get(`http://localhost:3001/api/carrito/all/${user.mail}`)
 
                 if (cesta.status === 200 && cesta.data.length) {
-                    console.log(response.data)
-                    console.log( cesta.data)
+
                     let result = intersection(response.data, cesta.data)
-                    console.log(result)
+
                     setClassUser(result)
                 }
                 else {
                     setClassUser(response.data)
                 }
+            }            
+            else {
+                setClassUser(response.data)
             }
         }
     }
     
     const searchIcon = <FontAwesomeIcon icon={faSearch} className="ml-2 ml-2" />
 
- 
+
     return (
         <div className="container-fluid pt-5" style={{ backgroundColor: '#ededed', height: "100%" }}>
             <Row>
@@ -389,7 +394,7 @@ const ClassContainer: React.FC<Props> = ({ searchInput, dispatchInput }) => {
                                 </Col>
                             </Row>
                             <div style={{ overflowX: 'hidden', height: '100vh', width: '90%' }}>
-                                <StudentClassCards clasesFiltradas={classUserFilter && (nivel || grado || puntuacion.value || (horario.desde && horario.hasta) || city.show) ? classUserFilter : classUser} />
+                                <StudentClassCards clasesFiltradas={classUserFilter && (nivel || grado || puntuacion.value || (horario.desde && horario.hasta) || city.show) ? classUserFilter : classUser } />
                             </div>
                         </Tab> : null}
                     </Tabs>
