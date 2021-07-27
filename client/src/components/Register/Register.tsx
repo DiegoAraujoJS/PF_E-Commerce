@@ -112,7 +112,7 @@ const Register: React.FC<Props> = ({ show, handleClose }) => {
     if (response_2.status === 200) {
       setStates([ {
         "name": "Selecciona un estado / provincia",
-        "unicodeFlag": ""
+        "state_code": ""
     }, ...response_2.data])
     }
   }
@@ -122,10 +122,7 @@ const Register: React.FC<Props> = ({ show, handleClose }) => {
     const response_3 = await axios.post('http://localhost:3001/api/allCountries/cities', { country: chosenCountry, state: e.target.value })
     console.log(response_3.data)
     if (response_3.status === 200) { 
-        setCities([ {
-          "name": "Selecciona una ciudad",
-          "unicodeFlag": ""
-      }, ...response_3.data])
+        setCities([ "Selecciona una ciudad", ...response_3.data])
 
     }
   }
@@ -252,20 +249,24 @@ const Register: React.FC<Props> = ({ show, handleClose }) => {
 
                   </select>
                 </Col>
+{ Object.keys(chosenCountry).length ?
+  <Col md={12} className="form-group mt-2">
+  <label >Estado/Provincia</label>
+  <select
+    name="state"
+    onChange={(e) => { handleChange(e); handleStateChange(e) }}
+    disabled={!countries.length}
+    className="form-control"
+  >
+    {states.length && states.map(c => <option value={c.name} >{c.name}</option>)}
+  </select>
+</Col>
+: null
 
-                <Col md={12} className="form-group mt-2">
-                  <label >Estado/Provincia</label>
-                  <select
-                    name="state"
-                    onChange={(e) => { handleChange(e); handleStateChange(e) }}
-                    disabled={!countries.length}
-                    className="form-control"
-                  >
-                    {states.length && states.map(c => <option value={c.name} >{c.name}</option>)}
-                  </select>
-                </Col>
+}
+                
                {
-                 cities.length ? 
+                 cities.length > 1 ? 
                  <Col md={12} className="form-group mt-2">
                   <label >Ciudad</label>
                   <select

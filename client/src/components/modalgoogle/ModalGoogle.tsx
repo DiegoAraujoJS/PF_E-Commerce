@@ -67,7 +67,11 @@ const ModalGoogle: React.FC<Props> = ({ show, handleClose }) => {
       const response_1 = await axios.get('http://localhost:3001/api/allCountries/countries')
 
       if(response_1.status === 200){
-        setCountries(response_1.data.data)
+        setCountries([ {
+          "name": "Selecciona un país",
+          "unicodeFlag": ""
+      }
+      , ...response_1.data.data])
       }
 
     }
@@ -144,7 +148,10 @@ const ModalGoogle: React.FC<Props> = ({ show, handleClose }) => {
     setChosenCountry(e.target.value)
     const response_2 = await axios.post('http://localhost:3001/api/allCountries/states', {country: e.target.value})
     if(response_2.status === 200){
-      setStates(response_2.data) 
+      setStates([ {
+        "name": "Selecciona un estado / provincia",
+        "state_code": ""
+    }, ...response_2.data])
   }
 }
 
@@ -153,7 +160,7 @@ async function handleStateChange(e) {
     const response_3 = await axios.post('http://localhost:3001/api/allCountries/cities', {country: chosenCountry, state: e.target.value})
     console.log(response_3.data)
     if(response_3.status === 200){
-      setCities(response_3.data)
+      setCities([ "Selecciona una ciudad", ...response_3.data])
     
   }
 }
@@ -196,8 +203,9 @@ async function handleStateChange(e) {
 
                   </select>
                 </Col>
+                { Object.keys(chosenCountry).length ?
 
-                <Col md={12} className="form-group mt-2">
+<Col md={12} className="form-group mt-2">
                   <label >Estado/Provincia</label>
                   <select
                     name="state"
@@ -207,7 +215,11 @@ async function handleStateChange(e) {
                   >
                     {states.length && states.map(c => <option value={c.name} >{c.name}</option>)}
                   </select>
-                </Col>
+                </Col> 
+                : null
+}
+{
+                 cities.length > 1 ?
 
                 <Col md={12} className="form-group mt-2">
                   <label >Ciudad</label>
@@ -222,6 +234,7 @@ async function handleStateChange(e) {
                   </select>
                </Col>
 
+: null}
                  {/* <Col md={12} className="form-group mt-2">
                   <label htmlFor="inputCity">Ciudad</label>
                   <input
