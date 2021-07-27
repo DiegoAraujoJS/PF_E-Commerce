@@ -56,7 +56,7 @@ function Profile(email,{user}) {
         <img src={prof.foto} alt="..." width="130" height="130" className={style.profile} />
         <div className="media-body mb-5">
             <h4 className="mt-0 mb-0">{prof.name} {prof.lastName} </h4>
-            <p className="small mb-4"> <i className="fas fa-map-marker-alt mr-2"></i>{prof.city}</p>
+            <p className="small mb-4"> <i className="fas fa-map-marker-alt mr-2"></i>{prof.state}, {prof.country}</p>
         </div>
         <h1>{prof.title}</h1>
         <p className={style.description}>{prof.description}</p>
@@ -99,7 +99,6 @@ function Profile(email,{user}) {
                 await setuserProfile({
                     ...response.data
                 })
-                console.log("LO QUE NECESITOO",userProfile)
             }
         } catch (err) {
             console.log(err)
@@ -147,8 +146,7 @@ function Profile(email,{user}) {
         fetchProfs()
         getUserLoged()
         fetchUser()
-        console.log("PROF.TITLE",prof.title)
- 
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     
