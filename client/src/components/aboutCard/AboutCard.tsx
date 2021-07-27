@@ -8,7 +8,7 @@ const AboutCard = () => {
             <img src={MauroFoto} alt =""/>
         <div className="card-body">
             <h4 className="card-title"> my title</h4>
-            <p className="card-text"> SADSADSADASDSA</p>
+            <p className="card-text text-seconday"> SADSADSADASDSA</p>
         </div>
         </div>
     )

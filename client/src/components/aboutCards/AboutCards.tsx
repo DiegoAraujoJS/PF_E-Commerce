@@ -7,13 +7,13 @@ const AboutCards = () => {
         <div className={styles.backgroud}>
         <div className="container justify-content-center aling-items-center h-100">
             <div className="row">
-                <div className="col-md-4">
+                <div className="col-md-2">
             <AboutCard/>
             </div>
-            <div className="col-md-4">
+            <div className="col-md-2">
             <AboutCard/>
             </div>
-            <div className="col-md-4">
+            <div className="col-md-2">
             <AboutCard/>
             </div>
             </div>
