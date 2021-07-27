@@ -6,8 +6,9 @@ import { IUser } from '../../../../interfaces'
 import { Formik } from 'formik';
 import { validationSchemaRegister } from '../../utils/validations';
 import imageParser from '../../utils/imageParser';
-import { Button, Modal, Row, Col } from 'react-bootstrap';
+import { Button, Modal, Row, Col, Form } from 'react-bootstrap';
 import Swal from 'sweetalert2';
+import getCookieValue from '../../cookieParser';
 
 enum ErrorType { INCOMPLETE_INPUTS, ALREADY_EXISTS }
 enum Role { USER, PROFESSOR, ADMIN }
@@ -16,8 +17,8 @@ type Props = {
   handleClose: (e: any) => any,
   show: boolean,
 }
-const paises = [{name: 'Argentina', unicodeFlag: '🇧🇩'}]
-const estados = [{name: 'Provincia de Buenos Aires'}]
+const paises = [{ name: 'Argentina', unicodeFlag: '🇧🇩' }]
+const estados = [{ name: 'Provincia de Buenos Aires' }]
 const ciudades = ['campana']
 
 const Register: React.FC<Props> = ({ show, handleClose }) => {
@@ -64,6 +65,19 @@ const Register: React.FC<Props> = ({ show, handleClose }) => {
           'Se registro correctamente!',
           'success'
         )
+        try {
+          const login = await axios.post(`http://localhost:3001/api/login`, {
+            mail: userWithPassword.User_mail,
+            password: userWithPassword.password
+          }, { withCredentials: true })
+          document.cookie = `token=${JSON.stringify(login.data.token)}`
+          localStorage.setItem('login', 'true')
+          const user = await axios.post(`http://localhost:3001/api/verify`, {}, { headers: { Authorization: getCookieValue('token').replaceAll("\"", '') } })
+          history.push('/')
+          window.location.reload();
+        } catch (error) {
+          console.log('LISTO')
+        }
       }
     }
     catch (error) {
@@ -74,17 +88,18 @@ const Register: React.FC<Props> = ({ show, handleClose }) => {
       }
     }
   }
-  async function googleSubmit() {
-
-  }
 
   useEffect(() => {
 
     const getCountries = async () => {
       const response_1 = await axios.get('http://localhost:3001/api/allCountries/countries')
 
-      if(response_1.status === 200){
-        setCountries(response_1.data.data)
+      if (response_1.status === 200) {
+        setCountries([ {
+          "name": "Selecciona un país",
+          "unicodeFlag": ""
+      }
+      , ...response_1.data.data])
       }
 
     }
@@ -92,20 +107,23 @@ const Register: React.FC<Props> = ({ show, handleClose }) => {
   }, [])
 
   async function handleCountryChange(e) {
-      setChosenCountry(e.target.value)
-      const response_2 = await axios.post('http://localhost:3001/api/allCountries/states', {country: e.target.value})
-      if(response_2.status === 200){
-        setStates(response_2.data) 
+    setChosenCountry(e.target.value)
+    const response_2 = await axios.post('http://localhost:3001/api/allCountries/states', { country: e.target.value })
+    if (response_2.status === 200) {
+      setStates([ {
+        "name": "Selecciona un estado / provincia",
+        "state_code": ""
+    }, ...response_2.data])
     }
   }
 
   async function handleStateChange(e) {
-      console.log('country', chosenCountry)
-      const response_3 = await axios.post('http://localhost:3001/api/allCountries/cities', {country: chosenCountry, state: e.target.value})
-      console.log(response_3.data)
-      if(response_3.status === 200){
-        setCities(response_3.data)
-      
+    console.log('country', chosenCountry)
+    const response_3 = await axios.post('http://localhost:3001/api/allCountries/cities', { country: chosenCountry, state: e.target.value })
+    console.log(response_3.data)
+    if (response_3.status === 200) { 
+        setCities([ "Selecciona una ciudad", ...response_3.data])
+
     }
   }
 
@@ -134,7 +152,7 @@ const Register: React.FC<Props> = ({ show, handleClose }) => {
             }}
             onSubmit={(values) => {
               console.log(values)
-              if (values.password === values.confirmar){
+              if (values.password === values.confirmar) {
                 handleSubmitRegister(values)
               } else {
                 setWrongPassword(true)
@@ -142,7 +160,7 @@ const Register: React.FC<Props> = ({ show, handleClose }) => {
 
             }}
           >
-            {({ handleSubmit, handleChange ,values, errors, touched, handleBlur }) => (
+            {({ handleSubmit, handleChange, values, errors, touched, handleBlur }) => (
               <form onSubmit={handleSubmit} className="mt-6 mb-4">
                 <div className="form-row " >
                   <Col md={12} className="form-group mt-6" >
@@ -213,91 +231,105 @@ const Register: React.FC<Props> = ({ show, handleClose }) => {
                   {errors.lastName && touched.lastName && <div className='invalid-feedback'>{errors.lastName}</div>}
                 </Col>
                 <Col md={12} className="form-group mt-2">
-                {/* {
+                  {/* {
             "name": "Bangladesh",
             "
         } */}
-                    <label >Pais</label>
-                    <select
-                      name="country"
-                      onChange={(e) => {handleChange(e) ; handleCountryChange(e)}}              
-                      className="form-control"
-                    >
-                     { countries.length && countries.map( c => {
+                  <label >País</label>
+                  <select
+                    name="country"
+                    onChange={(e) => { handleChange(e); handleCountryChange(e) }}
+                    className="form-control"
+                  >
+                    {countries.length && countries.map(c => {
 
-                      return <option value={c.name}>{c.name} {c.unicodeFlag}</option> 
+                      return <option value={c.name}>{c.name} {c.unicodeFlag}</option>
                     }
                     )}
 
-                    </select>
-                  </Col>
+                  </select>
+                </Col>
+{ Object.keys(chosenCountry).length ?
+  <Col md={12} className="form-group mt-2">
+  <label >Estado/Provincia</label>
+  <select
+    name="state"
+    onChange={(e) => { handleChange(e); handleStateChange(e) }}
+    disabled={!countries.length}
+    className="form-control"
+  >
+    {states.length && states.map(c => <option value={c.name} >{c.name}</option>)}
+  </select>
+</Col>
+: null
 
-                  <Col md={12} className="form-group mt-2">
-                    <label >Estado/Provincia</label>
-                    <select
-                      name="state"
-                      onChange={(e) => {handleChange(e) ; handleStateChange(e)}}
-                      disabled={!countries.length}
-                      className="form-control"
-                    >
-                      { states.length && states.map( c => <option value={c.name} >{c.name}</option> ) }
-                    </select>
-                  </Col>
-                  
-                  <Col md={12} className="form-group mt-2">
-                    <label >Ciudad</label>
-                    <select
-                      onChange={handleChange}
-                      name="city"  
-                      disabled={!states.length}
-                      className="form-control"
-                      value={values.city}
-                    >
-                      { cities.length && cities.map( c => <option value={c}>{c}</option> ) }
-                    </select>
-                  </Col>
+}
+                
+               {
+                 cities.length > 1 ? 
+                 <Col md={12} className="form-group mt-2">
+                  <label >Ciudad</label>
+                  <select
+                    onChange={handleChange}
+                    name="city"
+                    disabled={!states.length}
+                    className="form-control"
+                    value={values.city}
+                  >
+                    {cities.length && cities.map(c => <option value={c}>{c}</option>)}
+                  </select>
+                </Col>
+                 :
+                 null
+               }
+                
 
-                <div className="form-row mt-2"> 
-                  <Row className=" mt-2" >
-                    <label className="form-check-label" htmlFor="gridCheck">Rol</label><br></br>
-                    <Col md={5} className="d-flex justify-content-evenly align-items-center p-0">
-                      <label className="form-check-label mr-2" htmlFor="gridCheck">User</label><br></br>
-                      <input
+                <Col md={12} className="form-group mt-2">
+                  <Form.Group as={Row} className="mb-3 mt-2">
+                    <Form.Label as="legend" column sm={2}>
+                      Rol
+                    </Form.Label>
+                    <Col sm={10}>
+                      <Form.Check
+                        type="radio"
+                        label="Usuario"
                         name="role"
-                        type="radio" id="gridCheck"
-                        // onChange={() => setRole(Role.PROFESSOR)} 
                         onChange={handleChange}
                         value={Role.USER}
                         defaultChecked
                       />
-                      <label className="form-check-label mr-3" htmlFor="gridCheck">Profesor</label><br></br>
-                      <input type="radio"
+                      <Form.Check
+                        type="radio"
+                        label="Profesor"
                         name="role"
                         value={Role.PROFESSOR}
                         onChange={handleChange}
-                      ></input>
+                      />
+                    </Col>
+                  </Form.Group>
+                </Col>
+
+
+                <Row md={12} className=" mt-3 ">
+                  <Col className="d-flex justify-content-center">
+                    <button type="submit" id="local" className="btn btn-primary w-100">Regístrate</button>
+                  </Col>
+
+                </Row>
+                {alreadyCreated ?
+                  <Row md={12} className=" mt-3 ">
+                    <Col className="d-flex justify-content-center" >
+                      <span style={{ color: 'red' }}>El usuario ya está siendo usado</span>
                     </Col>
                   </Row>
-                </div>
-                <Row md={12} className=" mt-3 ">
-                  <Col sm={6} md={6} lg={6} className="d-flex justify-content-center">
-                    <button type="submit" id="local" className="btn btn-primary">Regístrate</button>
-                  </Col>
-                  <Col sm={6} md={6} lg={6}>
-                    <button onClick={googleSubmit} id="google" className="btn btn-primary " >Regístrate con Google</button>
-                    {alreadyCreated ? <span style={{ color: 'red' }}>El usuario ya está siendo usado</span> : ''}
-                  </Col>
-                </Row>
+                  :
+                  ''
+                }
               </form >
             )}
           </Formik>
 
         </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={handleClose}>
-            Close
-          </Button>
-        </Modal.Footer>
       </Modal>
     </>
   )
