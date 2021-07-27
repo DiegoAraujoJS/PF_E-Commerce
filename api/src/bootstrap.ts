@@ -212,7 +212,7 @@ const bootstrap = async () => {
         ////////////////////
 
         const Clase1 = await Clase.create({
-            nombre: "Inglés para jóvenes",
+            nombre: "Clase 1 de Ingles",
             Profesor_mail: "edwardburgos@gmail.com",
             descripcion:
                 "En esta clase te enseñaré todo lo que necesitas para tener un nivel intermedio de Inglés",
@@ -227,7 +227,7 @@ const bootstrap = async () => {
         });
 
         const Clase2 = await Clase.create({
-            nombre: "Sumas y Restas",
+            nombre: "Clase 2 de Matematica",
             User_mail: "edwardburgos@gmail.com",
             descripcion: "Aprende a sumar y restar para ser el mejor de tu clase",
             materia: "Matematica",
@@ -240,7 +240,7 @@ const bootstrap = async () => {
         });
 
         const Clase3 = await Clase.create({
-            nombre: "Sumas y Restas",
+            nombre: "Clase 3 de Matematica",
             User_mail: "braiansilva@gmail.com",
             descripcion: "Aprende a sumar y restar para ser el mejor de tu clase",
             materia: "Matematica",
@@ -252,7 +252,7 @@ const bootstrap = async () => {
             precio: "$2000",
         });
         const Clase8 = await Clase.create({
-            nombre: "Sumas y Restas",
+            nombre: "Clase 4 de Matematica",
             Profesor_mail: "mauroleonel@gmail.com",
             User_mail: "braiansilva@gmail.com",
             descripcion: "Aprende a sumar y restar para ser el mejor de tu clase",
@@ -267,7 +267,7 @@ const bootstrap = async () => {
         });
 
         const Clase4 =await Clase.create({
-            nombre: 'Historia',
+            nombre: 'Clase 5 de Historia',
             Profesor_mail: "edwardburgos@gmail.com",
             User_mail: 'mauroleonel@gmail.com',
             descripcion: 'En esta clase te enseñaré todo lo que necesitas de Historia',
@@ -282,7 +282,7 @@ const bootstrap = async () => {
         })
 
         const Clase5 = await Clase.create({
-            nombre: 'Filosofia',
+            nombre: 'Clase 6 de Filosofia',
             Profesor_mail: "diegoaraujo@gmail.com",
             User_mail: 'mauroleonel@gmail.com',
             descripcion: 'En esta clase te enseñaré todo lo que necesitas de Filosofia',
@@ -297,7 +297,7 @@ const bootstrap = async () => {
         })
 
         const Clase6 = await Clase.create({
-            nombre: 'Inglés para jóvenes',
+            nombre: 'Clase 7 de Ingles',
             Profesor_mail: "edwardburgos@gmail.com",
             descripcion: 'En esta clase te enseñaré todo lo que necesitas para tener un nivel intermedio de Inglés',
             materia: 'Ingles',
@@ -311,7 +311,7 @@ const bootstrap = async () => {
         })
 
         const Clase7 = await Clase.create({
-            nombre: 'Sumas y Restas',
+            nombre: 'Clase 8 de Matematica',
             Profesor_mail: "edwardburgos@gmail.com",
             descripcion: 'Aprende a sumar y restar para ser el mejor de tu clase',
             materia: 'Matematica',
