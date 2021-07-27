@@ -12,6 +12,10 @@ const Historial = () => {
         width: '160px',
         borderRadius: '50%',
     };
+    const [historialFiltro, setHistorialFiltro]=useState("")
+    const [colorBotonPublicado, setColorBotonPublicado]=useState("white")
+    const [colorBotonCompletado, setColorBotonCompletado]=useState("white")
+    const [colorBotonPendiente, setColorBotonPendiente]=useState("white")
     var j=0
     const classListContainer = {
         // position: 'relative',
@@ -62,28 +66,52 @@ const Historial = () => {
         fetchHistorial()
     },[])
     console.log("Show", show)
+    const setearCompletado=()=>{
+        setHistorialFiltro("complete")
+        setColorBotonPendiente("white")
+        setColorBotonPublicado("white")
+        setColorBotonCompletado("#1ECD97")}
+    const setearPublicado=()=>{
+        setHistorialFiltro(null)
+        setColorBotonPendiente("white")
+        setColorBotonPublicado("#2E67F4")
+        setColorBotonCompletado("white")}
+    const setearPendientes=()=>{
+        setHistorialFiltro("pending")
+        setColorBotonPendiente("#F4A62E")
+        setColorBotonPublicado("white")
+        setColorBotonCompletado("white")}
+    
+    const colorred="#1ECD97"
     return (
         <div class="container" >
             <h1>Mi historial de cursos</h1>
+            <h2>Filtrar por:</h2>
+            <button style={{backgroundColor: colorBotonPublicado, borderRadius: "20px", fontFamily:"Montserrat", fontSize:"18px", padding:"3px",width:"100px", boxSizing:"border-box"}} onClick={()=>{setearPublicado()}}>Publicados</button>
+            <button style={{backgroundColor: colorBotonCompletado, borderRadius: "20px", fontFamily:"Montserrat", fontSize:"18px", padding:"3px",width:"100px", boxSizing:"border-box"}}onClick={()=>{setearCompletado()}}>Completados</button>
+            <button style={{backgroundColor: colorBotonPendiente, borderRadius: "20px", fontFamily:"Montserrat", fontSize:"18px", padding:"3px", boxSizing:"border-box",width:"100px"}} onClick={()=>{setearPendientes()}}>Pendientes</button>
             
             <ul style={classListContainer}>
                 {historia.map((e, i)=>{
                     console.log("ESTO ES E", e)
                     const clase=e
                     if(!e.profesor){return null}
+                    if(historialFiltro!==""){if(e.status!==historialFiltro){return null}}
                     return (
                         <Container style={{background:"silver", borderColor:"red", borderRadius:"20px", marginTop:"20px"}}>
                             <div>
-                                <div className="d-flex justify-content-start">
+                                <div className="d-flex justify-content-start" style={{width:"500px"}}>
                                    {e.profesor? <Card.Img style={profileImg}  src={e.profesor.foto} alt="Error" />: null}
                                    <div style={{marginLeft:"20px"}}>
-                                        {e.status==="complete"?<div style={{backgroundColor: "#1ECD97", borderRadius: "20px", fontFamily:"Montserrat", fontSize:"18px", padding:"3px", boxSizing:"border-box", display:"flex", justifyContent:"center"}}>
+                                        {e.status==="complete"?<div style={{backgroundColor: "#1ECD97", borderRadius: "20px", fontFamily:"Montserrat", fontSize:"18px", padding:"3px",width:"300px", boxSizing:"border-box", display:"flex", justifyContent:"center",fontWeight:"700"}}>
                                             Clase completada
-                                        </div> : (e.status==="pending"?<div style={{backgroundColor: "#F4A62E", borderRadius: "20px", fontFamily:"Montserrat", fontSize:"18px", padding:"3px", boxSizing:"border-box", display:"flex", justifyContent:"center"}}>
+                                        </div> : (e.status==="pending"?<div style={{backgroundColor: "#F4A62E", borderRadius: "20px", fontFamily:"Montserrat", fontSize:"18px", padding:"3px",width:"300px", boxSizing:"border-box", display:"flex",fontWeight:"700", justifyContent:"center"}}>
                                             Pendiente
-                                        </div>:<div style={{backgroundColor: "#FB797E", borderRadius: "20px", fontFamily:"Montserrat", fontSize:"18px", padding:"3px", boxSizing:"border-box", display:"flex", justifyContent:"center"}}>
+                                        </div>: (e.status==="cancelled"?<div style={{backgroundColor: "#FB797E", borderRadius: "20px", fontFamily:"Montserrat", fontWeight:"700", fontSize:"18px", padding:"3px",width:"300px", display:"flex", justifyContent:"center"}}>
                                             Cancelado
-                                        </div>)
+                                        </div>:<div style={{backgroundColor: "#2E67F4", borderRadius: "20px", fontFamily:"Montserrat", fontSize:"18px", padding:"3px", boxSizing:"border-box",width:"300px", display:"flex", justifyContent:"center", fontWeight:"700"}}>
+                                            Publicado
+                                        </div>))
                                         }
                                         <div>
                                             Materia: {e.materia}
@@ -91,16 +119,16 @@ const Historial = () => {
                                         <div>
                                             Nombre de la clase: {e.nombre}
                                         </div>
-                                        <div>
+                                        {e.status!==null?<div>
                                             Fecha de la clase: {e.date.day}/{e.date.month}/{e.date.year} 
-                                        </div>
-                                        <div>
+                                        </div>:null}
+                                        {e.status!==null?<div>
                                             Horario de la clase: {e.date.time[0]}-{e.date.time[1]}
-                                        </div>
+                                        </div>:null}
                                         <div>
                                             Precio: {e.precio}
                                         </div>
-                                        {e.profesor.User_mail===alum?<div>
+                                        {(e.profesor.User_mail===alum && e.status!==null)?<div>
                                                                         Alumno: {e.student.name} {e.student.lastName}
                                                                     </div>:
                                                                     <div>
