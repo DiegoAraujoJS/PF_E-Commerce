@@ -41,12 +41,12 @@ const ClassCard: React.FC<IClase> = (props) => {
                                     className='d-flex justify-content-center font-weight-bold '>{props.nombre}</Card.Header>
                                 <Card.Body className={"d-lg-flex d-md-flex flex-row align-items-center card-body " } style={{ backgroundColor: '#c8c8c8', borderBottomRightRadius: "30px", borderBottomLeftRadius: "30px" }} >
                                     <Col sm={12} md={8} lg={4} className="d-flex justify-content-center">
-                                        <Card.Img style={profileImg} src={props.profesor && props.profesor.foto} />
+                                        <Card.Img style={profileImg} src={props.profesor && props.profesor?.foto} />
                                     </Col>
                                     <Col sm={12} md={4} lg={8} className="d-flex flex-column align-items-start ml-2 ">
-                                        <Card.Title className="d-sm-flex justify-content-center m-0">{puntuacion(props.profesor.score)}</Card.Title>
+                                        <Card.Title className="d-sm-flex justify-content-center m-0">{puntuacion(props.profesor?.score)}</Card.Title>
                                         <Card.Text className="m-0"> <strong> Tipo: </strong>{props && props.esPresencial} </Card.Text>
-                                        <Card.Text className="m-0"> {mark} &nbsp; {props.profesor && props.profesor.city} </Card.Text>
+                                        <Card.Text className="m-0"> {mark} &nbsp; {props.profesor && props.profesor?.city} </Card.Text>
                                         <Card.Text className="m-0"> <strong> Materia: </strong> {props && props.materia} </Card.Text>
                                         <Card.Text className="fst-italic">
                                             {props && props.descripcion}
@@ -58,7 +58,7 @@ const ClassCard: React.FC<IClase> = (props) => {
                     </ListGroup>
                 </Col>
             </Row>
-            <ClassDetail hijo = {{show, handleClose, email, mark, puntuacion}} puntuacion={props.profesor.score} {...props} />
+            <ClassDetail hijo = {{show, handleClose, email, mark, puntuacion}} puntuacion={props.profesor?.score} {...props} />
             
         </div >
     )

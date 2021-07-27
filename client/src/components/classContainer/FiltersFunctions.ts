@@ -1,5 +1,12 @@
 import { IClase } from "../../../../interfaces";
 
+export const intersection = (arr1, arr2) => {
+    let ids = new Set(arr2.map(({ id }) => id));
+
+    let result = arr1.filter(({ id }) => !ids.has(id));
+    return result;
+}
+
 export const filterByTime = (array, horario) => {
     let filtrados: IClase[] = array.filter((clase: IClase) => {
         if (clase && clase.date.time && clase.date.time.length === 2) {

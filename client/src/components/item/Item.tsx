@@ -88,7 +88,7 @@ export default function Item({ cliente, id, imagen, nombre, precioDescuento, pre
                 </div>
                 <div className={s.down}>
                   <span className={s.monedaComprado}>{moneda}</span>
-                  <span className={s.precioComprado}>{precioDescuento.toFixed(2)}</span>
+                  <span className={s.precioComprado}>{precioDescuento?.toFixed(2)}</span>
                 </div>
               </div>
             </Link>
@@ -122,11 +122,11 @@ export default function Item({ cliente, id, imagen, nombre, precioDescuento, pre
                 <p className={s.title}>Precio</p>
                 <div>
                   <span className={s.moneda}>{moneda}</span>
-                  <span className={s.precio}>{precioDescuento.toFixed(2)}</span>
+                  <span className={s.precio}>{precioDescuento?.toFixed(2)}</span>
                 </div>
                 <div>
                   <span className={s.moneda}>{moneda}</span>
-                  <span className={s.precioOriginal}>{precioOriginal.toFixed(2)}</span>
+                  <span className={s.precioOriginal}>{precioOriginal?.toFixed(2)}</span>
                 </div>
               </div>
             </Link>
