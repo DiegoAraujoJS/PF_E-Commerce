@@ -164,7 +164,7 @@ const mark = <FontAwesomeIcon icon={faMapMarkerAlt} style={{ color: "#ff3f3f" }}
                   <span className={s.precioComprado}>{precioDescuento.toFixed(2)}</span>
                 </div>
               </div>
-              <ClassDetail hijo = {{show, handleClose, email, mark, puntuacion }} {...props} />
+              <ClassDetail hijo = {{show, handleClose, email, mark, puntuacion, botn: 'd.none' }} {...props} />
             {/* </Link> */}
           </div>
           :
@@ -203,7 +203,7 @@ const mark = <FontAwesomeIcon icon={faMapMarkerAlt} style={{ color: "#ff3f3f" }}
                   <span className={s.precioOriginal}>{precioOriginal.toFixed(2)}</span>
                 </div>
               </div>
-              <ClassDetail hijo = {{show, handleClose, email, mark, puntuacion}} {...props} />
+              <ClassDetail hijo = {{show, handleClose, email, mark, puntuacion, botn: 'd-none'}} {...props} />
             {/* </Link> */}
             <div className={s.quitarDeCesta}>
               <button onClick={quitardeCesta} className={s.quitarDeCestaButton}>

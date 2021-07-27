@@ -12,7 +12,7 @@ const calendar = <FontAwesomeIcon icon={faCalendarAlt} className="mt-1" style={{
 const clock = <FontAwesomeIcon icon={faClock} className="mt-1" style={{ color: "#0067ff" }} />
 
 export default function ClassDetail (props) {
-    const {show, handleClose, email, mark, puntuacion } = props.hijo
+    const {show, handleClose, email, mark, puntuacion, botn } = props.hijo
 
     function redirect_blank(url) {
         var a = document.createElement('a');
@@ -20,6 +20,8 @@ export default function ClassDetail (props) {
         a.href=url;
         a.click();
       }
+
+
 
 return (
 
@@ -79,7 +81,7 @@ return (
                 <Card.Title className="d-flex justify-content-center"> Precio de la clase: &nbsp;<span className="text-success ml-3">{props.precio}</span> </Card.Title>
                 <Modal.Footer className="justify-content-center">
 
-                        <Button variant="primary" onClick={async () => {
+                        <Button  className = {botn} variant="primary" onClick={async () => {
 
                             const payload: IClase = {
                                 ...props
