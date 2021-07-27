@@ -17,7 +17,7 @@ export default function ClassDetail (props) {
 
     const {show, handleClose, email, mark, puntuacion } = props.hijo
 
-    const [price, setPrice] = useState(0)
+    const [hours, setHours] = useState(1)
 
     function redirect_blank(url) {
         var a = document.createElement('a');
@@ -92,12 +92,11 @@ return (
                             <div style={{ width: '325px' }}>
 											<Form.Label className='text-uppercase'>MIN</Form.Label>
 											<RangeSlider
-												value={price}
-												onChange={changeEvent => setPrice(changeEvent.target.value)}
-												step={0.5}
-												max={50}
-												
-												
+												value={hours}
+												onChange={changeEvent => setHours(changeEvent.target.value)}
+												step={0.25}
+												max={8}
+
 											/>
 											<Form.Label className='text-uppercase'>MAX</Form.Label>
 											
@@ -105,14 +104,15 @@ return (
                         </Card.Body>
                     </Card>
                 </Modal.Body>
-                <Card.Title className="d-flex justify-content-center"> Precio de la clase: &nbsp;<span className="text-success ml-3">{props.precio}</span> </Card.Title>
+                <Card.Title className="d-flex justify-content-center"> Precio de la clase: &nbsp;<span className="text-success ml-3">{`$${Number(props.precio) * hours}`}</span> </Card.Title>
                 
                 <Modal.Footer className="justify-content-center">
 
                         <Button variant="primary" onClick={async () => {
 
                             const payload: IClase = {
-                                ...props
+                                ...props,
+                                precio: `${hours * props.precio}`
                             }
                             try{
                             const token = getCookieValue('token').replaceAll("\"", '')

@@ -8,7 +8,7 @@ import { modificarClasesPorComprar } from '../../Actions/Actions';
 import axios from 'axios'
 import Swal from 'sweetalert2'
 
-export default function Item({ cliente, id, imagen, nombre, precioDescuento, precioOriginal, moneda, dia, horaInicio, horaFin, profesor, comprado }) {
+export default function Item({ cliente, id, imagen, nombre, precioDescuento, precioOriginal, moneda, dia, horaInicio, horaFin, profesor, comprado, precio }) {
 
   // This allows use to modify Redux state's properties 
   const dispatch = useDispatch();
@@ -82,6 +82,7 @@ export default function Item({ cliente, id, imagen, nombre, precioDescuento, pre
                   <span className={s.detail}>{horaFin}</span>
                 </div>
               </div>
+              {/* clasesPorComprar.map((e, i) => <Item key={i} cliente={cliente} id={e.id} imagen={e.imagen} nombre={e.nombre} precioDescuento={e.precioDescuento} precioOriginal={e.precioOriginal} moneda={moneda} dia={e.dia} horaInicio={e.horaInicio} horaFin={e.horaFin} profesor={e.profesor} comprado={false}></Item>) */}
               <div className={s.pricesComprado}>
                 <div className={s.textAlign}>
                   <p className={s.titleComprado}>Precio</p>
@@ -122,12 +123,9 @@ export default function Item({ cliente, id, imagen, nombre, precioDescuento, pre
                 <p className={s.title}>Precio</p>
                 <div>
                   <span className={s.moneda}>{moneda}</span>
-                  <span className={s.precio}>{precioDescuento.toFixed(2)}</span>
+                  <span className={s.precio}>{precio}</span>
                 </div>
-                <div>
-                  <span className={s.moneda}>{moneda}</span>
-                  <span className={s.precioOriginal}>{precioOriginal.toFixed(2)}</span>
-                </div>
+                
               </div>
             </Link>
             <div className={s.quitarDeCesta}>

@@ -59,7 +59,8 @@ export default function Cesta() {
                             dia: `${dia}/${mes}/${e.date.year}`,
                             horaInicio: `${horaInicio[0]}:${horaInicio[1]} ${horaInicio[2]}`,
                             horaFin: `${horaFinal[0]}:${horaFinal[1]} ${horaFinal[2]}`,
-                            profesor: e.profesor?.User_mail
+                            profesor: e.profesor?.User_mail,
+                            precio: e.precio
                         }
                         return clasePorComprar;
                     })
