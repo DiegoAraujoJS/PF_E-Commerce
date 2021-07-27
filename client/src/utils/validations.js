@@ -49,7 +49,14 @@ export const validationSchemaRegister = yup.object().shape({
     role: yup
         .number()
         .required('Este campo es obligatorio'),
-});
+    country: yup
+        .string()
+        .required('Este campo es obligatorio'),
+    state: yup
+        .string()
+        .required('Este campo es obligatorio'),
+})
+
 
 export const validationSchemaGoogle = yup.object().shape({
     role: yup
