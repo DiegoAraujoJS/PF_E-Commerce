@@ -28,8 +28,9 @@ const EditProfile = () => {
                 foto: img,
                 usuario: thisUser.data.mail,
                 description: data.description,
-                ciudad:data.estado+", "+data.ciudad,
-                education:data.education
+                city:data.ciudad,
+                title:data.education,
+                state:data.estado
             })
             alert("Cambios Realizados")
         } catch (err) {
