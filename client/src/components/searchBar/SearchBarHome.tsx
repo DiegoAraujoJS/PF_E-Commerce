@@ -255,7 +255,7 @@ export default function SearchBar() {
 
             {loggedOrNot() ?
               <div className="ms-4 d-flex">
-                <span className="ml-4">{userIcon}</span><NavDropdown className={'text-decoration-none justify-content-end ms-1'} title="Sesión" id="basic-nav-dropdown">
+                <span className="ml-4">{userIcon}</span><NavDropdown className={'text-decoration-none justify-content-end ms-1'} title={user.name + " " + user.lastName} id="basic-nav-dropdown">
                   <NavDropdown.Item>
                     <Link className={'nav-link ms-4 text-decoration-none'} to={"/perfil"}>Profile</Link>
                   </NavDropdown.Item>
