@@ -4,8 +4,11 @@ import axios from 'axios';
 import getCookieValue from '../../cookieParser';
 import { useHistory } from "react-router-dom";
 import styles from "./editPerfilAlumn.module.css"
+import { storage } from '../../firebase';
+
 const EditPerfilAlum = () => {
     const history = useHistory()
+    const [prech, setPrech] = useState<any>({})
     const [img, setImg] = useState<any>('')
     const [data, setData] = useState<any>({
         foto: "",
@@ -18,6 +21,16 @@ const EditPerfilAlum = () => {
         lastName:""
 
     });
+
+    useEffect(() => {
+        fetchAlumns()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    useEffect(() => {
+        setImg(prech.foto)
+    }, [prech]);
+
     const inputsHandler = (e) => {
         e.preventDefault();
         const newdata = { ...data }
@@ -26,6 +39,7 @@ const EditPerfilAlum = () => {
         console.log(newdata)
 
     }
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const imageHandler = (e) => {
         const reader = new FileReader();
         reader.onload = () => {
@@ -38,6 +52,25 @@ const EditPerfilAlum = () => {
         newdata[e.target.id] = e.target.value;
         setData(newdata)
         console.log(newdata)
+    }
+    const Upload = async ({file}) => {
+        // Referencia al espacio en el bucket donde estará el archivo
+          let storageRef = storage.ref().child("images/" + file.name);
+          // Subir el archivo
+          await storageRef.put(file);
+          // Retornar la referencia
+          return storageRef;
+    }
+
+    const imageFirebaseHandler = async (e) => {
+        const file = e.target.files[0];
+        const storageRef = await Upload({file});
+        const url = await storageRef.getDownloadURL();
+        setImg(url);
+        const newdata = { ...data };
+        newdata[e.target.id] = e.target.value;
+        setData(newdata);
+        console.log(newdata);
     }
     const Changes = async (e) => {
         try {
@@ -56,6 +89,7 @@ const EditPerfilAlum = () => {
 
             const token = getCookieValue('token').replaceAll("\"", '')
             const thisUser = await axios.post(`http://localhost:3001/api/verify`, {},{ withCredentials: true, headers: {Authorization: token}})
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             let editar = await axios.patch("http://localhost:3001/api/usuarios/", {
                 foto: img,
                 usuario: thisUser.data.mail,
@@ -70,6 +104,25 @@ const EditPerfilAlum = () => {
 
         history.push(`/perfil/`)
     }
+
+    const fetchAlumns = async () => {
+        try {
+            
+            const token = getCookieValue('token').replaceAll("\"", '')
+            const thisUser = await axios.post(`http://localhost:3001/api/verify`, {},{ withCredentials: true, headers: {Authorization: token}})
+            const response = await axios.get(`http://localhost:3001/api/usuarios/${thisUser.data.mail}`)
+                
+            setPrech({
+             ...response.data
+                })
+                setImg(prech.foto)
+        // console.log("todo lo que hayt que agregar",prech)
+
+        }catch(err){
+            console.log(err);
+        }
+    };
+
     return (
         <div className={styles.body} >
         <div className={styles.Container}>
@@ -81,19 +134,35 @@ const EditPerfilAlum = () => {
                     </div>
                     <div className="col-md-3 border-right">
                         <span className={styles.span_imagen}>Selecciona una imagen para tu perfil</span>
-                        <input type='file' onChange={(e) => imageHandler(e)} id='foto' />
-                        <div className="d-flex flex-column align-items-center text-center  p-3 py-5"><img className={styles.imgEdit} src={img} /><span className="font-weight-bold">Vista Previa</span><span className="text-black-50"></span><span> </span></div>
+                        <input type='file' onChange={(e) => imageFirebaseHandler(e)} id='foto' />
+                        <div className="d-flex flex-column align-items-center text-center  p-3 py-5">
+                            <img className={styles.imgEdit} src={img} alt='profile' />
+                            <span className="font-weight-bold">Vista Previa</span>
+                            <span className="text-black-50"></span>
+                            <span></span>
+                        </div>
                     </div>
                     <div className="row mt-3">
-                    <div className="col-md-12"><label className="labels">Pon una descripción para los que entren vean en tu perfil</label><textarea className="form-control" onChange={(e) => inputsHandler(e)} id="description" /></div>
+                    <div className="col-md-12">
+                        <label className="labels">Pon una descripción para los que entren vean en tu perfil</label>
+                        <textarea className="form-control" onChange={(e) => inputsHandler(e)} id="description" />
+                    </div>
                         {/*  <div className="col-md-12"><label className="labels">Contacto Telefonico</label><input type="text" className="form-control" placeholder="numero de celular" /></div>
                         <div className="col-md-12"><label className="labels">Dirección</label><input type="text" className="form-control" placeholder="escribir direccion" /></div> */}
                     </div>
                     <div className="row mt-3">
-                        <div className="col-md-6"><label className="labels">País</label><input type="text" className="form-control" placeholder="pais" id="ciudad" onChange={(e) => inputsHandler(e)}/></div>
-                        <div className="col-md-6"><label className="labels">Estado</label><input type="text" className="form-control" placeholder="estado" id="estado" onChange={(e) => inputsHandler(e)}/></div>
+                        <div className="col-md-6">
+                            <label className="labels">País</label>
+                            <input type="text" className="form-control" placeholder="pais" id="ciudad" onChange={(e) => inputsHandler(e)}/>
+                        </div>
+                        <div className="col-md-6">
+                            <label className="labels">Estado</label>
+                            <input type="text" className="form-control" placeholder="estado" id="estado" onChange={(e) => inputsHandler(e)}/>
+                        </div>
                     </div>
-                    <div className="mt-5 text-center"><button className="btn btn-primary profile-button" type="button" onClick={(e) => Changes(e)}>Guardar Perfil</button></div>
+                    <div className="mt-5 text-center">
+                        <button className="btn btn-primary profile-button" type="button" onClick={(e) => Changes(e)}>Guardar Perfil</button>
+                    </div>
                 </div>
             </div>
         </div>
