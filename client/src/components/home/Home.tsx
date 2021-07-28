@@ -5,8 +5,11 @@ import { connect } from 'react-redux';
 import { useHistory } from "react-router-dom";
 import SearchBarHome from '../searchBar/SearchBarHome';
 import students from '../../images/students.jpg';
+import lupa from '../../images/lupa.png';
+import persona from '../../images/persona.png';
+import copa from '../../images/copa.png';
 import axios from 'axios'
-import ControlledCarousel from './Carousel';
+// import ControlledCarousel from './Carousel';
 
 // import { auth } from '../../firebase';
 // import { store } from '../../Store/store';
@@ -50,6 +53,17 @@ const Home = ({ dispatchInput }) => {
         top: '2px',
         lineHeight: '100px'
     }
+    const desc: CSS.Properties = {
+        position: 'relative',
+        textAlign: 'center',
+        height: 'fit-content',
+        width: '350px',
+        paddingTop: '45px',
+    }
+    const imgs: CSS.Properties = {
+        height: '150px',
+        width: '150px'
+    }
     const containerHome: CSS.Properties = {
     //    '--height': 'calc(100vh - 56px)',
     }
@@ -72,14 +86,28 @@ const Home = ({ dispatchInput }) => {
             <img src={students} alt='students' style={bgImg}/>
             <div style={{
                 position: 'absolute',
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'space-around',
+                alignContent: 'center',
                 bottom: '0px',
                 width: '100%',
-                height: '53%',
+                height: '44%',
                 margin: '0 auto',
-                
-                
+                backgroundColor: 'white'
             }}>
-                <ControlledCarousel/>
+                <div style={desc}>
+                    <img style={imgs} src={lupa}/>
+                    <p>Contamos con miles de profesores particulares de Argentina</p>
+                </div>
+                <div style={desc}>
+                    <img style={imgs} src={persona}/>
+                    <p>Encuentra tu profesor perfecto con facilidad según tus necesidades</p>
+                </div>
+                <div style={desc}>
+                    <img style={imgs} src={copa}/>
+                    <p>Con las clases particulares aprenderás más facil y rápidamente, ya que son completamente personalizadas</p>
+                </div>
             </div>
 
         </div>
