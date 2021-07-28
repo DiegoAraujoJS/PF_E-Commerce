@@ -15,6 +15,7 @@ import { connect } from "react-redux"
 import { set_calendar_data } from "../../Actions/Actions"
 import { useDispatch } from "react-redux"
 import { actionsType } from "../../constants/constants"
+import DetalleCompra from "./DetalleCompra"
 const calendar = <FontAwesomeIcon icon={faCalendarAlt} className="mt-1" style={{ color: "#0067ff" }} />
 const clock = <FontAwesomeIcon icon={faClock} className="mt-1" style={{ color: "#0067ff" }} />
 const materias = [
@@ -164,11 +165,12 @@ return (
                                             className={`form-control`}
                                             
                                         >
-                                            <option value='' >Seleccioná un día para tu clase</option>
+                                            {/* <option value='' >Seleccioná un día para tu clase</option>
                                             {days.map((fullDate, i) => {
                                                 return <option key={i + 10} value={`${fullDate.day} ${fullDate.number} de ${fullDate.month} del ${fullDate.year}`}>{`${fullDate.day} ${fullDate.number} de ${fullDate.month} del ${fullDate.year}`}</option>
                                             }
-                                            )}
+                                            )} */}
+                                            <DetalleCompra profesor={props.profesor.User_mail}/>
                                         </Form.Control>
                                         
 								
