@@ -14,6 +14,8 @@ let RoleAdmin = 2
 
 const today = new Date();
 const date = (fecha, formato) => {};
+var diaa= date(today)
+console.log("DIAAAAAAAAA", today)
 const profesorEjemplo = [
   {
     start: "2021-07-07T10:30:00",
@@ -83,6 +85,8 @@ class Calendar extends Component {
           const dia=args.start.value.slice(8,-9)
           const start=args.start.value.slice(11)
           const end=args.end.value.slice(11)
+          console.log("ENDO", end)
+        
           const horario1={
             disponible: [[start,  end]],
             email: email,
@@ -239,28 +243,27 @@ class Calendar extends Component {
       showToolTip: false,
       startDate: date(today, "yy/mm/dd"),
       events: persons,
-      width: "40%"
+      width: "40%",
+      
     });
+    console.log("SETSTATE", this.state)
   }
     
 
   render() {
     const propsEmail={email:this.props.email}
     var { ...config } = this.state;
+    const  fecha=today
     return (
       <div style={styles.wrap}>
         <div style={styles.left}>
-         
-          <DayPilotNavigator
-
+        <DayPilotNavigator
             selectMode={"week"}
             showMonths={1}
             skipMonths={1}
-            startDate={date(today, "yy/mm/dd")}
-            selectionDay={"2021-07-15"}
-            onTimeRangeSelected={(args) => {
+            onTimeRangeSelected={ args => {
               this.setState({
-                startDate: args.day,
+                startDate: args.day
               });
             }}
           />
