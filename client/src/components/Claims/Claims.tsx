@@ -20,6 +20,7 @@ function Claims(props) {
 
   useEffect(() => {
     getClaims();
+    console.log(claims);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [offset, limit]);
 

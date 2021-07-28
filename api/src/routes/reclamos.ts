@@ -9,7 +9,7 @@ router.get("/", async (req: Request, res: Response) => {
   try {
     const offset: number = parseInt(req.query.offset.toString());
     const limit: number = parseInt(req.query.limit.toString());
-    console.log(offset, limit);
+    
     const reclamos = await Reclamo.findAll({
       attributes: ["id", "nombre", "reclamo"],
       order: [["createdAt", "ASC"]],
@@ -36,20 +36,21 @@ router.get("/:id", async (req: Request, res: Response) => {
         {
           model: User,
           as: "denunciado",
-          attributes: ["name", "mail", "lastName"],
+          attributes: ["name", "User_mail", "lastName"],
         },
         {
           model: User,
           as: "denunciante",
-          attributes: ["name", "mail", "lastName"],
+          attributes: ["name", "User_mail", "lastName"],
         },
         {
           model: User,
           as: "admin",
-          attributes: ["name", "mail", "lastName"],
+          attributes: ["name", "User_mail", "lastName"],
         },
         {
           model: Clase,
+          as: "clase",
           attributes: ["id", "nombre"],
         },
       ],

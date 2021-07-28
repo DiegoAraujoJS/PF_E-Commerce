@@ -57,7 +57,7 @@ export default class User extends Model implements IUser {
     carrito!: IClase[];
 
     @Column({ type: DataType.JSON})
-    historial!: object[]
+    historial!: object[];
 
     @Column ({type: DataType.JSON})
     calendario!: Horario[];

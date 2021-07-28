@@ -331,10 +331,58 @@ const bootstrap = async () => {
 
         // /* Reclamo 1 */
 
-        // const Reclamo1 = await Reclamo.create({
-        //     nombre: "Solicito Reembolso",
-        //     reclamo: "El profesor no se presento a la clase",
-        // });
+        const reclamo1 = await Reclamo.create({
+            nombre: "Profesor estafador",
+            reclamo: "El profesor no se presento a la clase",
+        });
+
+        const denunciante = await User.findByPk("benjaminspiecker@gmail.com");
+        await denunciante?.$add("denuncias_hechas", [reclamo1]);
+
+        const denunciado = await User.findByPk("edwardburgos@gmail.com");
+        await denunciado?.$add("denuncias_recibidas", [reclamo1]);
+
+        const admin = await User.findByPk("braiansilva@gmail.com");
+        await admin?.$add("denuncias_administradas", [reclamo1]);
+
+        const clase = await Clase.findByPk(1);
+        await clase?.$add("clase", [reclamo1]);
+    
+        /* Reclamo 2 */
+    
+        const reclamo2 = await Reclamo.create({
+            nombre: "Ayuda",
+            reclamo: "Me cobró 500 pesos en la boleta de pago pero despues me pidio que le pague 300 mas",
+        });
+        const denunciante2 = await User.findByPk("javiercarro@gmail.com");
+        await denunciante2?.$add("denuncias_hechas", [reclamo2]);
+
+        const denunciado2 = await User.findByPk("edwardburgos@gmail.com");
+        await denunciado2?.$add("denuncias_recibidas", [reclamo2]);
+
+        const admin2 = await User.findByPk("braiansilva@gmail.com");
+        await admin2?.$add("denuncias_administradas", [reclamo2]);
+
+        const clase2 = await Clase.findByPk(2);
+        await clase2?.$add("clase", [reclamo2]);
+    
+         /* Reclamo 3 */
+    
+         const reclamo3 = await Reclamo.create({
+            nombre: "Alumno Problemático",
+            reclamo: "El profesor no entendia bien el contenido de la materia",
+        });
+        const denunciante3 = await User.findByPk("diegoaraujo@gmail.com");
+        await denunciante3?.$add("denuncias_hechas", [reclamo3]);
+
+        const denunciado3 = await User.findByPk("edwardburgos@gmail.com");
+        await denunciado3?.$add("denuncias_recibidas", [reclamo3]);
+
+        const admin3 = await User.findByPk("braiansilva@gmail.com");
+        await admin3?.$add("denuncias_administradas", [reclamo3]);
+
+        const clase3 = await Clase.findByPk(3);
+        await clase3?.$add("clase", [reclamo3]);
     } catch(err) {
         console.log(err)
     }
