@@ -69,9 +69,9 @@ function Profile(email,{user}) {
 </section>
 
 <section className={style.sectionTwo}>
-    <h4 className={style.h4Prof}>Aca podrás ver sus horarios disponibles:</h4>
+    <h4 className={style.h4Prof + " d-flex justify-content-center pt-4 m-0"} style={{color:"#0d6efd"}}>Aca podrás ver sus horarios disponibles:</h4>
     <br />
-    <Link to="/calendarAdd"><button className={style.agregaDisponibilidad}>Agrega un nueva disponibilidad horaria</button></Link>
+    <div className="d-flex justify-content-center mb-3"><Link to="/calendarAdd"><button className={style.agregaDisponibilidad} style={{ width: "400px" }}>Agrega un nueva disponibilidad horaria</button></Link></div>
     <div className={style.calendarContainer}>
         <Calendar {...propEmail} />
     </div>
