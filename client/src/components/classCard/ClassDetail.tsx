@@ -89,11 +89,13 @@ function ClassDetail (props) {
             
             props.dispatchData(profDays)
             setDays(profDays)
+            console.log('profDays', profDays)
     
         }
-        fetchDays()
+
+        if (!days.length)fetchDays()
         
-    }, [])
+    }, [props.profesor])
 
     
 
