@@ -48,7 +48,7 @@ function ListChatRoom(props: React.PropsWithChildren<PropsChat>) {
         }
       } else {
         setChatSelected(chatRoom[0]);
-        if(!receivingUser) {
+        if(!receivingUser && chatRoom.length) {
           chatRoom[0].users.forEach( (user) => {
             if(user !== props.userLoged.mail) {
               getReceivingUser(user);
