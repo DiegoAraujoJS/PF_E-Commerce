@@ -75,7 +75,10 @@ function ClassDetail (props) {
             const today = new Date()
 
             const profDays = fetchCalendar.data.map((date: Disponible) => {
+                console.log("DIAS", date)
                 today.setDate(date.fecha.dia); 
+                today.setMonth(date.fecha.mes - 1);
+
                 const oneDate = {
                     disponible: date,
                     day: week[today.getDay()],
@@ -84,6 +87,7 @@ function ClassDetail (props) {
                     year: today.getFullYear()
 
                 }
+                
                 return oneDate
             })
             
