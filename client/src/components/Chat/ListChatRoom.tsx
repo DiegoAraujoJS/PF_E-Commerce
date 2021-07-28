@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { firestore } from "../../firebase";
-import { UserChat } from './Chat';
+import { UserChat } from "./Chat";
 import style from "./Chat.module.css";
 import ChatRoom from "./ChatRoom";
 import axios from "axios";
@@ -43,17 +43,17 @@ function ListChatRoom(props: React.PropsWithChildren<PropsChat>) {
     if (chatRoom) {
       if (userSelected) {
         foundChatUser();
-        if(!receivingUser) {
-          getReceivingUser(userSelected)
+        if (!receivingUser) {
+          getReceivingUser(userSelected);
         }
       } else {
         setChatSelected(chatRoom[0]);
-        if(!receivingUser && chatRoom.length) {
-          chatRoom[0].users.forEach( (user) => {
-            if(user !== props.userLoged.mail) {
+        if (!receivingUser && chatRoom.length) {
+          chatRoom[0].users.forEach((user) => {
+            if (user !== props.userLoged.mail) {
               getReceivingUser(user);
             }
-          })
+          });
         }
       }
     }
@@ -239,15 +239,19 @@ function ListChatRoom(props: React.PropsWithChildren<PropsChat>) {
             })}
         </ul>
       </div>
-      {((chatSelected && chatSelected.id) && receivingUser ) ? (
-        <ChatRoom
-          issuingUser={props.userLoged}
-          receivingUser={receivingUser}
-          chatSelected={chatSelected}
-          setChatSelected={setChatSelected}
-        />
+      {receivingUser ? (
+        chatSelected && chatSelected.id ? (
+          <ChatRoom
+            issuingUser={props.userLoged}
+            receivingUser={receivingUser}
+            chatSelected={chatSelected}
+            setChatSelected={setChatSelected}
+          />
+        ) : (
+          "Cargando..."
+        )
       ) : (
-        "Cargando..."
+        "No hay chats abiertos"
       )}
     </div>
   );
