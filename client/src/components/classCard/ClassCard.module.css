@@ -3,3 +3,12 @@
     box-shadow: 0px 12px 16px rgba(0, 0, 0, 0.2);
     border-radius: 35px;
 }
+
+
+.contenedorDetalle {
+    padding: 20px 10% 20px 10%;
+}
+
+.linea {
+    margin-bottom: 10px;
+}

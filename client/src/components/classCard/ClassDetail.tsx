@@ -15,6 +15,7 @@ import { connect } from "react-redux"
 import { set_calendar_data } from "../../Actions/Actions"
 import { useDispatch } from "react-redux"
 import { actionsType } from "../../constants/constants"
+import s from "./ClassCard.module.css"
 const calendar = <FontAwesomeIcon icon={faCalendarAlt} className="mt-1" style={{ color: "#0067ff" }} />
 const clock = <FontAwesomeIcon icon={faClock} className="mt-1" style={{ color: "#0067ff" }} />
 const materias = [
@@ -58,6 +59,7 @@ function ClassDetail (props) {
     let [day, setDay] = useState('')
     let [from, setFrom] = useState('0')
     let [days, setDays] = useState([])
+    let [opciones, setOpciones] = useState([])
     const dispatch = useDispatch();
     
     function redirect_blank(url) {
@@ -69,6 +71,7 @@ function ClassDetail (props) {
 
     useEffect(() => {
         async function fetchDays() {
+            
             console.log('profesor', props.profesor)
             const fetchCalendar = props.profesor ? await axios.get(`http://localhost:3001/api/calendario/${props.profesor.User_mail}`) : {data:[]}
             
@@ -87,9 +90,18 @@ function ClassDetail (props) {
                 return oneDate
             })
             
+            console.log('PRUEB', profDays)
+            const opciones = profDays.map(fullDate => {
+                return {
+                    dia: `${fullDate.day} ${fullDate.number} de ${fullDate.month} del ${fullDate.year}`,
+                    opciones: fullDate.disponible.disponible
+                }
+            })
+            setOpciones(opciones)
+            console.log('PROBANDO', opciones)
+            setFrom('0')
             props.dispatchData(profDays)
             setDays(profDays)
-            console.log('profDays', profDays)
     
         }
 
@@ -150,49 +162,79 @@ return (
                            {props.profesor ? <CalendarApp email={props.profesor.User_mail}> {props.profesor.User_mail} </CalendarApp>:null}
                         </div>
                         
+                        <div className={s.contenedorDetalle}>
                         <Card.Title>Selecciona el horario de tu clase</Card.Title>
                         
-                                    <div style={{display:'flex'}}>
+                        
 
-                                    <Form.Label className='text-uppercase'>Día</Form.Label>
+<Form.Row className={s.linea}>
+<Form.Label>Día de la clase</Form.Label>
 
-                                        <Form.Control
-                                            as='select'
-                                            
-                                            onChange={e => {console.log(e.target.value);setDay(e.target.value)}}
+                            <Form.Control
+                                as='select'
+                                
+                                onChange={e => {console.log(e.target.value);setDay(e.target.value);}}
 
-                                            // onBlur={handleBlur}
-                                            
-                                            className={`form-control`}
-                                            
-                                        >
-                                            <option value='' >Seleccioná un día para tu clase</option>
-                                            {days.map((fullDate, i) => {
-                                                return <option key={i + 10} value={`${fullDate.day} ${fullDate.number} de ${fullDate.month} del ${fullDate.year}`}>{`${fullDate.day} ${fullDate.number} de ${fullDate.month} del ${fullDate.year}`}</option>
-                                            }
-                                            )}
-                                        </Form.Control>
-                                        
-								
-                                        <Form.Control
-										name='hasta'
-										type='time'
-										value={from}
-                                        onChange={e => setFrom(e.target.value)}
-										
-									/>
-                                        
-                                <Form.Label>Horas:</Form.Label>
-                                    <RangeSlider
-                                        
-                                        value={hours}
-                                        onChange={(e)=>{setHours(e.target.value)}}
-                                        step={1}
-                                        max={8}
-                                    />
-                                        
-                                    
-                                    </div>
+                                // onBlur={handleBlur}
+                                
+                                className={`form-control`}
+                                
+                            >
+                                <option value='' >Selecciona un día para tu clase</option>
+                                {days.map((fullDate, i) => {
+                                    return <option key={i + 10} value={`${fullDate.day} ${fullDate.number} de ${fullDate.month} del ${fullDate.year}`}>{`${fullDate.day} ${fullDate.number} de ${fullDate.month} del ${fullDate.year}`}</option>
+                                }
+                                )}
+                            </Form.Control>
+</Form.Row>
+                        
+                            <Form.Row className={s.linea}>
+                            <Form.Label>Hora de inicio de la clase</Form.Label>
+                            <Form.Control
+                            name='hasta'
+                            as='select'
+                            onChange={e => setFrom(e.target.value)} >
+                                <option value='' selected={true} >Selecciona una hora de inicio para tu clase</option>
+                                {day ?
+                                
+                                opciones.filter(opcion => day === opcion.dia)[0].opciones[0].map((elemento, i) => {
+                                    return <option key={i + 10} value={elemento}>{elemento}</option>
+                                }
+                                )
+                            : 
+                            <option>Primero selecciona un día para tu clase</option>}
+                            </Form.Control>
+                            </Form.Row>
+                    
+                            
+                            
+                            <Form.Row className={s.linea}>
+                            <Form.Label>Cantidad de horas:</Form.Label>
+                            <Form.Control
+                            name='hasta'
+                            as='select'
+                            onChange={(e)=>{setHours(parseInt(e.target.value))}}
+                            >
+                                <option value='1'>1</option>
+                                {[2,3,4,5,6,7,8].map((e, i) => {
+                                return <option key={i + 10} value={e}>{e}</option>
+                            })}
+                            </Form.Control>
+                            
+                            </Form.Row>
+
+                    {/* <Form.Label>Cantidad de horas:</Form.Label>
+                        <RangeSlider
+                            
+                            value={hours}
+                            onChange={(e)=>{setHours(e.target.value)}}
+                            step={1}
+                            max={8}
+                        /> */}
+                            
+                        
+                        </div>
+                        
                                     
 									
 						
