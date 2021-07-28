@@ -10,6 +10,7 @@ interface UserClaimDetail {
   lastName: string;
   name: string;
   mail: string;
+  foto: string;
 }
 
 interface ClaimDetailType extends ClaimType {
@@ -160,7 +161,7 @@ function DetailClaim(props) {
             <div className={"text-center mb-2"}>
               <img
                 className={"img-fluid rounded-circle " + style.imgClaim}
-                src="https://i.imgur.com/MRTAOWM.png"
+                src={claim.denunciante.foto}
                 alt="foto perfil estudiante"
               />
               <h5 className={"w-100 m-0 p-1"}>{claim.denunciante.name}</h5>
@@ -182,15 +183,15 @@ function DetailClaim(props) {
               : null}
             </div>
 
-            <div className={"rounded-3 shadow my-2 mx-auto"}>
-              <ChatAdmin admin={claim.admin} user={claim.denunciante} />
+            <div className={"rounded-3 shadow my-2 "}>
+              {/* <ChatAdmin admin={claim.admin.mail} user={claim.denunciante.mail} /> */}
             </div>
           </div>
           <div className={"w-50 d-flex flex-column p-3"}>
             <div className={"text-center my-2"}>
               <img
-                className={style.imgClaim}
-                src="https://i.imgur.com/wc7cCCs.png"
+                className={"img-fluid rounded-circle " + style.imgClaim}
+                src={claim.denunciado.foto}
                 alt="foto denunciado"
               />
               <h5 className={"w-100 m-0 p-1"}>

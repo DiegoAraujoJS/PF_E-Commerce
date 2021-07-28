@@ -36,17 +36,17 @@ router.get("/:id", async (req: Request, res: Response) => {
         {
           model: User,
           as: "denunciado",
-          attributes: ["name", "User_mail", "lastName"],
+          attributes: ["name", "User_mail", "lastName", "foto"],
         },
         {
           model: User,
           as: "denunciante",
-          attributes: ["name", "User_mail", "lastName"],
+          attributes: ["name", "User_mail", "lastName", "foto"],
         },
         {
           model: User,
           as: "admin",
-          attributes: ["name", "User_mail", "lastName"],
+          attributes: ["name", "User_mail", "lastName", "foto"],
         },
         {
           model: Clase,

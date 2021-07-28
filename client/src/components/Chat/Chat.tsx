@@ -4,11 +4,13 @@ import getCookieValue from "../../cookieParser";
 import style from "./Chat.module.css";
 import ListChatRoom from "./ListChatRoom";
 import image from "../../images/login.svg";
+import profilePicture from "../../images/profile_pic.svg";
 
 export interface UserChat {
   mail: string;
   name: string;
   lastName: string;
+  photo?: string;
 }
 
 function Chat(props: React.PropsWithChildren<{mail:string}>) {
@@ -31,10 +33,13 @@ function Chat(props: React.PropsWithChildren<{mail:string}>) {
       {},
       { withCredentials: true, headers: { Authorization: token } }
     );
+    const response = await axios.get("http://localhost:3001/api/usuarios/" + userResponse.data.mail);
+    const photo = response.data.foto;
     const user: UserChat = {
       mail: userResponse.data.mail,
       name: userResponse.data.name,
       lastName: userResponse.data.lastName,
+      photo: photo || profilePicture,
     };
     setUserLoged(user);
   };

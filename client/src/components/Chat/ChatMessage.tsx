@@ -3,9 +3,9 @@ import style from "./Chat.module.css";
 import profilePicture from "../../images/profile_pic.svg";
 
 export default function ChatMessage(props) {
-  const { text, uid, photoURL, createdAt, user } = props.message;
+  const { text, uid, createdAt, receivingUser, issuingUser } = props.message;
 
-  const messageClass = uid === user ? "sent" : "received";
+  const messageClass = uid === issuingUser.mail ? "sent" : "received";
   
   return (
     <>
@@ -21,7 +21,7 @@ export default function ChatMessage(props) {
             </span>
             <img
               alt="alt"
-              src={photoURL || profilePicture}
+              src={issuingUser.photo || profilePicture}
               className={"rounded-circle shadow " + style.imgMessage}
             />
           </div>
@@ -36,7 +36,7 @@ export default function ChatMessage(props) {
           <div className={"d-flex align-items-center"}>
             <img
               alt="alt"
-              src={photoURL || profilePicture}
+              src={receivingUser.photo || profilePicture}
               className={"rounded-circle shadow " + style.imgMessage}
             />
             <span

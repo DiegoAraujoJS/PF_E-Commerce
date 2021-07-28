@@ -1,5 +1,3 @@
-import { connect } from "react-redux";
-import { getAllClaims } from "../../Actions/Actions";
 import Claim from "./Claim";
 import style from "./Claims.module.css";
 import { useState, useEffect } from "react";
@@ -20,7 +18,6 @@ function Claims(props) {
 
   useEffect(() => {
     getClaims();
-    console.log(claims);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [offset, limit]);
 

@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { firestore } from "../../firebase";
 import firebase from "firebase/app";
-import { UserChat } from "./Chat";
+import { UserChat } from './Chat';
 import style from "./Chat.module.css";
 import ChatMessage from "./ChatMessage";
 import profilePicture from "../../images/profile_pic.svg";
@@ -13,14 +13,17 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 interface ChatData {
-  users: Array<UserChat>;
+  users: Array<string>;
   id: string;
 }
 
 interface ChatRoomData {
-  userLoged: UserChat;
-  users: Array<UserChat>;
-  id: string;
+  chatSelected: {
+    users: Array<string>;
+    id: string;
+  };
+  issuingUser: UserChat;
+  receivingUser: UserChat;
   setChatSelected: React.Dispatch<React.SetStateAction<ChatData>>;
 }
 
@@ -29,7 +32,7 @@ export default function ChatRoom(props: React.PropsWithChildren<ChatRoomData>) {
 
   let messagesRef = firestore
     .collection("chatsRooms")
-    .doc(props.id)
+    .doc(props.chatSelected.id)
     .collection("messages");
   const queryMessages = messagesRef.orderBy("createdAt", "desc");
   const [messages] = useCollectionData(queryMessages, { idField: "id" });
@@ -42,9 +45,8 @@ export default function ChatRoom(props: React.PropsWithChildren<ChatRoomData>) {
     await messagesRef.add({
       text: formValue,
       createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-      uid: props.userLoged.mail,
-      name: props.userLoged.name,
-      photoURL: profilePicture,
+      uid: props.issuingUser.mail,
+      name: props.issuingUser.name,
     });
 
     setFormValue("");
@@ -63,26 +65,13 @@ export default function ChatRoom(props: React.PropsWithChildren<ChatRoomData>) {
               "w-100 d-flex flex-row justify-content-start align-items-center"
             }
           >
-            {/* <button
-              className={
-                "text-white fs-6 mx-3 border-0 rounded-1 " +
-                style.background
-              }
-              onClick={() => props.setChatSelected({ users: [], id: "" })}
-            >
-              <FontAwesomeIcon icon={faArrowLeft} size={"1x"}/>
-            </button> */}
             <img
-              src={profilePicture}
+              src={props.receivingUser.photo || profilePicture}
               className={"rounded-circle mx-3 " + style.imgMessage}
               alt="profile"
             />
             <span className="text-white fs-5 ">
-              {props.users.map((user) =>
-                user.mail !== props.userLoged.mail
-                  ? user.name + " " + user.lastName
-                  : ""
-              )}
+              {props.receivingUser.name + " " + props.receivingUser.lastName}
             </span>
           </div>
         </nav>
@@ -107,7 +96,7 @@ export default function ChatRoom(props: React.PropsWithChildren<ChatRoomData>) {
               messages.map((msg: any, i) => (
                 <ChatMessage
                   key={i}
-                  message={{ ...msg, user: props.userLoged.mail }}
+                  message={{ ...msg, issuingUser: props.issuingUser, receivingUser: props.receivingUser  }}
                 />
               ))}
           </main>
