@@ -11,7 +11,8 @@ let initialState = {
     user_name: '',
     user_lastName: '',
     clasesPorComprar: [],
-    calendar_to_addClassStudent: {}
+    calendar_to_addClassStudent: {},
+    set_fetch_calendar: []
 };
 
 const all = (state = initialState, action) => {
@@ -51,6 +52,11 @@ const all = (state = initialState, action) => {
             return {
                 ...state,
                 calendar_to_addClassStudent: action.payload
+            }
+        case actionsType.SET_FETCH_CALENDAR:
+            return {
+                ...state,
+                set_fetch_calendar: action.payload
             }
         default:
             return state

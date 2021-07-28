@@ -27,8 +27,10 @@ export default function DetalleCesta({ moneda, cliente }) {
     let descuento = 0;
     if (clasesPorComprar.length) {
         precioOriginal = roundTwo(clasesPorComprar.map(e => e.precioOriginal).reduce((acum, e) => acum + e));
-        total = roundTwo(clasesPorComprar.map(e => e.precioDescuento).reduce((acum, e) => acum + e));
-        descuento = roundTwo(precioOriginal - total);
+        
+        total = roundTwo(precioOriginal);
+        precioOriginal = roundTwo(precioOriginal)
+        descuento = 0
     }
 
     // This allows us to redirect the client
