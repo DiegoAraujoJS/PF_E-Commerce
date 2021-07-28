@@ -18,18 +18,11 @@ router.post('/add', validateToken, async (req: MiddlewareRequest, res: Response)
     if (req.data.role !== 2 && req.body.email != req.data.mail) {
         return res.status(400).send('You are not authorized.')
     }
-    let query_disponible_1
-    let query_disponible_2
-    if ( query.disponible) {
-        query_disponible_1 = query.disponible[0][0].substring(0, 2) + query.disponible[0][0].substring(3, 5) + query.disponible[0][0].substring(6, 8)
-        query_disponible_2 = query.disponible[0][1].substring(0, 2) + query.disponible[0][1].substring(3, 5) + query.disponible[0][1].substring(6, 8)
-
-        if(query.disponible && query_disponible_1 < "0" && query_disponible_1 > "240000"  || query_disponible_2 < "0" && query_disponible_2 > "240000" || query_disponible_2 < query_disponible_1) return res.send("El horario disponible es incorrecto")
-    }
+    
 
 
     try {
-        if ( query.disponible && query.disponible[0][0].substring(0,2) < "00" || query.disponible[0][1].substring(0,2) > "24") return res.send("El horario disponible es incorrecto")
+        
         
         let profesor = await Profesor.findOne({
             where: {
@@ -219,7 +212,7 @@ router.put('/delete', validateToken, async (req:MiddlewareRequest, res:Response)
             if (newAvaliable.length === 0) newAvaliable = null
             newDate.disponible = newAvaliable
             const calendarWithoutOldDate = calendar.filter(c => c !== thisDate)
-            const newCalendar = [...calendarWithoutOldDate, newDate]
+            const newCalendar = newDate.disponible!==null || newDate.ocupado!==null ? [...calendarWithoutOldDate, newDate] : calendarWithoutOldDate
             professor.set({
                 ...professor, 
                 calendario: newCalendar
@@ -231,7 +224,7 @@ router.put('/delete', validateToken, async (req:MiddlewareRequest, res:Response)
             if (newAvaliable.length === 0) newAvaliable = null
             newDate.ocupado = newAvaliable
             const calendarWithoutOldDate = calendar.filter(c => c !== thisDate)
-            const newCalendar = [...calendarWithoutOldDate, newDate]
+            const newCalendar = newDate.disponible!==null || newDate.ocupado!==null ? [...calendarWithoutOldDate, newDate] : calendarWithoutOldDate
             professor.set({
                 ...professor, 
                 calendario: newCalendar

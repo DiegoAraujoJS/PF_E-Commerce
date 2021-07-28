@@ -83,8 +83,10 @@ class Calendar extends Component {
           const dia=args.start.value.slice(8,-9)
           const start=args.start.value.slice(11)
           const end=args.end.value.slice(11)
+          let last = end
+          if (last === '00:00:00') last = '24:00:00'
           const horario1={
-            disponible: [[start,  end]],
+            disponible: [[start,  last]],
             email: email,
             fecha: {
                 anio: año,
@@ -107,9 +109,11 @@ class Calendar extends Component {
             const start=args.e.data.start.value.slice(11)
             const end=args.e.data.end.value.slice(11)
             let horario1
+            let last = end
+            if (last === '00:00:00') last = '24:00:00'
             if(args.e.data.text==="Disponible"){
             horario1={
-              disponible: [[start,  end]],
+              disponible: [[start,  last]],
               email: email,
               fecha: {
                   anio: año,
@@ -118,8 +122,9 @@ class Calendar extends Component {
               }
           } }
           else if(args.e.data.text==="Ocupado"){
+            
             horario1={
-              ocupado: [[start,  end]],
+              ocupado: [[start,  last]],
               email: email,
               fecha: {
                   anio: año,
