@@ -184,7 +184,7 @@ export default function PagoExitoso() {
             <div className={s.detalleContainer}>
                 {
                     productosComprados.length ?
-                        productosComprados.map((e, i) => <Item cliente={cliente} key={i} id={e.id} imagen={e.imagen} nombre={e.nombre} precioOriginal={e.precioOriginal} precioDescuento={e.precioDescuento} moneda={e.moneda} dia={e.dia} horaInicio={e.horaInicio} horaFin={e.horaFin} profesor={e.profesor} comprado={true} precio={e.precio}></Item>)
+                        productosComprados.map((e, i) => <Item cliente={cliente} key={i} id={e.id} imagen={e.imagen} nombre={e.nombre} precioDescuento={e.precioDescuento} moneda={e.moneda} dia={e.dia} horaInicio={e.horaInicio} horaFin={e.horaFin} profesor={e.profesor} comprado={true} precio={e.precio}></Item>)
                         :
                         <img src={loadingGif} alt="Loading Gif" className={s.loadingGif} />
                 }

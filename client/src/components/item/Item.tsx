@@ -33,7 +33,7 @@ const mark = <FontAwesomeIcon icon={faMapMarkerAlt} style={{ color: "#ff3f3f" }}
     // student={clase?.student}
     
     
-    export default function Item({ cliente, id, imagen, nombre, precioDescuento, precioOriginal, moneda, dia, horaInicio, horaFin, profesor, comprado, precio }) {
+    export default function Item({ cliente, id, imagen, nombre, precioDescuento, moneda, dia, horaInicio, horaFin, profesor, comprado, precio }) {
       
 
 
@@ -198,10 +198,7 @@ const mark = <FontAwesomeIcon icon={faMapMarkerAlt} style={{ color: "#ff3f3f" }}
                   <span className={s.moneda}>{moneda}</span>
                   <span className={s.precio}>{precioDescuento.toFixed(2)}</span>
                 </div>
-                <div>
-                  <span className={s.moneda}>{moneda}</span>
-                  <span className={s.precioOriginal}>{precioOriginal.toFixed(2)}</span>
-                </div>
+                
               </div>
               <ClassDetail hijo = {{show, handleClose, email, mark, puntuacion}} {...props} />
             {/* </Link> */}

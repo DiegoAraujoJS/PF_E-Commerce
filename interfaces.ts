@@ -26,7 +26,6 @@ interface ClasePorComprar {
     imagen: string;
     nombre: string;
     precioDescuento: number;
-    precioOriginal: number;
     dia: `${number}${number}/${number}${number}/${number}${number}${number}${number}`;
     horaInicio: `${number}${number}:${number}${number} ${'PM' | 'AM'}`;
     horaFin: `${number}${number}:${number}${number} ${'PM' | 'AM'}`;

@@ -22,13 +22,13 @@ export default function DetalleCesta({ moneda, cliente }) {
     }
 
     // This allows us to calculate the total based on Redux state's properties
-    let precioOriginal = 0;
+    
     let total = 0;
     let descuento = 0;
     if (clasesPorComprar.length) {
-        precioOriginal = roundTwo(clasesPorComprar.map(e => e.precioOriginal).reduce((acum, e) => acum + e));
+        
         total = roundTwo(clasesPorComprar.map(e => e.precioDescuento).reduce((acum, e) => acum + e));
-        descuento = roundTwo(precioOriginal - total);
+        descuento = roundTwo(total);
     }
 
     // This allows us to redirect the client
@@ -37,7 +37,7 @@ export default function DetalleCesta({ moneda, cliente }) {
         try {
             const session = await axios.post('http://localhost:3001/procesarpago', {
                 clasesPorComprar,
-                precioOriginal,
+                
                 total,
                 descuento,
                 moneda,
@@ -58,7 +58,7 @@ export default function DetalleCesta({ moneda, cliente }) {
                             <p className={`${s.cantidadClases} ${s.marginBottom}`}>{clasesPorComprar.length === 1 ? '1 clase en la cesta' : `${clasesPorComprar.length} clases en la cesta`}</p>
                             <div>
                                 {
-                                    clasesPorComprar.map((e, i) => <Item key={i} cliente={cliente} id={e.id} imagen={e.imagen} nombre={e.nombre} precioDescuento={e.precioDescuento} precioOriginal={e.precioOriginal} moneda={moneda} dia={e.dia} horaInicio={e.horaInicio} horaFin={e.horaFin} profesor={e.profesor} comprado={false} precio={e.precio}></Item>)
+                                    clasesPorComprar.map((e, i) => <Item key={i} cliente={cliente} id={e.id} imagen={e.imagen} nombre={e.nombre} precioDescuento={e.precioDescuento} moneda={moneda} dia={e.dia} horaInicio={e.horaInicio} horaFin={e.horaFin} profesor={e.profesor} comprado={false} precio={e.precio}></Item>)
                                 }
                             </div>
                         </div>
@@ -66,11 +66,7 @@ export default function DetalleCesta({ moneda, cliente }) {
                             <form onSubmit={handleSubmit}>
                                 <p className={`${s.title} ${s.marginBottom}`}>Resumen</p>
                                 <div className={s.details}>
-                                    <div>
-                                        <span className={s.label}>Precio original: </span>
-                                        <span className={s.moneda}>{moneda}</span>
-                                        <span className={s.precio}>{precioOriginal.toFixed(2)}</span>
-                                    </div>
+                                    
                                     <div>
                                         <span className={s.label}>Descuento: </span>
                                         <span className={s.moneda}>{moneda}</span>
