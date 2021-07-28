@@ -18,19 +18,6 @@ const starCompleta = <FontAwesomeIcon icon={starComplete} style={{ color: "#ffe5
 const email = <FontAwesomeIcon icon={faEnvelope} className="mt-1" style={{ color: "#0067ff" }} />
 const mark = <FontAwesomeIcon icon={faMapMarkerAlt} style={{ color: "#ff3f3f" }} />
 
-    // id={clase?.id}
-    // nombre={clase?.nombre}
-    // descripcion={clase?.descripcion}
-    // esPresencial={clase?.esPresencial}
-    // grado={clase?.grado}
-    // materia={clase?.materia}
-    // nivel={clase?.nivel}
-    // profesor={clase?.profesor}
-    
-    // date={clase?.date}
-    // precio={clase?.precio}
-    // key={i + 20}
-    // student={clase?.student}
     
     
     export default function Item({ cliente, id, imagen, nombre, precioDescuento, precioOriginal, moneda, dia, horaInicio, horaFin, profesor, comprado }) {
@@ -48,8 +35,6 @@ const mark = <FontAwesomeIcon icon={faMapMarkerAlt} style={{ color: "#ff3f3f" }}
           if(result.status === 200) {  
             const props = result.data;
             setDet(props)
-            console.log('aquiiii', props)
-            // return props;
           }
         }) 
       }, [show]);
@@ -75,12 +60,6 @@ const mark = <FontAwesomeIcon icon={faMapMarkerAlt} style={{ color: "#ff3f3f" }}
                                             : num === 1 || (num < 1.5 && num >= 1) ? <p>{starCompleta}{starEmpty}{starEmpty}{starEmpty}{starEmpty}</p>
                                                 : <h4>No tiene puntuacion</h4>
         }
-
-        
-    
-
-
-
 
 
       // This allows use to modify Redux state's properties 
@@ -132,7 +111,7 @@ const mark = <FontAwesomeIcon icon={faMapMarkerAlt} style={{ color: "#ff3f3f" }}
       {
         comprado ?
           <div  className={s.card}>
-            {/* <Link to={`/detalle/${id}`} className={s.enlaceComprado}> */}
+            
               <div onClick={handleShow} className={s.imageContainer}>
                 <img src={imagen} alt={nombre} className={s.cover} />
               </div>
@@ -165,11 +144,11 @@ const mark = <FontAwesomeIcon icon={faMapMarkerAlt} style={{ color: "#ff3f3f" }}
                 </div>
               </div>
               <ClassDetail hijo = {{show, handleClose, email, mark, puntuacion, botn: 'd.none' }} {...props} />
-            {/* </Link> */}
+            
           </div>
           :
           <div className={s.card}>
-            {/* <Link to={`/detalle/${id}`} className={s.enlace}> */}
+            
               <div onClick={handleShow} className={s.imageContainer}>
                 <img src={imagen} alt={nombre} className={s.cover} />
               </div>
@@ -204,7 +183,7 @@ const mark = <FontAwesomeIcon icon={faMapMarkerAlt} style={{ color: "#ff3f3f" }}
                 </div>
               </div>
               <ClassDetail hijo = {{show, handleClose, email, mark, puntuacion, botn: 'd-none'}} {...props} />
-            {/* </Link> */}
+            
             <div className={s.quitarDeCesta}>
               <button onClick={quitardeCesta} className={s.quitarDeCestaButton}>
                 <IonIcon icon={closeCircleOutline} className={s.iconDumb}></IonIcon>

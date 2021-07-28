@@ -18,7 +18,7 @@ import SearchBarHome from './components/searchBar/SearchBarHome';
 import getCookieValue from './cookieParser';
 import PagoExitoso from './components/pagoexitoso/PagoExitoso';
 import Cesta from './components/cesta/Cesta';
-import DetalleClase from './components/detalleclase/DetalleClase';
+
 import CondicionesUso from './components/condicionesuso/CondicionesUso';
 import CondicionesServicio from './components/condicionesservicio/CondicionesServicio';
 import PoliticaPrivacidad from './components/politicaprivacidad/PoliticaPrivacidad';
@@ -142,7 +142,7 @@ function App() {
       <Route path='/cesta' component={Cesta}></Route>
       <Route path='/historial' component={Historial}></Route>
       <Route path="/pagoexitoso" component={PagoExitoso}></Route>
-      {/* <Route path="/detalle/:id" render={({ match }) => <DetalleClase id={match.params.id} />} /> */}
+
       <Route path="/condicionesdeuso" component={CondicionesUso}></Route>
       <Route path="/condicionesdelservicio" component={CondicionesServicio}></Route>
       <Route path="/politicadeprivacidad" component={PoliticaPrivacidad}></Route>
