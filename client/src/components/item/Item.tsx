@@ -33,7 +33,7 @@ const mark = <FontAwesomeIcon icon={faMapMarkerAlt} style={{ color: "#ff3f3f" }}
     // student={clase?.student}
     
     
-    export default function Item({ cliente, id, imagen, nombre, precioDescuento, moneda, dia, horaInicio, horaFin, profesor, comprado, precio }) {
+    export default function Item({ cliente, id, imagen, nombre, precioDescuento, moneda, dia, horaInicio, horaFin, profesor, comprado }) {
       
 
 
@@ -155,6 +155,7 @@ const mark = <FontAwesomeIcon icon={faMapMarkerAlt} style={{ color: "#ff3f3f" }}
                   <span className={s.detail}>{horaFin}</span>
                 </div>
               </div>
+              {/* clasesPorComprar.map((e, i) => <Item key={i} cliente={cliente} id={e.id} imagen={e.imagen} nombre={e.nombre} precioDescuento={e.precioDescuento} precioOriginal={e.precioOriginal} moneda={moneda} dia={e.dia} horaInicio={e.horaInicio} horaFin={e.horaFin} profesor={e.profesor} comprado={false}></Item>) */}
               <div className={s.pricesComprado}>
                 <div className={s.textAlign}>
                   <p className={s.titleComprado}>Precio</p>

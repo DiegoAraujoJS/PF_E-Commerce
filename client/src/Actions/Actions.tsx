@@ -42,4 +42,11 @@ const modificarClasesPorComprar = (clasesPorComprar) => {
     }
 }
 
-export { getByIdClaim, getAllClaims, getUserLoged, modificarClasesPorComprar}
+const set_calendar_data = (calendarArray) => {
+    return {
+        type: actionsType.SET_FETCH_CALENDAR,
+        payload: calendarArray
+    }
+}
+
+export { getByIdClaim, getAllClaims, getUserLoged, modificarClasesPorComprar, set_calendar_data}

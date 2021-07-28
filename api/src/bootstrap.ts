@@ -236,7 +236,7 @@ const bootstrap = async () => {
             nivel: "Primario",
             puntuacion: 5,
             date: { year: 2021, month: 8, day: 7, time: ["08:00:00", "12:00:00"] },
-            precio: "200",
+            precio: "100",
         });
 
         const Clase3 = await Clase.create({
@@ -278,7 +278,7 @@ const bootstrap = async () => {
             nivel: 'Secundario',
             puntuacion: 4.20,
             date: { year: 2021, month: 8, day: 7, time: ['12:00:00', '17:00:00'] },
-            precio: "100"
+            precio: "200"
         })
 
         const Clase5 = await Clase.create({
@@ -293,7 +293,7 @@ const bootstrap = async () => {
             nivel: 'Terciario',
             puntuacion: 4,
             date: { year: 2021, month: 8, day: 7, time: ['08:00:00', '10:00:00'] },
-            precio: "100",
+            precio: "200",
         })
 
         const Clase6 = await Clase.create({

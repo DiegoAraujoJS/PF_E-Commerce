@@ -7,6 +7,7 @@ const router = Router()
 router.post('/:user', async function (req: Request, res: Response) {
     const { user } = req.params
     const clase: IClase = req.body
+    console.log(clase)
     try {
         const usuario = await User.findByPk(user)
         if (usuario.carrito) {

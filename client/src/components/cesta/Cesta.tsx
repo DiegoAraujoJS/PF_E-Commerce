@@ -30,6 +30,7 @@ export default function Cesta() {
                 
                 if (clases.status === 200 && Array.isArray(clases.data) && clases.data.length) {
                     const clasesPorComprarFormateadas: any = clases.data.map(e => {
+                        console.log(e.date)
                         let dia = e.date?.day;
                         let mes = e.date?.month;
                         let horaInicio = e.date?.time[0].split(':');
@@ -54,7 +55,7 @@ export default function Cesta() {
                             id: e.id,
                             imagen: e.profesor?.foto,
                             nombre: e.nombre,
-                            precioDescuento: Number(e.precio),
+                            precioDescuento: Number(e.precio?.slice(1)) + Number(e.precio),
                             
                             dia: `${dia}/${mes}/${e.date.year}`,
                             horaInicio: `${horaInicio[0]}:${horaInicio[1]} ${horaInicio[2]}`,

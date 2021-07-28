@@ -107,16 +107,21 @@ router.get('/:usuario', async (req: Request, res: Response) => {
     const { usuario } = req.params
 
     try {
+        console.log(usuario)
         if (usuario) {
             const user = await User.findByPk(usuario)
+            console.log(user)
             const profesor = await Profesor.findOne({
                 where: {
                     User_mail: usuario
                 }
             })
+            console.log(profesor)
             if (profesor) {
                 if (profesor.calendario) {
-                    res.send(profesor.calendario)
+                    return res.send(profesor.calendario)
+                } else {
+                    return res.send([])
                 }
             } else if (!profesor && usuario){
                 return res.send(user.calendario)
