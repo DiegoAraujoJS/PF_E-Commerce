@@ -271,9 +271,29 @@ class Calendar extends Component {
   render() {
     const propsEmail={email:this.props.email}
     var { ...config } = this.state;
+    const  fecha=today
     return (
-      
-        
+      <div>
+      <div style={{display:"flex", justifyContent:"space-between"}}>
+      <button onClick={async ()=>{
+          console.log(config)
+          console.log("fecha", fecha)
+          fecha.setDate(fecha.getDate() - 7);
+          this.setState({
+            startDate: fecha,
+          });
+          console.log("Fecha modificada", fecha)
+        }}> {"<"} </button>
+        <button onClick={async ()=>{
+          console.log(config)
+          console.log("fecha", fecha)
+          fecha.setDate(fecha.getDate() + 7);
+          this.setState({
+            startDate: fecha,
+          });
+          console.log("Fecha modificada", fecha)
+        }}>{">"}</button>
+        </div>
         
           <DayPilotCalendar
             {...config}
@@ -283,7 +303,7 @@ class Calendar extends Component {
             children={{}}
           />
         
-      
+        </div>
     );
   }
 }
