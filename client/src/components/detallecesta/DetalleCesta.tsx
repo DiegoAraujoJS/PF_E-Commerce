@@ -26,7 +26,7 @@ export default function DetalleCesta({ moneda, cliente }) {
     let total = 0;
     let descuento = 0;
     if (clasesPorComprar.length) {
-        precioOriginal = roundTwo(clasesPorComprar.map(e => e.precioOriginal).reduce((acum, e) => acum + e));
+        precioOriginal = roundTwo(clasesPorComprar.map(e => e.precioDescuento).reduce((acum, e) => acum + e));
         
         total = roundTwo(precioOriginal);
         precioOriginal = roundTwo(precioOriginal)
