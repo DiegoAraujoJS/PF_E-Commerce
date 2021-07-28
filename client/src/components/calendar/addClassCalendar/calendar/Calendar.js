@@ -71,7 +71,8 @@ class Calendar extends Component {
           const start=args.start.value.slice(11)
           const end=args.end.value.slice(11)
           
-        
+          let last = end
+          if (last === '00:00:00') last = '24:00:00'
         const dias = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado']
         const d = new Date(args.start);
 
@@ -79,9 +80,9 @@ class Calendar extends Component {
         console.log(args.start)
         this.state.horarios[dayName] = this.state.horarios[dayName] ? this.state.horarios[dayName] = {
           ...this.state.horarios[dayName],
-          disponible: [...this.state.horarios[dayName].disponible, [start, end]]
+          disponible: [...this.state.horarios[dayName].disponible, [start, last]]
         } : this.state.horarios[dayName] = {
-          disponible: [[start, end]],
+          disponible: [[start, last]],
           fecha: {
             anio: año,
             mes:  mes,
@@ -111,9 +112,11 @@ class Calendar extends Component {
             const start=args.e.data.start.value.slice(11)
             const end=args.e.data.end.value.slice(11)
             let horario1
+            let last = end
+            if (last === '00:00:00') last = '24:00:00'
             if(args.e.data.text==="Disponible"){
             horario1={
-              disponible: [[start,  end]],
+              disponible: [[start,  last]],
               email: email,
               fecha: {
                   anio: año,
@@ -123,7 +126,7 @@ class Calendar extends Component {
           } }
           else if(args.e.data.text==="Ocupado"){
             horario1={
-              ocupado: [[start,  end]],
+              ocupado: [[start,  last]],
               email: email,
               fecha: {
                   anio: año,
