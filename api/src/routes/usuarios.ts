@@ -127,7 +127,7 @@ router.put('/', async (req: Request, res: Response) => {
 router.patch('/', async (req: Request, res: Response) => {
     const { ciudad, foto, description } = req.body;
     const mail = req.body.usuario;
-    console.log("ACA ESTA EL BODYT XDDDDD",req.body)
+    console.log("BODYYYYYYYYYYYYYYYYYYY",req.body)
     try {
         if (mail) {
             let usuario: any = await User.findOne({
@@ -136,7 +136,7 @@ router.patch('/', async (req: Request, res: Response) => {
                 },
             });
             if (usuario) {
-                    await usuario.update({city:ciudad, foto:foto, description:description},{
+                    await usuario.update({...req.body},{
                         where:{
                             User_mail: mail.toString()
                         }

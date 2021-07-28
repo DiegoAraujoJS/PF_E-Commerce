@@ -4,26 +4,19 @@ import axios from "axios";
 import getCookieValue from "../../cookieParser";
 import { useHistory } from "react-router-dom";
 import { storage } from "../../firebase";
-
+import bootstrap from "bootstrap";
+import { Button, Modal, Row, Col, Form } from "react-bootstrap";
 const EditProfile = () => {
   const history = useHistory();
   const [prech, setPrech] = useState<any>({});
   const [img, setImg] = useState<any>("");
-  const [data, setData] = useState<any>({
-    foto: "",
-    usuario: "",
-    ciudad: "",
-    estado: "",
-    education: prech.title,
-    description: prech.description,
-    name: "",
-    lastName: "",
-    title: "",
-  });
+  const [data, setData] = useState<any>({});
   const [countries, setCountries] = React.useState([]);
   const [states, setStates] = React.useState([]);
+  const [cities, setCities] = React.useState([]);
   const [countryS, setCountryS] = useState<any>({});
   const [stateS, setStateS] = useState<any>({});
+  const [cityS, setCitieS] = useState<any>({});
   const Changes = async (e) => {
     try {
       const token = getCookieValue("token").replaceAll('"', "");
@@ -33,14 +26,14 @@ const EditProfile = () => {
         { withCredentials: true, headers: { Authorization: token } }
       );
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      console.log("stateS", stateS);
       let editar = await axios.patch("http://localhost:3001/api/profesores/", {
         foto: img,
         usuario: thisUser.data.mail,
         description: data.description,
         country: countryS,
-        title: data.education,
+        title: data.title,
         state: stateS,
+        city: cityS,
       });
       alert("Cambios Realizados");
     } catch (err) {
@@ -59,20 +52,6 @@ const EditProfile = () => {
     console.log(newdata);
   };
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const imageHandler = (e) => {
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (reader.readyState === 2) {
-        setImg(reader.result);
-      }
-    };
-    reader.readAsDataURL(e.target.files[0]);
-    const newdata = { ...data };
-    newdata[e.target.id] = e.target.value;
-    setData(newdata);
-    console.log(newdata);
-  };
-
   const Upload = async ({ file }) => {
     // Referencia al espacio en el bucket donde estará el archivo
     let storageRef = storage.ref().child("images/" + file.name);
@@ -107,9 +86,8 @@ const EditProfile = () => {
         setData({
           ...response.data,
         });
-        console.log("prechargue", prech);
       }
-      setImg(prech.foto);
+      setImg(data.foto);
       // console.log("todo lo que hayt que agregar",prech)
     } catch (err) {
       console.log(err);
@@ -147,10 +125,12 @@ const EditProfile = () => {
       { country: countryS, state: e.target.value }
     );
     console.log(response_3.data);
+    setCities(response_3.data);
   }
-  useEffect(() => {
-    setImg(prech.foto);
-  }, [prech]);
+
+  const handleCitieChange = (e) => {
+    setCitieS(e.target.value);
+  };
 
   return (
     <div className={styles.body}>
@@ -186,7 +166,7 @@ const EditProfile = () => {
                   className="form-control"
                   onChange={(e) => inputsHandler(e)}
                   id="description"
-                  value={data.description}
+                  value={data.description ? data.description : ""}
                 />
               </div>
               {/*  <div className="col-md-12"><label className="labels">Contacto Telefonico</label><input type="text" className="form-control" placeholder="numero de celular" /></div>
@@ -200,8 +180,8 @@ const EditProfile = () => {
                   className="form-control"
                   placeholder="educacion"
                   onChange={(e) => inputsHandler(e)}
-                  id="education"
-                  value={data.title}
+                  id="title"
+                  value={data.title ? data.title : ""}
                 />
               </div>
             </div>
@@ -226,18 +206,41 @@ const EditProfile = () => {
                 </select>
               </div>
               <div className="col-md-6">
-                <label className="labels">Estado</label>
-                <select
-                  name="state"
-                  onChange={(e) => {
-                    handleStateChange(e);
-                  }}
-                  disabled={!countries.length}
-                  className="form-control"
-                >
-                  {states.length &&
-                    states.map((c) => <option value={c.name}>{c.name}</option>)}
-                </select>
+                {Object.keys(countryS).length ? (
+                  <Col>
+                    <label>Estado/Provincia</label>
+                    <select
+                      name="state"
+                      onChange={(e) => {
+                        handleStateChange(e);
+                      }}
+                      disabled={!countries.length}
+                      className="form-control"
+                    >
+                      {states.length &&
+                        states.map((c) => (
+                          <option value={c.name}>{c.name}</option>
+                        ))}
+                    </select>
+                  </Col>
+                ) : null}
+              </div>
+              <br />
+              <div className="col-md-6">
+                {cities.length > 1 ? (
+                  <Col>
+                    <label>Ciudad</label>
+                    <select
+                      onChange={(e) => handleCitieChange(e)}
+                      name="city"
+                      disabled={!states.length}
+                      className="form-control"
+                    >
+                      {cities.length &&
+                        cities.map((c) => <option value={c}>{c}</option>)}
+                    </select>
+                  </Col>
+                ) : null}
               </div>
             </div>
             <div className="mt-5 text-center">

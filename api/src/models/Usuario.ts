@@ -49,6 +49,9 @@ export default class User extends Model implements IUser {
 
     @Column
     suspendido!: boolean;
+    
+    @Column  ({type: DataType.TEXT})
+    description!: string;
 
     @HasOne(() => Profesor)
     profesor!: Profesor;
