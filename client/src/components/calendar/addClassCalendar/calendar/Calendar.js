@@ -272,12 +272,13 @@ class Calendar extends Component {
     
 
   render() {
+    const rende={renderiza:this.props.renderiza}
     const propsEmail={email:this.props.email}
     var { ...config } = this.state;
     const  fecha=today
     return (
       <div>
-      <div style={{display:"flex", justifyContent:"space-between"}}>
+      {rende.renderiza===true?<div style={{display:"flex", justifyContent:"space-between"}}>
       <button onClick={async ()=>{
           console.log(config)
           console.log("fecha", fecha)
@@ -296,7 +297,7 @@ class Calendar extends Component {
           });
           console.log("Fecha modificada", fecha)
         }}>{">"}</button>
-        </div>
+           </div>:null }
         
           <DayPilotCalendar
             {...config}

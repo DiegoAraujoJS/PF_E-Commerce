@@ -147,8 +147,7 @@ return (
                         </Card.Header>
                         <div style={{height:'400px'}}>
 
-                           {props.profesor ? <CalendarApp email={props.profesor.User_mail}> {props.profesor.User_mail} </CalendarApp>:null}
-                        </div>
+                        {props.profesor ? <CalendarApp renderiza={true} email={props.profesor.User_mail}> {props.profesor.User_mail} </CalendarApp>:null}     </div>
                         
                         <Card.Title>Selecciona el horario de tu clase</Card.Title>
                         
