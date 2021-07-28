@@ -33,7 +33,7 @@ const mark = <FontAwesomeIcon icon={faMapMarkerAlt} style={{ color: "#ff3f3f" }}
     // student={clase?.student}
     
     
-    export default function Item({ cliente, id, imagen, nombre, precioDescuento, precioOriginal, moneda, dia, horaInicio, horaFin, profesor, comprado }) {
+    export default function Item({ cliente, id, imagen, nombre, precioDescuento, precioOriginal, moneda, dia, horaInicio, horaFin, profesor, comprado, precio }) {
       
 
 
