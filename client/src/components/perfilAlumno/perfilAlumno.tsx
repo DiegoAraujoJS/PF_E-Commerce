@@ -4,6 +4,7 @@ import axios from "axios";
 import getCookieValue from "../../cookieParser";
 import icon_edit from "../../images/editar.png";
 import { useHistory } from "react-router-dom";
+import Foto_Perfil from "../../images/SinFoto.png";
 
 const PerfilAlumno = ({ email }) => {
   const history = useHistory();
@@ -52,6 +53,12 @@ const PerfilAlumno = ({ email }) => {
       { withCredentials: true, headers: { Authorization: token } }
     );
     setUserLoged(userResponse.data);
+    if (!alumno.foto) {
+      let editar = await axios.patch("http://localhost:3001/api/usuarios/", {
+        foto: Foto_Perfil,
+        usuario: userLoged.mail,
+      });
+    }
     console.log("ESTE ES EL RESPONSE", userResponse.data);
   };
   useEffect(() => {

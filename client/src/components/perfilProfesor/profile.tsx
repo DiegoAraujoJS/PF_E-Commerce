@@ -9,6 +9,7 @@ import { useHistory, Link } from "react-router-dom";
 import PerfilAlumno from "../perfilAlumno/perfilAlumno";
 import { Rating, RatingView } from "react-simple-star-rating";
 import Swal from "sweetalert2";
+import Foto_Perfil from "../../images/SinFoto.png";
 
 const Role = {
   USER: 0,
@@ -166,6 +167,12 @@ function Profile(email, { user }) {
       { withCredentials: true, headers: { Authorization: token } }
     );
     setUserLoged(userResponse.data);
+    if (!prof.foto) {
+      let editar = await axios.patch("http://localhost:3001/api/profesores/", {
+        foto: Foto_Perfil,
+        usuario: userLoged.mail,
+      });
+    }
   };
   const handleClick = (e) => {
     e.preventDefault();

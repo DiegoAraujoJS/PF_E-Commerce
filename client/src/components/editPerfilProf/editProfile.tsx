@@ -60,7 +60,11 @@ const EditProfile = () => {
       }
     } catch (err) {
       console.log(err);
-      Swal.fire("Error!", "Algo salio mal", "error");
+      Swal.fire(
+        "Error!",
+        "Algo salio mal, ¿Añadiste un pais, estado y ciudad?",
+        "error"
+      );
     }
 
     history.push(`/perfil/`);
