@@ -255,7 +255,7 @@ return (
                                 date: {year: thisDate.year, month: thisDate.month, day: thisDate.number, time: [`${from[0]}:00`, stringified]},
                                 precio: `${hours * props.precio}`
                             }
-                            
+                            console.log('payload', payload)
                             try{
                             const token = getCookieValue('token').replaceAll("\"", '')
                             const getUser = await axios.post(`http://localhost:3001/api/verify`, {}, { headers: { Authorization: token } })
