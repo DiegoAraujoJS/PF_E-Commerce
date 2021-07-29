@@ -1,10 +1,8 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { Button, Card, Col, Form, Row, Container } from "react-bootstrap";
-import { useSelector } from "react-redux";
 import style from './AddClaim.module.css';
 import Swal from 'sweetalert2'
-import { Claim } from "../../../../interfaces";
 import getCookieValue from "../../cookieParser";
 
 function AddClaim() {

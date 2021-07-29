@@ -134,10 +134,11 @@ class Calendar extends Component {
                   dia: dia
               }
           } }
-          await axios.put('http://localhost:3001/api/calendario/delete', horario1, {headers: {Authorization: this.token}})
+          const borrado=await axios.put('http://localhost:3001/api/calendario/delete', horario1, {headers: {Authorization: this.token}})
+          console.log("BORARADO", borrado)
         }
       },
-      eventDeleteHandling: "Update",
+      
       onEventClick: async args => {
         console.log("BOrrar")
         if (this.state.isUser){
@@ -202,7 +203,7 @@ class Calendar extends Component {
     if (usuario){
       this.state.isUser = true;
     }
-    console.log(this.state.isUser)
+    console.log("THIS USER",this.state.isUser)
     if(email===undefined && localStorage.getItem('user')!==null)email=JSON.parse(localStorage.getItem('user')).mail
     const arrayProf = await axios.get(
       `http://localhost:3001/api/calendario/${email}`
@@ -240,6 +241,11 @@ class Calendar extends Component {
       })}
       return tempo;
     });}
+    let borrar
+    console.log(thisUser && (email === thisUser.data.mail))
+    if(thisUser && (email === thisUser.data.mail)){borrar="Update"}
+    else{ borrar="Disabled"}
+    console.log("Borrar", borrar)
     const persons = tempo;
     this.setState({
       bubble: null,
@@ -247,6 +253,7 @@ class Calendar extends Component {
       startDate: date(today, "yy/mm/dd"),
       events: persons,
       width: "40%",
+      eventDeleteHandling: "Update",
       
     });
     console.log("SETSTATE", this.state)

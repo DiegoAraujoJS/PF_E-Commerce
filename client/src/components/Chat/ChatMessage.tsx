@@ -3,7 +3,7 @@ import style from "./Chat.module.css";
 import profilePicture from "../../images/profile_pic.svg";
 
 export default function ChatMessage(props) {
-  const { text, uid, createdAt, receivingUser, issuingUser } = props.message;
+  const { text, uid, receivingUser, issuingUser } = props.message;
 
   const messageClass = uid === issuingUser.mail ? "sent" : "received";
   

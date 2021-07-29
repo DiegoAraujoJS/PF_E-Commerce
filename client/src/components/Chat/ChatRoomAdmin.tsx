@@ -8,8 +8,7 @@ import ChatMessage from "./ChatMessage";
 import profilePicture from "../../images/profile_pic.svg";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-  faPaperPlane,
-  faChevronCircleDown,
+  faPaperPlane
 } from "@fortawesome/free-solid-svg-icons";
 
 interface ChatData {
@@ -53,9 +52,7 @@ export default function ChatRoom(props: React.PropsWithChildren<ChatRoomData>) {
     setFormValue("");
     dummy!.current.scrollIntoView({ behavior: "smooth" });
   };
-  function dummyCurrent() {
-    dummy!.current.scrollIntoView({ behavior: "smooth" });
-  }
+  
 
   return (
     <>

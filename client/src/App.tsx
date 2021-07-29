@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import './App.css';
 import Login from './components/login/login';
-import { BrowserRouter, Redirect, Route, useHistory } from 'react-router-dom';
+import { BrowserRouter, Redirect, Route } from 'react-router-dom';
 import ClassContainer from './components/classContainer/ClassContainer';
 import CalendarApp from './components/calendar/Calendar';
 import Claims from './components/Claims/Claims';
@@ -10,7 +10,6 @@ import DetailClaim from './components/Claims/DetailClaim';
 import Profile from './components/perfilProfesor/profile';
 import Chat from './components/Chat/Chat'
 import Home from './components/home/Home'
-import Register from './components/Register/Register'
 import axios from 'axios';
 import EditProfile from './components/editPerfilProf/editProfile'
 import AddClass from './components/addClass/addClass';
@@ -18,19 +17,17 @@ import SearchBarHome from './components/searchBar/SearchBarHome';
 import getCookieValue from './cookieParser';
 import PagoExitoso from './components/pagoexitoso/PagoExitoso';
 import Cesta from './components/cesta/Cesta';
-import DetalleClase from './components/detalleclase/DetalleClase';
 import CondicionesUso from './components/condicionesuso/CondicionesUso';
 import CondicionesServicio from './components/condicionesservicio/CondicionesServicio';
 import PoliticaPrivacidad from './components/politicaprivacidad/PoliticaPrivacidad';
 import AddStudentClass from './components/addClass/addStudentClass';
 import EditPerfilAlum from './components/editPerfilAlum/editPerfilAlum';
-import Puntuar from './components/puntuar/Puntuar.jsx';
 import AddCalendar from './components/addClass/AddCalendar'
 import Historial from './components/historial/Historial';
 enum Role {USER, PROFESSOR, ADMIN}
 
 function App() {
-  const history = useHistory()
+
 
   let [user, setUser] = useState<{name: string, lastName: string, role: number, mail: string} | undefined>({name: '', lastName: '', role: null, mail: ''})
 

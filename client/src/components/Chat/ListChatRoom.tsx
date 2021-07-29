@@ -6,11 +6,6 @@ import style from "./Chat.module.css";
 import ChatRoom from "./ChatRoom";
 import axios from "axios";
 import profilePicture from "../../images/profile_pic.svg";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faPaperPlane,
-  faChevronCircleDown,
-} from "@fortawesome/free-solid-svg-icons";
 import ChatRoomEmpty from "./ChatRoomEmpty";
 
 interface PropsChat {
@@ -117,12 +112,7 @@ function ListChatRoom(props: React.PropsWithChildren<PropsChat>) {
     }
   }
 
-  function handleChange(e) {
-    if (e.target.value) {
-      setUserSelected(e.target.value);
-    }
-  }
-
+  
   async function handleChatSelected(chat: ChatData) {
     setChatSelected(chat);
     let userFound = "";
