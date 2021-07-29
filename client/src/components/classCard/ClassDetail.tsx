@@ -55,11 +55,11 @@ function ClassDetail (props) {
     const {show, handleClose, email, mark, puntuacion } = props.hijo
     
     
-    let [hours, setHours] = useState(1)
-    let [day, setDay] = useState<[string, number]>(['', -1])
-    let [from, setFrom] = useState('0')
-    let [days, setDays] = useState([])
-    
+    const [hours, setHours] = useState(1)
+    const [selectedDay, setDay] = useState<[string, number]>(['', -1])
+    const [from, setFrom] = useState('0')
+    const [days, setDays] = useState([])
+    let selected = ''
     
     function redirect_blank(url) {
         var a = document.createElement('a');
@@ -183,13 +183,15 @@ return (
                                         
 								
                                         <Form.Control
+                                        as='select'
 										className={`form-control`}
-										type='select'
-										value={from}
-                                        onChange={e => setFrom(e.target.value)}
-                                        { ...day[0] !== '' ? days[day[1]].available.map(d => <option>`${d}`</option>) : null}
 										
-									/>
+										
+                                        onChange={e => setFrom(e.target.value)}
+									>
+                                        {console.log(selectedDay)}
+                                        { selectedDay[0] ? days[selectedDay[1]].available.map(d => <option value={selectedDay[1]}>{d}</option>) : null}
+                                        </Form.Control>
                                         
                                 <Form.Label>Horas:</Form.Label>
                                     <RangeSlider
