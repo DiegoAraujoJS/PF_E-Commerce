@@ -231,7 +231,7 @@ return (
                         </Card.Body>
                     </Card>
                 </Modal.Body>
-                <Card.Title className="d-flex justify-content-center"> Precio de la clase: &nbsp;<span className="text-success ml-3">{`$${hours * props.precio}}`}</span> </Card.Title>
+                <Card.Title className="d-flex justify-content-center"> Precio de la clase: &nbsp;<span className="text-success ml-3">{`$${hours * props.precio}`}</span> </Card.Title>
                 
                 <Modal.Footer className="justify-content-center">
 
@@ -243,7 +243,7 @@ return (
                             const time = from[0].split(':')
                             
                             const fromPlusHours = Number(time[0][0]) * 10 + Number(time[0][1]) + Number(hours)
-                            console.log(from, fromPlusHours)
+                            
                             const stringified = `${fromPlusHours}`.length===2 ? `${fromPlusHours}:${time[1][0]}0:00` : `0${fromPlusHours}:${time[1][0]}0:00`
                             
                             if (fromPlusHours > 24) return setIsAnotherDay(true);
@@ -254,7 +254,7 @@ return (
                                 date: {year: thisDate.year, month: thisDate.month, day: thisDate.number, time: [`${from[0]}:00`, stringified]},
                                 precio: `${hours * props.precio}`
                             }
-                            console.log('payload', payload)
+                            
                             try{
                             const token = getCookieValue('token').replaceAll("\"", '')
                             const getUser = await axios.post(`http://localhost:3001/api/verify`, {}, { headers: { Authorization: token } })

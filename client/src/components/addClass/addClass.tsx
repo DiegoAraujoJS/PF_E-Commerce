@@ -192,25 +192,7 @@ const AddClass = () => {
 										/>
 									</Col>
 								</Row>
-								{!calendarChoice ?
-									<div>
-
-										<Button type='button' className='text-uppercase' style={{ width: '500px' }} onClick={(e => setCalendarChoice(true))}>
-											Elegir disponibilidad horaria
-										</Button>
-										{console.log(store.getState()['calendar_to_addClassStudent'])}
-									</div> :
-									<div>
-
-										<div style={{ border: '1px solid red', height: '400px' }}>
-											{console.log('le manda el store?', store.getState()['calendar_to_addClassStudent'])}
-											<CalendarApp calendar_to_addClassStudent={store.getState()['calendar_to_addClassStudent']} email={user.mail}>{user.mail}</CalendarApp>
-										</div>
-										<Button type='button' className='text-uppercase' style={{ width: '500px' }} onClick={(e => { setCalendarChoice(false) })}>
-											Aceptar
-										</Button>
-									</div>
-								}
+								
 							</Row>
 
 							<Row>
@@ -297,25 +279,7 @@ const AddClass = () => {
 									) : null}
 								</Col>
 							</Row>
-							<Row>
-								<Col sm={12} md={4}>
-									<Form.Label className='text-uppercase'>Duración por semanas</Form.Label>
-									<Field
-										name='week'
-										type='number'
-										onChange={handleChange}
-										onBlur={handleBlur}
-										value={values.week}
-										min="0"
-										
-										className={`form-control ${errors.week && touched.week ? 'is-invalid' : ''
-											}`}
-									/>
-									{errors.week && touched.week ? (
-										<div className='invalid-feedback'>{errors.week}</div>
-									) : null}
-								</Col>
-							</Row>
+							
 							<Row>
 								<Col sm={12} md={4}>
 									<Form.Label className='text-uppercase'>Precio</Form.Label>

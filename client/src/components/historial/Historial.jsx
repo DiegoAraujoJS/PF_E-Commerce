@@ -222,7 +222,7 @@ const Historial = () => {
                                             Horario de la clase: {e.date.time[0]}-{e.date.time[1]}
                                         </div>:null}
                                         <div>
-                                            Precio: {e.precio}
+                                            Precio: {`$${e.precio}`}
                                         </div>
                                         {(e.profesor.User_mail===alum && e.status!==null)?<div>
                                                                         Alumno: {e.student.name} {e.student.lastName}
