@@ -93,7 +93,7 @@ const Historial = () => {
               console.log("Iserresponse", userResponse)
               let role="student"
             if(userResponse.data.role===1)role="profesor"
-            await setAlum(userResponse.data.mail)            
+            await setAlum(userResponse.data)            
             const response = await axios.get(`http://localhost:3001/api/clases/all/student/${userResponse.data.mail}`)
             console.log("RESPONSEEEE", response)
             await setHistoria([
@@ -176,7 +176,26 @@ const Historial = () => {
             )
           }
         })
-      };   
+      };
+      const completar = async (e) => {
+        Swal.fire({
+            title: '¿Ya tomaste esta clase?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Si!',
+            cancelButtonText: 'No!'
+        }).then(result => {
+            if (result.isConfirmed) {
+                axios.post(`http://localhost:3001/api/clases/status`, {id: e.id, status: 'complete'})
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                Swal.fire(
+                    'Cancelado',
+                    'La clase sigue pendiente',
+                    'error'
+                  )   
+            }
+        })
+      }    
     const colorred="#1ECD97"
     return (
         <div class="container" >
@@ -224,7 +243,7 @@ const Historial = () => {
                                         <div>
                                             Precio: {`$${e.precio}`}
                                         </div>
-                                        {(e.profesor.User_mail===alum && e.status!==null)?<div>
+                                        {(e.profesor.User_mail===alum.mail && e.status!==null)?<div>
                                                                         Alumno: {e.student.name} {e.student.lastName}
                                                                     </div>:
                                                                     <div>
@@ -235,11 +254,12 @@ const Historial = () => {
                                    {e.status==="complete"?
                                    <div  style={{marginLeft:"35vw"}}>
                                         <Button onClick={() => handleShow(i)}> Puntuar clase </Button>
-                                        <Puntuar key={i}id={i} show={show[i]} handleClose={() => handleClose(i)} clase={e} alum={alum} index={i} />
+                                        <Puntuar key={i}id={i} show={show[i]} handleClose={() => handleClose(i)} clase={e} alum={alum.mail} index={i} />
                                    </div>: null}
                                    {e.status==="pending"?
                                    <div  style={{marginLeft:"35vw"}}>
                                    <Button onClick={() => cancelar(e.id)}> Cancelar clase </Button>
+                                   {alum.mail === e.User_mail ? <Button onClick={() => completar(e)}> Ya tomé esta clase </Button> : null}
                                      </div>: null}
                                      {e.status===null?
                                    <div  style={{marginLeft:"35vw"}}>

@@ -233,6 +233,16 @@ router.put('/edit', async (req: Request, res: Response) => {
     }
 })
 
+router.post('/status', async (req:Request, res:Response) => {
+    const {id, status} = req.body
+    try {
+        const clase = await Clase.findByPk(id)
+        const edit = await clase.update({status})
+        return res.send({message: 'success', payload: edit})
+    } catch(err) {
+        return res.status(400).send('error')
+    }
+})
 
 router.post('/delete', async (req: Request, res: Response) => {
     const { id } = req.body

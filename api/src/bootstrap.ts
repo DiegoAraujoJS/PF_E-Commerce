@@ -302,7 +302,7 @@ const bootstrap = async () => {
             descripcion: 'En esta clase te enseñaré todo lo que necesitas para tener un nivel intermedio de Inglés',
             materia: 'Ingles',
             esPresencial: 'Presencial',
-            status: 'pending',
+            
             grado: "Sexto grado",
             nivel: 'Secundario',
             puntuacion: 1,
