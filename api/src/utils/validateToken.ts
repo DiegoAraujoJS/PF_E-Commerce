@@ -10,7 +10,7 @@ function validateToken(req: MiddlewareRequest, res: Response, next: () => void){
     if (!token) return res.status(400).send('incorrect token')
     verify(token, config.secret, (err, data) => {
         if (err) return res.status(400).send('incorrect token')
-        
+        console.log(data)
         req.data = data
         next()
     })

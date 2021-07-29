@@ -14,7 +14,7 @@ interface MiddlewareRequest extends Request {
 
 router.post('/add', validateToken, async (req: MiddlewareRequest, res: Response) => {
     let query: Disponible = req.body
-
+    console.log(req.body.email, req.data.mail)
     if (req.data.role !== 2 && req.body.email != req.data.mail) {
         return res.status(400).send('You are not authorized.')
     }
@@ -126,28 +126,25 @@ router.get('/:usuario', async (req: Request, res: Response) => {
     }
 });
 
-router.get('/:usuario', async (req: Request, res: Response) => {
-    const { usuario } = req.params
+router.post('/editTaken', async (req:Request, res:Response) => {
+    const query: Ocupado = req.body
+    
 
-    try {
-        if (usuario) {
-            const profesor = await Profesor.findOne({
-                where: {
-                    User_mail: usuario
-                }
-            })
-            if (profesor) {
-                if (profesor.calendario) {
-                    res.send(profesor.calendario)
-                }
-            }
-        }
-    }
-    catch (error) {
-        res.send(error)
-    }
-});
+        const profesor = await Profesor.findByPk(query.email)
+        console.log(profesor)
+        
 
+            // const newDate = nuevosHorarios(profesor.calendario.find(date => date.fecha.dia===query.fecha.dia), null, query)
+            const thisDate = profesor.calendario.find(date => date.fecha.dia===query.fecha.dia)
+            const newDate = nuevosHorarios(thisDate, null, query)
+            return res.send(newDate)
+            // const nuevoCalendarioMap = profesor.calendario.map(date => date.fecha.dia===query.fecha.dia ? newDate : date)
+            // console.log(nuevoCalendarioMap)
+            // const profUpdate = await profesor.update({calendario: nuevoCalendarioMap})
+            // return res.send(profUpdate)
+        
+    
+})
 
 router.put('/edit', validateToken, async (req: MiddlewareRequest, res: Response) => {
     let query: Ocupado = req.body

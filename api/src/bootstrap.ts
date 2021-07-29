@@ -1,10 +1,21 @@
-import { IProfesor, IUser } from "../../interfaces"
+import { Disponible, IProfesor, IUser } from "../../interfaces"
 import Clase from "./models/Clase"
 import axios from "axios"
 import Profesor from "./models/Profesor"
 import Reclamo from "./models/Reclamo";
 import User from "./models/Usuario";
 import { Role } from "../../interfaces";
+import UsersInjectionToIUser from "./utils/transformations/UsersInjectionToIUser";
+
+const range = (n) => {
+    let iterable = []
+    for (let i=0; i<n; i++){
+        iterable.push(i)
+    }
+    return iterable
+}
+
+const pass = "123456"
 
 const bootstrap = async () => {
     try {
@@ -24,7 +35,7 @@ const bootstrap = async () => {
                 foto: "https://firebasestorage.googleapis.com/v0/b/auth-4d665.appspot.com/o/images%2F1627488066448.jpeg?alt=media&token=1392fb14-ede8-4aa9-a1b1-bba3657751ec",
             
         }
-        const Diego = {...d, password:"123456"}
+        const Diego = {...d, password:pass}
     
         const b: IUser = {
             name: `Braian`,
@@ -38,7 +49,7 @@ const bootstrap = async () => {
                 foto: "https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=547&q=80",
             
         }
-        const Braian = {...b, password:"123456"}
+        const Braian = {...b, password:pass}
     
         const e: IUser = {
             name: 'Edward',
@@ -52,7 +63,7 @@ const bootstrap = async () => {
                 foto: "https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=547&q=80",
             
         }
-        const Edward = {...e, password:"123456"}
+        const Edward = {...e, password:pass}
     
         const j: IUser = {
             name: 'Javier',
@@ -66,7 +77,7 @@ const bootstrap = async () => {
                 foto: "https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=547&q=80",
             
         }
-        const Javi = {...j, password:"123456"}
+        const Javi = {...j, password:pass}
     
         const m: IUser = {
             name: 'Mauro',
@@ -80,7 +91,7 @@ const bootstrap = async () => {
                 foto: "https://firebasestorage.googleapis.com/v0/b/auth-4d665.appspot.com/o/images%2FMauro-Foto.jpg?alt=media&token=2ed51a34-8d84-4cb2-bbf3-1ed6660d7ff8",
             
         }
-        const Mauro = {...m, password:"123456"}
+        const Mauro = {...m, password:pass}
 
         const ben: IUser = {
             name: 'Benja',
@@ -93,7 +104,7 @@ const bootstrap = async () => {
                 foto: "https://firebasestorage.googleapis.com/v0/b/auth-4d665.appspot.com/o/images%2FIMG_20190119.jpg?alt=media&token=d616eeab-80d1-4aca-81bb-69958a294fc0",
             
         }
-        const Benja = {...ben, password:"123456"}
+        const Benja = {...ben, password:pass}
 
         const ped: IUser = {
             name: 'Pedro',
@@ -106,7 +117,7 @@ const bootstrap = async () => {
                 foto: "https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=547&q=80",
             
         }
-        const Pedro = {...ped, password:"123456"}
+        const Pedro = {...ped, password:pass}
 
         for (const user of [
             Edward,
@@ -117,13 +128,27 @@ const bootstrap = async () => {
             Benja,
             Pedro
         ]) {
-            await axios.post(`htttp://localhost:3001/api/usuarios/register`, user)
+            await axios.post(`http://localhost:3001/api/usuarios/register`, user)
         }
     
 
         ////////////////////////
         // Agregar Profesores //
         ////////////////////////
+
+        // professorsInjection
+
+        
+        // const newProfessor = await UsersInjectionToIUser(1, 5)
+        // const newUser = await UsersInjectionToIUser(0, 5)
+        // console.log(newProfessor)
+        // for (const x of newProfessor) {
+        //     if (x) await axios.post(`http://localhost:3001/api/usuarios/register`, x) 
+        // }
+        // for (const x of newUser){
+        //     if (x) await axios.post(`http://localhost:3001/api/usuarios/register`, x) 
+        // }
+        
 
         const DiegoProfe: IProfesor = {
             name: `Diego`,
@@ -196,21 +221,13 @@ const bootstrap = async () => {
             state: 'Buenos Aires'
         };
 
-        // for (const prof of [
-        //     DiegoProfe,
-        //     BraianProfe,
-        //     EdwardProfe,
-        //     MauroProfe,
-        //     JaviProfe,
-        //     BenjaProfe,
-        // ]) {
-        //     await Profesor.create(prof);
-        // }
-
+        
+        
         ////////////////////
         // Agregar Clases //
         ////////////////////
 
+        
         const Clase1 = await Clase.create({
             nombre: "Clase 1 de Ingles",
             Profesor_mail: "edwardburgos@gmail.com",
@@ -225,7 +242,6 @@ const bootstrap = async () => {
             precio: "200",
             
         });
-
         const Clase2 = await Clase.create({
             nombre: "Clase 2 de Matematica",
             User_mail: "edwardburgos@gmail.com",
@@ -322,6 +338,43 @@ const bootstrap = async () => {
             date: { year: 2021, month: 8, day: 7, time: ['08:00:00', '12:00:00'] },
             precio: "200"
         })
+
+        const date = new Date()
+        
+        //////////////////////////
+        // Agregar Disponibles //
+        /////////////////////////
+
+
+        for (const user of [
+            Edward,
+            
+            Diego,
+            Javi,
+            Mauro,
+            Benja,
+            
+        ]) {
+            const payload: Disponible = {
+                disponible: [['08:00:00', '12:00:00'], ['16:00:00', '21:00:00']],
+                email: user.User_mail,
+                fecha: {anio: date.getFullYear(), dia: date.getDate(), mes: date.getMonth() + 1}
+            }
+           
+            try {
+                const token1 = await axios.post(`http://localhost:3001/api/login`, {mail: user.User_mail, password: '123456'})
+                await axios.post(`http://localhost:3001/api/calendario/add`, payload, {headers: {Authorization: token1.data.token}})
+    
+                
+            } catch (err) {
+                console.log(err)
+            }
+        }
+
+
+
+        
+
 
 
         // //////////////////////
