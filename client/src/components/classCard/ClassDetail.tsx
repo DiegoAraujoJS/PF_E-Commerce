@@ -78,6 +78,7 @@ function ClassDetail (props) {
                 console.log("DIAS", date)
                 today.setDate(date.fecha.dia); 
                 today.setMonth(date.fecha.mes - 1);
+                today.setFullYear(date.fecha.anio)
 
                 const oneDate = {
                     disponible: date,
