@@ -46,7 +46,7 @@ const bootstrap = async () => {
                 country: "Argentina",
                 state: "Buenos Aires",
                 city: "Ciudad Autónoma de Buenos aires",
-                foto: "https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=547&q=80",
+                foto: "https://avatars.githubusercontent.com/u/80982289?v=4",
             
         }
         const Braian = {...b, password:pass}
@@ -60,7 +60,7 @@ const bootstrap = async () => {
                 country: "Argentina",
                 state: "Buenos Aires",
                 city: "Ciudad Autónoma de Buenos aires",
-                foto: "https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=547&q=80",
+                foto: 'https://avatars.githubusercontent.com/u/80774061?v=4',
             
         }
         const Edward = {...e, password:pass}
@@ -88,10 +88,39 @@ const bootstrap = async () => {
                 country: "Argentina",
                 state: "Buenos Aires",
                 city: "Ciudad Autónoma de Buenos aires",
+                foto: "https://images.unsplash.com/photo-1607990281513-2c110a25bd8c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=547&q=80",
+            
+        }
+        const MauroLeonel = {...m, password:pass}
+
+        const cc: IUser = {
+            name: 'Mauro',
+            lastName: 'Loyola',
+            User_mail: "mauroloyola@gmail.com", 
+            role: Role.PROFESSOR,
+            
+                country: "Argentina",
+                state: "Buenos Aires",
+                city: "Ciudad Autónoma de Buenos aires",
                 foto: "https://firebasestorage.googleapis.com/v0/b/auth-4d665.appspot.com/o/images%2FMauro-Foto.jpg?alt=media&token=2ed51a34-8d84-4cb2-bbf3-1ed6660d7ff8",
             
         }
-        const Mauro = {...m, password:pass}
+        const Mauro = {...cc, password:pass}
+
+        const bb: IUser = {
+            name: 'Leonel',
+            lastName: 'Llane',
+            User_mail: "leonelllane@gmail.com", 
+            role: Role.PROFESSOR,
+            
+                country: "Argentina",
+                state: "Buenos Aires",
+                city: "Ciudad Autónoma de Buenos aires",
+                foto: "https://avatars.githubusercontent.com/u/78386531?v=4",
+            
+        }
+        const Leonel = {...bb, password:pass}
+
 
         const ben: IUser = {
             name: 'Benja',
@@ -124,9 +153,12 @@ const bootstrap = async () => {
             Braian,
             Diego,
             Javi,
-            Mauro,
+            MauroLeonel,
             Benja,
-            Pedro
+            Pedro,
+            Mauro,
+            Leonel
+
         ]) {
             await axios.post(`http://localhost:3001/api/usuarios/register`, user)
         }

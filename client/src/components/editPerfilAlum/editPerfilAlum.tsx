@@ -88,9 +88,12 @@ const EditPerfilAlum = () => {
 
   const imageFirebaseHandler = async (e) => {
     const file = e.target.files[0];
-    const storageRef = await Upload({ file });
-    const url = await storageRef.getDownloadURL();
-    setImg2(url);
+    if (file){
+      const storageRef = await Upload({ file });
+      const url = await storageRef.getDownloadURL();
+      setImg2(url);
+    }
+      
   };
   const Changes = async (e) => {
     try {
