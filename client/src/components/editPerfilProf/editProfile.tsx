@@ -8,8 +8,8 @@ import bootstrap from "bootstrap";
 import { Button, Modal, Row, Col, Form } from "react-bootstrap";
 const EditProfile = () => {
   const history = useHistory();
-  const [prech, setPrech] = useState<any>({});
   const [img, setImg] = useState<any>("");
+  const [img2, setImg2] = useState<any>("");
   const [data, setData] = useState<any>({});
   const [countries, setCountries] = React.useState([]);
   const [states, setStates] = React.useState([]);
@@ -26,16 +26,35 @@ const EditProfile = () => {
         { withCredentials: true, headers: { Authorization: token } }
       );
       // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      let editar = await axios.patch("http://localhost:3001/api/profesores/", {
-        foto: img,
-        usuario: thisUser.data.mail,
-        description: data.description,
-        country: countryS,
-        title: data.title,
-        state: stateS,
-        city: cityS,
-      });
-      alert("Cambios Realizados");
+      if (img2) {
+        let editar = await axios.patch(
+          "http://localhost:3001/api/profesores/",
+          {
+            foto: img2,
+            usuario: thisUser.data.mail,
+            description: data.description,
+            country: countryS,
+            title: data.title,
+            state: stateS,
+            city: cityS,
+          }
+        );
+        alert("Cambios Realizados");
+      } else {
+        let editar = await axios.patch(
+          "http://localhost:3001/api/profesores/",
+          {
+            foto: img,
+            usuario: thisUser.data.mail,
+            description: data.description,
+            country: countryS,
+            title: data.title,
+            state: stateS,
+            city: cityS,
+          }
+        );
+        alert("Cambios Realizados");
+      }
     } catch (err) {
       console.log(err);
       alert("Algo salio mal");
@@ -65,11 +84,7 @@ const EditProfile = () => {
     const file = e.target.files[0];
     const storageRef = await Upload({ file });
     const url = await storageRef.getDownloadURL();
-    setImg(url);
-    const newdata = { ...data };
-    newdata[e.target.id] = e.target.value;
-    setData(newdata);
-    console.log(newdata);
+    setImg2(url);
   };
   const fetchProfs = async () => {
     try {
@@ -93,7 +108,10 @@ const EditProfile = () => {
       console.log(err);
     }
   };
-
+  useEffect(() => {
+    setImg2(data.foto);
+    setImg(data.foto);
+  }, [data]);
   useEffect(() => {
     fetchProfs();
     const getCountries = async () => {
@@ -151,7 +169,11 @@ const EditProfile = () => {
                 className="form-control"
               />
               <div className="d-flex flex-column align-items-center text-center  p-3 py-5">
-                <img className={styles.imgEdit} src={data.foto} alt="profile" />
+                <img
+                  className={styles.imgEdit}
+                  src={img2 ? img2 : img}
+                  alt="profile"
+                />
                 <span className="font-weight-bold">Vista Previa</span>
                 <span className="text-black-50"></span>
                 <span> </span>
@@ -196,9 +218,9 @@ const EditProfile = () => {
                   className="form-control"
                 >
                   {countries.length &&
-                    countries.map((c) => {
+                    countries.map((c, i) => {
                       return (
-                        <option value={c.name}>
+                        <option key={i} value={c.name}>
                           {c.name} {c.unicodeFlag}
                         </option>
                       );
@@ -218,8 +240,10 @@ const EditProfile = () => {
                       className="form-control"
                     >
                       {states.length &&
-                        states.map((c) => (
-                          <option value={c.name}>{c.name}</option>
+                        states.map((c, i) => (
+                          <option key={i} value={c.name}>
+                            {c.name}
+                          </option>
                         ))}
                     </select>
                   </Col>
@@ -237,7 +261,11 @@ const EditProfile = () => {
                       className="form-control"
                     >
                       {cities.length &&
-                        cities.map((c) => <option value={c}>{c}</option>)}
+                        cities.map((c, i) => (
+                          <option key={i} value={c}>
+                            {c}
+                          </option>
+                        ))}
                     </select>
                   </Col>
                 ) : null}
