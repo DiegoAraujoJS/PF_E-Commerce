@@ -16,6 +16,7 @@ import { set_calendar_data } from "../../Actions/Actions"
 import { useDispatch } from "react-redux"
 import { actionsType } from "../../constants/constants"
 import rangeToHours from "./rangeToHours"
+
 const calendar = <FontAwesomeIcon icon={faCalendarAlt} className="mt-1" style={{ color: "#0067ff" }} />
 const clock = <FontAwesomeIcon icon={faClock} className="mt-1" style={{ color: "#0067ff" }} />
 const materias = [
@@ -57,8 +58,9 @@ function ClassDetail (props) {
     
     const [hours, setHours] = useState(1)
     const [selectedDay, setDay] = useState<[string, number]>(['', -1])
-    const [from, setFrom] = useState('0')
+    const [from, setFrom] = useState<[string, number]>(['0', -1])
     const [days, setDays] = useState([])
+    const [isAnotherDay, setIsAnotherDay] = useState(false)
     let selected = ''
     
     function redirect_blank(url) {
@@ -83,6 +85,7 @@ function ClassDetail (props) {
                 today.setFullYear(date.fecha.anio)
 
                 const oneDate = {
+                    
                     available: date.disponible.map(rangeToHours).flat(),
                     day: week[today.getDay()],
                     number: today.getDate(),
@@ -187,10 +190,11 @@ return (
 										className={`form-control`}
 										
 										
-                                        onChange={e => setFrom(e.target.value)}
+                                        onChange={e => setFrom([e.target.value.slice(0, e.target.value.length - 1), Number(e.target.value[e.target.value.length - 1])])}
 									>
-                                        {console.log(selectedDay)}
-                                        { selectedDay[0] ? days[selectedDay[1]].available.map(d => <option value={selectedDay[1]}>{d}</option>) : null}
+                                        {console.log('selectedday', selectedDay)}
+                                        { selectedDay[0] ? days[selectedDay[1]].available.map((d, i) => <option value={`${d}${i}`}>{d}</option>) : null}
+                                        {console.log(from)}
                                         </Form.Control>
                                         
                                 <Form.Label>Horas:</Form.Label>
@@ -227,45 +231,38 @@ return (
                         </Card.Body>
                     </Card>
                 </Modal.Body>
-                <Card.Title className="d-flex justify-content-center"> Precio de la clase: &nbsp;<span className="text-success ml-3">{`$${Number(props.precio) * hours}`}</span> </Card.Title>
+                <Card.Title className="d-flex justify-content-center"> Precio de la clase: &nbsp;<span className="text-success ml-3">{`$${hours * props.precio}}`}</span> </Card.Title>
                 
                 <Modal.Footer className="justify-content-center">
 
                         <Button variant="primary" onClick={async () => {
-//  id?: number;
-//  nombre: string;
-//  grado: string;
-//  nivel: string;
-//  materia: string;
 
-//  status?: 'pending' | 'complete' | 'cancelled'
-//  date?: {year: number, month: number, day: number, time: Time}
-//  profesor?: IProfesor
-//  student?: IUser;
-//  precio: number|string;
-//  Profesor_mail?: string;
-//  User_mail?: string;
-//  esPresencial: string;
-                            // const thisDate = day.split(' ')
+                            const thisDate = days[selectedDay[1]]
                             
                             
-                            const fromPlusHours = Number(from[0]) * 10 + Number(from[1]) + Number(hours)
-                            const stringified = `${fromPlusHours}`.length < 2 ? `0${fromPlusHours}`+':'+from[3] + from[4] : `${fromPlusHours}`+':' +from[3] + from[4]
+                            const time = from[0].split(':')
                             
-                            // const payload: IClase = {
-                            //     ...props,
-                            //     date: {year: Number(thisDate[thisDate.length - 1]), month: year.indexOf(thisDate[3]), day: Number(thisDate[1]), time: [`${from}`, stringified]},
-                            //     precio: `${hours * props.precio}`
-                            // }
+                            const fromPlusHours = Number(time[0][0]) * 10 + Number(time[0][1]) + Number(hours)
+                            console.log(from, fromPlusHours)
+                            const stringified = `${fromPlusHours}`.length===2 ? `${fromPlusHours}:${time[1][0]}0:00` : `0${fromPlusHours}:${time[1][0]}0:00`
                             
+                            if (fromPlusHours > 24) return setIsAnotherDay(true);
+                            
+                            
+                            const payload: IClase = {
+                                ...props,
+                                date: {year: thisDate.year, month: thisDate.month, day: thisDate.number, time: [`${from[0]}:00`, stringified]},
+                                precio: `${hours * props.precio}`
+                            }
+                            console.log('payload', payload)
                             try{
                             const token = getCookieValue('token').replaceAll("\"", '')
                             const getUser = await axios.post(`http://localhost:3001/api/verify`, {}, { headers: { Authorization: token } })
 
-                            // if (getUser.status) {
-                            //     const addToCart = await axios.post(`http://localhost:3001/api/carrito/${getUser.data.mail}`, payload)
-                            //     if(addToCart.status === 200) redirect_blank("./cesta")
-                            //     }
+                            if (getUser.status) {
+                                const addToCart = await axios.post(`http://localhost:3001/api/carrito/${getUser.data.mail}`, payload)
+                                if(addToCart.status === 200) redirect_blank("./cesta")
+                                }
                              }
                             catch(error) {
                                 console.log(error)
@@ -278,6 +275,7 @@ return (
                         }}>
                            Agregar clase a mi lista
                         </Button>
+                        {isAnotherDay ? <span style={{color:'red'}}>No puedes pasarte del día seleccionado!</span> : null}
            
                 </Modal.Footer>
             </Modal>

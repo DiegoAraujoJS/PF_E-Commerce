@@ -7,6 +7,7 @@ import { IUser, Time, IClase } from '../../../interfaces'
 import User from '../models/Usuario'
 import ClaseToIClase from '../utils/transformations/ClaseToIClase'
 import BuildClaseToIClase from '../utils/transformations/BuildClaseToIClase'
+import filterClassesWithoutAvailables from '../utils/filterClassesWithoutAvailables'
 const router = Router()
 
 router.get('/', async (req: Request, res: Response) => {
@@ -62,22 +63,28 @@ router.get('/', async (req: Request, res: Response) => {
                 }
             }
             if (clases.length){
-                const transformedClases = await Promise.all(clases.flat().map(async (cl) => BuildClaseToIClase(cl)))
-                return res.send(transformedClases)
+                const filteredClasses = await filterClassesWithoutAvailables(clases)
+                const filteredIClasses = await Promise.all(filteredClasses.map(BuildClaseToIClase))
+                return res.send(filteredIClasses)
+                // const transformedClases = await Promise.all(classesOnlyAvailables.map(async (cl) => BuildClaseToIClase(cl)))
+                // return res.send(transformedClases)
     
             } else if (profesores.length && !clases.length) {
     
-                const clases = await Promise.all(profesores.map(async (prof) => await Clase.findAll({where: {Profesor_mail: prof.User_mail}, include:[{model: Profesor}, {model: User}]})))
-    
-                const transformedClases = await Promise.all(clases.flat().map(async (cl) => BuildClaseToIClase(cl)))
-    
-                return res.send(transformedClases)
+                console.log('entre')
+                const allProfessorsClasses = await Promise.all(profesores.map( (prof: Profesor) => Clase.findAll({where: {Profesor_mail: prof.User_mail}, include:[{model:Profesor}] } ) ))
+                const allFilteredProfessorsClasses = await filterClassesWithoutAvailables(allProfessorsClasses.flat())
+                const allIProfessorsClasses = await Promise.all(allFilteredProfessorsClasses.flat().map(BuildClaseToIClase))
+
+                return res.send(allIProfessorsClasses)
             }
         }   else {
 
                 const allClasses = await Clase.findAll({include:[{model:Profesor, required: true}]})
-                const allIClasses = await Promise.all(allClasses.map(async (cl) => await BuildClaseToIClase(cl)))
-                return res.send(allIClasses)
+                const filteredClasses = await filterClassesWithoutAvailables(allClasses)
+                const filteredIClasses = await Promise.all(filteredClasses.map(BuildClaseToIClase))
+                return res.send(filteredIClasses)
+                
         }
     } catch (err) {
         res.send(err)
