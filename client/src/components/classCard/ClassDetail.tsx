@@ -203,6 +203,7 @@ return (
                                         value={hours}
                                         onChange={(e)=>{setHours(e.target.value)}}
                                         step={1}
+                                        min={1}
                                         max={8}
                                     />
                                         
