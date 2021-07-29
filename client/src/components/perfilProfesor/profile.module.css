@@ -96,7 +96,7 @@
   align-items: center;
   scroll-snap-align: start;
   scroll-behavior: smooth;
-  animation: change 10s ease-in-out infinite;
+  animation: change 35s ease-in-out infinite;
 }
 .sectionTwo {
   background-color: #c8c8c8;
