@@ -6,6 +6,12 @@ import style from "./Chat.module.css";
 import ChatRoom from "./ChatRoom";
 import axios from "axios";
 import profilePicture from "../../images/profile_pic.svg";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faPaperPlane,
+  faChevronCircleDown,
+} from "@fortawesome/free-solid-svg-icons";
+import ChatRoomEmpty from "./ChatRoomEmpty";
 
 interface PropsChat {
   userLoged: UserChat;
@@ -43,12 +49,10 @@ function ListChatRoom(props: React.PropsWithChildren<PropsChat>) {
     if (chatRoom) {
       if (userSelected) {
         foundChatUser();
-        if (!receivingUser) {
-          getReceivingUser(userSelected);
-        }
+        getReceivingUser(userSelected);
       } else {
         setChatSelected(chatRoom[0]);
-        if (!receivingUser && chatRoom.length) {
+        if (chatRoom.length) {
           chatRoom[0].users.forEach((user) => {
             if (user !== props.userLoged.mail) {
               getReceivingUser(user);
@@ -58,7 +62,7 @@ function ListChatRoom(props: React.PropsWithChildren<PropsChat>) {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [users, chatRoom, userSelected, receivingUser]);
+  }, [users, chatRoom, userSelected]);
 
   async function getAllUsers() {
     try {
@@ -131,6 +135,7 @@ function ListChatRoom(props: React.PropsWithChildren<PropsChat>) {
     getReceivingUser(userFound);
   }
 
+  /*
   const addChatRoom = async () => {
     const query = await chatsRoomsRef.where(
       "users",
@@ -165,12 +170,13 @@ function ListChatRoom(props: React.PropsWithChildren<PropsChat>) {
     } else {
       console.log("seleccione un usuario para agregar");
     }
-  };
+  }; 
+*/
 
   return (
     <div className={"w-100 d-flex flex-row justify-content-center"}>
       <div className={"w-50 "}>
-        <div className={"d-flex w-100"}>
+        {/* <div className={"d-flex w-100"}>
           {users && (
             <form className={"d-flex w-100"}>
               <select
@@ -203,10 +209,32 @@ function ListChatRoom(props: React.PropsWithChildren<PropsChat>) {
           >
             Añadir
           </button>
-        </div>
+        </div> */}
+        <nav className={"navbar " + style.background}>
+          <div
+            className={
+              "w-100 d-flex flex-row justify-content-start align-items-center"
+            }
+          >
+            <p className={"py-2 text-white w-100 text-center fs-6 m-0"}>
+              Lista de chats
+            </p>
+          </div>
+        </nav>
         <ul className={"list-group border rounded-0 " + style.listChats}>
           {chatRoom &&
             chatRoom.map((chat, i) => {
+              let receivingUser: UserChat;
+              chat.users.map(async (user, i) => {
+                if (user !== props.userLoged.mail) {
+                  users.map((u) => {
+                    if (user === u.mail) {
+                      receivingUser = u;
+                    }
+                  });
+                }
+              });
+
               return (
                 <li
                   className={
@@ -214,22 +242,21 @@ function ListChatRoom(props: React.PropsWithChildren<PropsChat>) {
                   }
                   key={i}
                   onClick={() => handleChatSelected(chat)}
+                  style={{cursor: "pointer"}}
                 >
                   <div className="d-flex w-25 justify-content-between">
                     <img
                       alt="alt"
-                      src={profilePicture || profilePicture}
+                      src={receivingUser.photo || profilePicture}
                       className={"rounded-circle " + style.imgMessage}
                     />
                   </div>
                   <div className="d-flex w-75 justify-content-between">
                     <div className="d-flex flex-column w-100 justify-content-between">
                       <p className="mb-1">
-                        {chat.users.map((user, i) =>
-                          user !== props.userLoged.mail ? user : null
-                        )}
+                        {receivingUser.name + " " + receivingUser.lastName}
                       </p>
-                      <small className="mb-1 text-truncate">
+                      <small className="mb-1 text-truncate text-secondary">
                         contenido del ultimo mensaje
                       </small>
                     </div>
@@ -248,10 +275,10 @@ function ListChatRoom(props: React.PropsWithChildren<PropsChat>) {
             setChatSelected={setChatSelected}
           />
         ) : (
-          "Cargando..."
+          <ChatRoomEmpty message={"Cargando..."}/>
         )
       ) : (
-        "No hay chats abiertos"
+        <ChatRoomEmpty message={"No hay chat abiertos"}/>
       )}
     </div>
   );

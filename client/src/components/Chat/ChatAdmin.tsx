@@ -1,27 +1,27 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import { firestore } from "../../firebase";
-import firebase from "firebase/app";
 import { UserChat } from "./Chat";
 import ChatRoomAdmin from "./ChatRoomAdmin";
 
 interface ChatData {
-  users: Array<UserChat>;
+  users: Array<string>;
   id: string;
 }
 
 interface ChatAdminProps {
-  admin: UserChat,
-  user: UserChat,
+  admin: UserChat;
+  user: UserChat;
 }
-export default function ChatAdmin(props: React.PropsWithChildren<ChatAdminProps>) {
-  const dummy: any = useRef();
+export default function ChatAdmin(
+  props: React.PropsWithChildren<ChatAdminProps>
+) {
 
   let chatsRoomsRef = firestore.collection("chatsRooms");
   const queryChatsRooms = chatsRoomsRef.where(
     "users",
     "array-contains",
-    props.admin
+    props.admin.mail
   );
 
   const [chatRoom] = useCollectionData<ChatData>(queryChatsRooms, {
@@ -37,6 +37,7 @@ export default function ChatAdmin(props: React.PropsWithChildren<ChatAdminProps>
     if (chatRoom) {
       foundChatUser();
     }
+    console.log(props);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chatRoom]);
 
@@ -44,9 +45,10 @@ export default function ChatAdmin(props: React.PropsWithChildren<ChatAdminProps>
     let chatFounded = null;
     chatRoom.map((chat) => {
       return chat.users.map((user) => {
-        if (user.mail === props.user.mail) {
-          return chatFounded = chat;
+        if (user === props.user.mail) {
+          return (chatFounded = chat);
         }
+        return null;
       });
     });
 
@@ -54,7 +56,7 @@ export default function ChatAdmin(props: React.PropsWithChildren<ChatAdminProps>
       setChatSelected(chatFounded);
     } else {
       await chatsRoomsRef.add({
-        users: [props.admin, props.user],
+        users: [props.admin.mail, props.user.mail],
       });
     }
   }
@@ -63,9 +65,9 @@ export default function ChatAdmin(props: React.PropsWithChildren<ChatAdminProps>
     <>
       {chatSelected && chatSelected.id ? (
         <ChatRoomAdmin
-          userLoged={props.admin}
-          users={chatSelected.users}
-          id={chatSelected.id}
+          issuingUser={props.admin}
+          receivingUser={props.user}
+          chatSelected={chatSelected}
           setChatSelected={setChatSelected}
         />
       ) : (

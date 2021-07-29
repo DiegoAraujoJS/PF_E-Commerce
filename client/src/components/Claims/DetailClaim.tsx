@@ -7,10 +7,10 @@ import ChatAdmin from "../Chat/ChatAdmin";
 import { ClaimType } from "./Claims";
 
 interface UserClaimDetail {
-  lastName: string;
-  name: string;
   mail: string;
-  foto: string;
+  name: string;
+  lastName: string;
+  photo?: string;
 }
 
 interface ClaimDetailType extends ClaimType {
@@ -42,7 +42,33 @@ function DetailClaim(props) {
         "http://localhost:3001/api/reclamos/" + props.id
       );
       if (response.status === 200) {
-        setClaim(response.data);
+        setClaim({
+          id: response.data.id,
+          nombre: response.data.nombre,
+          denunciante: {
+              mail: response.data.denunciante.User_mail,
+              name: response.data.denunciante.name,
+              lastName: response.data.denunciante.lastName,
+              photo: response.data.denunciante.foto,
+            },
+          denunciado: {
+            mail: response.data.denunciado.User_mail,
+            name: response.data.denunciado.name,
+            lastName: response.data.denunciado.lastName,
+            photo: response.data.denunciado.foto,
+          },
+          admin: {
+            mail: response.data.admin.User_mail,
+            name: response.data.admin.name,
+            lastName: response.data.admin.lastName,
+            photo: response.data.admin.foto,
+          },
+          reclamo: response.data.reclamo,
+          clase: {
+            id: response.data.clase.id,
+            nombre: response.data.nombre,
+          }
+        });
       }
     } catch (error) {
       console.log(error);
@@ -82,7 +108,6 @@ function DetailClaim(props) {
       }
     })
   }; 
-
 
   const suspender = async () => {
     Swal.fire({
@@ -161,7 +186,7 @@ function DetailClaim(props) {
             <div className={"text-center mb-2"}>
               <img
                 className={"img-fluid rounded-circle " + style.imgClaim}
-                src={claim.denunciante.foto}
+                src={claim.denunciante.photo}
                 alt="foto perfil estudiante"
               />
               <h5 className={"w-100 m-0 p-1"}>{claim.denunciante.name}</h5>
@@ -184,14 +209,15 @@ function DetailClaim(props) {
             </div>
 
             <div className={"rounded-3 shadow my-2 "}>
-              {/* <ChatAdmin admin={claim.admin.mail} user={claim.denunciante.mail} /> */}
+              { () => console.log(claim) }
+              <ChatAdmin admin={claim.admin} user={claim.denunciante} />
             </div>
           </div>
           <div className={"w-50 d-flex flex-column p-3"}>
-            <div className={"text-center my-2"}>
+            <div className={"text-center mb-2"}>
               <img
                 className={"img-fluid rounded-circle " + style.imgClaim}
-                src={claim.denunciado.foto}
+                src={claim.denunciado.photo}
                 alt="foto denunciado"
               />
               <h5 className={"w-100 m-0 p-1"}>
