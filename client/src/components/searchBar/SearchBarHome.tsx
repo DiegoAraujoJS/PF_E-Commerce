@@ -101,10 +101,11 @@ export default function SearchBar() {
 
         if (reponse.data.suspendido) {
           const logout = await axios.post(`http://localhost:3001/api/login/logout`, {}, { withCredentials: true })
+          const admins = await axios.get(`http://localhost:3001/api/usuarios/all/admin`)
 
           return Swal.fire({
             title: 'Error!',
-            text: 'Su cuenta esta suspendida!',
+            text: `Su cuenta esta suspendida!.\n Si desea saber los detalles sobre la suspención, porfavor comuniquese con uno de nuestros administradores: ${admins.data[Math.floor(Math.random() * admins.data.length)].User_mail}`,
             icon: 'error',
             willClose: () => window.location.reload()
           })
@@ -160,7 +161,7 @@ export default function SearchBar() {
         willClose: () => window.location.reload()
       })
     }
-    
+
   }
 
   const dropBox: CSS.Properties = {
@@ -181,33 +182,33 @@ export default function SearchBar() {
 
   // Función para iniciar sesión con Google
   async function loginConGoogle(e) {
-      e.preventDefault();
-      try {
-          await loginWithGoogle();
-          const usuarioExistente = await axios.get(`http://localhost:3001/api/login/${auth.currentUser.email}`)
-          console.log('HABER', usuarioExistente.data)
-          if (usuarioExistente.data) {
-              try {
-                  const login = await axios.post(`http://localhost:3001/api/login`, {
-                    mail: auth.currentUser.email,
-                    password: 'google'
-                  }, { withCredentials: true })
-                  console.log(login)
-                  document.cookie = `token=${JSON.stringify(login.data.token)}`
-                  localStorage.setItem('login', 'true')
-                  const user = await axios.post(`http://localhost:3001/api/verify`, {}, { headers: { Authorization: getCookieValue('token').replaceAll("\"", '') } })
-                  console.log(user)
-                  history.push('/')
-                  window.location.reload();
-                } catch (error) {
-                  console.log('LISTO')
-                }
-          } else {
-              handleShowGoogle();
-          }
-      } catch {
-          console.log('Se produjo un error durante la autenticación')
+    e.preventDefault();
+    try {
+      await loginWithGoogle();
+      const usuarioExistente = await axios.get(`http://localhost:3001/api/login/${auth.currentUser.email}`)
+      console.log('HABER', usuarioExistente.data)
+      if (usuarioExistente.data) {
+        try {
+          const login = await axios.post(`http://localhost:3001/api/login`, {
+            mail: auth.currentUser.email,
+            password: 'google'
+          }, { withCredentials: true })
+          console.log(login)
+          document.cookie = `token=${JSON.stringify(login.data.token)}`
+          localStorage.setItem('login', 'true')
+          const user = await axios.post(`http://localhost:3001/api/verify`, {}, { headers: { Authorization: getCookieValue('token').replaceAll("\"", '') } })
+          console.log(user)
+          history.push('/')
+          window.location.reload();
+        } catch (error) {
+          console.log('LISTO')
+        }
+      } else {
+        handleShowGoogle();
       }
+    } catch {
+      console.log('Se produjo un error durante la autenticación')
+    }
   }
 
   const eyeTest: CSS.Properties = {
@@ -252,33 +253,34 @@ export default function SearchBar() {
         <Navbar.Brand className={'ms-3'} href="#home"><Link to={"/"}><img src={logo} alt='U CLASES Logo' style={{ height: '56px' }}></img></Link></Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="mr-auto">
-            <Link className={'nav-link ms-4 text-decoration-none'} to={"/"}>Home</Link>
-            <Link className={'nav-link ms-4 text-decoration-none'} to={"/calendar"}>Calendar</Link>
-            <Link className={'nav-link ms-4 text-decoration-none'} to={"/clases"}>Class</Link>
+          <Nav className="mr-auto  align-items-center">
+            <Link className={'nav-link ms-4 text-decoration-none'} to={"/"}>Principal</Link>
+            <Link className={'nav-link ms-4 text-decoration-none'} to={"/calendar"}>Calendario</Link>
+            <Link className={'nav-link ms-4 text-decoration-none'} to={"/clases"}>Clases</Link>
 
             {loggedOrNot() ?
               <div className="ms-4 d-flex">
                 <span className="ml-4">{userIcon}</span><NavDropdown className={'text-decoration-none justify-content-end ms-1'} title={user.name + " " + user.lastName} id="basic-nav-dropdown">
-                  <NavDropdown.Item>
-                    <Link className={'nav-link ms-4 text-decoration-none'} to={"/perfil"}>Profile</Link>
-                  </NavDropdown.Item>
-                  <NavDropdown.Item>
-                    <Link className={'nav-link ms-4 text-decoration-none'} to={"/historial"}>History</Link>
-                  </NavDropdown.Item>
+                  {user.role !== Role.ADMIN ? <NavDropdown.Item>
+                    <Link className={'nav-link ms-4 text-decoration-none'} to={"/perfil"}>Perfil</Link>
+                  </NavDropdown.Item> : null}
+                  {user.role !== Role.ADMIN ? <NavDropdown.Item>
+                    <Link className={'nav-link ms-4 text-decoration-none'} to={"/historial"}>Historial</Link>
+                  </NavDropdown.Item> : null}
                   <NavDropdown.Item>
                     <Link className={'nav-link ms-4 text-decoration-none'} to={"/chat"}>Chat</Link>
                   </NavDropdown.Item>
-                  <NavDropdown.Item>
-                  <Link className={'nav-link ms-4 text-decoration-none'} to={"/addclaim"}>New Claim</Link>
-                  </NavDropdown.Item>
+                  {user.role !== Role.ADMIN ?
+                    <NavDropdown.Item>
+                      <Link className={'nav-link ms-4 text-decoration-none'} to={"/addclaim"}>Nuevo Reclamo</Link>
+                    </NavDropdown.Item> : null }
                   <NavDropdown.Item className="d-flex justify-content-center" onClick={() => signOut()}>
                     Desconectarse
                   </NavDropdown.Item>
                 </NavDropdown>
               </div>
               :
-              <NavDropdown className={'ms-4 text-decoration-none'} title="Cuenta" style={{width:"300px"}} id="basic-nav-dropdown">
+              <NavDropdown className={'ms-4 text-decoration-none'} title="Cuenta" style={{ width: "300px" }} id="basic-nav-dropdown">
                 <Form className={'d-flex flex-column align-items-center justify-content-center'} style={dropBox} onSubmit={handleSubmit}>
                   <Form.Control style={inputSizeLim} className={'d-flex justify-content-center'} type="email" placeholder="Email" onChange={handleChange} />
                   <Form.Control className="mt-2" style={inputSizeLim} type={showPassword} placeholder="Contraseña" onChange={handleChange} />
@@ -293,22 +295,22 @@ export default function SearchBar() {
                     ¿No tienes cuenta? <Button onClick={() => handleShow()}> Registrarse </Button>
                     <Register show={show} handleClose={handleClose} />
                   </Navbar.Text>
-                  
-                  
-                    <div className={`btn ${s.googleButton}`} onClick={loginConGoogle}>
-                        <img src={googleLogo} className={s.googleLogo} alt='Google Logo'></img>
-                        <span>Inicia sesión con Google</span>
-                    </div>
+
+
+                  <div className={`btn ${s.googleButton}`} onClick={loginConGoogle}>
+                    <img src={googleLogo} className={s.googleLogo} alt='Google Logo'></img>
+                    <span>Inicia sesión con Google</span>
+                  </div>
                 </Form>
                 <ModalGoogle show={showGoogle} handleClose={handleCloseGoogle} />
               </NavDropdown>
             }
             {loggedOrNot() && user.role === Role.PROFESSOR ?
               <Link className={'nav-link ms-4 text-decoration-none'} to={"/clases/add"}>
-                <Alert variant="info" className="p-1 m-0 d-flex justify-content-center" style={{width:"200px"}}>
-                Agrega tu Propia Clase!
+                <Alert variant="info" className="p-1 m-0 d-flex justify-content-center" style={{ width: "200px" }}>
+                  Agrega tu Propia Clase!
                 </Alert>
-                </Link>
+              </Link>
               :
               null
             }
