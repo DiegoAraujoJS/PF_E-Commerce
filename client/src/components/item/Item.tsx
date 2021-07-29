@@ -100,22 +100,67 @@ const mark = <FontAwesomeIcon icon={faMapMarkerAlt} style={{ color: "#ff3f3f" }}
       showCancelButton: true,
       confirmButtonText: 'Si, eliminalo!',
       cancelButtonText: 'No, quédatelo'
-    }).then((result) => {
+    }).then(async (result) => {
       if (result.isConfirmed) {
-
-          axios.get(`http://localhost:3001/api/carrito/${cliente}/${id}`)
-            .then(result => {
-              if (result.status === 200) {
-                dispatch(modificarClasesPorComprar(result.data));
+          try {
+            const updatedCarrito = await axios.get(`http://localhost:3001/api/carrito/${cliente}/${id}`)
+            if (updatedCarrito.status === 200 && Array.isArray(updatedCarrito.data) && updatedCarrito.data.length) {
+              Swal.fire(
+                'Eliminado!',
+                'Tu clase se ha eliminado de tu lista.',
+                'success'
+              )
+                const clasesPorComprarFormateadas: any = updatedCarrito.data.map(e => {
+                    console.log(e.date)
+                    let dia = e.date?.day;
+                    let mes = e.date?.month;
+                    let horaInicio = e.date?.time[0].split(':');
+                    let horaFinal = e.date?.time[1].split(':');
+                    if (e.date.day.toString().length === 1) dia = '0' + dia;
+                    if (e.date.month.toString().length === 1) mes = '0' + mes;
+                    if (horaInicio[0] >= 12) {
+                        horaInicio[2] = 'PM';
+                        if (horaInicio[0] !== 12) horaInicio[0] = (Number(horaInicio[0]) - 12).toString();
+                    } else {
+                        horaInicio[2] = 'AM';
+                    }
+                    if (horaFinal[0] >= 12) {
+                        horaFinal[2] = 'PM';
+                        if (horaFinal[0] !== 12) horaFinal[0] = (Number(horaFinal[0]) - 12).toString();
+                    } else {
+                        horaFinal[2] = 'AM';
+                    }
+                    if (horaInicio[0].length === 1) horaInicio[0] = '0' + horaInicio[0];
+                    if (horaFinal[0].length === 1) horaFinal[0] = '0' + horaFinal[0];
+                    let clasePorComprar = {
+                        id: e.id,
+                        imagen: e.profesor?.foto,
+                        nombre: e.nombre,
+                        precioDescuento: Number(e.precio?.slice(1)) + Number(e.precio),
+                        
+                        dia: `${dia}/${mes}/${e.date.year}`,
+                        horaInicio: `${horaInicio[0]}:${horaInicio[1]} ${horaInicio[2]}`,
+                        horaFin: `${horaFinal[0]}:${horaFinal[1]} ${horaFinal[2]}`,
+                        profesor: e.profesor?.User_mail,
+                        precio: e.precio
+                    }
+                    return clasePorComprar;
+                })
+                dispatch(modificarClasesPorComprar(clasesPorComprarFormateadas));
               }
-            })
-            .catch(error => alert(error))
+          } catch (error) {
+            console.log(error)
+          }
+         
+          
+            // .then(result => {
+            //   if (result.status === 200) {
+            //     dispatch(modificarClasesPorComprar(result.data));
+            //   }D
+            // })
+            // .catch(error => console.log('BUGGA', error))
 
-          Swal.fire(
-            'Eliminado!',
-            'Tu clase se ha eliminado de tu lista.',
-            'success'
-          )
+          
         } else if (result.dismiss === Swal.DismissReason.cancel) {
           Swal.fire(
             'Cancelado',
