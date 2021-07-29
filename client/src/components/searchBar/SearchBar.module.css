@@ -8,3 +8,21 @@
   box-shadow: 1px 1px 12px -1px rgb(0 0 0 / 24%);
   -webkit-box-shadow: 1px 1px 12px -1px rgb(0 0 0 / 24%);
 }
+
+
+.googleButton {
+  display: flex !important;
+  align-items:center !important;
+  justify-content: center !important;
+  box-shadow: 1px 1px 12px -1px rgb(0 0 0 / 24%);
+  -webkit-box-shadow: 1px 1px 12px -1px rgb(0 0 0 / 24%);
+  margin: 8px 5% 8px 5%;
+  width: 90%;
+  box-sizing: border-box;
+}
+
+
+.googleLogo {
+  height: 1.2rem;
+  margin-right: 10px;
+}

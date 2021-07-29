@@ -1,26 +1,21 @@
-import { useRef, useState, useEffect } from "react";
-import "./Chat.css";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import getCookieValue from "../../cookieParser";
 import style from "./Chat.module.css";
-import ChatRoom from "./ChatRoom";
 import ListChatRoom from "./ListChatRoom";
 import image from "../../images/login.svg";
+import profilePicture from "../../images/profile_pic.svg";
 
 export interface UserChat {
   mail: string;
   name: string;
   lastName: string;
+  photo?: string;
 }
 
-function Chat() {
+function Chat(props: React.PropsWithChildren<{mail:string}>) {
   const [userLoged, setUserLoged] = useState<UserChat>();
-  const [userReference, setUserReference] = useState({
-    mail: "admin@admin.com",
-    name: "Admin",
-    lastName: "Admin",
-    city: "Buenos Aires"
-  });
+  const [userReference, /* setUserReference */] = useState(props.mail);
 
   useEffect(() => {
     if (!userLoged) {
@@ -38,23 +33,26 @@ function Chat() {
       {},
       { withCredentials: true, headers: { Authorization: token } }
     );
+    const response = await axios.get("http://localhost:3001/api/usuarios/" + userResponse.data.mail);
+    const photo = response.data.foto;
     const user: UserChat = {
       mail: userResponse.data.mail,
       name: userResponse.data.name,
       lastName: userResponse.data.lastName,
+      photo: photo || profilePicture,
     };
     setUserLoged(user);
   };
 
   return (
-    <div className={"mt-5 mx-auto " + style.chatContainer}>
+    <div className={"mt-5 mx-auto" + style.chatContainer}>
       {userLoged ? (
-        <div className={"d-flex flex-row justify-content-center w-100"}>
+        <div className={"d-flex flex-row justify-content-center w-75 mx-auto"}>
           <ListChatRoom userLoged={userLoged} userReference={userReference} />
         </div>
       ) : (
         <div className={"d-flex flex-column justify-content-center align-items-center"}>
-          <h1 className={"mb-5"}>No hay un usuario logeado</h1>
+          <h1 className={"mb-5"}>No hay una sesión iniciada</h1>
           <img className={"w-75"} src={image} alt="Login" />
         </div>
       )}

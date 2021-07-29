@@ -6,11 +6,13 @@ let initialState = {
     professor: [],
     claim: [],
     class: {},
-    clases: [],
+    claims: [],
     user_mail: '',
     user_name: '',
     user_lastName: '',
-    clasesPorComprar: []
+    clasesPorComprar: [],
+    calendar_to_addClassStudent: {},
+    set_fetch_calendar: []
 };
 
 const all = (state = initialState, action) => {
@@ -25,10 +27,10 @@ const all = (state = initialState, action) => {
                 ...state,
                 searchInput: action.payload
             }
-        case actionsType.GET_ALL_CLASS:
+        case actionsType.GET_ALL_CLAIMS:
             return {
                 ...state,
-                clases: action.payload
+                claims: action.payload
             }
         case actionsType.MODIFICAR_CLASES_POR_COMPRAR:
             return {
@@ -45,6 +47,16 @@ const all = (state = initialState, action) => {
                     user_lastName: action.payload.lastName !== "" && action.payload.lastName,
                     user_city: action.payload.user_city !== "" && action.payload.user_city
                 }
+            }
+        case actionsType.CALENDAR_TO_ADDCLASS:
+            return {
+                ...state,
+                calendar_to_addClassStudent: action.payload
+            }
+        case actionsType.SET_FETCH_CALENDAR:
+            return {
+                ...state,
+                set_fetch_calendar: action.payload
             }
         default:
             return state

@@ -3,33 +3,28 @@ import { Json } from 'sequelize/types/lib/utils';
 
 import Clase from './Clase';
 import User from './Usuario';
-import {ProfesorProps, Horario} from '../../../interfaces'
+import {IProfesor, Horario} from '../../../interfaces'
 
 @Table
-export default class Profesor extends Model implements ProfesorProps{
+export default class Profesor extends Model{
+
     @Column(DataType.FLOAT)
     score!: number;
 
+    @Column //howMany marks the number of SCORED classes of the professor
+    howMany: number;
+
     @PrimaryKey
-    @ForeignKey(() => User)
+    @ForeignKey(() => User)    
     @Column
     User_mail!: string;
 
-    @Column
-    password!: string;
+    @Column  ({type: DataType.STRING})
+    title!: string;
     
-    @Column
-    name!: string;
-
-    @Column
-    lastName!: string;
-
-    @Column
-    city!: string;
     
     @Column  ({type: DataType.TEXT})
-    foto!: string;
-    
+    foto!: string;   
     @Column  ({type: DataType.TEXT})
     description!: string;
 

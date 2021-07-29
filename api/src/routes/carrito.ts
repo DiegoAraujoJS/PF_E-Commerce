@@ -1,14 +1,13 @@
 import Router, { Request, Response } from 'express'
-import { ClasePorComprar } from '../../../interfaces';
+import { ClasePorComprar, IClase } from '../../../interfaces';
 import User from '../models/Usuario';
-
-import { Time, Class, Profesor } from '../../../interfaces'
 
 const router = Router()
 
 router.post('/:user', async function (req: Request, res: Response) {
     const { user } = req.params
-    const clase: Class = req.body
+    const clase: IClase = req.body
+    console.log(clase)
     try {
         const usuario = await User.findByPk(user)
         if (usuario.carrito) {
@@ -16,7 +15,8 @@ router.post('/:user', async function (req: Request, res: Response) {
             if (!existe) {
                 usuario.set({
                     ...usuario,
-                    carrito: usuario.carrito[0] ? [...usuario.carrito, clase] : [clase]
+                    carrito: usuario.carrito[0] ? [...usuario.carrito, clase] : [clase],
+                    historial: usuario.carrito[0] ? [...usuario.carrito, clase] : [clase]
                 })
                 const result = await usuario.save()
                 res.send(result)
@@ -27,7 +27,8 @@ router.post('/:user', async function (req: Request, res: Response) {
         } else {
             usuario.set({
                 ...usuario,
-                carrito: [clase]
+                carrito: [clase],
+                historial:[clase]
             })
             const result = await usuario.save()
             res.send(result)
@@ -61,7 +62,7 @@ router.get('/:user/:id', async function (req: Request, res: Response) {
     try {
         const usuario = await User.findByPk(user)
 
-        const clases: Class[] = usuario.carrito.filter(e => e.id.toString() !== id)
+        const clases: IClase[] = usuario.carrito.filter(e => e.id.toString() !== id)
         usuario.set({
             ...usuario,
             carrito: clases

@@ -64,7 +64,7 @@
 
 .container {
   scroll-snap-type: y mandatory;
-  overflow-y: scroll;
+  overflow-y: visible;
   height: 100vh;
   scroll-behavior: smooth;
   font-family: "Poppins", sans-serif;
@@ -86,18 +86,21 @@
 }
 .sectionOne {
   color: white;
-  background-color: #00b0ff;
+  background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+  background-size: 400% 400%;
   text-align: center;
   height: 100vh;
   display: flex;
+  position: relative;
   justify-content: center;
   align-items: center;
   scroll-snap-align: start;
   scroll-behavior: smooth;
+  animation: change 10s ease-in-out infinite;
 }
 .sectionTwo {
-  background-color: #00bfa6;
-  height: 100vh;
+  background-color: #c8c8c8;
+  height: 110vh;
   justify-content: center;
   scroll-snap-align: start;
   scroll-behavior: smooth;
@@ -112,6 +115,27 @@
   scroll-snap-align: start;
   scroll-behavior: smooth;
 }
+
+.agregaDisponibilidad {
+  background-color: #2962ff;
+  color: white;
+  font-weight: 500;
+  padding: 10px;
+  font-size: 1.1rem;
+  width: 100%;
+  border-radius: 1rem;
+  border: 1px solid transparent;
+}
+
+.agregaDisponibilidad:hover {
+  box-shadow: 1px 1px 12px -1px rgb(0 0 0 / 24%);
+  -webkit-box-shadow: 1px 1px 12px -1px rgb(0 0 0 / 24%);
+}
+
+.agregaDisponibilidad:disabled {
+  background-color: #99b2f5;
+}
+
 /* .profile {
   border-radius: 50%;
 }
@@ -151,3 +175,14 @@
   color: #c59b08;
 }
  */
+@keyframes change {
+  0% {
+    background-position: 0 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0 50%;
+  }
+}

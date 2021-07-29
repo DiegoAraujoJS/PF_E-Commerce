@@ -1,0 +1,29 @@
+Rutas y lo que devuelven.
+
+Usuario
+
+    POST /api/usuarios/                         AGREGAR UN USUARIO
+        ==> IUserResponse 
+
+    PUT /api/usuarios/                          MODIFICAR UN USUARIO
+        ==> IUserResponse
+
+    GET /api/usuarios/:mail
+        ==> IUserResponse
+
+    GET /api/usuarios/
+        ==> ArrayOfIUserResponse
+
+    GET /api/usuarios/all?nombre='edu'
+        ==> ArrayOfIUserResponse
+
+    DELETE /api/usuarios
+        ==> mensaje
+
+
+Profesores
+
+Clases
+
+Carrito
+

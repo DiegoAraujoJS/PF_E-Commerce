@@ -24,7 +24,7 @@ router.post('/register', async (req:Request, res:Response) => {
             where: {
                 mail: req.body.mail
             },
-            defaults: {...newUser, password: hashPassword(req.body.password)}
+            defaults: {...newUser, password: hashPassword(req.body.password), suspendido: false}
         })
     
         if (!created) return res.status(400).send({type:ErrorType.ALREADY_EXISTS})
