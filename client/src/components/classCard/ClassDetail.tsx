@@ -9,12 +9,14 @@ import { faCalendarAlt, faClock, faEnvelope, faStar } from '@fortawesome/free-re
 import { Disponible, IClase } from '../../../../interfaces';
 import CalendarApp from "../calendar/addClassCalendar/Calendar"
 import RangeSlider from 'react-bootstrap-range-slider';
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Formik } from "formik"
 import { connect } from "react-redux"
 import { set_calendar_data } from "../../Actions/Actions"
 import { useDispatch } from "react-redux"
 import { actionsType } from "../../constants/constants"
+import rangeToHours from "./rangeToHours"
+
 const calendar = <FontAwesomeIcon icon={faCalendarAlt} className="mt-1" style={{ color: "#0067ff" }} />
 const clock = <FontAwesomeIcon icon={faClock} className="mt-1" style={{ color: "#0067ff" }} />
 const materias = [
@@ -54,11 +56,12 @@ function ClassDetail (props) {
     const {show, handleClose, email, mark, puntuacion } = props.hijo
     
     
-    let [hours, setHours] = useState(1)
-    let [day, setDay] = useState('')
-    let [from, setFrom] = useState('0')
-    let [days, setDays] = useState([])
-    const dispatch = useDispatch();
+    const [hours, setHours] = useState(1)
+    const [selectedDay, setDay] = useState<[string, number]>(['', -1])
+    const [from, setFrom] = useState<[string, number]>(['0', -1])
+    const [days, setDays] = useState([])
+    const [isAnotherDay, setIsAnotherDay] = useState(false)
+    let selected = ''
     
     function redirect_blank(url) {
         var a = document.createElement('a');
@@ -66,6 +69,7 @@ function ClassDetail (props) {
         a.href=url;
         a.click();
       }
+      let thisOption = useRef()
 
     useEffect(() => {
         async function fetchDays() {
@@ -75,19 +79,25 @@ function ClassDetail (props) {
             const today = new Date()
 
             const profDays = fetchCalendar.data.map((date: Disponible) => {
+                console.log("DIAS", date)
                 today.setDate(date.fecha.dia); 
+                today.setMonth(date.fecha.mes - 1);
+                today.setFullYear(date.fecha.anio)
+
                 const oneDate = {
-                    disponible: date,
+                    
+                    available: date.disponible.map(rangeToHours).flat(),
                     day: week[today.getDay()],
                     number: today.getDate(),
                     month: year[today.getMonth()],
                     year: today.getFullYear()
 
                 }
+                
                 return oneDate
             })
             
-            props.dispatchData(profDays)
+            
             setDays(profDays)
             console.log('profDays', profDays)
     
@@ -147,8 +157,7 @@ return (
                         </Card.Header>
                         <div style={{height:'400px'}}>
 
-                           {props.profesor ? <CalendarApp email={props.profesor.User_mail}> {props.profesor.User_mail} </CalendarApp>:null}
-                        </div>
+                        {props.profesor ? <CalendarApp renderiza={true} email={props.profesor.User_mail}> {props.profesor.User_mail} </CalendarApp>:null}     </div>
                         
                         <Card.Title>Selecciona el horario de tu clase</Card.Title>
                         
@@ -159,7 +168,7 @@ return (
                                         <Form.Control
                                             as='select'
                                             
-                                            onChange={e => {console.log(e.target.value);setDay(e.target.value)}}
+                                            onChange={e => {console.log([e.target.value.slice(0, e.target.value.length - 1), Number(e.target.value[e.target.value.length-1])]); setDay([e.target.value.slice(0, e.target.value.length - 1), Number(e.target.value[e.target.value.length-1])])}}
 
                                             // onBlur={handleBlur}
                                             
@@ -168,19 +177,25 @@ return (
                                         >
                                             <option value='' >Seleccioná un día para tu clase</option>
                                             {days.map((fullDate, i) => {
-                                                return <option key={i + 10} value={`${fullDate.day} ${fullDate.number} de ${fullDate.month} del ${fullDate.year}`}>{`${fullDate.day} ${fullDate.number} de ${fullDate.month} del ${fullDate.year}`}</option>
+                                                
+
+                                                return <option  key={i+10} value={`${fullDate.day} ${fullDate.number} de ${fullDate.month} del ${fullDate.year}${i}`}>{`${fullDate.day} ${fullDate.number} de ${fullDate.month} del ${fullDate.year}`}</option>
                                             }
                                             )}
                                         </Form.Control>
                                         
 								
                                         <Form.Control
-										name='hasta'
-										type='time'
-										value={from}
-                                        onChange={e => setFrom(e.target.value)}
+                                        as='select'
+										className={`form-control`}
 										
-									/>
+										
+                                        onChange={e => setFrom([e.target.value.slice(0, e.target.value.length - 1), Number(e.target.value[e.target.value.length - 1])])}
+									>
+                                        {console.log('selectedday', selectedDay)}
+                                        { selectedDay[0] ? days[selectedDay[1]].available.map((d, i) => <option value={`${d}${i}`}>{d}</option>) : null}
+                                        {console.log(from)}
+                                        </Form.Control>
                                         
                                 <Form.Label>Horas:</Form.Label>
                                     <RangeSlider
@@ -216,37 +231,30 @@ return (
                         </Card.Body>
                     </Card>
                 </Modal.Body>
-                <Card.Title className="d-flex justify-content-center"> Precio de la clase: &nbsp;<span className="text-success ml-3">{`$${Number(props.precio) * hours}`}</span> </Card.Title>
+                <Card.Title className="d-flex justify-content-center"> Precio de la clase: &nbsp;<span className="text-success ml-3">{`$${hours * props.precio}}`}</span> </Card.Title>
                 
                 <Modal.Footer className="justify-content-center">
 
                         <Button variant="primary" onClick={async () => {
-//  id?: number;
-//  nombre: string;
-//  grado: string;
-//  nivel: string;
-//  materia: string;
 
-//  status?: 'pending' | 'complete' | 'cancelled'
-//  date?: {year: number, month: number, day: number, time: Time}
-//  profesor?: IProfesor
-//  student?: IUser;
-//  precio: number|string;
-//  Profesor_mail?: string;
-//  User_mail?: string;
-//  esPresencial: string;
-                            const thisDate = day.split(' ')
+                            const thisDate = days[selectedDay[1]]
                             
                             
-                            const fromPlusHours = Number(from[0]) * 10 + Number(from[1]) + Number(hours)
-                            const stringified = `${fromPlusHours}`.length < 2 ? `0${fromPlusHours}`+':'+from[3] + from[4] : `${fromPlusHours}`+':' +from[3] + from[4]
+                            const time = from[0].split(':')
+                            
+                            const fromPlusHours = Number(time[0][0]) * 10 + Number(time[0][1]) + Number(hours)
+                            console.log(from, fromPlusHours)
+                            const stringified = `${fromPlusHours}`.length===2 ? `${fromPlusHours}:${time[1][0]}0:00` : `0${fromPlusHours}:${time[1][0]}0:00`
+                            
+                            if (fromPlusHours > 24) return setIsAnotherDay(true);
+                            
                             
                             const payload: IClase = {
                                 ...props,
-                                date: {year: Number(thisDate[thisDate.length - 1]), month: year.indexOf(thisDate[3]), day: Number(thisDate[1]), time: [`${from}`, stringified]},
+                                date: {year: thisDate.year, month: thisDate.month, day: thisDate.number, time: [`${from[0]}:00`, stringified]},
                                 precio: `${hours * props.precio}`
                             }
-                            
+                            console.log('payload', payload)
                             try{
                             const token = getCookieValue('token').replaceAll("\"", '')
                             const getUser = await axios.post(`http://localhost:3001/api/verify`, {}, { headers: { Authorization: token } })
@@ -255,7 +263,7 @@ return (
                                 const addToCart = await axios.post(`http://localhost:3001/api/carrito/${getUser.data.mail}`, payload)
                                 if(addToCart.status === 200) redirect_blank("./cesta")
                                 }
-                            }
+                             }
                             catch(error) {
                                 console.log(error)
                                 Swal.fire(
@@ -267,24 +275,13 @@ return (
                         }}>
                            Agregar clase a mi lista
                         </Button>
+                        {isAnotherDay ? <span style={{color:'red'}}>No puedes pasarte del día seleccionado!</span> : null}
            
                 </Modal.Footer>
             </Modal>
 )
 }
 
-const mapStateToProps = (state) => {
-    return {
-        set_fetch_calendar: state.set_fetch_calendar,
-    }
-}
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        dispatchData: function (payload) {
-            dispatch({ type: actionsType.SET_FETCH_CALENDAR, payload })
-        }
-    }
-}
 
-export default connect(mapStateToProps, mapDispatchToProps)(ClassDetail)
+export default ClassDetail

@@ -25,6 +25,7 @@ class Calendar extends Component {
       allowEventOverlap: false,
       isUser: true,
       token: '',
+      rendeer: false,
       viewType: "Week",
       heightSpec: "Parent100Pct",
       position: 'none',
@@ -48,6 +49,7 @@ class Calendar extends Component {
     },
       onTimeRangeSelected: async (args) => {
         
+        if(this.state.rendeer===true){return null}
         if (this.state.isUser) {
           const dp = this.calendar;
           const modal = await DayPilot.Modal.prompt(
@@ -71,7 +73,8 @@ class Calendar extends Component {
           const start=args.start.value.slice(11)
           const end=args.end.value.slice(11)
           
-        
+          let last = end
+          if (last === '00:00:00') last = '24:00:00'
         const dias = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado']
         const d = new Date(args.start);
 
@@ -79,9 +82,9 @@ class Calendar extends Component {
         console.log(args.start)
         this.state.horarios[dayName] = this.state.horarios[dayName] ? this.state.horarios[dayName] = {
           ...this.state.horarios[dayName],
-          disponible: [...this.state.horarios[dayName].disponible, [start, end]]
+          disponible: [...this.state.horarios[dayName].disponible, [start, last]]
         } : this.state.horarios[dayName] = {
-          disponible: [[start, end]],
+          disponible: [[start, last]],
           fecha: {
             anio: año,
             mes:  mes,
@@ -103,6 +106,7 @@ class Calendar extends Component {
         }
         },
         onEventDelete:async  function(args) {
+          if(this.state.rendeer===true){return null}
             if(this.isUser){
             
             const año=args.e.data.start.value.slice(0,-15)
@@ -111,9 +115,11 @@ class Calendar extends Component {
             const start=args.e.data.start.value.slice(11)
             const end=args.e.data.end.value.slice(11)
             let horario1
+            let last = end
+            if (last === '00:00:00') last = '24:00:00'
             if(args.e.data.text==="Disponible"){
             horario1={
-              disponible: [[start,  end]],
+              disponible: [[start,  last]],
               email: email,
               fecha: {
                   anio: año,
@@ -123,7 +129,7 @@ class Calendar extends Component {
           } }
           else if(args.e.data.text==="Ocupado"){
             horario1={
-              ocupado: [[start,  end]],
+              ocupado: [[start,  last]],
               email: email,
               fecha: {
                   anio: año,
@@ -136,6 +142,7 @@ class Calendar extends Component {
       },
       eventDeleteHandling: "Update",
       onEventClick: async args => {
+        if(this.state.rendeer===true){return null}
         console.log("BOrrar")
         if (this.state.isUser){
           const dp = this.calendar;
@@ -186,7 +193,8 @@ class Calendar extends Component {
     };
   }
   async componentDidMount() {
-
+    const renderr={renderiza:this.props.renderiza}
+    
     let placeholder = document.querySelectorAll('.calendar_default_colheader')
     const dias = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado' ]
     let i=0;
@@ -264,16 +272,38 @@ class Calendar extends Component {
       showToolTip: false,
       startDate: date(today, "yy/mm/dd"),
       events: persons,
+      rendeer: renderr.renderiza
     });
   }
     
 
   render() {
+    const rende={renderiza:this.props.renderiza}
     const propsEmail={email:this.props.email}
     var { ...config } = this.state;
+    const  fecha=today
     return (
-      
-        
+      <div>
+      {rende.renderiza===true?<div style={{display:"flex", justifyContent:"space-between"}}>
+      <button onClick={async ()=>{
+          console.log(config)
+          console.log("fecha", fecha)
+          fecha.setDate(fecha.getDate() - 7);
+          this.setState({
+            startDate: fecha,
+          });
+          console.log("Fecha modificada", fecha)
+        }}> {"<"} </button>
+        <button onClick={async ()=>{
+          console.log(config)
+          console.log("fecha", fecha)
+          fecha.setDate(fecha.getDate() + 7);
+          this.setState({
+            startDate: fecha,
+          });
+          console.log("Fecha modificada", fecha)
+        }}>{">"}</button>
+           </div>:null }
         
           <DayPilotCalendar
             {...config}
@@ -283,7 +313,7 @@ class Calendar extends Component {
             children={{}}
           />
         
-      
+        </div>
     );
   }
 }

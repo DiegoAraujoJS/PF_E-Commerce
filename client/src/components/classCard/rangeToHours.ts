@@ -6,11 +6,14 @@ function rangeToHours(range: Time) {
     let max=Number(`${range[1][0]}${range[1][1]}`)
     let allHours=[]
     while (min < max) {
-        allHours.push(`${min} hs`)
+        
+        allHours.push(`${min}`)
         
         min=min+1
     }
-    return allHours
+    
+    const allTHours: string[] = allHours.map(h => h.length===1 ? `0${h}:00` : `${h}:00`)
+    return allTHours
 }
 
 export default rangeToHours
