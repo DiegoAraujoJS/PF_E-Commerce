@@ -25,6 +25,7 @@ class Calendar extends Component {
       allowEventOverlap: false,
       isUser: true,
       token: '',
+      rendeer: false,
       viewType: "Week",
       heightSpec: "Parent100Pct",
       position: 'none',
@@ -48,6 +49,7 @@ class Calendar extends Component {
     },
       onTimeRangeSelected: async (args) => {
         
+        if(this.state.rendeer===true){return null}
         if (this.state.isUser) {
           const dp = this.calendar;
           const modal = await DayPilot.Modal.prompt(
@@ -104,6 +106,7 @@ class Calendar extends Component {
         }
         },
         onEventDelete:async  function(args) {
+          if(this.state.rendeer===true){return null}
             if(this.isUser){
             
             const año=args.e.data.start.value.slice(0,-15)
@@ -139,6 +142,7 @@ class Calendar extends Component {
       },
       eventDeleteHandling: "Update",
       onEventClick: async args => {
+        if(this.state.rendeer===true){return null}
         console.log("BOrrar")
         if (this.state.isUser){
           const dp = this.calendar;
@@ -189,7 +193,8 @@ class Calendar extends Component {
     };
   }
   async componentDidMount() {
-
+    const renderr={renderiza:this.props.renderiza}
+    
     let placeholder = document.querySelectorAll('.calendar_default_colheader')
     const dias = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado' ]
     let i=0;
@@ -267,6 +272,7 @@ class Calendar extends Component {
       showToolTip: false,
       startDate: date(today, "yy/mm/dd"),
       events: persons,
+      rendeer: renderr.renderiza
     });
   }
     
