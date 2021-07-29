@@ -36,9 +36,38 @@ function AddClaim() {
         getUser()
     }, [])
 
-    const handleChange = (e) => {
-        if (e.target.name === "class_id") {
-            return setClass_id(e.target.value)
+    const handleChange = async (e) => {
+        if (e.target.name === "clases") {
+
+            var index = e.target.selectedIndex;
+            var optionElement = e.target.childNodes[index];
+            var id =  optionElement.getAttribute('data-id');
+            if (id) {  
+                const response = await axios.get(`http://localhost:3001/api/clases/${id}`)
+                if (response.status === 200) {
+                    setClass_id(response.data.id)
+                    setClassData({
+                        nombre: response.data.nombre,
+                        grado: response.data.grado,
+                        nivel: response.data.nivel,
+                        materia: response.data.materia,
+                        descripcion: response.data.descripcion,
+                        esPresencial: response.data.esPresencial,
+                        Profesor_mail: response.data.Profesor_mail,
+                    })
+                }
+            }
+            else {
+                setClassData({
+                    nombre: "",
+                    grado: "",
+                    nivel: "",
+                    materia: "",
+                    descripcion:"",
+                    esPresencial: "",
+                    Profesor_mail: "",
+                })
+            }
         }
         else if (e.target.name === "admin") {
             setAdmin(e.target.value)
@@ -71,6 +100,7 @@ function AddClaim() {
     }
 
     const [adminsArray, setAdminsArray] = useState([])
+    const [classesData, setClassesData] = useState([])
     const [classData, setClassData] = useState({
         nombre: "",
         grado: "",
@@ -81,41 +111,27 @@ function AddClaim() {
         Profesor_mail: "",
     })
 
-    const getClass = async () => {
-        if (class_id) {
-            const response = await axios.get(`http://localhost:3001/api/clases/${class_id}`)
-            if (response.status === 200) {
-                setClassData({
-                    nombre: response.data.nombre,
-                    grado: response.data.grado,
-                    nivel: response.data.nivel,
-                    materia: response.data.materia,
-                    descripcion: response.data.descripcion,
-                    esPresencial: response.data.esPresencial,
-                    Profesor_mail: response.data.Profesor_mail,
-                })
-            } else {
-                Swal.fire(
-                    "Error!",
-                    "No existe clase con ese id.",
-                    "error"
-                )
+    useEffect(() => {
+        const getClass = async () => {
+            if (professorData && user) {
+                const response = await axios.get(`http://localhost:3001/api/clases/claims/${professorData.User_mail}/${user.mail}`)
+                if (response.status === 200) {
+                    setClassesData(response.data)
+                }
             }
         }
-    }
+        getClass()
+    }, [professorData])
+
 
     const getProfessorFn = (e) => {
         e.preventDefault()
         getProfessor()
     }
-    const getClassFn = (e) => {
-        e.preventDefault()
-        getClass()
-    }
 
     useEffect(() => {
         const getAdmin = async () => {
-            const response = await axios.get(`http://localhost:3001/api/usuarios/admin`)
+            const response = await axios.get(`http://localhost:3001/api/usuarios/all/admin`)
             if (response.status === 200) {
                 setAdminsArray(response.data)
             }
@@ -149,7 +165,6 @@ function AddClaim() {
 
                     const responseClaim = await axios.post('http://localhost:3001/api/reclamos', newClaim)
                     if (responseClaim.status === 200) {
-                        console.log(responseClaim.data)
                         Swal.fire(
                             "Exito!",
                             "El reclamo fue creado correctamente.",
@@ -176,8 +191,7 @@ function AddClaim() {
         }
     };
 
-    console.log(adminsArray)
-    console.log(user)
+
     return (
         <Container>
             <Row>
@@ -228,8 +242,8 @@ function AddClaim() {
                                             <Card.Img src={professorData.foto} width="200" height="200" alt="foto de profesor" />
                                             <div className="d-flex flex-column align-items-center justify-content-center w-100">
                                                 <Card.Title>{professorData.name}{professorData.lastName}</Card.Title>
-                                                <Card.Text>{professorData.User_mail}</Card.Text>
-                                                <Card.Text>{professorData.city}</Card.Text>
+                                                <Card.Text className="ms-3">{professorData.User_mail}</Card.Text>
+                                                <Card.Text className="ms-3">{professorData.city}</Card.Text>
                                             </div>
                                         </Card.Body>
                                     </Card>
@@ -238,21 +252,20 @@ function AddClaim() {
                             : null
                     }
                     <Row className="mt-3">
-                        <Form.Label>Id de la clase:</Form.Label>
-                        <Form.Group className="mb-3 d-flex align-items-center" >
-                            <Col sm={10} md={10} >
+                        <Form.Label>Elije una clase:</Form.Label>
+                        <Form.Group className="mb-3 d-flex align-items-center">
+                            <Col sm={12} md={12}>
                                 <Form.Control
-                                    type='number'
-                                    name='professor'
-                                    onChange={(e) => { setClass_id(Number(e.target.value)) }}
-                                />
-                            </Col>
-                            <Col sm={2} md={2}>
-                                <Button
-                                    onClick={(e) => getClassFn(e)}
+                                    as="select"
+                                    name="clases"
+                                    onChange={handleChange}
+                               
                                 >
-                                    Show Class
-                                </Button>
+                                    <option>Sin elejir</option>
+                                    {classesData.length ? classesData?.map(c => {
+                                        return <option data-id={c.id}>{c.nombre}</option>
+                                    }) : <option>No hay clases en su historial del profesor mencionado</option>}
+                                </Form.Control>
                             </Col>
                         </Form.Group>
                     </Row>
@@ -283,16 +296,20 @@ function AddClaim() {
                     </Row>
                     <Row className="mt-3">
                         <Form.Label>Elije un admin:</Form.Label>
-                        <Form.Control
-                            as="select"
-                            name="admin"
-                            onChange={handleChange}
-                        >
-                            <option>{"..."}</option>
-                            {/* {adminsArray && adminsArray.length ? adminsArray?.map(a => {
-                                return <option>{a.mail}</option>
-                            }) : <h3>No hay admins</h3>} */}
-                        </Form.Control>
+                        <Form.Group className="mb-3 d-flex align-items-center">
+                            <Col>
+                                <Form.Control
+                                    as="select"
+                                    name="admin"
+                                    onChange={handleChange}
+                                >
+                                    <option>Sin elejir</option>
+                                    {Array.isArray(adminsArray) && adminsArray.length ? adminsArray?.map(a => {
+                                        return <option>{a.User_mail}</option>
+                                    }) : <option>No hay admins</option>}
+                                </Form.Control>
+                            </Col>
+                        </Form.Group>
                     </Row>
                     <Row className="d-flex justify-content-center mt-4">
                         <Col sm={4} md={4} className="d-flex justify-content-center">
@@ -306,7 +323,7 @@ function AddClaim() {
                     </Row>
                 </Form>
             </Row >
-        </Container>
+        </Container >
     )
 };
 
