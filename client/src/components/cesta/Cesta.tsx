@@ -37,13 +37,13 @@ export default function Cesta() {
                         let horaFinal = e.date?.time[1].split(':');
                         if (e.date.day.toString().length === 1) dia = '0' + dia;
                         if (e.date.month.toString().length === 1) mes = '0' + mes;
-                        if (horaInicio[0] >= 12) {
+                        if (horaInicio[0] > 12) {
                             horaInicio[2] = 'PM';
                             if (horaInicio[0] !== 12) horaInicio[0] = (Number(horaInicio[0]) - 12).toString();
                         } else {
                             horaInicio[2] = 'AM';
                         }
-                        if (horaFinal[0] >= 12) {
+                        if (horaFinal[0] > 12) {
                             horaFinal[2] = 'PM';
                             if (horaFinal[0] !== 12) horaFinal[0] = (Number(horaFinal[0]) - 12).toString();
                         } else {

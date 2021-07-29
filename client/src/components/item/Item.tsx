@@ -104,12 +104,15 @@ const mark = <FontAwesomeIcon icon={faMapMarkerAlt} style={{ color: "#ff3f3f" }}
       if (result.isConfirmed) {
           try {
             const updatedCarrito = await axios.get(`http://localhost:3001/api/carrito/${cliente}/${id}`)
-            if (updatedCarrito.status === 200 && Array.isArray(updatedCarrito.data) && updatedCarrito.data.length) {
+            if (updatedCarrito.status === 200 && Array.isArray(updatedCarrito.data)) {
               Swal.fire(
                 'Eliminado!',
                 'Tu clase se ha eliminado de tu lista.',
                 'success'
               )
+              if (updatedCarrito.data.length === 0) {
+                dispatch(modificarClasesPorComprar([]));
+              } else {
                 const clasesPorComprarFormateadas: any = updatedCarrito.data.map(e => {
                     console.log(e.date)
                     let dia = e.date?.day;
@@ -118,13 +121,13 @@ const mark = <FontAwesomeIcon icon={faMapMarkerAlt} style={{ color: "#ff3f3f" }}
                     let horaFinal = e.date?.time[1].split(':');
                     if (e.date.day.toString().length === 1) dia = '0' + dia;
                     if (e.date.month.toString().length === 1) mes = '0' + mes;
-                    if (horaInicio[0] >= 12) {
+                    if (horaInicio[0] > 12) {
                         horaInicio[2] = 'PM';
                         if (horaInicio[0] !== 12) horaInicio[0] = (Number(horaInicio[0]) - 12).toString();
                     } else {
                         horaInicio[2] = 'AM';
                     }
-                    if (horaFinal[0] >= 12) {
+                    if (horaFinal[0] > 12) {
                         horaFinal[2] = 'PM';
                         if (horaFinal[0] !== 12) horaFinal[0] = (Number(horaFinal[0]) - 12).toString();
                     } else {
@@ -147,7 +150,7 @@ const mark = <FontAwesomeIcon icon={faMapMarkerAlt} style={{ color: "#ff3f3f" }}
                     return clasePorComprar;
                 })
                 dispatch(modificarClasesPorComprar(clasesPorComprarFormateadas));
-              }
+            }}
           } catch (error) {
             console.log(error)
           }

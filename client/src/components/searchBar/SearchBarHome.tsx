@@ -22,6 +22,8 @@ import { useHistory } from "react-router-dom";
 import ModalGoogle from '../modalgoogle/ModalGoogle';
 import googleLogo from '../../images/googleLogo.png';
 import { loginWithGoogle } from '../../firebase';
+import { useSelector, useDispatch } from "react-redux";
+import { modificarClasesPorComprar } from "../../Actions/Actions";
 
 
 export default function SearchBar() {
@@ -32,7 +34,9 @@ export default function SearchBar() {
   const [errors, setErrors] = useState({ email: null, password: null })
   let [user, setUser] = useState<{ name: string, lastName: string, role: number, mail: string } | undefined>({ name: '', lastName: '', role: null, mail: '' })
   const [cestaLength, setCestaLength] = useState(0)
+  const clasesPorComprar = useSelector(state => state['clasesPorComprar']);
   const history = useHistory();
+  const dispatch = useDispatch();
   useEffect(() => {
     async function setRoleOfUser() {
       if (localStorage.getItem('login')) {
@@ -47,7 +51,7 @@ export default function SearchBar() {
           console.log('status 200')
           setUser(thisUser.data)
           const clases = await axios.get(`http://localhost:3001/api/carrito/all/${thisUser.data.mail}`)
-          setCestaLength(clases.data.length)
+          dispatch(modificarClasesPorComprar(clases))
         } else {
           console.log('else')
           setUser(undefined)
@@ -318,7 +322,7 @@ export default function SearchBar() {
           :
           < div >
             <Link to={"/cesta"}> {book} </Link>
-            {cestaLength > 0 ? <Link style={{ textDecoration: "none", }} to={"/cesta"}><span style={bookCSS}> {cestaLength}</span> </Link> : null}
+            {clasesPorComprar.length > 0 ? <Link style={{ textDecoration: "none", }} to={"/cesta"}><span style={bookCSS}> {clasesPorComprar.length}</span> </Link> : <Link style={{ textDecoration: "none", }} to={"/cesta"}><span style={bookCSS}>0</span> </Link>}
           </div>
         }
       </div>
