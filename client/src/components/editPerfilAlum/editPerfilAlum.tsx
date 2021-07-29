@@ -188,7 +188,7 @@ const EditPerfilAlum = () => {
                   className="form-control"
                   onChange={(e) => inputsHandler(e)}
                   id="description"
-                  value={data.description}
+                  value={data.description ? data.description : ""}
                 />
               </div>
               {/*  <div className="col-md-12"><label className="labels">Contacto Telefonico</label><input type="text" className="form-control" placeholder="numero de celular" /></div>
@@ -205,9 +205,9 @@ const EditPerfilAlum = () => {
                   className="form-control"
                 >
                   {countries.length &&
-                    countries.map((c) => {
+                    countries.map((c, i) => {
                       return (
-                        <option value={c.name}>
+                        <option key={i} value={c.name}>
                           {c.name} {c.unicodeFlag}
                         </option>
                       );
@@ -227,8 +227,10 @@ const EditPerfilAlum = () => {
                       className="form-control"
                     >
                       {states.length &&
-                        states.map((c) => (
-                          <option value={c.name}>{c.name}</option>
+                        states.map((c, i) => (
+                          <option key={i} value={c.name}>
+                            {c.name}
+                          </option>
                         ))}
                     </select>
                   </Col>
@@ -245,7 +247,11 @@ const EditPerfilAlum = () => {
                       className="form-control"
                     >
                       {cities.length &&
-                        cities.map((c) => <option value={c}>{c}</option>)}
+                        cities.map((c, i) => (
+                          <option key={i} value={c}>
+                            {c}
+                          </option>
+                        ))}
                     </select>
                   </Col>
                 ) : null}
