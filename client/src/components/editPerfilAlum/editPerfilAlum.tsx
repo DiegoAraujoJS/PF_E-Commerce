@@ -5,6 +5,7 @@ import { useHistory } from "react-router-dom";
 import styles from "./editPerfilAlumn.module.css";
 import { storage } from "../../firebase";
 import { Button, Modal, Row, Col, Form } from "react-bootstrap";
+import Swal from "sweetalert2";
 
 const EditPerfilAlum = () => {
   const history = useHistory();
@@ -109,7 +110,7 @@ const EditPerfilAlum = () => {
           city: cityS,
           country: countryS,
         });
-        alert("Cambios Realizados");
+        Swal.fire("Exito!", "Cambios Realizados!", "success");
       } else {
         let editar = await axios.patch("http://localhost:3001/api/usuarios/", {
           foto: img,
@@ -119,11 +120,11 @@ const EditPerfilAlum = () => {
           city: cityS,
           country: countryS,
         });
-        alert("Cambios Realizados");
+        Swal.fire("Exito!", "Cambios Realizados!", "success");
       }
     } catch (err) {
       console.log(err);
-      alert("Algo salio mal");
+      Swal.fire("Error!", "Algo salio mal", "error");
     }
 
     history.push(`/perfil/`);
