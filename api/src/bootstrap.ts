@@ -380,11 +380,13 @@ const bootstrap = async () => {
 
         for (const user of [
             Edward,
-            
+            MauroLeonel,
             Diego,
             Javi,
             Mauro,
             Benja,
+            Mauro,
+            Leonel
             
         ]) {
             const payload: Disponible = {

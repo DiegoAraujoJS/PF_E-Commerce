@@ -41,7 +41,7 @@ export default function ChatMessage(props) {
             />
             <span
               className={
-                "d-inline-block bg-white px-3 py-2 me-1 rounded-3 shadow fs-6 text-wrap text-break"
+                "d-inline-block bg-white px-3 py-2 ms-1 rounded-3 shadow fs-6 text-wrap text-break"
               }
             >
               {text}
