@@ -9,12 +9,13 @@ import { faCalendarAlt, faClock, faEnvelope, faStar } from '@fortawesome/free-re
 import { Disponible, IClase } from '../../../../interfaces';
 import CalendarApp from "../calendar/addClassCalendar/Calendar"
 import RangeSlider from 'react-bootstrap-range-slider';
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { Formik } from "formik"
 import { connect } from "react-redux"
 import { set_calendar_data } from "../../Actions/Actions"
 import { useDispatch } from "react-redux"
 import { actionsType } from "../../constants/constants"
+import rangeToHours from "./rangeToHours"
 const calendar = <FontAwesomeIcon icon={faCalendarAlt} className="mt-1" style={{ color: "#0067ff" }} />
 const clock = <FontAwesomeIcon icon={faClock} className="mt-1" style={{ color: "#0067ff" }} />
 const materias = [
@@ -55,10 +56,10 @@ function ClassDetail (props) {
     
     
     let [hours, setHours] = useState(1)
-    let [day, setDay] = useState('')
+    let [day, setDay] = useState<[string, number]>(['', -1])
     let [from, setFrom] = useState('0')
     let [days, setDays] = useState([])
-    const dispatch = useDispatch();
+    
     
     function redirect_blank(url) {
         var a = document.createElement('a');
@@ -66,6 +67,7 @@ function ClassDetail (props) {
         a.href=url;
         a.click();
       }
+      let thisOption = useRef()
 
     useEffect(() => {
         async function fetchDays() {
@@ -81,7 +83,7 @@ function ClassDetail (props) {
                 today.setFullYear(date.fecha.anio)
 
                 const oneDate = {
-                    disponible: date,
+                    available: date.disponible.map(rangeToHours).flat(),
                     day: week[today.getDay()],
                     number: today.getDate(),
                     month: year[today.getMonth()],
@@ -92,7 +94,7 @@ function ClassDetail (props) {
                 return oneDate
             })
             
-            props.dispatchData(profDays)
+            
             setDays(profDays)
             console.log('profDays', profDays)
     
@@ -163,7 +165,7 @@ return (
                                         <Form.Control
                                             as='select'
                                             
-                                            onChange={e => {console.log(e.target.value);setDay(e.target.value)}}
+                                            onChange={e => {console.log([e.target.value.slice(0, e.target.value.length - 1), Number(e.target.value[e.target.value.length-1])]); setDay([e.target.value.slice(0, e.target.value.length - 1), Number(e.target.value[e.target.value.length-1])])}}
 
                                             // onBlur={handleBlur}
                                             
@@ -172,17 +174,20 @@ return (
                                         >
                                             <option value='' >Seleccioná un día para tu clase</option>
                                             {days.map((fullDate, i) => {
-                                                return <option key={i + 10} value={`${fullDate.day} ${fullDate.number} de ${fullDate.month} del ${fullDate.year}`}>{`${fullDate.day} ${fullDate.number} de ${fullDate.month} del ${fullDate.year}`}</option>
+                                                
+
+                                                return <option  key={i+10} value={`${fullDate.day} ${fullDate.number} de ${fullDate.month} del ${fullDate.year}${i}`}>{`${fullDate.day} ${fullDate.number} de ${fullDate.month} del ${fullDate.year}`}</option>
                                             }
                                             )}
                                         </Form.Control>
                                         
 								
                                         <Form.Control
-										name='hasta'
-										type='time'
+										className={`form-control`}
+										type='select'
 										value={from}
                                         onChange={e => setFrom(e.target.value)}
+                                        { ...day[0] !== '' ? days[day[1]].available.map(d => <option>`${d}`</option>) : null}
 										
 									/>
                                         
@@ -239,27 +244,27 @@ return (
 //  Profesor_mail?: string;
 //  User_mail?: string;
 //  esPresencial: string;
-                            const thisDate = day.split(' ')
+                            // const thisDate = day.split(' ')
                             
                             
                             const fromPlusHours = Number(from[0]) * 10 + Number(from[1]) + Number(hours)
                             const stringified = `${fromPlusHours}`.length < 2 ? `0${fromPlusHours}`+':'+from[3] + from[4] : `${fromPlusHours}`+':' +from[3] + from[4]
                             
-                            const payload: IClase = {
-                                ...props,
-                                date: {year: Number(thisDate[thisDate.length - 1]), month: year.indexOf(thisDate[3]), day: Number(thisDate[1]), time: [`${from}`, stringified]},
-                                precio: `${hours * props.precio}`
-                            }
+                            // const payload: IClase = {
+                            //     ...props,
+                            //     date: {year: Number(thisDate[thisDate.length - 1]), month: year.indexOf(thisDate[3]), day: Number(thisDate[1]), time: [`${from}`, stringified]},
+                            //     precio: `${hours * props.precio}`
+                            // }
                             
                             try{
                             const token = getCookieValue('token').replaceAll("\"", '')
                             const getUser = await axios.post(`http://localhost:3001/api/verify`, {}, { headers: { Authorization: token } })
 
-                            if (getUser.status) {
-                                const addToCart = await axios.post(`http://localhost:3001/api/carrito/${getUser.data.mail}`, payload)
-                                if(addToCart.status === 200) redirect_blank("./cesta")
-                                }
-                            }
+                            // if (getUser.status) {
+                            //     const addToCart = await axios.post(`http://localhost:3001/api/carrito/${getUser.data.mail}`, payload)
+                            //     if(addToCart.status === 200) redirect_blank("./cesta")
+                            //     }
+                             }
                             catch(error) {
                                 console.log(error)
                                 Swal.fire(
@@ -277,18 +282,6 @@ return (
 )
 }
 
-const mapStateToProps = (state) => {
-    return {
-        set_fetch_calendar: state.set_fetch_calendar,
-    }
-}
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        dispatchData: function (payload) {
-            dispatch({ type: actionsType.SET_FETCH_CALENDAR, payload })
-        }
-    }
-}
 
-export default connect(mapStateToProps, mapDispatchToProps)(ClassDetail)
+export default ClassDetail
