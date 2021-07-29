@@ -1,6 +1,7 @@
 import {Router} from 'express'
 import Stripe from 'stripe';
 import config from '../lib/config';
+import Clase from '../models/Clase';
 const stripe = new Stripe(config.privateApiKey, null);
 const router = Router()
 router.post('/procesarpago', async (req, res) => {
@@ -29,6 +30,8 @@ router.post('/procesarpago', async (req, res) => {
       success_url: 'http://localhost:3000/pagoexitoso?id={CHECKOUT_SESSION_ID}',
       cancel_url: 'http://localhost:3000/cesta',
     });
+
+    
 
     res.send({id: session.id})
   });

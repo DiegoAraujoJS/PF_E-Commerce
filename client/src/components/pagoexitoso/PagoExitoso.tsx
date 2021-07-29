@@ -73,6 +73,8 @@ export default function PagoExitoso() {
                 let meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Setiembre', 'Octubre', 'Noviembre', 'Diciembre'];
                 let dias = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
                 let fecha = e.dia.split('/');
+                const getMonth = (element) => element===fecha[1]
+                fecha[1] = meses.findIndex(getMonth) + 1
                 // horaInicio
                 let hora = e.horaInicio.split(' ')
                 let numeros = hora[0].split(':');
