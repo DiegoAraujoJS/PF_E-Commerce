@@ -104,6 +104,7 @@ const mark = <FontAwesomeIcon icon={faMapMarkerAlt} style={{ color: "#ff3f3f" }}
       if (result.isConfirmed) {
           try {
             const updatedCarrito = await axios.get(`http://localhost:3001/api/carrito/${cliente}/${id}`)
+            console.log('updated', updatedCarrito)
             if (updatedCarrito.status === 200 && Array.isArray(updatedCarrito.data)) {
               Swal.fire(
                 'Eliminado!',
@@ -121,18 +122,18 @@ const mark = <FontAwesomeIcon icon={faMapMarkerAlt} style={{ color: "#ff3f3f" }}
                     let horaFinal = e.date?.time[1].split(':');
                     if (e.date.day.toString().length === 1) dia = '0' + dia;
                     if (e.date.month.toString().length === 1) mes = '0' + mes;
-                    if (horaInicio[0] > 12) {
-                        horaInicio[2] = 'PM';
-                        if (horaInicio[0] !== 12) horaInicio[0] = (Number(horaInicio[0]) - 12).toString();
-                    } else {
-                        horaInicio[2] = 'AM';
-                    }
-                    if (horaFinal[0] > 12) {
-                        horaFinal[2] = 'PM';
-                        if (horaFinal[0] !== 12) horaFinal[0] = (Number(horaFinal[0]) - 12).toString();
-                    } else {
-                        horaFinal[2] = 'AM';
-                    }
+                    if (Number(horaInicio[0]) > 11) {
+                      horaInicio[2] = 'PM';
+                      if (horaInicio[0] !== '12') horaInicio[0] = (Number(horaInicio[0]) - 12).toString();
+                  } else {
+                      horaInicio[2] = 'AM';
+                  }
+                  if (Number(horaFinal[0]) > 11) {
+                      horaFinal[2] = 'PM';
+                      if (horaFinal[0] !== '12') horaFinal[0] = (Number(horaFinal[0]) - 12).toString();
+                  } else {
+                      horaFinal[2] = 'AM';
+                  }
                     if (horaInicio[0].length === 1) horaInicio[0] = '0' + horaInicio[0];
                     if (horaFinal[0].length === 1) horaFinal[0] = '0' + horaFinal[0];
                     let clasePorComprar = {

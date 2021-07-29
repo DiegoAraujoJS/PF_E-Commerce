@@ -26,9 +26,13 @@ export default function Cesta() {
             const token = getCookieValue(`token`).replaceAll('\"', '')
             const user = await axios.post(`http://localhost:3001/api/verify`, {}, { headers: { Authorization: token } })
             if (user) {
+                setClient(user.data.mail)
                 const clases = await axios.get(`http://localhost:3001/api/carrito/all/${user.data.mail}`)
                 
-                if (clases.status === 200 && Array.isArray(clases.data) && clases.data.length) {
+                if (clases.status === 200 && Array.isArray(clases.data)) {
+                    if (clases.data.length === 0) {
+                        dispatch(modificarClasesPorComprar([]));
+                      } else {
                     const clasesPorComprarFormateadas: any = clases.data.map(e => {
                         console.log(e.date)
                         let dia = e.date?.day;
@@ -37,15 +41,15 @@ export default function Cesta() {
                         let horaFinal = e.date?.time[1].split(':');
                         if (e.date.day.toString().length === 1) dia = '0' + dia;
                         if (e.date.month.toString().length === 1) mes = '0' + mes;
-                        if (horaInicio[0] > 12) {
+                        if (Number(horaInicio[0]) > 11) {
                             horaInicio[2] = 'PM';
-                            if (horaInicio[0] !== 12) horaInicio[0] = (Number(horaInicio[0]) - 12).toString();
+                            if (horaInicio[0] !== '12') horaInicio[0] = (Number(horaInicio[0]) - 12).toString();
                         } else {
                             horaInicio[2] = 'AM';
                         }
-                        if (horaFinal[0] > 12) {
+                        if (Number(horaFinal[0]) > 11) {
                             horaFinal[2] = 'PM';
-                            if (horaFinal[0] !== 12) horaFinal[0] = (Number(horaFinal[0]) - 12).toString();
+                            if (horaFinal[0] !== '12') horaFinal[0] = (Number(horaFinal[0]) - 12).toString();
                         } else {
                             horaFinal[2] = 'AM';
                         }
@@ -65,8 +69,8 @@ export default function Cesta() {
                         }
                         return clasePorComprar;
                     })
-                    setClient(user.data.mail)
                     setClasesPorComprar(clasesPorComprarFormateadas)
+                }
                 }
             }
         }
