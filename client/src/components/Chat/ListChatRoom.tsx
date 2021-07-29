@@ -47,7 +47,7 @@ function ListChatRoom(props: React.PropsWithChildren<PropsChat>) {
       getAllUsers();
     }
     if (chatRoom) {
-      if (userSelected) {
+      if (userSelected && userSelected !== props.userLoged.mail) {
         foundChatUser();
         getReceivingUser(userSelected);
       } else {
@@ -135,81 +135,9 @@ function ListChatRoom(props: React.PropsWithChildren<PropsChat>) {
     getReceivingUser(userFound);
   }
 
-  /*
-  const addChatRoom = async () => {
-    const query = await chatsRoomsRef.where(
-      "users",
-      "array-contains",
-      props.userLoged.mail
-    );
-
-    let idFounded = "";
-
-    const result = await query.get();
-    result.docs.map(async (doc, i) => {
-      const data = await doc.data();
-      data.users.forEach((user) => {
-        if (user === userSelected) {
-          idFounded = doc.id;
-        }
-      });
-    });
-
-    await idFounded;
-
-    if (idFounded !== "") {
-      console.log("no se puede agregar un chat que ya está creado");
-    } else if (userSelected) {
-      const chatResponse = await chatsRoomsRef.add({
-        users: [props.userLoged.mail, userSelected],
-      });
-      const chatResponseData = await (
-        await chatsRoomsRef.doc(chatResponse.id).get()
-      ).data();
-      setChatSelected({ users: chatResponseData.users, id: chatResponse.id });
-    } else {
-      console.log("seleccione un usuario para agregar");
-    }
-  }; 
-*/
-
   return (
     <div className={"w-100 d-flex flex-row justify-content-center"}>
       <div className={"w-50 "}>
-        {/* <div className={"d-flex w-100"}>
-          {users && (
-            <form className={"d-flex w-100"}>
-              <select
-                name=""
-                value={userSelected}
-                onChange={handleChange}
-                className={
-                  "text-light border-0 rounded-0 w-100 px-3 fs-6 " +
-                  style.background
-                }
-              >
-                <option value={""} key={-1}>
-                  Select User
-                </option>
-                {users.map((user, i) => {
-                  if (user.mail !== props.userLoged.mail) {
-                    return (
-                      <option value={user.mail} key={i}>
-                        {user.name + " " + user.lastName}
-                      </option>
-                    );
-                  }
-                })}
-              </select>
-            </form>
-          )}
-          <button
-            className={"px-4 py-3 bg-secondary text-white border-0"}
-            onClick={addChatRoom}
-          >
-            Añadir
-          </button>
-        </div> */}
         <nav className={"navbar " + style.background}>
           <div
             className={
