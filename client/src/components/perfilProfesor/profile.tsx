@@ -4,12 +4,11 @@ import axios from "axios";
 import Calendar from "../calendar/Calendar";
 import { IProfesor } from "../../../../interfaces";
 import getCookieValue from "../../cookieParser";
-import ChatRoom from "../Chat/ChatRoom";
 import icon_edit from "../../images/editar.png";
 import { useHistory, Link } from "react-router-dom";
-import star from "../../images/star.png";
 import PerfilAlumno from "../perfilAlumno/perfilAlumno";
 import { Rating, RatingView } from "react-simple-star-rating";
+import Swal from "sweetalert2";
 
 const Role = {
   USER: 0,
@@ -173,7 +172,7 @@ function Profile(email, { user }) {
     if (userLoged.mail === propEmail.email) {
       history.push("/editPerfil");
     } else {
-      alert("no puedes editar este perfil");
+      Swal.fire("Error!", "No podes editar este perfil!", "error");
     }
   };
 

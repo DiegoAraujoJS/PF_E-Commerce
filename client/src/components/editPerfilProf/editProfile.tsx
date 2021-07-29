@@ -6,6 +6,8 @@ import { useHistory } from "react-router-dom";
 import { storage } from "../../firebase";
 import bootstrap from "bootstrap";
 import { Button, Modal, Row, Col, Form } from "react-bootstrap";
+import Swal from "sweetalert2";
+
 const EditProfile = () => {
   const history = useHistory();
   const [img, setImg] = useState<any>("");
@@ -17,6 +19,7 @@ const EditProfile = () => {
   const [countryS, setCountryS] = useState<any>({});
   const [stateS, setStateS] = useState<any>({});
   const [cityS, setCitieS] = useState<any>({});
+
   const Changes = async (e) => {
     try {
       const token = getCookieValue("token").replaceAll('"', "");
@@ -39,7 +42,7 @@ const EditProfile = () => {
             city: cityS,
           }
         );
-        alert("Cambios Realizados");
+        Swal.fire("Exito!", "Cambios Realizados!", "success");
       } else {
         let editar = await axios.patch(
           "http://localhost:3001/api/profesores/",
@@ -53,11 +56,11 @@ const EditProfile = () => {
             city: cityS,
           }
         );
-        alert("Cambios Realizados");
+        Swal.fire("Exito!", "Cambios Realizados!", "success");
       }
     } catch (err) {
       console.log(err);
-      alert("Algo salio mal");
+      Swal.fire("Error!", "Algo salio mal", "error");
     }
 
     history.push(`/perfil/`);
