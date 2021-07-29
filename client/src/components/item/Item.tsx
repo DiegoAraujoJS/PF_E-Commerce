@@ -164,6 +164,13 @@ const mark = <FontAwesomeIcon icon={faMapMarkerAlt} style={{ color: "#ff3f3f" }}
                   <span className={s.monedaComprado}>{moneda}</span>
                   <span className={s.precioComprado}>{precioDescuento.toFixed(2)}</span>
                 </div>
+                <div className={"w-100 d-flex justify-content-center"}>
+                  <Link to={`/chat/${profesor}`}>
+                      <button className={"btn btn-primary"}>
+                          Chatea con el profesor
+                      </button>
+                  </Link> 
+                </div>
               </div>
               <ClassDetail hijo = {{show, handleClose, email, mark, puntuacion }} {...props} />
             {/* </Link> */}

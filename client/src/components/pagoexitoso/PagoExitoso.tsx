@@ -176,13 +176,6 @@ export default function PagoExitoso() {
                     Agenda tus clases en Google Calendar
                 </button>
             </div>
-            <div className={s.contenedorBoton}>
-                <Link to={`/chat/${clientMail}`}>
-                    <button className={s.agendar} onClick={() => console.log(clientMail)}>
-                        Chatea con el profesor
-                    </button>
-                </Link> 
-            </div>
             <p className={s.subtitle}>Detalle de compra</p>
             <div className={s.detalleContainer}>
                 {
