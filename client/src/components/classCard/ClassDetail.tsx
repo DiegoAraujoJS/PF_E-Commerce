@@ -16,6 +16,8 @@ import { set_calendar_data } from "../../Actions/Actions"
 import { useDispatch } from "react-redux"
 import { actionsType } from "../../constants/constants"
 import rangeToHours from "./rangeToHours"
+import { modificarClasesPorComprar } from '../../Actions/Actions';
+
 
 const calendar = <FontAwesomeIcon icon={faCalendarAlt} className="mt-1" style={{ color: "#0067ff" }} />
 const clock = <FontAwesomeIcon icon={faClock} className="mt-1" style={{ color: "#0067ff" }} />
@@ -55,7 +57,7 @@ function ClassDetail (props) {
 
     const {show, handleClose, email, mark, puntuacion } = props.hijo
     
-    
+    const dispatch = useDispatch();
     const [hours, setHours] = useState(1)
     const [selectedDay, setDay] = useState<[string, number]>(['', -1])
     const [from, setFrom] = useState<[string, number]>(['0', -1])
@@ -262,8 +264,13 @@ return (
 
                             if (getUser.status) {
                                 const addToCart = await axios.post(`http://localhost:3001/api/carrito/${getUser.data.mail}`, payload)
-                                if(addToCart.status === 200) redirect_blank("./cesta")
-                                }
+                              
+                                if (addToCart.status === 200 && Array.isArray(addToCart.data.carrito)) {
+                                    console.log('CARR', addToCart.data.carrito)
+                                    dispatch(modificarClasesPorComprar(addToCart.data.carrito))
+                                    redirect_blank("./cesta")
+                                } 
+                            }
                              }
                             catch(error) {
                                 console.log(error)
