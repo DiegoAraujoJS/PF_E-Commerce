@@ -145,10 +145,11 @@ export default function SearchBar() {
 
         if (reponse.data.suspendido) {
           const logout = await axios.post(`http://localhost:3001/api/login/logout`, {}, { withCredentials: true })
+          const admins = await axios.get(`http://localhost:3001/api/usuarios/all/admin`)
 
           return Swal.fire({
             title: 'Error!',
-            text: 'Su cuenta esta suspendida!',
+            text: `Su cuenta esta suspendida!.\n Si desea saber los detalles sobre la suspención, porfavor comuniquese con uno de nuestros administradores: ${admins.data[Math.floor(Math.random() * admins.data.length)].User_mail}`,
             icon: 'error',
             willClose: () => window.location.reload()
           })
@@ -296,26 +297,26 @@ export default function SearchBar() {
         <Navbar.Brand className={'ms-3'} href="#home"><Link to={"/"}><img src={logo} alt='U CLASES Logo' style={{ height: '56px' }}></img></Link></Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="mr-auto">
-            <Link className={'nav-link ms-4 text-decoration-none'} to={"/"}>Home</Link>
-            <Link className={'nav-link ms-4 text-decoration-none'} to={"/calendar"}>Calendar</Link>
-            <Link className={'nav-link ms-4 text-decoration-none'} to={"/clases"}>Class</Link>
+          <Nav className="mr-auto align-items-center">
+            <Link className={'nav-link ms-4 text-decoration-none'} to={"/"}>Principal</Link>
+            <Link className={'nav-link ms-4 text-decoration-none'} to={"/calendar"}>Calendario</Link>
+            <Link className={'nav-link ms-4 text-decoration-none'} to={"/clases"}>Clases</Link>
 
             {loggedOrNot() ?
               <div className="ms-4 d-flex">
                 <span className="ml-4">{userIcon}</span><NavDropdown className={'text-decoration-none justify-content-end ms-1'} title={user.name + " " + user.lastName} id="basic-nav-dropdown">
-                  <NavDropdown.Item>
-                    <Link className={'nav-link ms-4 text-decoration-none'} to={"/perfil"}>Profile</Link>
-                  </NavDropdown.Item>
-                  <NavDropdown.Item>
-                    <Link className={'nav-link ms-4 text-decoration-none'} to={"/historial"}>History</Link>
-                  </NavDropdown.Item>
+                {user.role !== Role.ADMIN ? <NavDropdown.Item>
+                    <Link className={'nav-link ms-4 text-decoration-none'} to={"/perfil"}>Perfil</Link>
+                  </NavDropdown.Item>: null}
+                  {user.role !== Role.ADMIN ? <NavDropdown.Item>
+                   <Link className={'nav-link ms-4 text-decoration-none'} to={"/historial"}>Historial</Link>
+                  </NavDropdown.Item> : null}
                   <NavDropdown.Item>
                     <Link className={'nav-link ms-4 text-decoration-none'} to={"/chat"}>Chat</Link>
                   </NavDropdown.Item>
-                  <NavDropdown.Item>
-                  <Link className={'nav-link ms-4 text-decoration-none'} to={"/addclaim"}>New Claim</Link>
-                  </NavDropdown.Item>
+                  {user.role !== Role.ADMIN ? <NavDropdown.Item>
+                  <Link className={'nav-link ms-4 text-decoration-none'} to={"/addclaim"}>Nuevo Reclamo</Link>
+                  </NavDropdown.Item>: null}
                   <NavDropdown.Item className="d-flex justify-content-center" onClick={() => signOut()}>
                     Desconectarse
                   </NavDropdown.Item>

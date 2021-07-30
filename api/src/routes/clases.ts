@@ -283,7 +283,24 @@ router.get('/student/:mail', async (req: Request, res: Response) => {
     }
 })
 
+router.get('/claims/:professor/:user', async (req: Request, res: Response) => {
+    try {
+        const { professor, user } = req.params
 
+        const clases = await Clase.findAll({
+            include: [{ model: Profesor, required: true }, {  model: User, required: true  }],
+
+            where: {
+                User_mail: user,
+                Profesor_mail: professor,
+            }
+        })
+        return res.send(clases)
+    }
+    catch (error) {
+        console.log(error)
+    }
+})
 
 export default router
 

@@ -170,6 +170,18 @@ router.delete('/:mail', async (req: Request, res: Response) => {
     }
 })
 
+router.get('/all/admin', async (req: Request, res: Response) => {
+    try {
+        const usuarios = await User.findAll({
+            where: { 
+                role: Role.ADMIN
+            }
+        })
+        res.send(usuarios)
+    } catch (error) {
+        res.send(error);
+    }
+})
 
 export default router;
 

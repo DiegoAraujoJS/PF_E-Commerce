@@ -198,7 +198,7 @@ const Historial = () => {
       }    
     const colorred="#1ECD97"
     return (
-        <div class="container" >
+        <div className="container" >
             <h1>Mi historial de cursos</h1>
             <h3>Filtrar por:</h3>
             <button style={{backgroundColor: colorBotonPublicado, borderRadius: "20px", fontFamily:"Arial", fontSize:"14px", padding:"3px",width:"100px", boxSizing:"border-box"}} onClick={()=>{setearPublicado()}}>Publicados</button>
@@ -258,7 +258,7 @@ const Historial = () => {
                                    </div>: null}
                                    {e.status==="pending"?
                                    <div  style={{marginLeft:"35vw"}}>
-                                   <Button onClick={() => cancelar(e.id)}> Cancelar clase </Button>
+                                   <Button className="mb-2" onClick={() => cancelar(e.id)}> Cancelar clase </Button>
                                    {alum.mail === e.User_mail ? <Button onClick={() => completar(e)}> Ya tomé esta clase </Button> : null}
                                      </div>: null}
                                      {e.status===null?
