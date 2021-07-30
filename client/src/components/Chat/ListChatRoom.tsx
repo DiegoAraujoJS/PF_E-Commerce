@@ -92,7 +92,7 @@ function ListChatRoom(props: React.PropsWithChildren<PropsChat>) {
       console.log(error);
     }
   }
-
+  
   async function foundChatUser() {
     let chatFounded = null;
     chatRoom.map((chat) => {
@@ -124,6 +124,7 @@ function ListChatRoom(props: React.PropsWithChildren<PropsChat>) {
     setUserSelected(userFound);
     getReceivingUser(userFound);
   }
+  console.log(receivingUser)
 
   return (
     <div className={"w-100 d-flex flex-row justify-content-center"}>
@@ -165,14 +166,14 @@ function ListChatRoom(props: React.PropsWithChildren<PropsChat>) {
                   <div className="d-flex w-25 justify-content-between">
                     <img
                       alt="alt"
-                      src={receivingUser.photo || profilePicture}
+                      src={receivingUser?.photo || profilePicture}
                       className={"rounded-circle " + style.imgMessage}
                     />
                   </div>
                   <div className="d-flex w-75 justify-content-between">
                     <div className="d-flex flex-column w-100 justify-content-between">
                       <p className="mb-1">
-                        {receivingUser.name + " " + receivingUser.lastName}
+                        {receivingUser?.name + " " + receivingUser?.lastName}
                       </p>
                       <small className="mb-1 text-truncate text-secondary">
                         contenido del ultimo mensaje
@@ -184,7 +185,7 @@ function ListChatRoom(props: React.PropsWithChildren<PropsChat>) {
             })}
         </ul>
       </div>
-      {receivingUser ? (
+      {receivingUser && receivingUser.mail ? (
         chatSelected && chatSelected.id ? (
           <ChatRoom
             issuingUser={props.userLoged}

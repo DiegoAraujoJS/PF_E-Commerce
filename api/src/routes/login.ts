@@ -28,7 +28,7 @@ router.post('/', async (req:MiddlewareRequest, res: Response) => {
 
     if (isAuthenticated){
         
-        const token = sign({mail, role: user.role, name: user.name, lastName: user.lastName}, process.env.SECRET)
+        const token = sign({mail, role: user.role, name: user.name, lastName: user.lastName}, process.env.SECRET || "9u#6j2pB#UqZ@9sQ")
         
         req.session.token = token
     
