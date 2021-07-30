@@ -16,9 +16,9 @@ const EditProfile = () => {
   const [countries, setCountries] = React.useState([]);
   const [states, setStates] = React.useState([]);
   const [cities, setCities] = React.useState([]);
-  const [countryS, setCountryS] = useState<any>({});
-  const [stateS, setStateS] = useState<any>({});
-  const [cityS, setCitieS] = useState<any>({});
+  const [countryS, setCountryS] = useState<any>(data.country);
+  const [stateS, setStateS] = useState<any>(data.state);
+  const [cityS, setCitieS] = useState<any>(data.city);
 
   const Changes = async (e) => {
     try {
@@ -89,9 +89,11 @@ const EditProfile = () => {
 
   const imageFirebaseHandler = async (e) => {
     const file = e.target.files[0];
-    const storageRef = await Upload({ file });
-    const url = await storageRef.getDownloadURL();
-    setImg2(url);
+    if (file) {
+      const storageRef = await Upload({ file });
+      const url = await storageRef.getDownloadURL();
+      setImg2(url);
+    }
   };
   const fetchProfs = async () => {
     try {
@@ -116,7 +118,6 @@ const EditProfile = () => {
     }
   };
   useEffect(() => {
-    setImg2(data.foto);
     setImg(data.foto);
   }, [data]);
   useEffect(() => {
@@ -131,6 +132,27 @@ const EditProfile = () => {
       }
     };
     if (!countries.length) getCountries();
+    async function handleCountryChange(e) {
+      setCountryS(e.target.value);
+      console.log(countryS);
+      const response_2 = await axios.post(
+        "http://localhost:3001/api/allCountries/states",
+        { country: e.target.value }
+      );
+      if (response_2.status === 200) {
+        setStates(response_2.data);
+      }
+    }
+    async function handleStateChange(e) {
+      setStateS(e.target.value);
+      const response_3 = await axios.post(
+        "http://localhost:3001/api/allCountries/cities",
+        { country: countryS, state: e.target.value }
+      );
+      console.log(response_3.data);
+      setCities(response_3.data);
+    }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   async function handleCountryChange(e) {
@@ -224,65 +246,68 @@ const EditProfile = () => {
                   }}
                   className="form-control"
                 >
-                  {countries.length &&
-                    countries.map((c, i) => {
-                      return (
-                        <option key={i} value={c.name}>
-                          {c.name} {c.unicodeFlag}
-                        </option>
-                      );
-                    })}
+                  <option value={data.country} selected>
+                    {data.country}
+                  </option>
+                  {countries.map((c, i) => {
+                    return (
+                      <option key={i} value={c.name}>
+                        {c.name} {c.unicodeFlag}
+                      </option>
+                    );
+                  })}
                 </select>
               </div>
               <div className="col-md-6">
-                {Object.keys(countryS).length ? (
-                  <Col>
-                    <label>Estado/Provincia</label>
-                    <select
-                      name="state"
-                      onChange={(e) => {
-                        handleStateChange(e);
-                      }}
-                      disabled={!countries.length}
-                      className="form-control"
-                    >
-                      {states.length &&
-                        states.map((c, i) => (
-                          <option key={i} value={c.name}>
-                            {c.name}
-                          </option>
-                        ))}
-                    </select>
-                  </Col>
-                ) : null}
+                <Col>
+                  <label>Estado/Provincia</label>
+                  <select
+                    name="state"
+                    onChange={(e) => {
+                      handleStateChange(e);
+                    }}
+                    disabled={!countries.length}
+                    className="form-control"
+                  >
+                    <option value={data.state} selected>
+                      {data.state}
+                    </option>
+                    {states.map((c, i) => (
+                      <option key={i} value={c.name}>
+                        {c.name}
+                      </option>
+                    ))}
+                  </select>
+                </Col>
               </div>
               <br />
               <div className="col-md-6">
-                {cities.length > 1 ? (
-                  <Col>
-                    <label>Ciudad</label>
-                    <select
-                      onChange={(e) => handleCitieChange(e)}
-                      name="city"
-                      disabled={!states.length}
-                      className="form-control"
-                    >
-                      {cities.length &&
-                        cities.map((c, i) => (
-                          <option key={i} value={c}>
-                            {c}
-                          </option>
-                        ))}
-                    </select>
-                  </Col>
-                ) : null}
+                <Col>
+                  <label>Ciudad</label>
+                  <select
+                    onChange={(e) => handleCitieChange(e)}
+                    name="city"
+                    disabled={!states.length}
+                    className="form-control"
+                  >
+                    <option value={data.city}>{data.city}</option>
+                    {cities.length &&
+                      cities.map((c, i) => (
+                        <option key={i} value={c}>
+                          {c}
+                        </option>
+                      ))}
+                  </select>
+                </Col>
               </div>
             </div>
             <div className="mt-5 text-center">
               <button
                 className="btn btn-primary profile-button"
                 type="button"
-                onClick={(e) => Changes(e)}
+                onClick={(e) => {
+                  Changes(e);
+                }}
               >
                 Guardar Perfil
               </button>

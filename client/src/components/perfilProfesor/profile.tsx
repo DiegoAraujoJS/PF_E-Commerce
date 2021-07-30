@@ -168,7 +168,7 @@ function Profile(email, { user }) {
     );
     setUserLoged(userResponse.data);
     if (!prof.foto) {
-      let editar = await axios.patch("http://localhost:3001/api/profesores/", {
+      let editar = await axios.patch("http://localhost:3001/api/usuarios/", {
         foto: Foto_Perfil,
         usuario: userLoged.mail,
       });
@@ -182,10 +182,18 @@ function Profile(email, { user }) {
       Swal.fire("Error!", "No podes editar este perfil!", "error");
     }
   };
-
+  const image = async () => {
+    if (!prof.foto) {
+      let editar = await axios.patch("http://localhost:3001/api/profesores/", {
+        foto: Foto_Perfil,
+        usuario: userLoged.mail,
+      });
+    }
+  };
   useEffect(() => {
     fetchProfs();
     getUserLoged();
+    image();
     fetchUser();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
