@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "dev": "nodemon index.ts"
+    "dev": "nodemon index.ts",
+    "start": "node --loader ts-node/esm index.ts"
   },
   "author": "",
   "license": "ISC",
@@ -28,7 +29,8 @@
     "sequelize-typescript": "^2.1.0",
     "stripe": "^8.163.0",
     "ts-jest": "^27.0.3",
-    "typescript": "^4.3.5"
+    "typescript": "^4.3.5",
+    "ts-node": "^10.0.0"
   },
   "devDependencies": {
     "@types/cookie-parser": "^1.4.2",
@@ -40,7 +42,7 @@
     "@types/pg": "^8.6.0",
     "jest": "^27.0.6",
     "morgan": "^1.10.0",
-    "nodemon": "^2.0.9",
-    "ts-node": "^10.0.0"
+    "nodemon": "^2.0.9"
+    
   }
 }

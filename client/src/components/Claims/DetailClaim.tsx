@@ -244,13 +244,7 @@ function DetailClaim(props) {
               </Button>
             </div>
             <div className={"d-flex justify-content-evenly " + style.btns}>
-              <Button
-                onClick={() => closeClass()}
-                disabled={cancelacion === "cancelled" ? true : false}
-                className="mr-2"
-              >
-                CANCELAR CLASE
-              </Button>
+              
             </div>
           </div>
         </div>

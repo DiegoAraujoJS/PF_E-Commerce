@@ -79,7 +79,7 @@ const AddCalendar = () => {
 						if (response.status === 200) {
 							Swal.fire(
 								'Exito!',
-								'Tu clase se creo correctamente!',
+								'Tu horario se registro correctamente!',
 								'success'
 							)
 							history.push(`/historial`)	
@@ -121,7 +121,7 @@ const AddCalendar = () => {
 
 							<Row>
 								<Col sm={12} md={4}>
-									<Form.Label className='text-uppercase'>Duración por semanas</Form.Label>
+									<Form.Label>Durante cuantas semanas estás disponible</Form.Label>
 									<Field
 										name='week'
 										type='number'

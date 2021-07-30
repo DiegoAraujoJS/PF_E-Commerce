@@ -10,6 +10,7 @@ import {
 import "./CalendarStyles.css";
 import axios from "axios";
 import { connect } from "react-redux";
+import { Button } from "react-bootstrap";
 
 const today = new Date();
 const date = (fecha, formato) => {};
@@ -287,7 +288,7 @@ class Calendar extends Component {
     return (
       <div>
       {rende.renderiza===true?<div style={{display:"flex", justifyContent:"space-between"}}>
-      <button onClick={async ()=>{
+      <Button onClick={async ()=>{
           console.log(config)
           console.log("fecha", fecha)
           fecha.setDate(fecha.getDate() - 7);
@@ -295,8 +296,8 @@ class Calendar extends Component {
             startDate: fecha,
           });
           console.log("Fecha modificada", fecha)
-        }}> {"<"} </button>
-        <button onClick={async ()=>{
+        }}> {"<"} </Button>
+        <Button onClick={async ()=>{
           console.log(config)
           console.log("fecha", fecha)
           fecha.setDate(fecha.getDate() + 7);
@@ -304,7 +305,7 @@ class Calendar extends Component {
             startDate: fecha,
           });
           console.log("Fecha modificada", fecha)
-        }}>{">"}</button>
+        }}>{">"}</Button>
            </div>:null }
         
           <DayPilotCalendar

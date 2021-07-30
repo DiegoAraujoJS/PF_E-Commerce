@@ -19,6 +19,7 @@ import rangeToHours from "./rangeToHours"
 import { modificarClasesPorComprar } from '../../Actions/Actions';
 
 
+
 const calendar = <FontAwesomeIcon icon={faCalendarAlt} className="mt-1" style={{ color: "#0067ff" }} />
 const clock = <FontAwesomeIcon icon={faClock} className="mt-1" style={{ color: "#0067ff" }} />
 const materias = [
@@ -60,7 +61,7 @@ function ClassDetail (props) {
     const dispatch = useDispatch();
     const [hours, setHours] = useState(1)
     const [selectedDay, setDay] = useState<[string, number]>(['', -1])
-    const [from, setFrom] = useState<[string, number]>(['0', -1])
+    const [from, setFrom] = useState<[string, number]>(['', -1])
     const [days, setDays] = useState([])
     const [isAnotherDay, setIsAnotherDay] = useState(false)
     let selected = ''
@@ -163,9 +164,11 @@ return (
                         
                         <Card.Title>Selecciona el horario de tu clase</Card.Title>
                         
-                                    <div style={{display:'flex'}}>
+                                    <div style={{display:'flex', justifyContent:'space-between'}}>
 
-                                    <Form.Label className='text-uppercase'>Día</Form.Label>
+                                        <div>
+
+                                    <Form.Label>Día</Form.Label>
 
                                         <Form.Control
                                             as='select'
@@ -185,8 +188,12 @@ return (
                                             }
                                             )}
                                         </Form.Control>
+
+                                        </div>
                                         
-								
+                                        <div style={{width:'100px'}}>
+                                        <Form.Label>A las</Form.Label>
+
                                         <Form.Control
                                         as='select'
 										className={`form-control`}
@@ -198,7 +205,9 @@ return (
                                         { selectedDay[0] ? days[selectedDay[1]].available.map((d, i) => <option value={`${d}${i}`}>{d}</option>) : null}
                                         {console.log(from)}
                                         </Form.Control>
-                                        
+                                        </div>
+                                    <div>
+
                                 <Form.Label>Horas:</Form.Label>
                                     <RangeSlider
                                         
@@ -209,6 +218,7 @@ return (
                                         max={8}
                                     />
                                         
+                                    </div>
                                     
                                     </div>
                                     
@@ -239,6 +249,15 @@ return (
                 <Modal.Footer className="justify-content-center">
 
                         <Button variant="primary" onClick={async () => {
+
+
+                            if (from[0] == '' || selectedDay[0]=='') {
+                                return Swal.fire(
+                                    'Error!',
+                                    'Tienes que indicar el horario al cual tomas la clase!',
+                                    'error'
+                                    )
+                            }
 
                             const thisDate = days[selectedDay[1]]
                             
