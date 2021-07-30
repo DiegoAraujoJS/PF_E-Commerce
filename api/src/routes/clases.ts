@@ -234,10 +234,10 @@ router.put('/edit', async (req: Request, res: Response) => {
 })
 
 router.post('/status', async (req:Request, res:Response) => {
-    const {id, status} = req.body
+    const {id, status, mail} = req.body
     try {
         const clase = await Clase.findByPk(id)
-        const edit = await clase.update({status})
+        const edit = await clase.update({status, User_mail: mail})
         return res.send({message: 'success', payload: edit})
     } catch(err) {
         return res.status(400).send('error')

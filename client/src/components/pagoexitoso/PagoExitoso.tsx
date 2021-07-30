@@ -38,6 +38,21 @@ export default function PagoExitoso() {
             let params = new URLSearchParams(window.location.search);
             let id = params.get('id')
             const session = await axios.get(`http://localhost:3001/informaciondepago/${id}`)
+            
+            const carrito = await axios.get(`http://localhost:3001/api/carrito/all/${session.data.customer_email}`)
+            const ids = carrito ? carrito.data.map(cl => cl.id) : null
+            if (ids) {
+                for (const id of ids) {
+                    const completeClasses = await axios.post(`http://localhost:3001/api/clases/status`, {id: id, status: 'pending', mail: session.data.customer_email})
+                    const clear = await axios.get(`http://localhost:3001/api/carrito/${session.data.customer_email}/${id}`)
+                }
+                
+            }
+
+
+
+
+            console.log('sessiondata', session.data.line_items.data)
             let cliente = session.data.customer.name.split(' ')
             let clienteFormateado = cliente.map(e => `${e.slice(0, 1).toUpperCase()}${e.slice(1).toLowerCase()}`)
             let clienteNombre = clienteFormateado.join(' '); 

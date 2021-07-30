@@ -56,6 +56,18 @@ router.get('/all/:user', async function (req: Request, res: Response) {
     }
 })
 
+router.post('/delete', async (req:Request, res:Response) => {
+    const {mail, id} = req.body
+    const usuario = await User.findByPk(mail)
+    let carrito;
+    console.log(usuario)
+    if (usuario) carrito = usuario.carrito
+    if (carrito) {
+        const carritoEdit = carrito.filter(product => product.id != id)
+        const update = await usuario.update({carrito: carritoEdit})
+        return res.send(update)
+    }
+})
 
 router.get('/:user/:id', async function (req: Request, res: Response) {
     const { user, id } = req.params
