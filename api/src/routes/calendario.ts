@@ -14,7 +14,6 @@ interface MiddlewareRequest extends Request {
 
 router.post('/add', validateToken, async (req: MiddlewareRequest, res: Response) => {
     let query: Disponible = req.body
-    console.log(req.body.email, req.data.mail)
     if (req.data.role !== 2 && req.body.email != req.data.mail) {
         return res.status(400).send('You are not authorized.')
     }
@@ -100,16 +99,13 @@ router.get('/:usuario', async (req: Request, res: Response) => {
     const { usuario } = req.params
 
     try {
-        console.log(usuario)
         if (usuario) {
             const user = await User.findByPk(usuario)
-            console.log(user)
             const profesor = await Profesor.findOne({
                 where: {
                     User_mail: usuario
                 }
             })
-            console.log(profesor)
             if (profesor) {
                 if (profesor.calendario) {
                     return res.send(profesor.calendario)
@@ -130,9 +126,7 @@ router.post('/editTaken', async (req:Request, res:Response) => {
     const query: Ocupado = req.body
     
 
-        const profesor = await Profesor.findByPk(query.email)
-        console.log(profesor)
-        
+        const profesor = await Profesor.findByPk(query.email)        
 
             // const newDate = nuevosHorarios(profesor.calendario.find(date => date.fecha.dia===query.fecha.dia), null, query)
             const thisDate = profesor.calendario.find(date => date.fecha.dia===query.fecha.dia)
@@ -201,9 +195,9 @@ router.put('/delete', validateToken, async (req:MiddlewareRequest, res:Response)
     try {
         const professor = await Profesor.findByPk(req.body.email)
         const calendar = professor.calendario
-        const thisDate = calendar.find(c => c.fecha.anio === req.body.fecha.anio && c.fecha.mes === req.body.fecha.mes && c.fecha.dia === req.body.fecha.dia)
+        const thisDate = calendar.find(c => Number(c.fecha.anio) === Number(req.body.fecha.anio) && Number(c.fecha.mes) === Number(req.body.fecha.mes) && Number(c.fecha.dia) === Number(req.body.fecha.dia))
         let newDate: Horario = {email: professor.User_mail, fecha: thisDate.fecha, disponible: thisDate.disponible, ocupado: thisDate.ocupado}
-
+        
         if (req.body.disponible) {
             let newAvaliable = thisDate.disponible.filter(tuple => {console.log(tuple[0] === req.body.disponible[0][0], tuple[1] === req.body.disponible[0][1]);return !(tuple[0] === req.body.disponible[0][0] && tuple[1] === req.body.disponible[0][1])})
             if (newAvaliable.length === 0) newAvaliable = null

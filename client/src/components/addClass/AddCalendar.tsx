@@ -1,58 +1,12 @@
 import { Formik, Field } from 'formik';
-import { validationSchemaNewClass } from '../../utils/validations';
 import { Form, Row, Col, Container, Button } from 'react-bootstrap';
 import axios from 'axios'
-// import MarketFlow from '../../../../api/src/MarketFlow'
-import { IClase, IPublish } from '../../../../interfaces';
 import getCookieValue from '../../cookieParser';
 import Swal from 'sweetalert2'
 import { store } from '../../Store/store';
 import CalendarApp from '../calendar/addClassCalendar/Calendar'
 import { useState, useEffect } from 'react'
 import {useHistory} from 'react-router-dom'
-import { useSelector } from 'react-redux';
-const materias = [
-	"Física",
-	"Biología",
-	"Anatomía y fisiología",
-	"Matemáticas",
-	"Química",
-	"Ecología",
-	"Metodología de la investigación",
-	"Ciencias sociales",
-	"Geografía",
-	"Economía",
-	"Medio ambiente",
-	"Biografías",
-	"Arte",
-	"Historia del arte",
-	"Filosofía",
-	"Historia",
-	"Ética y valores",
-	"Literatura",
-	"Lengua española",
-	"Inglés",
-	"Informática",
-	"Psicología",
-	"Educación física",
-	"Tecnología",
-	"Política",
-	"Religión",
-	"Salud",
-	"Educación",
-]
-
-const niveles = [
-	"Primario", "Secundario", "Terciario", "Universitario"
-]
-
-const grados = [
-	"Primer grado", "Segundo grado", "Tercer grado", "Cuarto grado", "Quinto grado", "Sexto grado"
-]
-
-
-
-enum Week { Lunes, Martes, Miercoles, Jueves, Viernes, Sabado, Domingo }
 
 const AddCalendar = () => {
 	const history = useHistory()
