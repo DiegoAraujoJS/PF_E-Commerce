@@ -110,6 +110,8 @@ const Register: React.FC<Props> = ({ show, handleClose }) => {
 
   async function handleCountryChange(e) {
     setChosenCountry(e.target.value)
+    setStates([])
+    setCities([])
     const response_2 = await axios.post('http://localhost:3001/api/allCountries/states', { country: e.target.value })
     if (response_2.status === 200) {
       setStates([{
@@ -120,13 +122,14 @@ const Register: React.FC<Props> = ({ show, handleClose }) => {
   }
 
   async function handleStateChange(e) {
+    setCities([])
     console.log('country', chosenCountry)
     const response_3 = await axios.post('http://localhost:3001/api/allCountries/cities', { country: chosenCountry, state: e.target.value })
     console.log(response_3.data)
-    if (response_3.status === 200) {
-      setCities(response_3.data)
-
-    }
+    if(response_3.status === 200){
+      setCities([ "Selecciona una ciudad", ...response_3.data])
+    
+  }
   }
 
   const [checkPassword, setCheckPassword] = useState({
@@ -271,7 +274,7 @@ const Register: React.FC<Props> = ({ show, handleClose }) => {
 
                   </select>
                 </Col>
-                {Object.keys(chosenCountry).length ?
+                { states.length > 1 ?
                   <Col md={12} className="form-group mt-2">
                     <label >Estado/Provincia</label>
                     <select
