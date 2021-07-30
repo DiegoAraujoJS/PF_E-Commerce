@@ -94,9 +94,9 @@ router.post('/register', async (req: Request, res: Response) => {
     try {
         const findUser = await User.findByPk(req.body.User_mail)
         if (findUser) res.status(400).send({type: ErrorType.ALREADY_EXISTS, message:`Ya existe un alumno asociado a la cuenta ${req.body.User_mail} así que debería actualizarlo`});             
-        const user = await User.create({...req.body, password: hashPassword(req.body.password)})
+        const user = await User.create({...req.body, password: hashPassword(req.body.password), foto:'https://cdn2.iconfinder.com/data/icons/avatars-99/62/avatar-370-456322-256.png'})
         if (user.role === Role.PROFESSOR) {
-            const profesor = await Profesor.create({ User_mail: user.User_mail, ...user,
+            const profesor = await Profesor.create({ User_mail: user.User_mail, ...user, foto:'https://cdn2.iconfinder.com/data/icons/avatars-99/62/avatar-375-456327-256.png',
             where: {
                 User_mail: user.User_mail
             } 
