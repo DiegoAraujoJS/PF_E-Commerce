@@ -253,7 +253,7 @@ class Calendar extends Component {
       startDate: date(today, "yy/mm/dd"),
       events: persons,
       width: "40%",
-      eventDeleteHandling: "Update",
+      eventDeleteHandling: borrar,
       
     });
     console.log("SETSTATE", this.state)
