@@ -5,7 +5,7 @@ import {
   DayPilot,
   DayPilotDate,
   DayPilotCalendar,
-  DayPilotNavigator,
+  DayPilotNavigator
 } from "daypilot-pro-react";
 import "./CalendarStyles.css";
 import axios from "axios";
@@ -40,10 +40,12 @@ const styles = {
     display: "flex",
   },
   left: {
-    marginRight: "10px",
+    marginRight: "20px",
+    marginLeft: "20px",
   },
   main: {
     flexGrow: "1",
+    marginRight: "20px",
   },
 };
 
@@ -104,7 +106,9 @@ class Calendar extends Component {
             const dia=args.e.data.start.value.slice(8,-9)
             const start=args.e.data.start.value.slice(11)
             const end=args.e.data.end.value.slice(11)
-            const horario1={
+            let horario1
+            if(args.e.data.text==="Disponible"){
+            horario1={
               disponible: [[start,  end]],
               email: email,
               fecha: {
@@ -112,7 +116,17 @@ class Calendar extends Component {
                   mes: mes,
                   dia: dia
               }
-          } 
+          } }
+          else if(args.e.data.text==="Ocupado"){
+            horario1={
+              ocupado: [[start,  end]],
+              email: email,
+              fecha: {
+                  anio: año,
+                  mes: mes,
+                  dia: dia
+              }
+          } }
           await axios.put('http://localhost:3001/api/calendario/delete', horario1, {headers: {Authorization: this.token}})
         }
       },
@@ -170,6 +184,7 @@ class Calendar extends Component {
   async componentDidMount() {
 
     // load event data
+    console.log("thisprop", this.props)
     
     const token = getCookieValue('token').replaceAll("\"", '')
     const thisUser = await axios.post(`http://localhost:3001/api/verify`, {},{ withCredentials: true, headers: {Authorization: token}})
@@ -224,6 +239,7 @@ class Calendar extends Component {
       showToolTip: false,
       startDate: date(today, "yy/mm/dd"),
       events: persons,
+      width: "40%"
     });
   }
     
@@ -234,7 +250,9 @@ class Calendar extends Component {
     return (
       <div style={styles.wrap}>
         <div style={styles.left}>
+         
           <DayPilotNavigator
+
             selectMode={"week"}
             showMonths={1}
             skipMonths={1}
@@ -246,7 +264,7 @@ class Calendar extends Component {
               });
             }}
           />
-          {this.state.isUser? <Clasesregulares {...propsEmail}/>:null}
+          {/* {this.state.isUser? <Clasesregulares {...propsEmail}/>:null} */}
         </div>
         <div style={styles.main}>
           <DayPilotCalendar

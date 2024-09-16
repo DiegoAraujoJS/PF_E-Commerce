@@ -37,3 +37,17 @@
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
+
+.googleButton {
+  display: flex !important;
+  align-items:center !important;
+  justify-content: center !important;
+  box-shadow: 1px 1px 12px -1px rgb(0 0 0 / 24%);
+  -webkit-box-shadow: 1px 1px 12px -1px rgb(0 0 0 / 24%);
+}
+
+
+.googleLogo {
+  height: 1.2rem;
+  margin-right: 10px;
+}

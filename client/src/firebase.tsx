@@ -1,6 +1,9 @@
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import 'firebase/firestore';
+import 'firebase/storage';
+
+
 
 const firebaseConfig = {
     apiKey: "AIzaSyDGqKZu8WjUjyjurueAHUhooogWltFdcwM",
@@ -16,7 +19,7 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 const googleProvider = new firebase.auth.GoogleAuthProvider();
-googleProvider.addScope('https://www.googleapis.com/auth/contacts.readonly');
+// googleProvider.addScope('https://www.googleapis.com/auth/contacts.readonly');
 
 const firebaseAuth = async (provider) => {
   try {
@@ -80,7 +83,38 @@ export const auth = firebase.auth();
 // use hook const [data] = useCollectionData(query, { idField: "id" });
 export const firestore = firebase.firestore();
 
-  
+export const storage = firebase.storage();
 
-  
-  
+/* 
+const Upload = async({file}) => {
+// Referencia al espacio en el bucket donde estará el archivo
+  let storageRef = storage.ref().child("images/" + file.name);
+  // Subir el archivo
+  await storage.put(file);
+  // Retornar la referencia
+  return storageRef;
+}
+
+// addDoc({collection: 'files', data: { fileName: ''}})
+const addDoc = async({collection, data}) => {
+  let document = {
+    ..data,
+    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+  }
+
+  // Una colleccion
+  let collectionRef = firebase.firestore().collection(collection);
+  // Guerdar el documento
+  return collectionRef.add(document);
+}
+
+const publish = async({file}) => {
+  const storageRef = await upload({file});
+  return await addDoc({collection: 'files', data: {path: storageRef.fullpath}});
+}
+
+docData = firestore.collection('files').where(fileName: )
+// Descargar archivo
+let url = await storage.ref(docData.path).getDownloadURL();
+*/

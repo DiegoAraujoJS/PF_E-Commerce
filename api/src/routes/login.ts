@@ -10,6 +10,13 @@ interface MiddlewareRequest extends Request {
     session: {token: string};
 }
 
+router.get('/:correo', async (req, res) => {
+    const user = await User.findByPk(req.params.correo)
+    if (user) return res.send(true)
+    res.send(false)
+})
+
+
 router.post('/', async (req:MiddlewareRequest, res: Response) => {
     
     if (req.session.token) return res.status(400).send('Already logged in')

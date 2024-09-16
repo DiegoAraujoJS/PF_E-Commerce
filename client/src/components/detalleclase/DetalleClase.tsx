@@ -10,7 +10,7 @@ export default function DetalleClase({ id }) {
 
     return (
         <div className={s.container}>
-            <h1>{`Detalle de la clase ${id}`}</h1>
+            <h1>{`Detalle ${id}`}</h1>
         </div>
     )
 }

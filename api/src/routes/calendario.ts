@@ -1,34 +1,12 @@
 import { Request, Response, Router } from 'express'
 import Profesor from '../models/Profesor'
 import { CalendarioResponse, Horario, Disponible, Ocupado } from '../../../interfaces';
-import nuevosHorarios from './nuevosHorarios';
+import nuevosHorarios from '../utils/calendarFunctions/nuevosHorarios';
 import validateToken from '../utils/validateToken';
+import setNewCalendar from '../utils/calendarFunctions/setNewCalendar';
+import User from '../models/Usuario';
+import weeklyToMonthlyCalendar from '../utils/calendarFunctions/weeklyToMonthlyCalendar';
 const router = Router()
-// ejemplo
-let queryBack: CalendarioResponse = [
-    {
-        email: "edwardburgos@gmail.com",
-        fecha: {
-            anio: 2021,
-            mes: 8,
-            dia: 3
-        },
-        disponible: [['12:45:00', '16:29:00']],
-        ocupado: [['16:29:00', '16:29:00']]
-
-    },
-    {
-        email: "edwardburgos@gmail.com",
-        fecha: {
-            anio: 2021,
-            mes: 8,
-            dia: 4
-        },
-        disponible: [['16:29:00', '16:29:00']],
-        ocupado: [['16:29:00', '16:29:00']]
-
-    }
-]
 
 interface MiddlewareRequest extends Request {
     data: {mail: string, role: number};
@@ -124,6 +102,36 @@ router.post('/add', validateToken, async (req: MiddlewareRequest, res: Response)
     }
 });
 
+
+router.get('/:usuario', async (req: Request, res: Response) => {
+    const { usuario } = req.params
+
+    try {
+        console.log(usuario)
+        if (usuario) {
+            const user = await User.findByPk(usuario)
+            console.log(user)
+            const profesor = await Profesor.findOne({
+                where: {
+                    User_mail: usuario
+                }
+            })
+            console.log(profesor)
+            if (profesor) {
+                if (profesor.calendario) {
+                    return res.send(profesor.calendario)
+                } else {
+                    return res.send([])
+                }
+            } else if (!profesor && usuario){
+                return res.send(user.calendario)
+            }
+        }
+    }
+    catch (error) {
+        res.send(error)
+    }
+});
 
 router.get('/:usuario', async (req: Request, res: Response) => {
     const { usuario } = req.params
@@ -236,8 +244,20 @@ router.put('/delete', validateToken, async (req:MiddlewareRequest, res:Response)
     }
 })
 
-router.post('/addTemp', async (req: MiddlewareRequest, res: Response) => {
-    
+router.post('/calendarAdd', async (req:Request, res:Response) => {
+    const publication = req.body
+    const calendarPayload = publication.agenda
+    const User_mail = req.body.User_mail
+    const monthlyCalendar = weeklyToMonthlyCalendar(calendarPayload.week, calendarPayload.forHowLong, calendarPayload.sundayStartsOn, User_mail)
+    try {
+
+        for (const available of monthlyCalendar) {
+            await setNewCalendar(available)
+        }
+        return res.send('success')
+    } catch(err) {
+        return res.status(400).send('fail')
+    }
 })
 
 export default router

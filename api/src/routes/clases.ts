@@ -3,12 +3,14 @@ import Clase from './../models/Clase'
 import Profesor from '../models/Profesor'
 import Puntuacion from '../models/Puntuacion'
 import { Op } from 'sequelize'
+import { IUser, Time, IClase } from '../../../interfaces'
+import User from '../models/Usuario'
+import ClaseToIClase from '../utils/transformations/ClaseToIClase'
+import BuildClaseToIClase from '../utils/transformations/BuildClaseToIClase'
 const router = Router()
-
 
 router.get('/', async (req: Request, res: Response) => {
     const { busqueda } = req.query
-    if (!busqueda) return res.status(400).send('Debes ingresar un input como \'busqueda\'')
 
     try {
         let clases: any[] = []
@@ -22,7 +24,7 @@ router.get('/', async (req: Request, res: Response) => {
             for (let x of palabrasSeparadas) {
                 try {
                     const c = await Clase.findAll({
-                        include: [{ model: Profesor }],
+                        include: [{ model: Profesor, required: true}, {model: User}],
                         where: {
                             [Op.or]: [{
                                 materia: {
@@ -43,12 +45,13 @@ router.get('/', async (req: Request, res: Response) => {
                         }
                     })
                     clases.push(...c)
-                    const p = await Profesor.findAll({
-                        include: [{ model: Clase }],
+                    const p = await User.findAll({
+                        include: [{model: Profesor, required: true}],
                         where: {
                             city: {
                                 [Op.iLike]: `%${x}%`.replace("\'", '')
-                            }
+                            },
+                            
                         }
                     })
                     profesores.push(...p)
@@ -58,197 +61,125 @@ router.get('/', async (req: Request, res: Response) => {
                     console.log(err)
                 }
             }
-        }
-
-        if (clases.length > 0 && profesores.length > 0) {
-            var clasesResult = [];
-
-            for (var i = 0; i < clases.flat().length; i++) {
-                for (var j = 0; j < profesores.flat().length; j++) {
-                    if (clases.flat()[i].Profesor_mail === profesores.flat()[j].User_mail) {
-                        clasesResult.push(clases[i])
-                    }
-                }
+            if (clases.length){
+                const transformedClases = await Promise.all(clases.flat().map(async (cl) => BuildClaseToIClase(cl)))
+                return res.send(transformedClases)
+    
+            } else if (profesores.length && !clases.length) {
+    
+                const clases = await Promise.all(profesores.map(async (prof) => await Clase.findAll({where: {Profesor_mail: prof.User_mail}, include:[{model: Profesor}, {model: User}]})))
+    
+                const transformedClases = await Promise.all(clases.flat().map(async (cl) => BuildClaseToIClase(cl)))
+    
+                return res.send(transformedClases)
             }
+        }   else {
 
-            let hash = {};
-            let result = clasesResult.filter(o => hash[o.id] ? false : hash[o.id] = true)          
-
-            return res.send(result)
+                const allClasses = await Clase.findAll({include:[{model:Profesor, required: true}]})
+                const allIClasses = await Promise.all(allClasses.map(async (cl) => await BuildClaseToIClase(cl)))
+                return res.send(allIClasses)
         }
-        else if (clases.length > 0) {
-            let hash = {};
-            let result = clases.filter(o => hash[o.id] ? false : hash[o.id] = true)    
-            return res.send(result)
-        }
-        else {
-            let resultClases = profesores.map(e => {
-                return e.clases.map(c => {
-                    return c = {
-                        ...c.dataValues, profesor: {
-                            score: e.score,
-                            User_mail: e.User_mail,
-                            name: e.name,
-                            lastName: e.lasName,
-                            city: e.city,
-                            foto: e.foto,
-                            description: e.description
-                        }
-                    }
-                })
-
-            })
-            let clases = resultClases.flat()
-            let hash = {};
-            let result = clases.filter(o => hash[o.id] ? false : hash[o.id] = true)    
-            return res.send(result)
-        }
-
     } catch (err) {
         res.send(err)
     }
 })
 
-router.post('/puntuar', async (req: Request, res: Response) => {
+router.get('/student', async (req:Request, res:Response)=> {
+    const { busqueda } = req.query
+
     try {
-        const { id, alumno, puntuacion, comentario } = req.body;
-        const clase = await Clase.findOne({
-            where: { id },
-            include: [{
-                model: Profesor,
-                required: true,
-                attributes: ['city', 'foto', 'description'],
-            }],
-            attributes: ['email', 'nombre', 'apellido']
-        })
-        if (clase) {
-            const profesor = clase.Profesor_mail;
-            if (clase.puntuaciones.length) {
-                const puntuacionAlumnoClase = await Puntuacion.findOne({
-                    where: {
-                        [Op.and]: {
-                            clase: id,
-                            usuario: alumno
+        let clases: Clase[] = []
+        let profesores: any[] = []
+        if (busqueda) {
+            let palabrasSeparadas = (busqueda as string).split(" ");
+            palabrasSeparadas = palabrasSeparadas.filter(x => x !== 'grado')
+            palabrasSeparadas = palabrasSeparadas.filter(x => x !== 'año')
+            palabrasSeparadas = palabrasSeparadas.filter(x => x !== 'anio')
+
+            for (let x of palabrasSeparadas) {
+                try {
+                    const c = await Clase.findAll({
+                        include: [{ model: User, required: true}],
+                        where: {
+                            [Op.or]: [{
+                                materia: {
+                                    [Op.iLike]: `%${x.normalize("NFD").replace(/\p{Diacritic}/gu, "")}%`.replace("\'", '')
+                                }
+                            },
+                            {
+                                nivel: {
+                                    [Op.iLike]: `%${x}%`.replace("\'", '')
+                                }
+                            },
+                            {
+                                grado: {
+                                    [Op.iLike]: `%${x}%`.replace("\'", '')
+                                }
+                            },
+                            ]
                         }
-                    }
-                })
-                if (puntuacionAlumnoClase) {
-                    return res.send(`${alumno} ya comentó esta clase si desea actualice su puntuacion`)
-                }
-            }
-            await Puntuacion.create({
-                usuario: alumno,
-                clase: id,
-                puntuacion,
-                comentario
-            });
-            const puntuaciones = await Puntuacion.findAll({
-                where: { clase: id },
-                attributes: ['puntuacion']
-            })
-
-            let puntuacionClase = parseFloat((puntuaciones.map(elemento => elemento.puntuacion).reduce(function (a, b) { return a + b; }) / puntuaciones.length).toFixed(2))
-            let claseActualizada = await Clase.findOne({
-                where: { id },
-                include: [{
-                    model: Puntuacion,
-                    required: true,
-                    attributes: ['usuario', 'puntuacion', 'comentario']
-                }]
-            })
-            if (claseActualizada) {
-                claseActualizada = await claseActualizada.update({ puntuacion: puntuacionClase })
-            }
-            let clasesProfesor = await Clase.findAll({
-                where: { Profesor_mail: profesor },
-                attributes: ['puntuacion']
-            })
-
-            let puntuacionProfesor = parseFloat((clasesProfesor.map(elemento => elemento.puntuacion).reduce(function (a, b) { return a + b; }) / clasesProfesor.length).toFixed(2))
-
-            let profesorPorActualizar = await Profesor.findOne({ where: { User_mail: profesor } });
-            if (profesorPorActualizar) {
-                profesorPorActualizar = await profesorPorActualizar.update({ puntuacion: puntuacionProfesor })
-            }
-            return res.send(claseActualizada)
-        }
-        return res.send(`No se encontró ninguna clase con el id ${id}`)
-    } catch (error) {
-        return res.send(error);
-    }
-})
-
-// Actualizar la puntuacion de una clase
-router.put('/puntuar', async (req: Request, res: Response) => {
-    try {
-        const { id, alumno, puntuacion, comentario } = req.body;
-        const clase = await Clase.findOne({
-            where: { id },
-            include: [{
-                model: Puntuacion,
-                attributes: ['puntuacion']
-            }]
-        })
-        if (clase) {
-            const profesor = clase.Profesor_mail;
-            if (clase.puntuaciones.length) {
-                const puntuacionAlumnoClase = await Puntuacion.findOne({
-                    where: {
-                        [Op.and]: {
-                            clase: id,
-                            usuario: alumno
-                        }
-                    }
-                })
-                if (puntuacionAlumnoClase) {
-                    await puntuacionAlumnoClase.update({
-                        puntuacion,
-                        comentario
                     })
-                } else {
-                    return res.send(`${alumno} aún no ha comentado esta clase si desea cree una nueva puntuacion`)
+                    clases.push(...c)
+                    
+                }
+
+                catch (err) {
+                    console.log(err)
                 }
             }
-            const puntuaciones = await Puntuacion.findAll({
-                where: { clase: id },
-                attributes: ['puntuacion']
-            })
-
-            let puntuacionClase = parseFloat((puntuaciones.map(elemento => elemento.puntuacion).reduce(function (a, b) { return a + b; }) / puntuaciones.length).toFixed(2))
-            let claseActualizada = await Clase.findOne({
-                where: { id },
-                include: [{
-                    model: Puntuacion,
-                    required: true,
-                    attributes: ['usuario', 'puntuacion', 'comentario']
-                }]
-            })
-            if (claseActualizada) {
-                claseActualizada = await claseActualizada.update({ puntuacion: puntuacionClase })
-            }
-            let clasesProfesor = await Clase.findAll({
-                where: { Profesor_mail: profesor },
-                attributes: ['puntuacion']
-            })
-
-            let puntuacionProfesor = parseFloat((clasesProfesor.map(elemento => elemento.puntuacion).reduce(function (a, b) { return a + b; }) / clasesProfesor.length).toFixed(2))
-
-            let profesorPorActualizar = await Profesor.findOne({ where: { User_mail: profesor } });
-            if (profesorPorActualizar) {
-                profesorPorActualizar = await profesorPorActualizar.update({ puntuacion: puntuacionProfesor })
-            }
-            return res.send(claseActualizada)
         }
-        return res.send(`No se encontró ninguna clase con el id ${id}`)
-    } catch (error) {
-        return res.send(error);
+        const transformedClasses = clases.filter(cl => !cl.Profesor_mail).map(cl => ClaseToIClase(cl))
+        return res.send(transformedClasses)        
+    } catch (err) {
+        res.send(err)
     }
 })
+
+router.get('/all', async (req:Request, res:Response) => {
+    const allClasses = await Clase.findAll({include: [{model: Profesor}, {model: User}]})
+    const allClassesWithIClaseInterface = await Promise.all(allClasses.map(async (cl) => await BuildClaseToIClase(cl)))
+    return res.send(allClassesWithIClaseInterface)
+})
+
+
+router.get('/all/student/:mail', async (req: Request, res: Response) => {
+    const clases = await Clase.findAll({
+         include: [{
+             model: Profesor,
+             required: true
+            },{model: User, required: false}],
+            
+         where: {
+            [Op.or]: [
+                { User_mail: req.params.mail },
+                { Profesor_mail: req.params.mail }
+              ]
+         }
+         })
+    const usersOfProfessors = await Promise.all(clases.map(cl => User.findByPk(cl.Profesor_mail)))
+
+    return res.send(clases.map((cl, i) => ClaseToIClase(cl, usersOfProfessors[i])))
+})
+
+router.get('/all/profesor/:mail', async (req: Request, res: Response) => {
+    const clases = await Clase.findAll({
+         include: [{
+             model: Profesor,
+             required: true
+            }],
+         
+         where: {
+            Profesor_mail: req.params.mail
+         }
+         })
+    return res.send(clases)    
+})
+
 
 
 router.get('/all', async (req: Request, res: Response) => {
     try {
-        const clases = await Clase.findAll({ include: Profesor })
+        const clases = await Clase.findAll({ include: [Profesor] })
         res.send(clases)
     }
     catch (error) {
@@ -308,6 +239,34 @@ router.post('/delete', async (req: Request, res: Response) => {
         res.send(error)
     }
 })
+
+router.get('/:id', async (req: Request, res: Response) => {
+    try {
+        const {id} = req.params
+        const clases = await Clase.findOne({ where: {id: id} })
+        res.send(clases)
+    }
+    catch (error) {
+        res.status(404).send("Ops! hubo un error")
+    }
+})
+
+router.get('/student/:mail', async (req: Request, res: Response) => {
+    try {
+        const mail = req.params.mail
+        const clases = await Clase.findAll({where: {
+            User_mail: mail
+        }, include: [{model: User}, {model: Profesor}]
+        })
+        const payload = await Promise.all(clases.map(async (cl) => await BuildClaseToIClase(cl)))
+        return res.send(payload)
+    }
+    catch(err) {
+        return res.status(400).send(err)
+    }
+})
+
+
 
 export default router
 

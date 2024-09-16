@@ -8,7 +8,7 @@ import session from 'express-session'
 import payment from './routes/payment'
 const app = express()
 
-app.use(express.static("public"))
+// app.use(express.static("public"))
 app.use(express.urlencoded({extended: true, limit: '50mb'}));
 app.use(express.json({limit:'50mb'}));
 app.use(cookieParser());
@@ -25,13 +25,13 @@ app.use(session({
     }
 }));
 
-/* app.use((req, res, next) => {
+app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', 'http://localhost:3000'); // update to match the domain you will make the request from
     res.header('Access-Control-Allow-Credentials', 'true');
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, DELETE');
     next();
-  }); */
+  }); 
 
 
 app.use(

@@ -1,0 +1,17 @@
+.page {
+    
+}
+.pagination {
+    border: 1px solid lightgray;
+    border-radius: 0.2rem;
+    padding: 0;
+}
+.pageItem {
+    display: inline-block;
+    list-style: none;
+    padding: 0.3rem 0.6rem;   
+}
+.pageLink {
+    text-decoration: none;
+}
+

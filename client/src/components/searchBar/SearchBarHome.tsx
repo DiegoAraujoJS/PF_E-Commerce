@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Container, Navbar } from "react-bootstrap";
+import { Container, Navbar, Col, Alert } from "react-bootstrap";
 import { Nav } from "react-bootstrap";
 import { Form } from 'react-bootstrap'
 // import { FormControl } from 'react-bootstrap'
@@ -15,7 +15,13 @@ import s from './SearchBar.module.css'
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEyeSlash, } from "@fortawesome/free-regular-svg-icons";
 import Register from '../Register/Register';
-import { faShoppingCart } from "@fortawesome/free-solid-svg-icons";
+import { faBook, faShoppingCart, faUserTie, faUser } from "@fortawesome/free-solid-svg-icons";
+import Swal from 'sweetalert2'
+import { auth } from "../../firebase";
+import { useHistory } from "react-router-dom";
+import ModalGoogle from '../modalgoogle/ModalGoogle';
+import googleLogo from '../../images/googleLogo.png';
+import { loginWithGoogle } from '../../firebase';
 
 
 export default function SearchBar() {
@@ -25,7 +31,8 @@ export default function SearchBar() {
   const [wrongPassword, setWrongPassword] = useState(false)
   const [errors, setErrors] = useState({ email: null, password: null })
   let [user, setUser] = useState<{ name: string, lastName: string, role: number, mail: string } | undefined>({ name: '', lastName: '', role: null, mail: '' })
-
+  const [cestaLength, setCestaLength] = useState(0)
+  const history = useHistory();
   useEffect(() => {
     async function setRoleOfUser() {
       if (localStorage.getItem('login')) {
@@ -39,6 +46,8 @@ export default function SearchBar() {
         if (thisUser.status === 200) {
           console.log('status 200')
           setUser(thisUser.data)
+          const clases = await axios.get(`http://localhost:3001/api/carrito/all/${thisUser.data.mail}`)
+          setCestaLength(clases.data.length)
         } else {
           console.log('else')
           setUser(undefined)
@@ -66,32 +75,53 @@ export default function SearchBar() {
   }
 
   function handleChange(e) {
-    validateErrors()
-    switch (e.target.name) {
-      case 'emailValue':
-        setEmail(e.target[0].value)
-        break;
-      case 'passValue':
-        setPassword(e.target[1].value)
-        break;
-      default:
-        break;
+    if (e.target.name === "emailValue") {
+      setEmail(e.target[0].value)
     }
-
+    if (e.target.name === "passValue") {
+      setPassword(e.target[1].value)
+    }
   }
 
   async function handleSubmit(e) {
     e.preventDefault()
-    console.log(e)
+
     try {
       const login = await axios.post(`http://localhost:3001/api/login`, {
         mail: e.target[0].value,
         password: e.target[1].value
       }, { withCredentials: true })
-      document.cookie = `token=${JSON.stringify(login.data.token)}`
-      localStorage.setItem('login', 'true')
-      const user = await axios.post(`http://localhost:3001/api/verify`, {}, { headers: { Authorization: getCookieValue('token').replaceAll("\"", '') } })
-      window.location.reload();
+
+      if (login.status === 200) {
+        const reponse = await axios.get('http://localhost:3001/api/usuarios/' + e.target[0].value)
+
+        if (reponse.data.suspendido) {
+          const logout = await axios.post(`http://localhost:3001/api/login/logout`, {}, { withCredentials: true })
+
+          return Swal.fire({
+            title: 'Error!',
+            text: 'Su cuenta esta suspendida!',
+            icon: 'error',
+            willClose: () => window.location.reload()
+          })
+        }
+        else {
+
+          document.cookie = `token=${JSON.stringify(login.data.token)}`
+          localStorage.setItem('login', 'true')
+
+          const user = await axios.post(`http://localhost:3001/api/verify`, {}, { headers: { Authorization: getCookieValue('token').replaceAll("\"", '') } })
+          if (user.status === 200) {
+            Swal.fire({
+              title: 'Exito!',
+              text: 'Se Inició sesión correctamente!',
+              icon: 'success',
+              willClose: () => window.location.reload()
+            })
+            history.push('/')
+          }
+        }
+      }
 
     } catch (error) {
       setWrongPassword(true)
@@ -106,20 +136,32 @@ export default function SearchBar() {
     }
   }
   async function signOut() {
-    // auth.signOut();
+    auth.signOut();
     try {
       const logout = await axios.post(`http://localhost:3001/api/login/logout`, {}, { withCredentials: true })
       deleteAllCookies()
       localStorage.removeItem('login')
-      alert("Se cerro sesión correctamente")
-      // window.location.reload();
+      Swal.fire({
+        title: 'Exito!',
+        text: 'Se cerro sesión correctamente!',
+        icon: 'success',
+        willClose: () => window.location.reload()
+      })
+      history.push('/')
     } catch (err) {
-      alert("Fallo al cerrar sesión")
+      Swal.fire({
+        title: 'Error!',
+        text: 'Fallo al cerrar sesión!',
+        icon: 'error',
+        willClose: () => window.location.reload()
+      })
     }
+    
   }
 
   const dropBox: CSS.Properties = {
-    width: '300px'
+    width: '300px',
+    height: '300px'
   }
   const inputSizeLim: CSS.Properties = {
     position: 'relative',
@@ -128,11 +170,48 @@ export default function SearchBar() {
 
   const [showPassword, setShowPassword] = useState("password")
 
+  // Estados para maejar el modal de Google
+  const [showGoogle, setShowGoogle] = useState(false);
+  const handleCloseGoogle = () => setShowGoogle(false);
+  const handleShowGoogle = () => setShowGoogle(true);
+
+  // Función para iniciar sesión con Google
+  async function loginConGoogle(e) {
+      e.preventDefault();
+      try {
+          await loginWithGoogle();
+          const usuarioExistente = await axios.get(`http://localhost:3001/api/login/${auth.currentUser.email}`)
+          console.log('HABER', usuarioExistente.data)
+          if (usuarioExistente.data) {
+              try {
+                  const login = await axios.post(`http://localhost:3001/api/login`, {
+                    mail: auth.currentUser.email,
+                    password: 'google'
+                  }, { withCredentials: true })
+                  console.log(login)
+                  document.cookie = `token=${JSON.stringify(login.data.token)}`
+                  localStorage.setItem('login', 'true')
+                  const user = await axios.post(`http://localhost:3001/api/verify`, {}, { headers: { Authorization: getCookieValue('token').replaceAll("\"", '') } })
+                  console.log(user)
+                  history.push('/')
+                  window.location.reload();
+                } catch (error) {
+                  console.log('LISTO')
+                }
+          } else {
+              handleShowGoogle();
+          }
+      } catch {
+          console.log('Se produjo un error durante la autenticación')
+      }
+  }
+
   const eyeTest: CSS.Properties = {
     position: 'relative',
     left: '80px',
     bottom: '30px',
   }
+
   const eye = <FontAwesomeIcon style={eyeTest} icon={faEye} className="mt-1" onClick={() => setShowPassword("text")} />
   const eyeSlash = <FontAwesomeIcon style={eyeTest} icon={faEyeSlash} className="mt-1" onClick={() => setShowPassword("password")} />
 
@@ -141,55 +220,109 @@ export default function SearchBar() {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
-  const carrito = <FontAwesomeIcon icon={faShoppingCart} style={{fontSize:"30px", marginLeft:"25px"}} className=""/>
+  const book = <FontAwesomeIcon icon={faBook} style={{ fontSize: "30px", marginLeft: "25px" }} className="" />
+
+  const bookCSS: CSS.Properties = {
+    color: "white",
+    fontWeight: 500,
+    backgroundColor: "red",
+    borderRadius: "9999px",
+    paddingTop: "5px",
+    paddingBottom: "5px",
+    paddingLeft: "10px",
+    paddingRight: "10px",
+    width: "60%",
+    height: "60%",
+    position: 'relative',
+    right: "10px",
+    top: "11px",
+  }
+
+  const admin = <FontAwesomeIcon icon={faUserTie} style={{ fontSize: "40px" }} className="" />
+  const userIcon = <FontAwesomeIcon icon={faUser} style={{ fontSize: "25px" }} className="mt-1" />
 
   return (
     // <Navbar expand="lg" className={s.navbar}>
-      <Navbar bg="light"  expand="lg">
-      <Container className="container-fluid p-0">
-        <Navbar.Brand className={'ms-3'} href="#home"><Link to={"/home"}><img src={logo} alt='U CLASES Logo' style={{ height: '56px' }}></img></Link></Navbar.Brand>
+    <Navbar bg="light" expand="lg">
+      <div className="container-fluid form">
+        <Navbar.Brand className={'ms-3'} href="#home"><Link to={"/"}><img src={logo} alt='U CLASES Logo' style={{ height: '56px' }}></img></Link></Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="mr-auto">
-            <Link className={'nav-link ms-4 text-decoration-none'} to={"/home"}>Home</Link>
+            <Link className={'nav-link ms-4 text-decoration-none'} to={"/"}>Home</Link>
             <Link className={'nav-link ms-4 text-decoration-none'} to={"/calendar"}>Calendar</Link>
-            <Link className={'nav-link ms-4 text-decoration-none'} to={"/perfil"}>Profile</Link>
-            <Link className={'nav-link ms-4 text-decoration-none'} to={"/chat"}>Chat</Link>
             <Link className={'nav-link ms-4 text-decoration-none'} to={"/clases"}>Class</Link>
 
             {loggedOrNot() ?
-              <NavDropdown className={'ms-4 text-decoration-none justify-content-end'} title="Logeado" id="basic-nav-dropdown">
-                <NavDropdown.Item onClick={() => signOut()}>
-                  Desconectarse
-                </NavDropdown.Item>
-              </NavDropdown>
+              <div className="ms-4 d-flex">
+                <span className="ml-4">{userIcon}</span><NavDropdown className={'text-decoration-none justify-content-end ms-1'} title={user.name + " " + user.lastName} id="basic-nav-dropdown">
+                  <NavDropdown.Item>
+                    <Link className={'nav-link ms-4 text-decoration-none'} to={"/perfil"}>Profile</Link>
+                  </NavDropdown.Item>
+                  <NavDropdown.Item>
+                    <Link className={'nav-link ms-4 text-decoration-none'} to={"/historial"}>History</Link>
+                  </NavDropdown.Item>
+                  <NavDropdown.Item>
+                    <Link className={'nav-link ms-4 text-decoration-none'} to={"/chat"}>Chat</Link>
+                  </NavDropdown.Item>
+                  <NavDropdown.Item>
+                  <Link className={'nav-link ms-4 text-decoration-none'} to={"/addclaim"}>New Claim</Link>
+                  </NavDropdown.Item>
+                  <NavDropdown.Item className="d-flex justify-content-center" onClick={() => signOut()}>
+                    Desconectarse
+                  </NavDropdown.Item>
+                </NavDropdown>
+              </div>
               :
-              <NavDropdown className={'ms-4 text-decoration-none'} title="Cuenta" id="basic-nav-dropdown">
-                <Form className={'d-flex flex-column align-items-center'} style={dropBox} onSubmit={handleSubmit}>
+              <NavDropdown className={'ms-4 text-decoration-none'} title="Cuenta" style={{width:"300px"}} id="basic-nav-dropdown">
+                <Form className={'d-flex flex-column align-items-center justify-content-center'} style={dropBox} onSubmit={handleSubmit}>
                   <Form.Control style={inputSizeLim} className={'d-flex justify-content-center'} type="email" placeholder="Email" onChange={handleChange} />
-                  <Form.Control style={inputSizeLim} type={showPassword} placeholder="Contraseña" onChange={handleChange} />
+                  <Form.Control className="mt-2" style={inputSizeLim} type={showPassword} placeholder="Contraseña" onChange={handleChange} />
                   {showPassword === "password" ? eye : eyeSlash}
 
                   <Button style={inputSizeLim} name='loginSubmit' variant="primary" type="submit">
                     Entrar
                   </Button>
-                  <Navbar.Text>
+                  {wrongPassword ? <div className="badge bg-danger mt-2" >
+                    El usuario o la contraseña son incorrectos</div> : null}
+                  <Navbar.Text className="mt-3">
                     ¿No tienes cuenta? <Button onClick={() => handleShow()}> Registrarse </Button>
                     <Register show={show} handleClose={handleClose} />
                   </Navbar.Text>
+                  
+                  
+                    <div className={`btn ${s.googleButton}`} onClick={loginConGoogle}>
+                        <img src={googleLogo} className={s.googleLogo} alt='Google Logo'></img>
+                        <span>Inicia sesión con Google</span>
+                    </div>
                 </Form>
+                <ModalGoogle show={showGoogle} handleClose={handleCloseGoogle} />
               </NavDropdown>
             }
             {loggedOrNot() && user.role === Role.PROFESSOR ?
-              <Link className={'nav-link ms-4 text-decoration-none'} to={"/clases/add"}>Agrega tu Propia Clase!</Link>
+              <Link className={'nav-link ms-4 text-decoration-none'} to={"/clases/add"}>
+                <Alert variant="info" className="p-1 m-0 d-flex justify-content-center" style={{width:"200px"}}>
+                Agrega tu Propia Clase!
+                </Alert>
+                </Link>
               :
               null
             }
           </Nav>
         </Navbar.Collapse>
-        <Link to={"/cesta"}>{carrito}</Link>
-      </Container>
-    </Navbar>
+        {loggedOrNot() && user.role === Role.ADMIN ? <div className="d-flex">
+          <Link className={'nav-link ms-4 text-decoration-none'} to={"/claim"}>Reclamos</Link>
+          {admin}
+          <h5 className="m-0">Admin</h5>
+        </div>
+          :
+          < div >
+            <Link to={"/cesta"}> {book} </Link>
+            {cestaLength > 0 ? <Link style={{ textDecoration: "none", }} to={"/cesta"}><span style={bookCSS}> {cestaLength}</span> </Link> : null}
+          </div>
+        }
+      </div>
+    </Navbar >
   );
 }
 

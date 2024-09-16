@@ -20,15 +20,6 @@ export const validationSchemaNewClass = yup.object().shape({
     precio: yup
         .number()
         .required('Este campo es obligatorio'),
-    dia: yup
-        .string()
-        .test('dia', 'Necesita elegir el dia de la clase', (value) => value),
-    desde: yup
-        .string()
-        .test('desde', 'Necesita elegir un comienzo a la clase', (value) => value),
-    hasta: yup
-        .string()
-        .test('hasta', 'Necesita elegir un comienzo a la clase', (value) => value),
 
 });
 
@@ -43,6 +34,10 @@ export const validationSchemaRegister = yup.object().shape({
         .string()
         .required('Este campo es obligatorio')
         .test('passwordSize', 'La contraseña debe tener de 4 a 20 caracteres', (value) => value && value.length > 4 && value.length < 20),
+    confirmar: yup
+        .string()
+        .required('Este campo es obligatorio')
+        .test('passwordSize', 'La contraseña debe tener de 4 a 20 caracteres', (value) => value && value.length > 4 && value.length < 20),
     name: yup
         .string()
         .required('Este campo es obligatorio')
@@ -54,8 +49,17 @@ export const validationSchemaRegister = yup.object().shape({
     role: yup
         .number()
         .required('Este campo es obligatorio'),
-    city: yup
+    country: yup
         .string()
-        .required('Este campo es obligatorio')
-        .test('citySize', 'El nombre de la ciudad es demaciado largo', (value) => value && value.length < 60),
+        .required('Este campo es obligatorio'),
+    state: yup
+        .string()
+        .required('Este campo es obligatorio'),
+})
+
+
+export const validationSchemaGoogle = yup.object().shape({
+    role: yup
+        .number()
+        .required('Este campo es obligatorio'),
 });

@@ -1,61 +1,239 @@
 import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useParams } from 'react-router';
-import { getByIdClaim } from '../../Actions/Actions';
+import style from "./DetailClaim.module.css";
+import Swal from "sweetalert2";
+import axios from "axios";
+import { Button } from "react-bootstrap";
+import ChatAdmin from "../Chat/ChatAdmin";
+import { ClaimType } from "./Claims";
 
-import style from './DetailClaim.module.css';
+interface UserClaimDetail {
+  lastName: string;
+  name: string;
+  mail: string;
+  foto: string;
+}
 
-function DetailClaim(){
+interface ClaimDetailType extends ClaimType {
+  denunciante: UserClaimDetail;
+  denunciado: UserClaimDetail;
+  admin: UserClaimDetail;
+  reclamo: string;
+  clase: {
+    id: number;
+    nombre: string;
+  };
+}
 
-    let { id:code } = useParams();
-    let[id] = useState(code);
-    
-    const dispatch = useDispatch();
-    const claim = useSelector( state => state['claim']);
-    let { name, codeClaim, detail, img, denunciante_email, description } = claim;
+function DetailClaim(props) {
+  const [suspendido, setSuspendido] = useState();
 
-    useEffect(() => {
-        dispatch(getByIdClaim(id))
-    }, [dispatch, id]);
+  const [claim, setClaim] = useState<ClaimDetailType>();
 
-    return(
-        <div className = {style.fondo}>
-            <div className = {style.container}>
-                <div className = {style.claim}>
-                    <div className= {style.estudiante}>
-                        <img className = {style.imagendenu} src = 'https://i.imgur.com/MRTAOWM.png' alt = 'foto perfil estudiante'/>
-                        <h5 className= {style.nombreEst}>Roberto Gomez Alaya</h5>
-                        <p>Estudiante</p>
-                        <span>{denunciante_email}</span>
-                    </div>
-                    <div className = {style.description}>
-                        <div className = {style.data}>
-                            <h6>name: {name}</h6>
-                            <span>#{codeClaim}</span>
-                        </div>
-                        <div className = {style.detailClaim}>
-                            <p>descripcion: {description}</p>
-                            <p>detalle{detail}</p>
-                        </div>
-                    </div>
-                    <div className = {style.chat}>
-                        Chat
-                    </div>
-                </div>
-                <div className = {style.denunciado}>
-                    <img className = {style.imagendenu} src = 'https://i.imgur.com/wc7cCCs.png' alt = 'foto denunciado'/>
-                    <h5 className= {style.nombreEst}>Nombre: </h5>
-                    <div className = {style.detail}>
-                        Materias dictadas:
-                    </div>
-                    <div className = {style.btns}>
-                        <button className = {style.ban}>BANEADO</button>
-                        <button className = {style.desb}>DESBANEAR</button>
-                    </div>
-                </div>
+  useEffect(() => {
+    if (!claim) {
+      getClaim();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [claim]);
+
+  async function getClaim() {
+    try {
+      const response = await axios.get(
+        "http://localhost:3001/api/reclamos/" + props.id
+      );
+      if (response.status === 200) {
+        setClaim(response.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const [cancelacion, setCancelación] = useState("")
+
+  const closeClass = async () => {
+    Swal.fire({
+      title: '¿Esta seguro de cerrar esta clase?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Si!',
+      cancelButtonText: 'No!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios.get("http://localhost:3001/api/reclamos/cancelar/" + claim.clase.id)
+          .then(response => {
+            if (response.status === 200) {
+              setCancelación(response.data.status);
+            }
+          })
+          .catch(error => alert(error))
+
+        Swal.fire(
+          'Cancelado!',
+          'La clase fue cancelada correctamente.',
+          'success'
+        )
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        Swal.fire(
+          'Cancelado',
+          'La clase sigue activa',
+          'error'
+        )
+      }
+    })
+  }; 
+
+
+  const suspender = async () => {
+    Swal.fire({
+      title: '¿Esta seguro de prohibir a este usuario?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Si!',
+      cancelButtonText: 'No!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios.get("http://localhost:3001/api/reclamos/suspender/" + claim.denunciado.mail)
+          .then(response => {
+            if (response.status === 200) {
+              setSuspendido(response.data.suspendido);
+            }
+          })
+          .catch(error => alert(error))
+
+        Swal.fire(
+          'Prohibido!',
+          'La cuenta del usuario a sido suspendido correctamente.',
+          'success'
+        )
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        Swal.fire(
+          'Cancelado',
+          'La cuenta del usuario sigue intancta',
+          'error'
+        )
+      }
+    })
+  };
+
+  const permitir = async () => {
+    Swal.fire({
+      title: '¿Esta seguro de eliminar la prohibición a este usuario?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Si!',
+      cancelButtonText: 'No!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        axios.get("http://localhost:3001/api/reclamos/permitir/" + claim.denunciado.mail)
+          .then(response => {
+            if (response.status === 200) {
+              setSuspendido(response.data.suspendido);
+            }
+          })
+          .catch(error => alert(error))
+
+        Swal.fire(
+          'Exito!',
+          'La prohibición del usuario a sido eliminada correctamente.',
+          'success'
+        )
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        Swal.fire(
+          'Cancelado',
+          'La cuenta del usuario sigue suspendida',
+          'error'
+        )
+      }
+    })
+  };
+
+  return (
+    <div className={"container px-3 pt-3"}>
+      {claim && (
+        <div
+          className={
+            "d-flex flex-row justify-content-center p-3 " +
+            "align-items-start w-100 bg-light"
+          }
+        >
+          <div className={"w-50 d-flex flex-column p-3"}>
+            <div className={"text-center mb-2"}>
+              <img
+                className={"img-fluid rounded-circle " + style.imgClaim}
+                src={claim.denunciante.foto}
+                alt="foto perfil estudiante"
+              />
+              <h5 className={"w-100 m-0 p-1"}>{claim.denunciante.name}</h5>
+              <span>{claim.denunciante.mail}</span>
             </div>
+
+            <div className={"bg-white rounded-3 shadow my-2 mx-auto"}>
+              <div className={"d-flex flex-row w-100 p-3"}>
+                <h6 className="me-auto">{claim.nombre}</h6>
+                <span>#{claim.id}</span>
+              </div>
+              <p className={"px-3 pb-3 m-0"}>
+                Descripción: {claim.reclamo}
+              </p>
+              {claim.clase ?  <p className={"px-3 pb-3 m-0"}>
+                Clase: {claim.clase.nombre}<br></br>
+                Id de la clase: {claim.clase.id}
+              </p>
+              : null}
+            </div>
+
+            <div className={"rounded-3 shadow my-2 "}>
+              {/* <ChatAdmin admin={claim.admin.mail} user={claim.denunciante.mail} /> */}
+            </div>
+          </div>
+          <div className={"w-50 d-flex flex-column p-3"}>
+            <div className={"text-center my-2"}>
+              <img
+                className={"img-fluid rounded-circle " + style.imgClaim}
+                src={claim.denunciado.foto}
+                alt="foto denunciado"
+              />
+              <h5 className={"w-100 m-0 p-1"}>
+                {claim.denunciado.name}
+              </h5>
+              <span>{claim.denunciado.mail}</span>
+            </div>
+
+            <div className={"bg-white rounded-3 shadow my-2 mx-auto w-100"}>
+              <div className={"w-100"}>Materias dictadas:</div>
+            </div>
+
+            <div className={"d-flex justify-content-evenly " + style.btns}>
+              <Button
+                onClick={() => suspender()}
+                disabled={suspendido}
+                className="mr-2"
+              >
+                PROHIBIR
+              </Button>
+              <Button
+                onClick={() => permitir()}
+                disabled={!suspendido}
+                className="ml-2"
+              >
+                DESHACER PROHIBICIÓN
+              </Button>
+            </div>
+            <div className={"d-flex justify-content-evenly " + style.btns}>
+              <Button
+                onClick={() => closeClass()}
+                disabled={cancelacion === "cancelled" ? true : false}
+                className="mr-2"
+              >
+                CANCELAR CLASE
+              </Button>
+            </div>
+          </div>
         </div>
-    )
+      )}
+    </div>
+  );
 }
 
 export default DetailClaim;

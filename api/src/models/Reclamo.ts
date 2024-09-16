@@ -1,28 +1,44 @@
 import { Model, Column, Table, CreatedAt, UpdatedAt, DataType, HasOne, ForeignKey, PrimaryKey, HasMany, BelongsToMany, BelongsTo } from 'sequelize-typescript';
 import { EnumType } from 'typescript';
+import { Claim } from '../../../interfaces';
 import Clase from './Clase';
 import Profesor from './Profesor';
-
 import User from './Usuario';
-
-
 
 @Table
 export default class Reclamo extends Model {
 
-    @ForeignKey(() => User)
-    @Column ({allowNull: false})
-    Denunciante_email!: string;
+    @Column
+    nombre!: string;
 
     @ForeignKey(() => User)
-    @Column ({allowNull: false})
-    Denunciado_email!: string;
+    @Column
+    denunciante_email!: string;
+
+    @BelongsTo(() => User, 'denunciante_email')
+    denunciante!: User;
+
+    @Column ({allowNull: false, type: DataType.JSON})
+    reclamo!: string;
 
     @ForeignKey(() => User)
-    @Column ({allowNull: false})
-    Admin_email!: string;
+    @Column
+    denunciado_email!: string;
 
-    @BelongsTo(() => User)
-    usuario!: User
+    @BelongsTo(() => User, 'denunciado_email')
+    denunciado!: User;
 
+    @ForeignKey(() => User)
+    @Column
+    admin_email!: string;
+
+    @BelongsTo(() => User, 'admin_email')
+    admin!: User;
+
+    @ForeignKey(() => Clase)
+    @Column
+    clase_id!: number;
+
+    @BelongsTo(() => Clase, 'clase_id')
+    clase!: Clase;
 }
