@@ -23,7 +23,6 @@ router.get('/', async (req: Request, res: Response) => {
 })
 
 
-
 router.get('/all', async (req: Request, res: Response) => {
     try {
         let terminoBusqueda = req.query.nombre;
@@ -167,6 +166,19 @@ router.delete('/:mail', async (req: Request, res: Response) => {
         
     } catch (error) {
         return res.send(error)
+    }
+})
+
+router.get('/all/admin', async (req: Request, res: Response) => {
+    try {
+        const usuarios = await User.findAll({
+            where: { 
+                role: Role.ADMIN
+            }
+        })
+        res.send(usuarios)
+    } catch (error) {
+        res.send(error);
     }
 })
 

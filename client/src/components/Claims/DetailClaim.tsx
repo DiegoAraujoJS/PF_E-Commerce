@@ -5,6 +5,7 @@ import axios from "axios";
 import { Button } from "react-bootstrap";
 import ChatAdmin from "../Chat/ChatAdmin";
 import { ClaimType } from "./Claims";
+import { Link } from 'react-router-dom'
 
 interface UserClaimDetail {
   mail: string;
@@ -190,7 +191,7 @@ function DetailClaim(props) {
                 alt="foto perfil estudiante"
               />
               <h5 className={"w-100 m-0 p-1"}>{claim.denunciante.name}</h5>
-              <span>{claim.denunciante.mail}</span>
+              <Link to={`/perfil/${claim.denunciante.mail}`}>{claim.denunciante.mail}</Link>
             </div>
 
             <div className={"bg-white rounded-3 shadow my-2 mx-auto"}>
@@ -223,11 +224,7 @@ function DetailClaim(props) {
               <h5 className={"w-100 m-0 p-1"}>
                 {claim.denunciado.name}
               </h5>
-              <span>{claim.denunciado.mail}</span>
-            </div>
-
-            <div className={"bg-white rounded-3 shadow my-2 mx-auto w-100"}>
-              <div className={"w-100"}>Materias dictadas:</div>
+              <Link to={`/perfil/${claim.denunciado.mail}`}><span>{claim.denunciado.mail}</span></Link>
             </div>
 
             <div className={"d-flex justify-content-evenly " + style.btns}>
